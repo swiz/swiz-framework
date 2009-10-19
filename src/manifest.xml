@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<componentPackage>
+	
+	<component class="org.swizframework.Swiz" />
+	<component class="org.swizframework.SwizConfig" />
+	
+	<!-- command package -->
+	<component class="org.swizframework.command.CommandChain" />
+	
+	<!-- controller package -->
+	<component class="org.swizframework.controller.AbstractController" />
+	
+	<!-- error package -->
+	<component class="org.swizframework.error.ExpressionError" />
+	
+	<!-- events package -->
+	<component class="org.swizframework.events.CentralDispatcher" />
+	<component class="org.swizframework.events.DynamicMediator" />
+	
+	<!-- factory package -->
+	<component class="org.swizframework.factory.BeanFactory" />
+	<component class="org.swizframework.factory.IDispatcherBean" />
+	<component class="org.swizframework.factory.IFactoryBean" />
+	<component class="org.swizframework.factory.IInitializingBean" />
+	<component class="org.swizframework.factory.IMetadataAwareBean" />
+	<component class="org.swizframework.factory.Prototype" />
+	
+	<!-- net package -->
+	<component class="org.swizframework.net.DynamicURLRequest" />
+	
+	<!-- rpc package -->
+	<component class="org.swizframework.rpc.DynamicCommand" />
+	<component class="org.swizframework.rpc.DynamicResponder" />
+	<component class="org.swizframework.rpc.MockAsyncToken" />
+	<component class="org.swizframework.rpc.MockResultEvent" />
+	
+	<!-- storage package -->
+	<component class="org.swizframework.storage.EncryptedLocalStorageBean" />
+	<component class="org.swizframework.storage.IEncryptedLocalStorageBean" />
+	<component class="org.swizframework.storage.ISharedObjectBean" />
+	<component class="org.swizframework.storage.SharedObjectBean" />
+	
+	<!-- util package -->
+	<component class="org.swizframework.util.BeanLoader" />
+	<component class="org.swizframework.util.DynamicChannelSet" />
+	<component class="org.swizframework.util.ExpressionUtils" />
+	<component class="org.swizframework.util.MediatorUtil" />
+	<component class="org.swizframework.util.TemplateUtil" />
+	<component class="org.swizframework.util.TestResponder" />
+	<component class="org.swizframework.util.TestUtil" />
+	
+</componentPackage>

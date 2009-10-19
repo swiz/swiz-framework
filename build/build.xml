@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!--
+Copyright (c) 2009 Swiz Framework Contributors.  See:
+    http://code.google.com/p/swizframework/people/list
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<project name="swizframework" basedir="/projects/SwizFramework/Swiz" default="buildAll">
+
+	<!-- 
+		Two build property files are supplied, one setup for a Windows machine and one for a Mac. 
+		Use whichever one fits your machine (you'll probably have to edit it for your computer setup)
+	-->
+	<!--<property file="./build/build.win.properties" />-->
+	<property file="./build/build.mac.properties" />
+	
+	<!-- 
+		Extension for ANT to allow for tasks like "for" and "propertyregex"
+	-->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${libs.dir}/ant-contrib-1.0b3.jar"/>
+		</classpath>
+	</taskdef>
+	
+	<!--
+		Compile the unit tests for the library, placing the test runner .swf file
+		in the bin directory.  (restore from flexlib if added)
+	-->
+	<!--target name="compileTests" depends="properties"-->
+	
+	<!--
+		Runs the unit tests for the library in the stand-alone Flash Player (restore from flexlib if added)
+	-->
+	<!--target name="test" depends="compileTests"-->
+	
+	<!--
+		Generate the example applications using the library (restore from flexlib if added)
+	-->
+	<!--target name="examples_modified" depends="properties"-->
+	
+	<!--
+		Exactly the same as examples_modified, except we regenerate all example files, 
+		regardless of whether they've been modified since last run. This is almost line-for-line
+		the same as the examples_modified target, so all comments have been removed for brevity.
+		(restore from flexlib if added)
+	-->
+	<!--target name="examples_all" depends="properties"-->
+	
+	<!--
+		Generate ASDoc output for the library
+	-->
+	<target name="docs">
+		<!-- Clean out the contents of the docs directory, without deleting "docs" -->
+		<delete includeemptydirs="true">
+			<fileset dir="${docs.dir}" includes="**/*" />
+		</delete>
+		
+		<exec executable="${asdoc.exe}" spawn="no">
+			<!-- Place the documentation in the "docs" directory -->
+			<arg line="-o '${docs.dir}'" />
+			
+			<!-- Specify the main source path as "src/main/flex" -->
+			<arg line="-sp '${src.dir}'" />
+			
+			<!-- Document all of the classes in the "src/main/flex" tree -->
+			<arg line="-ds '${src.dir}'" />
+			
+			<arg line="-define='${config.flex4.false}'" />
+			
+			<arg line="-library-path='${flexsdk.dir}/frameworks/libs,${flexsdk.dir}/frameworks/libs/air,${flexsdk.dir}/frameworks/libs/player/9,${flexsdk.dir}/frameworks/libs/player/10'" />
+			
+			<!-- Include the library name in the window title -->
+			<arg line="-window-title 'Swiz Framework'" />
+			
+			<arg line="-templates-path '${flexsdk.dir}/asdoc/templates'" />
+		</exec>
+	</target>
+	
+	<!--
+		When the ASDoc files are generated and imported into the SVN
+		repository, the files need to have mime types set correctly so that
+		you can open a web browser to the docs in the repository and
+		have the HTML render correctly.  Failure to set the mime types will
+		result in the doc source being displayed, rather than the docs being
+		rendered.
+		
+		This target requires the ANT contrib library in order to run.
+	-->
+	<target name="fixDocMimeTypes">
+		<!-- Loop over the files in the doc directory -->
+		<for param="file">
+			<!-- Include the following file types in the target directory as part of the loop -->
+			<fileset dir="docs">
+				<include name="**/*.html" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.css" />
+				<include name="**/*.js" />
+				<include name="**/*.gif" />
+			</fileset>
+			
+			<sequential>
+				<!--- 
+					Determine the mime-type from the file extension.
+				-->
+				<property name="mime.type.html" value="text/html" />
+				<property name="mime.type.png" value="image/png" />
+				<property name="mime.type.jpg" value="image/jpeg" />
+				<property name="mime.type.css" value="text/css" />
+				<property name="mime.type.js" value="text/plain" />
+				<property name="mime.type.gif" value="image/gif" />
+				
+				<!-- Extract the extension from the file name -->
+				<propertyregex property="fileExtension" override="yes" input="@{file}"
+						regexp=".*${file.separator}([^\\]+)\.([a-zA-Z0-9]+)" replace="\2" />
+			
+				<!-- Set the mime.type property based on the extension -->
+				<propertycopy name="mime.type" from="mime.type.${fileExtension}" override="yes" />
+				
+				<!-- Sanity check...
+				<echo>@{file} is ${fileExtension} with mime type ${mime.type}</echo>
+				-->
+				
+				<!-- Configure the mime type for the file -->
+				<exec executable="${svn.exe}" spawn="no">
+					<arg line="propset svn:mime-type '${mime.type}' '@{file}'" />
+				</exec>
+			</sequential>
+		</for>
+	</target>
+	
+	<!--
+		Generate a distribution based on the current source code.  Includes
+		the source code, the documentation, the examples, and the binary .swc file.
+	-->
+	<macrodef name="zipTask">
+		<attribute name="output" />
+		
+		<sequential>
+			<!-- Creates the .zip file in the bin directory -->
+			<zip destfile="${bin.dir}/@{output}.zip">
+				<fileset dir="${basedir}">
+					<include name="bin/${output}.swc" />
+					<include name="src/main/flex/**" />
+			    	<include name="docs/**" />
+					<!--include name="examples/**" /-->
+					<!--exclude name="**/*_Sample.swf" /-->
+				</fileset>
+			</zip>
+		</sequential>
+	</macrodef>
+	
+	<!--
+		Compile all of the classes under the "src/main/flex" tree into a .swc file
+	-->
+	<macrodef name="libTask">
+		<attribute name="sdkdir" />
+		<attribute name="f4" />
+		<attribute name="output" />
+	
+		<sequential>
+			<exec executable="@{sdkdir}/bin/compc" dir="${basedir}">
+				<!-- Specify the name of the output file -->
+				<arg line="-o '${bin.dir}/@{output}.swc'" />
+				
+				<!-- Specify the main source path as "src/main/flex" -->
+				<arg line="-sp '${src.dir}'" />
+				
+				<!-- Retain the metadata Swiz uses to do its magic -->
+				<arg line="-keep-as3-metadata+='Autowire,Mediate'" />
+				
+				<!-- Specify the manifest.xml file and namespace to use -->
+				<!-- The manifest is what tells compc which classes to include in the SWC -->
+				<arg line="-namespace http://swiz.swizframework.org ${src.dir}/manifest.xml" />
+				<arg line="-include-namespaces http://swiz.swizframework.org" />
+				
+				<!-- Specify conditional compilation argument for compiling against Flex 3 or 4 -->
+				<arg line="-define='@{f4}'" />
+				
+				<!-- Exclude the core flex swcs from the library -->
+				<arg line="-el '@{sdkdir}/frameworks/libs'" />
+				<arg line="-el '@{sdkdir}/frameworks/libs/air'" />
+				<arg line="-el '@{sdkdir}/frameworks/libs/player/9'" />
+				<arg line="-el '@{sdkdir}/frameworks/libs/player/10'" />
+			</exec>
+		</sequential>
+	</macrodef>
+	
+	<target name="buildAll">
+		
+		<antcall target="docs" />
+		
+		<libTask sdkdir="${flex3sdk.dir}" f4="${config.flex4.false}" output="swiz-${swiz.version}-flex3" />
+		<zipTask output="swiz-${swiz.version}-flex3" />
+		
+		<libTask sdkdir="${flex4sdk.dir}" f4="${config.flex4.true}" output="swiz-${swiz.version}-flex4" />
+		<zipTask output="swiz-${swiz.version}-flex4" />
+		
+	</target>
+
+</project>
