@@ -45,6 +45,23 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
+		protected function createBean( definition:XML ):Bean
+		{
+			var bean:Bean = new Bean();
+			var node:XML;
+			
+			bean.type = definition.@name;
+			bean.superClassType = definition.@base;
+			bean.interfaces = [];
+			for each( node in definition.implementsInterface )
+				bean.interfaces.push( node.@type.toString() );
+			
+			return bean;
+		}
+		
+		/**
+		 * 
+		 */
 		protected function getAutowireTargets( definition:XML ):Array
 		{
 			var targets:XML = <targets />;
@@ -75,7 +92,7 @@ package org.swizframework.di
 				args = [];
 				for each( var arg:XML in node.metadata.( @name == "Autowire" ).arg )
 				{
-					args.push( { key: arg.@key, value: arg.@value } );
+					args.push( { key: arg.@key.toString(), value: arg.@value.toString() } );
 				}
 				isBindable = node.metadata.( @name == "Bindable" ) != undefined;
 				isWriteOnly = node.hasOwnProperty( "@access" ) && node.@access == "writeonly";
@@ -95,8 +112,12 @@ package org.swizframework.di
 			if( !isPotentialTarget( target ) )
 				return;
 			
-			var autowireTargets:Array = getAutowireTargets( describeType( target ) );
-			beans[ UIDUtil.getUID( target ) ] = autowireTargets;
+			// TODO: port caching logic
+			var definition:XML = describeType( target );
+			//trace( definition );
+			var bean:Bean = createBean( definition );
+			bean.autowireMembers = getAutowireTargets( definition );
+			beans[ UIDUtil.getUID( target ) ] = bean;
 		}
 	}
 }

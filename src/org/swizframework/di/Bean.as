@@ -19,6 +19,16 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
+		public var superClassType:String;
+		
+		/**
+		 * 
+		 */
+		public var interfaces:Array;
+		
+		/**
+		 * 
+		 */
 		public var isView:Boolean = false;
 		
 		/**
