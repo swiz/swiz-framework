@@ -2,6 +2,10 @@
 <flexLibProperties version="1">
 <includeClasses>
 <classEntry path="org.swizframework.Swiz"/>
+<classEntry path="org.swizframework.di.AutowireMember"/>
+<classEntry path="org.swizframework.ioc.BeanLoader"/>
+<classEntry path="org.swizframework.di.AutowireManager"/>
+<classEntry path="org.swizframework.di.Bean"/>
 </includeClasses>
 <includeResources/>
 <namespaceManifests/>
