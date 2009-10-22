@@ -1,6 +1,6 @@
 package org.swizframework.ioc
 {
-	public class BeanLoader implements IBeansProvider
+	public class BeanLoader implements IBeanProvider
 	{
 		// ========================================
 		// beans property (read-only)

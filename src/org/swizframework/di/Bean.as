@@ -9,7 +9,7 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
-		public var source:*;
+		public var instance:*;
 		
 		/**
 		 * 
@@ -19,32 +19,12 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
-		public var type:String;
-		
-		/**
-		 * 
-		 */
-		public var superClassType:String;
-		
-		/**
-		 * 
-		 */
-		public var interfaces:Array;
-		
-		/**
-		 * 
-		 */
 		public var isView:Boolean = false;
 		
 		/**
 		 * 
 		 */
-		public var typeDescription:XML;
-		
-		/**
-		 * 
-		 */
-		public var autowireMembers:Array;
+		public var typeDescription:TypeDescriptor;
 		
 		/**
 		 * 
@@ -58,6 +38,5 @@ package org.swizframework.di
 		public function Bean()
 		{
 		}
-
 	}
 }

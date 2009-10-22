@@ -3,9 +3,13 @@
 <includeClasses>
 <classEntry path="org.swizframework.Swiz"/>
 <classEntry path="org.swizframework.di.AutowireMember"/>
-<classEntry path="org.swizframework.ioc.BeanLoader"/>
-<classEntry path="org.swizframework.di.AutowireManager"/>
+<classEntry path="org.swizframework.di.AutowiredStatus"/>
 <classEntry path="org.swizframework.di.Bean"/>
+<classEntry path="org.swizframework.di.TypeDescriptor"/>
+<classEntry path="org.swizframework.ioc.BeanLoader"/>
+<classEntry path="org.swizframework.ioc.BeanManager"/>
+<classEntry path="org.swizframework.ioc.IBeanProvider"/>
+<classEntry path="org.swizframework.util.SwizLogger"/>
 </includeClasses>
 <includeResources/>
 <namespaceManifests/>

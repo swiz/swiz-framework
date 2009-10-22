@@ -4,6 +4,7 @@ package org.swizframework
 	import flash.events.IEventDispatcher;
 	
 	import org.swizframework.di.AutowireManager;
+	import org.swizframework.ioc.BeanManager;
 	
 	public class Swiz
 	{
@@ -26,6 +27,11 @@ package org.swizframework
 		 */
 		protected var autowireManager:AutowireManager;
 		
+		/**
+		 * 
+		 */
+		protected var beanManager:BeanManager;
+		
 		// ========================================
 		// constructor
 		// ========================================
@@ -33,9 +39,12 @@ package org.swizframework
 		public function Swiz( dispatcher:IEventDispatcher )
 		{
 			this.autowireManager = new AutowireManager();
+			this.beanManager = new BeanManager();
 			
 			this.dispatcher = dispatcher;
 			this.dispatcher.addEventListener( injectionEventType, handleInjectionEvent, true, 50, true );
+			
+			trace( "Swiz created and attached to", dispatcher );
 		}
 		
 		// ========================================
@@ -47,7 +56,17 @@ package org.swizframework
 		 */
 		protected function handleInjectionEvent( injectionEvent:Event ):void
 		{
-			autowireManager.autowire( injectionEvent.target );
+			//autowireManager.autowire( injectionEvent.target, true );
+		}
+		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		public function addBeanProvider( provider:Class ):void
+		{
+			trace( "Swiz passing bean provider processing request to BeanManager" );
+			beanManager.processBeanProvider( provider );
 		}
 	}
 }

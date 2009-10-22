@@ -1,6 +1,6 @@
 package org.swizframework.ioc
 {
-	public interface IBeansProvider
+	public interface IBeanProvider
 	{
 		function get beans():Array;
 	}
