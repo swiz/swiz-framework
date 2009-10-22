@@ -48,12 +48,11 @@ package org.swizframework.di
 		protected function createBean( definition:XML ):Bean
 		{
 			var bean:Bean = new Bean();
-			var node:XML;
 			
 			bean.type = definition.@name;
 			bean.superClassType = definition.@base;
 			bean.interfaces = [];
-			for each( node in definition.implementsInterface )
+			for each( var node:XML in definition.implementsInterface )
 				bean.interfaces.push( node.@type.toString() );
 			
 			return bean;
@@ -116,8 +115,22 @@ package org.swizframework.di
 			var definition:XML = describeType( target );
 			//trace( definition );
 			var bean:Bean = createBean( definition );
+			bean.source = target;
 			bean.autowireMembers = getAutowireTargets( definition );
-			beans[ UIDUtil.getUID( target ) ] = bean;
+			
+			if( bean.autowireMembers.length > 0 )
+				beans[ UIDUtil.getUID( target ) ] = bean;
+		}
+		
+		/**
+		 * 
+		 */
+		public function getBeanByUID( uid:String ):*
+		{
+			if( beans[ uid ] )
+				return Bean( beans[ uid ] ).source;
+			
+			return null;
 		}
 	}
 }

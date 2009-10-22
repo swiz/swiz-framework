@@ -9,6 +9,11 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
+		public var source:*;
+		
+		/**
+		 * 
+		 */
 		public var name:String;
 		
 		/**
