@@ -9,7 +9,7 @@ package org.swizframework.di
 	public class AutowireManager
 	{
 		// ========================================
-		// protected methods
+		// protected properties
 		// ========================================
 		
 		/**
