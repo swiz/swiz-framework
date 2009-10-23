@@ -44,6 +44,9 @@ package org.swizframework
 			this.dispatcher = dispatcher;
 			this.dispatcher.addEventListener( injectionEventType, handleInjectionEvent, true, 50, true );
 			
+			if( dispatcher is ISwizHost )
+				ISwizHost( dispatcher ).swizInstance = this;
+			
 			trace( "Swiz created and attached to", dispatcher );
 		}
 		
