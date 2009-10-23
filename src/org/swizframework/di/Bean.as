@@ -24,7 +24,7 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
-		public var typeDescription:TypeDescriptor;
+		public var typeDescriptor:TypeDescriptor;
 		
 		/**
 		 * 
