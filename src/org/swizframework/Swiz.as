@@ -20,6 +20,11 @@ package org.swizframework
 		/**
 		 * 
 		 */
+		protected var config:SwizConfig;
+		
+		/**
+		 * 
+		 */
 		protected var injectionEventType:String = "addedToStage";
 		
 		/**
@@ -36,13 +41,15 @@ package org.swizframework
 		// constructor
 		// ========================================
 		
-		public function Swiz( dispatcher:IEventDispatcher )
+		public function Swiz( dispatcher:IEventDispatcher, config:SwizConfig = null )
 		{
 			this.autowireManager = new AutowireManager();
 			this.beanManager = new BeanManager();
 			
 			this.dispatcher = dispatcher;
 			this.dispatcher.addEventListener( injectionEventType, handleInjectionEvent, true, 50, true );
+			
+			this.config = ( config != null ) ? config : new SwizConfig()
 			
 			if( dispatcher is ISwizHost )
 				ISwizHost( dispatcher ).swizInstance = this;
