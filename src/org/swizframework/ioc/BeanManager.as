@@ -50,12 +50,16 @@ package org.swizframework.ioc
 				// TODO: add support for passing in instances
 				var providerInstance:* = new providerClass();
 				// get public props.
-				// TODO add accessor support?
+				// TODO add accessor support
 				trace( "BeanManager calling describeType() for bean provider instance" );
-				var providerPublicProps:XMLList = describeType( providerInstance ).variable;
+				// TODO: implement type caching
+				var providerDescription:XML = describeType( providerInstance );
+				var beanList:XML = <beans />;
+				beanList.appendChild( providerDescription.variable );
+				beanList.appendChild( providerDescription.accessor.( @access != "writeOnly" ) );
 				
 				trace( "BeanManager iterating over public properties (beans) of bean provider instance" );
-				for each( var beanNode:XML in providerPublicProps )
+				for each( var beanNode:XML in beanList.children() )
 				{
 					var beanName:String = beanNode.@name.toString();
 					
@@ -80,7 +84,7 @@ package org.swizframework.ioc
 					bean.instance = providerInstance[ beanName ];
 					bean.autowiredStatus = AutowiredStatus.EMPTY;
 					beans[ UIDUtil.getUID( bean.instance ) ] = bean.instance;
-					trace( "BeanManager created Bean instance for", beanClassName );
+					trace( "BeanManager created", beanName, "Bean instance of type", beanClassName );
 				}
 			}
 		}
