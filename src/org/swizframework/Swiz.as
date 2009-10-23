@@ -63,10 +63,10 @@ package org.swizframework
 		// public methods
 		// ========================================
 		
-		public function addBeanProvider( provider:Class ):void
+		public function addBeanProviders( providerClasses:Array ):void
 		{
-			trace( "Swiz passing bean provider processing request to BeanManager" );
-			beanManager.processBeanProvider( provider );
+			trace( "Swiz passing array of", providerClasses.length, "bean provider classes to BeanManager" );
+			beanManager.processBeanProviders( providerClasses );
 		}
 	}
 }
