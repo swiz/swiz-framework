@@ -10,5 +10,17 @@ package org.swizframework.reflect
 			this.key = key;
 			this.value = value;
 		}
+		
+		/**
+		 * 
+		 */
+		public function toString():String
+		{
+			var str:String = "MetadataArg: ";
+			
+			str += key + " = " + value + "\n";
+			
+			return str;
+		}
 	}
 }

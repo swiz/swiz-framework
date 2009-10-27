@@ -31,5 +31,21 @@ package org.swizframework.reflect
 			this.args = ( args ) ? args : [];
 			this.host = host;
 		}
+		
+		/**
+		 * 
+		 */
+		public function toString():String
+		{
+			var str:String = "MetadataTag: ";
+			
+			str += name + "\n";
+			for each( var arg:MetadataArg in args )
+			{
+				str += "\t\t" + arg.toString() + "\n";
+			}
+			
+			return str;
+		}
 	}
 }
