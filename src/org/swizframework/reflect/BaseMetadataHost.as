@@ -2,6 +2,28 @@ package org.swizframework.reflect
 {
 	public class BaseMetadataHost implements IMetadataHost
 	{
+		// ========================================
+		// public properties
+		// ========================================
+		
+		/**
+		 * Backing variable for <code>type</code> getter/setter.
+		 */
+		protected var _type:String;
+		
+		/**
+		 * 
+		 */
+		public function get type():String
+		{
+			return _type;
+		}
+		
+		public function set type( value:String ):void
+		{
+			_type = value;
+		}
+		
 		//
 		// name property
 		//
@@ -46,9 +68,34 @@ package org.swizframework.reflect
 			_metadataTags = value;
 		}
 		
+		// ========================================
+		// constructor
+		// ========================================
+		
 		public function BaseMetadataHost()
 		{
 			metadataTags = [];
 		}
+		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		/*
+		 * 
+		 *
+		public function toString():String
+		{
+			var str:String = "IMetadataHost: ";
+			
+			str += name + "\n";
+			for each( var tag:MetadataTag in metadataTags )
+			{
+				str += "\t" + tag.toString() + "\n";
+			}
+			
+			return str;
+		}
+		*/
 	}
 }
