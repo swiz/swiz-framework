@@ -40,41 +40,41 @@ package org.swizframework.ioc
 		
 		public function processBeanProviders( providerClasses:Array ):void
 		{
-			trace( "BeanManager::processBeanProviders()" );
+			//trace( "BeanManager::processBeanProviders()" );
 			typeDescriptors ||= new Dictionary();
 			beans ||= new Dictionary();
 			
 			for each( var providerClass:Class in providerClasses )
 			{
-				trace( "BeanManager creating instance of provider class", getQualifiedClassName( providerClass ) );
+				//trace( "BeanManager creating instance of provider class", getQualifiedClassName( providerClass ) );
 				// TODO: add support for passing in instances
 				var providerInstance:* = new providerClass();
 				// get public props.
 				// TODO add accessor support
-				trace( "BeanManager calling describeType() for bean provider instance" );
+				//trace( "BeanManager calling describeType() for bean provider instance" );
 				// TODO: implement type caching
 				var providerDescription:XML = describeType( providerInstance );
 				var beanList:XML = <beans />;
 				beanList.appendChild( providerDescription.variable );
 				beanList.appendChild( providerDescription.accessor.( @access != "writeOnly" ) );
 				
-				trace( "BeanManager iterating over public properties (beans) of bean provider instance" );
+				//trace( "BeanManager iterating over public properties (beans) of bean provider instance" );
 				for each( var beanNode:XML in beanList.children() )
 				{
 					var beanName:String = beanNode.@name.toString();
 					
 					var beanClassName:String = beanNode.@type;
-					trace( "BeanManager checking to see if we already have type info for", beanClassName );
+					//trace( "BeanManager checking to see if we already have type info for", beanClassName );
 					if( typeDescriptors[ beanClassName ] == null )
 					{
-						trace( "BeanManager does not have type info for", beanClassName );
+						//trace( "BeanManager does not have type info for", beanClassName );
 						var td:TypeDescriptor = new TypeDescriptor().fromXML( describeType( providerInstance[ beanName ] ) );
-						trace( "BeanManager storing", beanClassName, "type info" );
+						//trace( "BeanManager storing", beanClassName, "type info" );
 						typeDescriptors[ beanClassName ] = td;
 					}
 					else
 					{
-						trace( "BeanManager already has type info for", beanClassName, ", moving on" );
+						//trace( "BeanManager already has type info for", beanClassName, ", moving on" );
 					}
 					
 					// create Bean instance and store it
@@ -84,7 +84,7 @@ package org.swizframework.ioc
 					bean.instance = providerInstance[ beanName ];
 					bean.autowiredStatus = AutowiredStatus.EMPTY;
 					beans[ UIDUtil.getUID( bean.instance ) ] = bean.instance;
-					trace( "BeanManager created", beanName, "Bean instance of type", beanClassName );
+					//trace( "BeanManager created", beanName, "Bean instance of type", beanClassName );
 				}
 			}
 		}
