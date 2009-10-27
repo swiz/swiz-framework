@@ -68,6 +68,21 @@ package org.swizframework.reflect
 			_metadataTags = value;
 		}
 		
+		//
+		// isBindable getter
+		//
+		
+		public function get isBindable():Boolean
+		{
+			for each( var tag:MetadataTag in metadataTags )
+			{
+				if( tag.name == "Bindable" )
+					return true;
+			}
+			
+			return false;
+		}
+		
 		// ========================================
 		// constructor
 		// ========================================
@@ -81,9 +96,9 @@ package org.swizframework.reflect
 		// public methods
 		// ========================================
 		
-		/*
+		/**
 		 * 
-		 *
+		 */
 		public function toString():String
 		{
 			var str:String = "IMetadataHost: ";
@@ -96,6 +111,5 @@ package org.swizframework.reflect
 			
 			return str;
 		}
-		*/
 	}
 }

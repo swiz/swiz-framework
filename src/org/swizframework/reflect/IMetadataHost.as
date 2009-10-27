@@ -10,5 +10,7 @@ package org.swizframework.reflect
 		
 		function get metadataTags():Array;
 		function set metadataTags( value:Array ):void;
+		
+		function get isBindable():Boolean;
 	}
 }

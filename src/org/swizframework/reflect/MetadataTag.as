@@ -32,6 +32,10 @@ package org.swizframework.reflect
 			this.host = host;
 		}
 		
+		// ========================================
+		// public methods
+		// ========================================
+		
 		/**
 		 * 
 		 */
