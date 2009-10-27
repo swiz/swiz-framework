@@ -7,9 +7,8 @@
 <classEntry path="org.swizframework.di.TypeDescriptor"/>
 <classEntry path="org.swizframework.ioc.IBeanProvider"/>
 <classEntry path="org.swizframework.SwizConfig"/>
-<classEntry path="org.swizframework.util.SwizLogger"/>
 <classEntry path="org.swizframework.ioc.BeanLoader"/>
-<classEntry path="org.swizframework.di.AutowireMember"/>
+<classEntry path="org.swizframework.util.SwizLogger"/>
 <classEntry path="org.swizframework.di.Bean"/>
 </includeClasses>
 <includeResources/>
