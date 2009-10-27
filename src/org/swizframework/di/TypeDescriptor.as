@@ -1,5 +1,12 @@
 package org.swizframework.di
 {
+	import org.swizframework.reflect.IMetadataHost;
+	import org.swizframework.reflect.MetadataArg;
+	import org.swizframework.reflect.MetadataHostClass;
+	import org.swizframework.reflect.MetadataHostMethod;
+	import org.swizframework.reflect.MetadataHostProperty;
+	import org.swizframework.reflect.MetadataTag;
+	
 	public class TypeDescriptor
 	{
 		// ========================================
@@ -29,7 +36,7 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
-		public var autowireMembers:Array;
+		public var metadataHosts:Array = [];
 		
 		// ========================================
 		// constructor
@@ -52,51 +59,65 @@ package org.swizframework.di
 			this.superClassName = description.@base;
 			for each( var node:XML in description.implementsInterface )
 				interfaces.push( node.@type.toString() );
-			this.autowireMembers = getAutowireMembers( description );
+			this.metadataHosts = getMetadataHosts( description );
 			
 			return this;
 		}
 		
-		protected function getAutowireMembers( description:XML ):Array
+		protected function getMetadataHosts( description:XML ):Array
 		{
-			var members:XML = <members />;
-			var node:XML;
+			var host:IMetadataHost;
 			
-			// can check for Autowire directly on variables (non-bindable properties)
-			members.appendChild( description.variable.( metadata.@name == "Autowire" ) );
-			
-			// get all accessors with any kind of metadata
-			var accessorList:XMLList = description.accessor.( ( @access == "readwrite" || @access == "writeonly" ) && hasOwnProperty( "metadata" ) );
-			
-			// have to inspect this list and make sure we only keep nodes with Autowire metadata
-			for each( node in accessorList )
+			// find all Metadata tags in describeType()'s output XML
+			// parent node will be the actual property/method node
+			for each( var mdNode:XML in description..metadata )
 			{
-				if( node.metadata.( @name == "Autowire" ) != undefined )
-					members.appendChild( node );
-			}
-			
-			// create objects from the xml
-			var autowireMembers:Array = [];
-			var autowireTarget:AutowireMember;
-			var args:Array;
-			var isBindable:Boolean;
-			var isWriteOnly:Boolean;
-			
-			for each( node in members.children() )
-			{
-				args = [];
-				for each( var arg:XML in node.metadata.( @name == "Autowire" ).arg )
+				// property, method or class?
+				var metadataHostType:String = mdNode.parent().name();
+				// name of property/method
+				var metadataHostName:String = mdNode.parent().@name.toString();
+				// if we don't already have an IMetadataHost object for this property/method
+				if( !hasMetadataHostWithName( metadataHostName ) )
 				{
-					args.push( { key: arg.@key.toString(), value: arg.@value.toString() } );
+					// actual type is determined by metadata's parent tag
+					host = ( metadataHostType == "method" ) ? new MetadataHostMethod()
+															: ( metadataHostType == "type" ) ? new MetadataHostClass()
+																							 : new MetadataHostProperty();
+					host.name = metadataHostName;
+					metadataHosts.push( host );
 				}
-				isBindable = node.metadata.( @name == "Bindable" ) != undefined;
-				isWriteOnly = node.hasOwnProperty( "@access" ) && node.@access == "writeonly";
+					
+				var args:Array = [];
+				for each( var argNode:XML in mdNode.arg )
+				{
+					args.push( new MetadataArg( argNode.@key.toString(), argNode.@value.toString() ) );
+				}
 				
-				autowireMembers.push( new AutowireMember( node.@name, node.@type, args, isBindable, isWriteOnly ) );
-				trace( "AutowireMember for", node.@name, "property found on TypeDescriptor for", className );
+				var mt:MetadataTag = new MetadataTag( mdNode.@name.toString(), args, host );
+				host.metadataTags.push( mt );
 			}
 			
-			return autowireMembers;
+			return metadataHosts;
+		}
+		
+		/**
+		 * Check to see if this type already has an IMetadataHost with the given name.
+		 * An IMetadataHost is a representation of a public property decorated with
+		 * some kind of metadata so name collisions should be impossible.
+		 * 
+		 * @see org.swizframework.reflect.IMetadataHost
+		 */
+		protected function hasMetadataHostWithName( metadataHostName:String ):Boolean
+		{
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				if( metadataHost.name == metadataHostName )
+				{
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }
