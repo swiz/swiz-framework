@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flexLibProperties version="1">
 <includeClasses>
-<classEntry path="org.swizframework.Swiz"/>
 <classEntry path="org.swizframework.di.AutowiredStatus"/>
-<classEntry path="org.swizframework.ioc.BeanManager"/>
 <classEntry path="org.swizframework.di.TypeDescriptor"/>
-<classEntry path="org.swizframework.ioc.IBeanProvider"/>
 <classEntry path="org.swizframework.SwizConfig"/>
+<classEntry path="org.swizframework.reflect.BaseMetadataHost"/>
 <classEntry path="org.swizframework.reflect.MetadataTag"/>
-<classEntry path="org.swizframework.util.SwizLogger"/>
+<classEntry path="org.swizframework.reflect.MetadataHostType"/>
 <classEntry path="org.swizframework.ioc.BeanLoader"/>
 <classEntry path="org.swizframework.di.Bean"/>
+<classEntry path="org.swizframework.Swiz"/>
+<classEntry path="org.swizframework.ioc.BeanManager"/>
+<classEntry path="org.swizframework.ioc.IBeanProvider"/>
+<classEntry path="org.swizframework.reflect.MetadataHostProperty"/>
+<classEntry path="org.swizframework.util.SwizLogger"/>
 </includeClasses>
 <includeResources/>
 <namespaceManifests/>
