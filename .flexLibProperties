@@ -6,6 +6,7 @@
 <classEntry path="org.swizframework.SwizConfig"/>
 <classEntry path="org.swizframework.reflect.BaseMetadataHost"/>
 <classEntry path="org.swizframework.reflect.MetadataTag"/>
+<classEntry path="org.swizframework.reflect.MetadataArg"/>
 <classEntry path="org.swizframework.reflect.MetadataHostType"/>
 <classEntry path="org.swizframework.ioc.BeanLoader"/>
 <classEntry path="org.swizframework.di.Bean"/>
