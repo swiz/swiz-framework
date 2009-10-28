@@ -6,6 +6,10 @@ package org.swizframework
 	import org.swizframework.di.AutowireManager;
 	import org.swizframework.ioc.BeanManager;
 	
+	/**
+	 * Core framework class that serves as an IoC container rooted
+	 * at the IEventDispatcher passed into its constructor.
+	 */
 	public class Swiz
 	{
 		// ========================================
