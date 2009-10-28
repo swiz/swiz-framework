@@ -53,8 +53,6 @@ package org.swizframework
 			
 			if( dispatcher is ISwizHost )
 				ISwizHost( dispatcher ).swizInstance = this;
-			
-			trace( "Swiz created and attached to", dispatcher );
 		}
 		
 		// ========================================
@@ -75,7 +73,6 @@ package org.swizframework
 		
 		public function addBeanProviders( providerClasses:Array ):void
 		{
-			trace( "Swiz passing array of", providerClasses.length, "bean provider classes to BeanManager" );
 			beanManager.processBeanProviders( providerClasses );
 		}
 	}
