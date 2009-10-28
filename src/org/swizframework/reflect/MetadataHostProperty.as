@@ -10,7 +10,7 @@ package org.swizframework.reflect
 		{
 			super();
 			
-			_type = MetadataHostType.PROPERTY;
+			_hostType = MetadataHostType.PROPERTY;
 		}
 	}
 }

@@ -40,51 +40,49 @@ package org.swizframework.ioc
 		
 		public function processBeanProviders( providerClasses:Array ):void
 		{
-			//trace( "BeanManager::processBeanProviders()" );
+			// make sure dictionaries are instantiated
 			typeDescriptors ||= new Dictionary();
 			beans ||= new Dictionary();
 			
+			// iterate over passed in classes
 			for each( var providerClass:Class in providerClasses )
 			{
-				//trace( "BeanManager creating instance of provider class", getQualifiedClassName( providerClass ) );
-				// TODO: add support for passing in instances
+				// TODO: add support for passing in instances?
+				// create instance of passed in class
 				var providerInstance:* = new providerClass();
-				// get public props.
-				// TODO add accessor support
-				//trace( "BeanManager calling describeType() for bean provider instance" );
+				// get all readable public properties of provider class instance
 				// TODO: implement type caching
 				var providerDescription:XML = describeType( providerInstance );
 				var beanList:XML = <beans />;
 				beanList.appendChild( providerDescription.variable );
 				beanList.appendChild( providerDescription.accessor.( @access != "writeOnly" ) );
 				
-				//trace( "BeanManager iterating over public properties (beans) of bean provider instance" );
+				// iterate over public properties (beans) of bean provider instance
 				for each( var beanNode:XML in beanList.children() )
 				{
+					// name of the property
 					var beanName:String = beanNode.@name.toString();
-					
+					// name of the property's class
 					var beanClassName:String = beanNode.@type;
-					//trace( "BeanManager checking to see if we already have type info for", beanClassName );
+					// ref to actual bean
+					var beanInstance:* = providerInstance[ beanName ];
+					
+					// check to see if we already have a TypeDescriptor for this class type
 					if( typeDescriptors[ beanClassName ] == null )
 					{
-						//trace( "BeanManager does not have type info for", beanClassName );
-						var td:TypeDescriptor = new TypeDescriptor().fromXML( describeType( providerInstance[ beanName ] ) );
-						//trace( "BeanManager storing", beanClassName, "type info" );
+						// existing TypeDescriptor not found, so create one and store it
+						// TODO: implement type caching
+						var td:TypeDescriptor = new TypeDescriptor().fromXML( describeType( beanInstance ) );
 						typeDescriptors[ beanClassName ] = td;
-					}
-					else
-					{
-						//trace( "BeanManager already has type info for", beanClassName, ", moving on" );
 					}
 					
 					// create Bean instance and store it
 					var bean:Bean = new Bean();
 					bean.name = beanName;
 					bean.typeDescriptor = td;
-					bean.instance = providerInstance[ beanName ];
+					bean.instance = beanInstance;
 					bean.autowiredStatus = AutowiredStatus.EMPTY;
-					beans[ UIDUtil.getUID( bean.instance ) ] = bean.instance;
-					//trace( "BeanManager created", beanName, "Bean instance of type", beanClassName );
+					beans[ UIDUtil.getUID( beanInstance ) ] = beanInstance;
 				}
 			}
 		}

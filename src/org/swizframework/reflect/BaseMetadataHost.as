@@ -7,21 +7,21 @@ package org.swizframework.reflect
 		// ========================================
 		
 		/**
-		 * Backing variable for <code>type</code> getter/setter.
+		 * Backing variable for <code>hostType</code> getter/setter.
 		 */
-		protected var _type:String;
+		protected var _hostType:String;
 		
 		/**
 		 * 
 		 */
-		public function get type():String
+		public function get hostType():String
 		{
-			return _type;
+			return _hostType;
 		}
 		
-		public function set type( value:String ):void
+		public function set hostType( value:String ):void
 		{
-			_type = value;
+			_hostType = value;
 		}
 		
 		//

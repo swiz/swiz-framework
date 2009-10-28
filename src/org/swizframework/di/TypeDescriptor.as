@@ -7,6 +7,10 @@ package org.swizframework.di
 	import org.swizframework.reflect.MetadataHostProperty;
 	import org.swizframework.reflect.MetadataTag;
 	
+	/**
+	 * This class is used to store basic information about types that Swiz
+	 * needs to know about.
+	 */
 	public class TypeDescriptor
 	{
 		// ========================================
@@ -14,27 +18,29 @@ package org.swizframework.di
 		// ========================================
 		
 		/**
-		 * 
+		 * Output of describeType() for this type.
 		 */
 		public var description:XML;
 		
 		/**
-		 * 
+		 * The fully qualified name of this type.
 		 */
 		public var className:String;
 		
 		/**
-		 * 
+		 * The fully qualified name of this type's super class.
 		 */
 		public var superClassName:String;
 		
 		/**
-		 * 
+		 * The fully qualified name of all interfaces this type implements.
 		 */
 		public var interfaces:Array = [];
 		
 		/**
+		 * Array of IMetadataHost instances for this type.
 		 * 
+		 * @see org.swizframework.reflect.IMetadataHost
 		 */
 		public var metadataHosts:Array = [];
 		
@@ -48,34 +54,26 @@ package org.swizframework.di
 		}
 		
 		// ========================================
-		// public methods
+		// protected methods
 		// ========================================
 		
-		public function fromXML( description:XML ):TypeDescriptor
-		{
-			this.description = description;
-			this.className = description.@name;
-			trace( "TypeDescriptor created for", this.className );
-			this.superClassName = description.@base;
-			for each( var node:XML in description.implementsInterface )
-				interfaces.push( node.@type.toString() );
-			this.metadataHosts = getMetadataHosts( description );
-			
-			return this;
-		}
-		
+		/**
+		 * Gather and return all properties, methods or the class itself that 
+		 * are decorated with metadata.
+		 */
 		protected function getMetadataHosts( description:XML ):Array
 		{
 			var host:IMetadataHost;
 			
-			// find all Metadata tags in describeType()'s output XML
-			// parent node will be the actual property/method node
+			// find all metadata tags in describeType()'s output XML
+			// parent node will be the actual property/method/class node
 			for each( var mdNode:XML in description..metadata )
 			{
 				// property, method or class?
 				var metadataHostType:String = mdNode.parent().name();
 				// name of property/method
 				var metadataHostName:String = mdNode.parent().@name.toString();
+				
 				// if we don't already have an IMetadataHost object for this property/method
 				if( !hasMetadataHostWithName( metadataHostName ) )
 				{
@@ -86,13 +84,15 @@ package org.swizframework.di
 					host.name = metadataHostName;
 					metadataHosts.push( host );
 				}
-					
+				
+				// gather and store all key/value pairs for the metadata tag
 				var args:Array = [];
 				for each( var argNode:XML in mdNode.arg )
 				{
 					args.push( new MetadataArg( argNode.@key.toString(), argNode.@value.toString() ) );
 				}
 				
+				// create and store metadata tag as object
 				var mt:MetadataTag = new MetadataTag( mdNode.@name.toString(), args, host );
 				host.metadataTags.push( mt );
 			}
@@ -102,8 +102,6 @@ package org.swizframework.di
 		
 		/**
 		 * Check to see if this type already has an IMetadataHost with the given name.
-		 * An IMetadataHost is a representation of a public property decorated with
-		 * some kind of metadata so name collisions should be impossible.
 		 * 
 		 * @see org.swizframework.reflect.IMetadataHost
 		 */
@@ -118,6 +116,28 @@ package org.swizframework.di
 			}
 			
 			return false;
+		}
+		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		/**
+		 * Populates the TypeDescriptor instance from the data returned
+		 * by flash.utils.describeType.
+		 * 
+		 * @see flash.utils.describeType
+		 */
+		public function fromXML( description:XML ):TypeDescriptor
+		{
+			description = description;
+			className = description.@name;
+			superClassName = description.@base;
+			for each( var node:XML in description.implementsInterface )
+				interfaces.push( node.@type.toString() );
+			metadataHosts = getMetadataHosts( description );
+			
+			return this;
 		}
 	}
 }

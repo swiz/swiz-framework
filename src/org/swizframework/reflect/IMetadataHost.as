@@ -1,9 +1,13 @@
 package org.swizframework.reflect
 {
+	/**
+	 * IMetadataHost is a representation of a public property or method
+	 * decorated with some kind of metadata so name collisions should be impossible.
+	 */
 	public interface IMetadataHost
 	{
-		function get type():String;
-		function set type( value:String ):void;
+		function get hostType():String;
+		function set hostType( value:String ):void;
 		
 		function get name():String;
 		function set name( value:String ):void;
