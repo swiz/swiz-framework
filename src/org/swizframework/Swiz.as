@@ -25,7 +25,7 @@ package org.swizframework
 		/**
 		 * 
 		 */
-		protected var injectionEventType:String = "addedToStage";
+		protected var injectionEvent:String = "addedToStage";
 		
 		/**
 		 * 
@@ -47,7 +47,7 @@ package org.swizframework
 			this.beanManager = new BeanManager();
 			
 			this.dispatcher = dispatcher;
-			this.dispatcher.addEventListener( injectionEventType, handleInjectionEvent, true, 50, true );
+			this.dispatcher.addEventListener( injectionEvent, handleInjectionEvent, true, 50, true );
 			
 			this.config = ( config != null ) ? config : new SwizConfig()
 			
