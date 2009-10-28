@@ -17,12 +17,18 @@ package org.swizframework.ioc
 		// ========================================
 		
 		/**
+		 * Catalog of TypeDescriptor instances keyed by fully
+		 * qualified class name of type being represented.
 		 * 
+		 * @see org.swizframework.di.TypeDescriptor
 		 */
 		protected var typeDescriptors:Dictionary;
 		
 		/**
+		 * Catalog of Bean instances keyed by UID of actual
+		 * managed object wrapped by Bean instance.
 		 * 
+		 * @see org.swizframework.di.Bean
 		 */
 		protected var beans:Dictionary;
 		
@@ -38,6 +44,12 @@ package org.swizframework.ioc
 		// public methods
 		// ========================================
 		
+		/**
+		 * Processes an <code>Array</code> of classes that contain
+		 * objects to be managed by Swiz (aka beans). The provider classes
+		 * will be instantiated within this method and all resulting publicly
+		 * readable properties will become beans.
+		 */
 		public function processBeanProviders( providerClasses:Array ):void
 		{
 			// make sure dictionaries are instantiated
