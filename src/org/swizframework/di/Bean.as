@@ -1,5 +1,7 @@
 package org.swizframework.di
 {
+	import org.swizframework.reflection.TypeDescriptor;
+	
 	public class Bean
 	{
 		// ========================================
