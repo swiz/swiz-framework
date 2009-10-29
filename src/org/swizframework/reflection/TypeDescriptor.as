@@ -1,11 +1,11 @@
-package org.swizframework.di
+package org.swizframework.reflection
 {
-	import org.swizframework.reflect.IMetadataHost;
-	import org.swizframework.reflect.MetadataArg;
-	import org.swizframework.reflect.MetadataHostClass;
-	import org.swizframework.reflect.MetadataHostMethod;
-	import org.swizframework.reflect.MetadataHostProperty;
-	import org.swizframework.reflect.MetadataTag;
+	import org.swizframework.reflection.IMetadataHost;
+	import org.swizframework.reflection.MetadataArg;
+	import org.swizframework.reflection.MetadataHostClass;
+	import org.swizframework.reflection.MetadataHostMethod;
+	import org.swizframework.reflection.MetadataHostProperty;
+	import org.swizframework.reflection.MetadataTag;
 	
 	/**
 	 * This class is used to store basic information about types that Swiz
@@ -40,7 +40,7 @@ package org.swizframework.di
 		/**
 		 * Array of IMetadataHost instances for this type.
 		 * 
-		 * @see org.swizframework.reflect.IMetadataHost
+		 * @see org.swizframework.reflection.IMetadataHost
 		 */
 		public var metadataHosts:Array = [];
 		
@@ -103,7 +103,7 @@ package org.swizframework.di
 		/**
 		 * Check to see if this type already has an IMetadataHost with the given name.
 		 * 
-		 * @see org.swizframework.reflect.IMetadataHost
+		 * @see org.swizframework.reflection.IMetadataHost
 		 */
 		protected function hasMetadataHostWithName( metadataHostName:String ):Boolean
 		{
@@ -130,7 +130,7 @@ package org.swizframework.di
 		 */
 		public function fromXML( description:XML ):TypeDescriptor
 		{
-			description = description;
+			this.description = description;
 			className = description.@name;
 			superClassName = description.@base;
 			for each( var node:XML in description.implementsInterface )
@@ -138,6 +138,106 @@ package org.swizframework.di
 			metadataHosts = getMetadataHosts( description );
 			
 			return this;
+		}
+		
+		/**
+		 * Determine whether or not this class has any instances of
+		 * metadata tags with the provided name.
+		 */
+		public function hasMetadataTag( metadataTagName:String ):Boolean
+		{
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				for each( var metadataTag:MetadataTag in metadataHost.metadataTags )
+				{
+					if( metadataTag.name == metadataTagName )
+						return true;
+				}
+			}
+			return false;
+		}
+		
+		/**
+		 * Get all IMetadataHost instances for this type that are decorated
+		 * with metadata tags with the provided name.
+		 */
+		public function getMetadataHostsWithTag( metadataTagName:String ):Array
+		{
+			var hosts:Array = [];
+			
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				for each( var metadataTag:MetadataTag in metadataHost.metadataTags )
+				{
+					if( metadataTag.name == metadataTagName )
+					{
+						hosts.push( metadataHost );
+						continue;
+					}
+				}
+			}
+			
+			return hosts;
+		}
+		
+		/**
+		 * Get all MetadataTag instances for class member with the provided name.
+		 */
+		public function getMetadataTagsForMember( memberName:String ):Array
+		{
+			var tags:Array;
+			
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				if( metadataHost.name == memberName )
+				{
+					tags = metadataHost.metadataTags;
+				}
+			}
+			
+			return tags;
+		}
+		
+		/**
+		 * Return all MetadataHostProperty instances for this type.
+		 * 
+		 * @see org.swizframework.reflection.MetadataHostProperty
+		 */
+		public function getMetadataHostProperties():Array
+		{
+			var hostProps:Array = [];
+			
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				if( metadataHost is MetadataHostProperty )
+				{
+					hostProps.push( metadataHost );
+					continue;
+				}
+			}
+			
+			return hostProps;
+		}
+		
+		/**
+		 * Return all MetadataHostMethod instances for this type.
+		 * 
+		 * @see org.swizframework.reflection.MetadataHostMethod
+		 */
+		public function getMetadataHostMethods():Array
+		{
+			var hostMethods:Array = [];
+			
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				if( metadataHost is MetadataHostMethod )
+				{
+					hostMethods.push( metadataHost );
+					continue;
+				}
+			}
+			
+			return hostMethods;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package org.swizframework.reflect
+package org.swizframework.reflection
 {
 	public class MetadataHostClass extends BaseMetadataHost
 	{

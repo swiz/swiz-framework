@@ -1,4 +1,4 @@
-package org.swizframework.reflect
+package org.swizframework.reflection
 {
 	/**
 	 * IMetadataHost is a representation of a public property or method

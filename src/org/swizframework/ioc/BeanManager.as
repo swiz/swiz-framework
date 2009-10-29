@@ -8,7 +8,7 @@ package org.swizframework.ioc
 	
 	import org.swizframework.di.AutowiredStatus;
 	import org.swizframework.di.Bean;
-	import org.swizframework.di.TypeDescriptor;
+	import org.swizframework.reflection.TypeDescriptor;
 	
 	public class BeanManager
 	{
@@ -38,6 +38,35 @@ package org.swizframework.ioc
 		
 		public function BeanManager()
 		{
+		}
+		
+		// ========================================
+		// protected methods
+		// ========================================
+		
+		/**
+		 * Get TypeDescriptor instance for provided bean. If a TypeDescriptor
+		 * has already been created for this type that instance will be returned.
+		 * 
+		 * @see org.swizframework.di.TypeDescriptor
+		 */
+		protected function getTypeDescriptor( beanInstance:* ):TypeDescriptor
+		{
+			// name of the property's class
+			var beanClassName:String = getQualifiedClassName( beanInstance );
+			
+			var td:TypeDescriptor = typeDescriptors[ beanClassName ];
+			
+			// check to see if we already have a TypeDescriptor for this class type
+			if( td == null )
+			{
+				// existing TypeDescriptor not found, so create one and store it
+				// TODO: implement type caching
+				td = new TypeDescriptor().fromXML( describeType( beanInstance ) );
+				typeDescriptors[ beanClassName ] = td;
+			}
+			
+			return td;
 		}
 		
 		// ========================================
@@ -74,19 +103,10 @@ package org.swizframework.ioc
 				{
 					// name of the property
 					var beanName:String = beanNode.@name.toString();
-					// name of the property's class
-					var beanClassName:String = beanNode.@type;
 					// ref to actual bean
 					var beanInstance:* = providerInstance[ beanName ];
 					
-					// check to see if we already have a TypeDescriptor for this class type
-					if( typeDescriptors[ beanClassName ] == null )
-					{
-						// existing TypeDescriptor not found, so create one and store it
-						// TODO: implement type caching
-						var td:TypeDescriptor = new TypeDescriptor().fromXML( describeType( beanInstance ) );
-						typeDescriptors[ beanClassName ] = td;
-					}
+					var td:TypeDescriptor = getTypeDescriptor( beanInstance );
 					
 					// create Bean instance and store it
 					var bean:Bean = new Bean();
