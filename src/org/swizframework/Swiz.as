@@ -4,7 +4,7 @@ package org.swizframework
 	import flash.events.IEventDispatcher;
 	
 	import org.swizframework.di.AutowireManager;
-	import org.swizframework.ioc.BeanManager;
+	import org.swizframework.ioc.BeanFactory;
 	
 	/**
 	 * Core framework class that serves as an IoC container rooted
@@ -39,7 +39,7 @@ package org.swizframework
 		/**
 		 * 
 		 */
-		protected var beanManager:BeanManager;
+		protected var beanManager:BeanFactory;
 		
 		// ========================================
 		// constructor
@@ -48,7 +48,7 @@ package org.swizframework
 		public function Swiz( dispatcher:IEventDispatcher, config:SwizConfig = null )
 		{
 			this.autowireManager = new AutowireManager();
-			this.beanManager = new BeanManager();
+			this.beanManager = new BeanFactory();
 			
 			this.dispatcher = dispatcher;
 			this.dispatcher.addEventListener( injectionEvent, handleInjectionEvent, true, 50, true );
