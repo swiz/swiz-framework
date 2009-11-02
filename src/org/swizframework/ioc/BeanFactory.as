@@ -10,7 +10,7 @@ package org.swizframework.ioc
 	import org.swizframework.di.Bean;
 	import org.swizframework.reflection.TypeDescriptor;
 	
-	public class BeanManager
+	public class BeanFactory
 	{
 		// ========================================
 		// protected properties
@@ -36,7 +36,7 @@ package org.swizframework.ioc
 		// constructor
 		// ========================================
 		
-		public function BeanManager()
+		public function BeanFactory()
 		{
 		}
 		

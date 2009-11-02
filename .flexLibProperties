@@ -8,7 +8,7 @@
 <classEntry path="org.swizframework.di.AutowiredStatus"/>
 <classEntry path="org.swizframework.di.Bean"/>
 <classEntry path="org.swizframework.ioc.BeanLoader"/>
-<classEntry path="org.swizframework.ioc.BeanManager"/>
+<classEntry path="org.swizframework.ioc.BeanFactory"/>
 <classEntry path="org.swizframework.ioc.IBeanProvider"/>
 <classEntry path="org.swizframework.reflection.BaseMetadataHost"/>
 <classEntry path="org.swizframework.reflection.IMetadataHost"/>
