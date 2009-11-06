@@ -4,8 +4,6 @@ package org.swizframework.ioc
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.utils.UIDUtil;
-	
 	import org.swizframework.di.AutowiredStatus;
 	import org.swizframework.di.Bean;
 	import org.swizframework.reflection.TypeDescriptor;
@@ -93,6 +91,7 @@ package org.swizframework.ioc
 				var providerInstance:* = new providerClass();
 				// get all readable public properties of provider class instance
 				// TODO: implement type caching
+				// TODO: add check and support for IBeanProviders
 				var providerDescription:XML = describeType( providerInstance );
 				var beanList:XML = <beans />;
 				beanList.appendChild( providerDescription.variable );
@@ -114,9 +113,46 @@ package org.swizframework.ioc
 					bean.typeDescriptor = td;
 					bean.instance = beanInstance;
 					bean.autowiredStatus = AutowiredStatus.EMPTY;
-					beans[ UIDUtil.getUID( beanInstance ) ] = beanInstance;
+					beans[ beanName ] = bean;
 				}
 			}
+		}
+		
+		/**
+		 * 
+		 */
+		public function getBeanById( beanId:String ):*
+		{
+			if( beans[ beanId ] != null )
+				return beans[ beanId ][ "instance" ];
+			
+			// TODO: throw error? log message? wait for future injection?
+		}
+		
+		/**
+		 * 
+		 */
+		public function getBeanByType( beanType:String ):*
+		{
+			var foundBean:*;
+			
+			if( beanType.indexOf( "::" ) < 0 && beanType.indexOf( "." ) > -1 )
+				beanType = beanType.substr( 0, beanType.lastIndexOf( "." ) ) + "::" + beanType.substr( beanType.lastIndexOf( "." ) + 1 );
+			
+			for each( var bean:Bean in beans )
+			{
+				var td:TypeDescriptor = bean.typeDescriptor;
+				
+				if( td.className == beanType || td.interfaces.indexOf( beanType ) > -1 )
+				{
+					if( foundBean != null )
+						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
+					
+					foundBean = bean;
+				}
+			}
+			
+			return foundBean[ "instance" ];
 		}
 	}
 }
