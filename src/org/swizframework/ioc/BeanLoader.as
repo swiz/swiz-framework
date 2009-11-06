@@ -14,7 +14,7 @@ package org.swizframework.ioc
 		/**
 		 * 
 		 */
-		public function get beans():Array
+		public function getBeans():Array
 		{
 			return _beans;
 		}
