@@ -3,35 +3,27 @@ package org.swizframework.reflection
 	public class BaseMetadataHost implements IMetadataHost
 	{
 		// ========================================
-		// public properties
+		// protected properties
 		// ========================================
-		
-		/**
-		 * Backing variable for <code>hostType</code> getter/setter.
-		 */
-		protected var _hostType:String;
-		
-		/**
-		 * 
-		 */
-		public function get hostType():String
-		{
-			return _hostType;
-		}
-		
-		public function set hostType( value:String ):void
-		{
-			_hostType = value;
-		}
-		
-		//
-		// name property
-		//
 		
 		/**
 		 * Backing variable for <code>name</code> getter/setter.
 		 */
 		protected var _name:String;
+		
+		/**
+		 * Backing variable for <code>type</code> getter/setter.
+		 */
+		protected var _type:Class;
+		
+		/**
+		 * Backing variable for <code>metadata</code> getter/setter.
+		 */
+		protected var _metadataTags:Array;
+		
+		// ========================================
+		// public properties
+		// ========================================
 		
 		/**
 		 * 
@@ -46,14 +38,20 @@ package org.swizframework.reflection
 			_name = value;
 		}
 		
-		//
-		// metadata property
-		//
-		
 		/**
-		 * Backing variable for <code>metadata</code> getter/setter.
+		 * 
 		 */
-		protected var _metadataTags:Array;
+		public function get type():Class
+		{
+			return _type;
+		}
+		
+		public function set type( value:Class ):void
+		{
+			_type = value;
+		}
+		
+		[ArrayElementType( "org.swizframework.reflection.IMetadataTag" )]
 		
 		/**
 		 * 
@@ -68,21 +66,6 @@ package org.swizframework.reflection
 			_metadataTags = value;
 		}
 		
-		//
-		// isBindable getter
-		//
-		
-		public function get isBindable():Boolean
-		{
-			for each( var tag:MetadataTag in metadataTags )
-			{
-				if( tag.name == "Bindable" )
-					return true;
-			}
-			
-			return false;
-		}
-		
 		// ========================================
 		// constructor
 		// ========================================
@@ -90,26 +73,6 @@ package org.swizframework.reflection
 		public function BaseMetadataHost()
 		{
 			metadataTags = [];
-		}
-		
-		// ========================================
-		// public methods
-		// ========================================
-		
-		/**
-		 * 
-		 */
-		public function toString():String
-		{
-			var str:String = "IMetadataHost: ";
-			
-			str += name + "\n";
-			for each( var tag:MetadataTag in metadataTags )
-			{
-				str += "\t" + tag.toString() + "\n";
-			}
-			
-			return str;
 		}
 	}
 }

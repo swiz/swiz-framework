@@ -1,6 +1,6 @@
 package org.swizframework.processors
 {
-	import org.swizframework.metadata.Metadata;
+	import org.swizframework.reflection.IMetadataTag;
 
 	public interface IMetadataProcessor extends IProcessor
 	{
@@ -26,12 +26,12 @@ package org.swizframework.processors
 		/**
 		 * Add Metadata
 		 */
-		function addMetadata( bean:Object, metadata:Metadata ):void;
+		function addMetadata( bean:Object, metadata:IMetadataTag ):void;
 		
 		/**
 		 * Remove Metadata
 		 */
-		function removeMetadata( bean:Object, metadata:Metadata ):void;
+		function removeMetadata( bean:Object, metadata:IMetadataTag ):void;
 		
 	}
 }

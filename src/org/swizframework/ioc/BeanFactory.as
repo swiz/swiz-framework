@@ -2,14 +2,16 @@ package org.swizframework.ioc
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	
 	import org.swizframework.ISwiz;
 	import org.swizframework.events.BeanEvent;
-	import org.swizframework.metadata.Metadata;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
+	import org.swizframework.reflection.IMetadataTag;
+	import org.swizframework.reflection.TypeDescriptor;
 	import org.swizframework.util.MetadataUtil;
 	
 	/**
@@ -133,7 +135,6 @@ package org.swizframework.ioc
 				if ( processor is IBeanProcessor )
 				{
 					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
-					
 					beanProcessor.addBean( bean );
 				}
 				
@@ -141,11 +142,12 @@ package org.swizframework.ioc
 				if ( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
+					//var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
+					var metadataTags:Array = new TypeDescriptor().fromInstance( bean ).getMetadataTagsByName( metadataProcessor.metadataName );
 					
-					for each ( var metadata:Metadata in metadatas )
+					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
-						metadataProcessor.addMetadata( bean, metadata );
+						metadataProcessor.addMetadata( bean, metadataTag );
 					}
 				}
 			}
@@ -162,11 +164,12 @@ package org.swizframework.ioc
 				if ( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
+					//var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
+					var metadataTags:Array = new TypeDescriptor().fromInstance( bean ).getMetadataTagsByName( metadataProcessor.metadataName );
 					
-					for each ( var metadata:Metadata in metadatas )
+					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
-						metadataProcessor.removeMetadata( bean, metadata );
+						metadataProcessor.removeMetadata( bean, metadataTag );
 					}
 				}
 				

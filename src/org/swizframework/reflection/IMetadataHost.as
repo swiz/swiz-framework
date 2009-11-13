@@ -6,15 +6,16 @@ package org.swizframework.reflection
 	 */
 	public interface IMetadataHost
 	{
-		function get hostType():String;
-		function set hostType( value:String ):void;
-		
+		// name of property/method/class
 		function get name():String;
 		function set name( value:String ):void;
 		
+		function get type():Class;
+		function set type( value:Class ):void;
+		
+		[ArrayElementType( "org.swizframework.reflection.IMetadataTag" )]
+		
 		function get metadataTags():Array;
 		function set metadataTags( value:Array ):void;
-		
-		function get isBindable():Boolean;
 	}
 }

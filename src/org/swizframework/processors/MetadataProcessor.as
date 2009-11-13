@@ -4,6 +4,8 @@ package org.swizframework.processors
 	
 	import org.swizframework.ISwiz;
 	import org.swizframework.metadata.Metadata;
+	import org.swizframework.reflection.BaseMetadataTag;
+	import org.swizframework.reflection.IMetadataTag;
 	
 	/**
 	 * Metadata Processor
@@ -58,7 +60,7 @@ package org.swizframework.processors
 			super();
 			
 			this._metadataName = metadataName;
-			this._metadataClass = metadataClass ||= Metadata;
+			this._metadataClass = metadataClass ||= BaseMetadataTag;
 			
 			this.addMethod = addMethod;
 			this.removeMethod = removeMethod;
@@ -80,7 +82,7 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function addMetadata( bean:Object, metadata:Metadata ):void
+		public function addMetadata( bean:Object, metadata:IMetadataTag ):void
 		{
 			addMethod( bean, metadata );
 		}
@@ -88,7 +90,7 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function removeMetadata( bean:Object, metadata:Metadata ):void
+		public function removeMetadata( bean:Object, metadata:IMetadataTag ):void
 		{
 			removeMethod( bean, metadata );
 		}
