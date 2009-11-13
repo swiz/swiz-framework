@@ -4,7 +4,7 @@ package org.swizframework.processors
 	import mx.binding.utils.ChangeWatcher;
 	
 	import org.swizframework.ioc.IBeanProvider;
-	import org.swizframework.metadata.AutowireMetadata;
+	import org.swizframework.metadata.AutowireMetadataTag;
 	import org.swizframework.metadata.AutowireQueue;
 	
 	/**
@@ -40,7 +40,7 @@ package org.swizframework.processors
 		 */
 		public function AutowireProcessor()
 		{
-			super( AUTOWIRE, AutowireMetadata, addAutowire, removeAutowire );
+			super( AUTOWIRE, AutowireMetadataTag, addAutowire, removeAutowire );
 		}
 		
 		// ========================================
@@ -93,7 +93,7 @@ package org.swizframework.processors
 		{
 			for each ( var queue:AutowireQueue in queueByType )
 			{
-				if ( bean is queue.autowire.targetType )
+				if ( bean is queue.autowire.host.type )
 				{
 					addAutowire( queue.bean, queue.autowire );
 					queueByType.splice( queueByType.indexOf( queue ), 1 );
@@ -104,7 +104,7 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire
 		 */
-		protected function addAutowire( bean:Object, autowire:AutowireMetadata ):void
+		protected function addAutowire( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			if ( autowire.bean != null )
 			{
@@ -126,7 +126,7 @@ package org.swizframework.processors
 		/**
 		 * Remove Autowire
 		 */
-		protected function removeAutowire( bean:Object, autowire:AutowireMetadata ):void
+		protected function removeAutowire( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			if ( autowire.bean != null )
 			{
@@ -148,18 +148,18 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire By Property
 		 */
-		protected function addAutowireByProperty( bean:Object, autowire:AutowireMetadata ):void
+		protected function addAutowireByProperty( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			var source:Object = getBeanByName( autowire.bean );
 			
 			if ( source )
 			{
-				bean[ autowire.targetName ] = source[ autowire.property ];
-				addPropertyBinding( bean, autowire.targetName, source, autowire.property );
+				bean[ autowire.host.name ] = source[ autowire.property ];
+				addPropertyBinding( bean, autowire.host.name, source, autowire.property );
 				
 				if ( autowire.twoWay )
 				{
-					addPropertyBinding( source, autowire.property, bean, autowire.targetName );
+					addPropertyBinding( source, autowire.property, bean, autowire.host.name );
 				}
 			}
 			else
@@ -171,29 +171,29 @@ package org.swizframework.processors
 		/**
 		 * Remove Autowire By Property
 		 */
-		protected function removeAutowireByProperty( bean:Object, autowire:AutowireMetadata ):void
+		protected function removeAutowireByProperty( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			var source:Object = getBeanByName( autowire.bean );
 			
 			if ( autowire.twoWay )
 			{
-				removePropertyBinding( source, autowire.property, bean, autowire.targetName );
+				removePropertyBinding( source, autowire.property, bean, autowire.host.name );
 			}
 			
-			removePropertyBinding( bean, autowire.targetName, source, autowire.property );
-			bean[ autowire.targetName ] = null;
+			removePropertyBinding( bean, autowire.host.name, source, autowire.property );
+			bean[ autowire.host.name ] = null;
 		}
 		
 		/**
 		 * Add Autowire By Name
 		 */
-		protected function addAutowireByName( bean:Object, autowire:AutowireMetadata ):void
+		protected function addAutowireByName( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			var source:Object = getBeanByName( autowire.bean );
 			
 			if ( source )
 			{
-				bean[ autowire.targetName ] = source;
+				bean[ autowire.host.name ] = source;
 			}
 			else
 			{
@@ -204,21 +204,21 @@ package org.swizframework.processors
 		/**
 		 * Remove Autowire By Name
 		 */
-		protected function removeAutowireByName( bean:Object, autowire:AutowireMetadata ):void
+		protected function removeAutowireByName( bean:Object, autowire:AutowireMetadataTag ):void
 		{
-			bean[ autowire.targetName ] = null;
+			bean[ autowire.host.name ] = null;
 		}
 		
 		/**
 		 * Add Autowire By Type
 		 */
-		protected function addAutowireByType( bean:Object, autowire:AutowireMetadata ):void
+		protected function addAutowireByType( bean:Object, autowire:AutowireMetadataTag ):void
 		{
-			var source:Object = getBeanByType( autowire.targetType );
+			var source:Object = getBeanByType( autowire.host.type );
 			
 			if ( source )
 			{
-				bean[ autowire.targetName ] = source;
+				bean[ autowire.host.name ] = source;
 			}
 			else
 			{
@@ -229,9 +229,9 @@ package org.swizframework.processors
 		/**
 		 * Remove Autowire By Type
 		 */
-		protected function removeAutowireByType( bean:Object, autowire:AutowireMetadata ):void
+		protected function removeAutowireByType( bean:Object, autowire:AutowireMetadataTag ):void
 		{
-			bean[ autowire.targetName ] = null;
+			bean[ autowire.host.name ] = null;
 		}
 		
 		/**
@@ -273,7 +273,7 @@ package org.swizframework.processors
 		/**
 		 * Add To Queue By Name
 		 */
-		protected function addToQueueByName( bean:Object, autowire:AutowireMetadata ):void
+		protected function addToQueueByName( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			if ( autowire.bean in queueByName )
 			{
@@ -288,7 +288,7 @@ package org.swizframework.processors
 		/**
 		 * Add To Queue By Type
 		 */
-		protected function addToQueueByType( bean:Object, autowire:AutowireMetadata ):void
+		protected function addToQueueByType( bean:Object, autowire:AutowireMetadataTag ):void
 		{
 			queueByType[ queueByType.length ] = new AutowireQueue( bean, autowire );
 		}

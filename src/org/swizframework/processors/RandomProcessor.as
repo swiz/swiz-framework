@@ -1,6 +1,7 @@
 package org.swizframework.processors
 {
 	import org.swizframework.metadata.Metadata;
+	import org.swizframework.reflection.IMetadataTag;
 	
 	/**
 	 * Random Processor
@@ -27,17 +28,17 @@ package org.swizframework.processors
 		/**
 		 * Add Random
 		 */
-		override public function addMetadata( bean:Object, metadata:Metadata ):void
+		override public function addMetadata( bean:Object, metadata:IMetadataTag ):void
 		{
-			bean[ metadata.targetName ] = Math.random() * 1000;
+			bean[ metadata.host.name ] = Math.random() * 1000;
 		}
 		
 		/**
 		 * Remove Random
 		 */
-		override public function removeMetadata( bean:Object, metadata:Metadata ):void
+		override public function removeMetadata( bean:Object, metadata:IMetadataTag ):void
 		{
-			bean[ metadata.targetName ] = 0;
+			bean[ metadata.host.name ] = 0;
 		}
 		
 	}

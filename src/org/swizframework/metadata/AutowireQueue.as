@@ -4,9 +4,9 @@ package org.swizframework.metadata
 	{
 		
 		public var bean:Object;
-		public var autowire:AutowireMetadata;
+		public var autowire:AutowireMetadataTag;
 		
-		public function AutowireQueue( bean:Object = null, autowire:AutowireMetadata = null )
+		public function AutowireQueue( bean:Object = null, autowire:AutowireMetadataTag = null )
 		{
 			super();
 			

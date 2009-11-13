@@ -1,11 +1,12 @@
 package org.swizframework.reflection
 {
-	import org.swizframework.reflection.IMetadataHost;
-	import org.swizframework.reflection.MetadataArg;
-	import org.swizframework.reflection.MetadataHostClass;
-	import org.swizframework.reflection.MetadataHostMethod;
-	import org.swizframework.reflection.MetadataHostProperty;
-	import org.swizframework.reflection.MetadataTag;
+	import flash.utils.Dictionary;
+	import flash.utils.describeType;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
+	
+	import org.swizframework.metadata.AutowireMetadataTag;
+	import org.swizframework.metadata.MediateMetadataTag;
 	
 	/**
 	 * This class is used to store basic information about types that Swiz
@@ -70,7 +71,7 @@ package org.swizframework.reflection
 			for each( var mdNode:XML in description..metadata )
 			{
 				// property, method or class?
-				var metadataHostType:String = mdNode.parent().name();
+				var metadataHostKind:String = mdNode.parent().name();
 				// name of property/method
 				var metadataHostName:String = mdNode.parent().@name.toString();
 				
@@ -78,9 +79,16 @@ package org.swizframework.reflection
 				if( !hasMetadataHostWithName( metadataHostName ) )
 				{
 					// actual type is determined by metadata's parent tag
-					host = ( metadataHostType == "method" ) ? new MetadataHostMethod()
-															: ( metadataHostType == "type" ) ? new MetadataHostClass()
+					host = ( metadataHostKind == "method" ) ? new MetadataHostMethod()
+															: ( metadataHostKind == "type" ) ? new MetadataHostClass()
 																							 : new MetadataHostProperty();
+					
+					// TODO: more temp fix code
+					if( host is MetadataHostProperty )
+					{
+						MetadataHostProperty( host ).type = getDefinitionByName( mdNode.parent().@type.toString() ) as Class;
+					}
+					
 					host.name = metadataHostName;
 					metadataHosts.push( host );
 				}
@@ -93,7 +101,12 @@ package org.swizframework.reflection
 				}
 				
 				// create and store metadata tag as object
-				var mt:MetadataTag = new MetadataTag( mdNode.@name.toString(), args, host );
+				//var mt:IMetadataTag = new BaseMetadataTag( mdNode.@name.toString(), args, host );
+				// TODO: this is a temp fix
+				var tagName:String = mdNode.@name.toString();
+				var mt:IMetadataTag = ( tagName == "Autowire" ) ? new AutowireMetadataTag( args, host )
+																: ( tagName == "Mediate" ) ? new MediateMetadataTag( args, host )
+																							: new BaseMetadataTag( tagName, args, host );
 				host.metadataTags.push( mt );
 			}
 			
@@ -140,6 +153,18 @@ package org.swizframework.reflection
 			return this;
 		}
 		
+		private static var types:Dictionary = new Dictionary();
+		
+		public function fromInstance( obj:Object ):TypeDescriptor
+		{
+			var qn:String = getQualifiedClassName( obj );
+			if( types[ qn ] != null )
+				return types[ qn ];
+			
+			types[ qn ] = fromXML( describeType( obj ) );
+			return types[ qn ];
+		}
+		
 		/**
 		 * Determine whether or not this class has any instances of
 		 * metadata tags with the provided name.
@@ -148,7 +173,7 @@ package org.swizframework.reflection
 		{
 			for each( var metadataHost:IMetadataHost in metadataHosts )
 			{
-				for each( var metadataTag:MetadataTag in metadataHost.metadataTags )
+				for each( var metadataTag:IMetadataTag in metadataHost.metadataTags )
 				{
 					if( metadataTag.name == metadataTagName )
 						return true;
@@ -167,7 +192,7 @@ package org.swizframework.reflection
 			
 			for each( var metadataHost:IMetadataHost in metadataHosts )
 			{
-				for each( var metadataTag:MetadataTag in metadataHost.metadataTags )
+				for each( var metadataTag:IMetadataTag in metadataHost.metadataTags )
 				{
 					if( metadataTag.name == metadataTagName )
 					{
@@ -178,6 +203,27 @@ package org.swizframework.reflection
 			}
 			
 			return hosts;
+		}
+		
+		/**
+		 * Get all MetadataTag instances for class member with the provided name.
+		 */
+		public function getMetadataTagsByName( tagName:String ):Array
+		{
+			var tags:Array = [];
+			
+			for each( var metadataHost:IMetadataHost in metadataHosts )
+			{
+				for each( var metadataTag:IMetadataTag in metadataHost.metadataTags )
+				{
+					if( metadataTag.name == tagName )
+					{
+						tags.push( metadataTag );
+					}
+				}
+			}
+			
+			return tags;
 		}
 		
 		/**
