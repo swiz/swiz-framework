@@ -5,6 +5,7 @@ package org.swizframework.ioc
 	import org.swizframework.events.BeanEvent;
 	
 	[DefaultProperty( "beans" )]
+	
 	[Event( name="beanAdded", type="org.swizframework.events.BeanEvent" )]
 	[Event( name="beanRemoved", type="org.swizframework.events.BeanEvent" )]
 	
@@ -13,15 +14,14 @@ package org.swizframework.ioc
 	 */
 	public class BeanProvider extends EventDispatcher implements IBeanProvider
 	{
-		
 		// ========================================
-		// private properties
+		// protected properties
 		// ========================================
 		
 		/**
 		 * Backing variable for <code>beans</code> getter.
 		 */
-		private var _beans:Array;
+		protected var _beans:Array;
 		
 		// ========================================
 		// public properties
@@ -37,7 +37,7 @@ package org.swizframework.ioc
 		
 		public function set beans( value:Array ):void
 		{
-			if ( _beans != value )
+			if ( value != _beans )
 			{
 				removeBeans();
 				_beans = value;
@@ -57,6 +57,26 @@ package org.swizframework.ioc
 			super();
 			
 			this.beans = beans;
+		}
+		
+		// ========================================
+		// protected methods
+		// ========================================
+		
+		protected function addBeans():void
+		{
+			for each ( var bean:Object in beans )
+			{
+				dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
+			}
+		}
+		
+		protected function removeBeans():void
+		{
+			for each ( var bean:Object in beans )
+			{
+				dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
+			}
 		}
 		
 		// ========================================
@@ -110,26 +130,5 @@ package org.swizframework.ioc
 			
 			return foundBean;
 		}
-		
-		// ========================================
-		// protected methods
-		// ========================================
-		
-		protected function addBeans():void
-		{
-			for each ( var bean:Object in beans )
-			{
-				dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
-			}
-		}
-		
-		protected function removeBeans():void
-		{
-			for each ( var bean:Object in beans )
-			{
-				dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
-			}
-		}
-		
 	}
 }

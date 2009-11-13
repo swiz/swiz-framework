@@ -1,6 +1,6 @@
 package org.swizframework.processors
 {
-	import org.swizframework.metadata.Metadata;
+	import org.swizframework.di.Bean;
 	import org.swizframework.reflection.IMetadataTag;
 	
 	/**
@@ -30,7 +30,7 @@ package org.swizframework.processors
 		 */
 		override public function addMetadata( bean:Object, metadata:IMetadataTag ):void
 		{
-			bean[ metadata.host.name ] = Math.random() * 1000;
+			Bean( bean ).source[ metadata.host.name ] = Math.random() * 1000;
 		}
 		
 		/**

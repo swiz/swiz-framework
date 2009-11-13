@@ -3,6 +3,7 @@ package org.swizframework.processors
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
 	
+	import org.swizframework.di.Bean;
 	import org.swizframework.ioc.IBeanProvider;
 	import org.swizframework.metadata.AutowireMetadataTag;
 	import org.swizframework.metadata.AutowireQueue;
@@ -50,7 +51,7 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function addBean( bean:Object ):void
+		public function addBean( bean:Bean ):void
 		{
 			processQueueByNameForBean( bean );
 			processQueueByTypeForBean( bean );
@@ -59,7 +60,7 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function removeBean( bean:Object ):void
+		public function removeBean( bean:Bean ):void
 		{
 			// nothing to do here
 		}
@@ -218,7 +219,7 @@ package org.swizframework.processors
 			
 			if ( source )
 			{
-				bean[ autowire.host.name ] = source;
+				Bean( bean ).source[ autowire.host.name ] = source;
 			}
 			else
 			{
