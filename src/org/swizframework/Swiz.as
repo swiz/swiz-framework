@@ -4,6 +4,7 @@ package org.swizframework
 	import flash.events.IEventDispatcher;
 	
 	import mx.core.IMXMLObject;
+	import mx.logging.ILogger;
 	
 	import org.swizframework.ioc.BeanFactory;
 	import org.swizframework.ioc.IBeanFactory;
@@ -11,6 +12,7 @@ package org.swizframework
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
 	import org.swizframework.processors.RandomProcessor;
+	import org.swizframework.util.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
 	
