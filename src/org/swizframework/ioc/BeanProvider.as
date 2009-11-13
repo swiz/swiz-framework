@@ -2,6 +2,7 @@ package org.swizframework.ioc
 {
 	import flash.events.EventDispatcher;
 	
+	import org.swizframework.di.Bean;
 	import org.swizframework.events.BeanEvent;
 	
 	[DefaultProperty( "beans" )]
@@ -108,7 +109,13 @@ package org.swizframework.ioc
 		
 		public function getBeanByName( beanName:String ):Object
 		{
-			return null; //return beanId in beans ? beans[ beanId ] : null;
+			for each( var bean:Object in beans )
+			{
+				if( bean is Bean && Bean( bean ).name == beanName )
+					return bean;
+			}
+			
+			return null;
 		}
 		
 		public function getBeanByType( beanType:Class ):Object
@@ -117,7 +124,11 @@ package org.swizframework.ioc
 			
 			for each( var bean:Object in beans )
 			{
-				if ( bean is beanType )
+				if( bean is Bean && Bean( bean ).source is beanType )
+				{
+					foundBean = bean;
+				}
+				else if ( bean is beanType )
 				{
 					if ( foundBean != null )
 					{
@@ -125,6 +136,9 @@ package org.swizframework.ioc
 					}
 					
 					foundBean = bean;
+					var wtfBean:Bean = new Bean();
+					wtfBean.source = foundBean;
+					return wtfBean;
 				}
 			}
 			
