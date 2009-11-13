@@ -1,70 +1,63 @@
 package org.swizframework.ioc
 {
-	import flash.utils.Dictionary;
-	import flash.utils.describeType;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.utils.getQualifiedClassName;
 	
-	import org.swizframework.di.AutowiredStatus;
-	import org.swizframework.di.Bean;
-	import org.swizframework.reflection.TypeDescriptor;
+	import org.swizframework.ISwiz;
+	import org.swizframework.events.BeanEvent;
+	import org.swizframework.metadata.Metadata;
+	import org.swizframework.processors.IBeanProcessor;
+	import org.swizframework.processors.IMetadataProcessor;
+	import org.swizframework.processors.IProcessor;
+	import org.swizframework.util.MetadataUtil;
 	
-	public class BeanFactory
+	/**
+	 * Bean Factory
+	 */
+	public class BeanFactory extends EventDispatcher implements IBeanFactory
 	{
+		
+		// ========================================
+		// private properties
+		// ========================================
+		
+		private var _injectionEvent:String = "addedToStage";
+		
 		// ========================================
 		// protected properties
 		// ========================================
 		
-		/**
-		 * Catalog of TypeDescriptor instances keyed by fully
-		 * qualified class name of type being represented.
-		 * 
-		 * @see org.swizframework.di.TypeDescriptor
-		 */
-		protected var typeDescriptors:Dictionary;
+		protected var swiz:ISwiz;
+		protected var ignoredClasses:RegExp = /^mx\./;
+		
+		// ========================================
+		// public properties
+		// ========================================
 		
 		/**
-		 * Catalog of Bean instances keyed by UID of actual
-		 * managed object wrapped by Bean instance.
-		 * 
-		 * @see org.swizframework.di.Bean
+		 * @inheritDoc
 		 */
-		protected var beans:Dictionary;
+		public function get injectionEvent():String
+		{
+			return _injectionEvent;
+		}
+		
+		public function set injectionEvent( value:String ):void
+		{
+			_injectionEvent = value;
+		}
 		
 		// ========================================
 		// constructor
 		// ========================================
 		
+		/**
+		 * Constructor
+		 */
 		public function BeanFactory()
 		{
-		}
-		
-		// ========================================
-		// protected methods
-		// ========================================
-		
-		/**
-		 * Get TypeDescriptor instance for provided bean. If a TypeDescriptor
-		 * has already been created for this type that instance will be returned.
-		 * 
-		 * @see org.swizframework.di.TypeDescriptor
-		 */
-		protected function getTypeDescriptor( beanInstance:* ):TypeDescriptor
-		{
-			// name of the property's class
-			var beanClassName:String = getQualifiedClassName( beanInstance );
-			
-			var td:TypeDescriptor = typeDescriptors[ beanClassName ];
-			
-			// check to see if we already have a TypeDescriptor for this class type
-			if( td == null )
-			{
-				// existing TypeDescriptor not found, so create one and store it
-				// TODO: implement type caching
-				td = new TypeDescriptor().fromXML( describeType( beanInstance ) );
-				typeDescriptors[ beanClassName ] = td;
-			}
-			
-			return td;
+			super();
 		}
 		
 		// ========================================
@@ -72,95 +65,152 @@ package org.swizframework.ioc
 		// ========================================
 		
 		/**
-		 * Processes an <code>Array</code> of classes that contain
-		 * objects to be managed by Swiz (aka beans). The provider classes
-		 * will be instantiated within this method and all resulting publicly
-		 * readable properties will become beans.
+		 * @inheritDoc
 		 */
-		public function processBeanProviders( providerClasses:Array ):void
+		public function init( swiz:ISwiz ):void
 		{
-			// make sure dictionaries are instantiated
-			typeDescriptors ||= new Dictionary();
-			beans ||= new Dictionary();
+			this.swiz = swiz;
 			
-			// iterate over passed in classes
-			for each( var providerClass:Class in providerClasses )
+			for each ( var processor:IProcessor in swiz.processors )
 			{
-				// TODO: add support for passing in instances?
-				// create instance of passed in class
-				var providerInstance:* = new providerClass();
-				// get all readable public properties of provider class instance
-				// TODO: implement type caching
-				// TODO: add check and support for IBeanProviders
-				var providerDescription:XML = describeType( providerInstance );
-				var beanList:XML = <beans />;
-				beanList.appendChild( providerDescription.variable );
-				beanList.appendChild( providerDescription.accessor.( @access != "writeOnly" ) );
-				
-				// iterate over public properties (beans) of bean provider instance
-				for each( var beanNode:XML in beanList.children() )
+				processor.init( swiz );
+			}
+			
+			addBeanProviders( swiz.beanProviders );
+			
+			swiz.dispatcher.addEventListener( injectionEvent, injectionEventHandler, true, 50, true );
+		}
+		
+		// ========================================
+		// protected methods
+		// ========================================
+		
+		/**
+		 * Add Bean Providers
+		 */
+		protected function addBeanProviders( beanProviders:Array ):void
+		{
+			for each( var beanProvider:IBeanProvider in beanProviders )
+			{
+				addBeanProvider( beanProvider );
+			}
+		}
+		
+		/**
+		 * Add Bean Provider
+		 */
+		protected function addBeanProvider( beanProvider:IBeanProvider ):void
+		{
+			for each ( var bean:Object in beanProvider.beans )
+			{
+				addBean( bean );
+			}
+			
+			beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
+		}
+		
+		/**
+		 * Remove Bean Provider
+		 */
+		protected function removeBeanProvider( beanProvider:IBeanProvider ):void
+		{
+			for each ( var bean:Object in beanProvider.beans )
+			{
+				removeBean( bean );
+			}
+			
+			beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
+		}
+		
+		/**
+		 * Add Bean
+		 */
+		protected function addBean( bean:Object ):void
+		{
+			for each ( var processor:IProcessor in swiz.processors )
+			{
+				// Handle Bean Processors
+				if ( processor is IBeanProcessor )
 				{
-					// name of the property
-					var beanName:String = beanNode.@name.toString();
-					// ref to actual bean
-					var beanInstance:* = providerInstance[ beanName ];
+					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
 					
-					var td:TypeDescriptor = getTypeDescriptor( beanInstance );
+					beanProcessor.addBean( bean );
+				}
+				
+				// Handle Metadata Processors
+				if ( processor is IMetadataProcessor )
+				{
+					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
+					var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
 					
-					// create Bean instance and store it
-					var bean:Bean = new Bean();
-					bean.name = beanName;
-					bean.typeDescriptor = td;
-					bean.instance = beanInstance;
-					bean.autowiredStatus = AutowiredStatus.EMPTY;
-					beans[ beanName ] = bean;
+					for each ( var metadata:Metadata in metadatas )
+					{
+						metadataProcessor.addMetadata( bean, metadata );
+					}
 				}
 			}
 		}
 		
 		/**
-		 * 
+		 * Remove Bean
 		 */
-		public function containsBean( beanId:String ):Boolean
+		protected function removeBean( bean:Object ):void
 		{
-			return getBeanById( beanId ) != null;
-		}
-		
-		/**
-		 * 
-		 */
-		public function getBeanById( beanId:String ):*
-		{
-			if( beans[ beanId ] != null )
-				return beans[ beanId ][ "instance" ];
-			
-			// TODO: throw error? log message? wait for future injection?
-		}
-		
-		/**
-		 * 
-		 */
-		public function getBeanByType( beanType:String ):*
-		{
-			var foundBean:*;
-			
-			if( beanType.indexOf( "::" ) < 0 && beanType.indexOf( "." ) > -1 )
-				beanType = beanType.substr( 0, beanType.lastIndexOf( "." ) ) + "::" + beanType.substr( beanType.lastIndexOf( "." ) + 1 );
-			
-			for each( var bean:Bean in beans )
+			for each ( var processor:IProcessor in swiz.processors )
 			{
-				var td:TypeDescriptor = bean.typeDescriptor;
-				
-				if( td.className == beanType || td.interfaces.indexOf( beanType ) > -1 )
+				// Handle Metadata Processors
+				if ( processor is IMetadataProcessor )
 				{
-					if( foundBean != null )
-						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
+					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
+					var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
 					
-					foundBean = bean;
+					for each ( var metadata:Metadata in metadatas )
+					{
+						metadataProcessor.removeMetadata( bean, metadata );
+					}
+				}
+				
+				// Handle Bean Processors
+				if ( processor is IBeanProcessor )
+				{
+					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
+					
+					beanProcessor.removeBean( bean );
 				}
 			}
+		}
+		
+		/**
+		 * Injection Event Handler
+		 */
+		protected function injectionEventHandler( event:Event ):void
+		{
+			var className:String = getQualifiedClassName( event.target );
 			
-			return foundBean[ "instance" ];
+			if ( ! ignoredClasses.test( className ) )
+			{
+				addBean( event.target );
+			}
+		}
+		
+		// ========================================
+		// private methods
+		// ========================================
+		
+		/**
+		 * Bean Added Handler
+		 */
+		private function beanAddedHandler( event:BeanEvent ):void
+		{
+			addBean( event.bean );
+		}
+		
+		/**
+		 * Bean Added Handler
+		 */
+		private function beanRemovedHandler( event:BeanEvent ):void
+		{
+			removeBean( event.bean );
 		}
 	}
 }

@@ -97,16 +97,16 @@ package org.swizframework.util
 		
 		protected var _category:String;
 		
-		public function SwizLogger( category:String )
+		public function SwizLogger( target:Object )
 		{
 			super();
 			
-			_category = category;
+			_category = getQualifiedClassName( target );
 		}
-		
+	
 		/**
 		 *  The category this logger send messages for.
-		 */
+		 */	
 		public function get category():String
 		{
 			return _category;
