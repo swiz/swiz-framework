@@ -2,6 +2,7 @@ package org.swizframework.processors
 {
 	import flash.events.Event;
 	
+	import org.swizframework.di.Bean;
 	import org.swizframework.metadata.MediateMetadata;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
@@ -45,7 +46,7 @@ package org.swizframework.processors
 		 */
 		protected function addMediator( bean:Object, mediator:MediateMetadataTag ):void
 		{
-			mediatorsByEventType[ mediator.event ] = new MediateQueue( mediator, bean[ mediator.host.name ] );
+			mediatorsByEventType[ mediator.event ] = new MediateQueue( mediator, Bean( bean ).source[ mediator.host.name ] );
 			swiz.dispatcher.addEventListener( mediator.event, eventHandler, false, mediator.priority, true );
 		}
 		

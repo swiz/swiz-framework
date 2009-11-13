@@ -2,6 +2,8 @@ package org.swizframework.di
 {
 	import org.swizframework.reflection.TypeDescriptor;
 	
+	[DefaultProperty( "source" )]
+	
 	public class Bean
 	{
 		// ========================================
@@ -11,7 +13,7 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
-		public var instance:*;
+		public var source:*;
 		
 		/**
 		 * 
@@ -21,17 +23,7 @@ package org.swizframework.di
 		/**
 		 * 
 		 */
-		public var isView:Boolean = false;
-		
-		/**
-		 * 
-		 */
 		public var typeDescriptor:TypeDescriptor;
-		
-		/**
-		 * 
-		 */
-		public var autowiredStatus:int;
 		
 		// ========================================
 		// constructor

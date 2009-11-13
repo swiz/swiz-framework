@@ -2,17 +2,18 @@ package org.swizframework.ioc
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.utils.Dictionary;
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	
 	import org.swizframework.ISwiz;
+	import org.swizframework.di.Bean;
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeDescriptor;
-	import org.swizframework.util.MetadataUtil;
 	
 	/**
 	 * Bean Factory
@@ -32,6 +33,11 @@ package org.swizframework.ioc
 		
 		protected var swiz:ISwiz;
 		protected var ignoredClasses:RegExp = /^mx\./;
+		
+		/**
+		 * 
+		 */
+		protected var typeDescriptors:Dictionary;
 		
 		// ========================================
 		// public properties
@@ -88,6 +94,33 @@ package org.swizframework.ioc
 		// ========================================
 		
 		/**
+		 * Get TypeDescriptor instance for provided bean. If a TypeDescriptor
+		 * has already been created for this type that instance will be returned.
+		 * 
+		 * @see org.swizframework.di.TypeDescriptor
+		 */
+		protected function getTypeDescriptor( beanInstance:* ):TypeDescriptor
+		{
+			typeDescriptors ||= new Dictionary();
+			
+			// name of the property's class
+			var beanClassName:String = getQualifiedClassName( beanInstance );
+			
+			var td:TypeDescriptor = typeDescriptors[ beanClassName ];
+			
+			// check to see if we already have a TypeDescriptor for this class type
+			if( td == null )
+			{
+				// existing TypeDescriptor not found, so create one and store it
+				// TODO: implement type caching
+				td = new TypeDescriptor().fromXML( describeType( beanInstance ) );
+				typeDescriptors[ beanClassName ] = td;
+			}
+			
+			return td;
+		}
+		
+		/**
 		 * Add Bean Providers
 		 */
 		protected function addBeanProviders( beanProviders:Array ):void
@@ -103,12 +136,37 @@ package org.swizframework.ioc
 		 */
 		protected function addBeanProvider( beanProvider:IBeanProvider ):void
 		{
-			for each ( var bean:Object in beanProvider.beans )
+			var bean:Bean;
+			
+			for each ( var beanSource:Object in beanProvider.beans )
 			{
+				if( beanSource is Bean )
+				{
+					bean = Bean( beanSource );
+				}
+				else
+				{
+					bean = new Bean();
+					bean.source = beanSource;
+				}
+				
+				bean.typeDescriptor = getTypeDescriptor( bean.source );
+				
 				addBean( bean );
 			}
 			
 			beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
+		}
+		
+		protected function getBean( source:Object ):Bean
+		{
+			if( source is Bean )
+				return Bean( source );
+			
+			var bean:Bean = new Bean();
+			bean.source = source;
+			bean.typeDescriptor = getTypeDescriptor( source );
+			return bean;
 		}
 		
 		/**
@@ -116,7 +174,7 @@ package org.swizframework.ioc
 		 */
 		protected function removeBeanProvider( beanProvider:IBeanProvider ):void
 		{
-			for each ( var bean:Object in beanProvider.beans )
+			for each ( var bean:Bean in beanProvider.beans )
 			{
 				removeBean( bean );
 			}
@@ -127,7 +185,7 @@ package org.swizframework.ioc
 		/**
 		 * Add Bean
 		 */
-		protected function addBean( bean:Object ):void
+		protected function addBean( bean:Bean ):void
 		{
 			for each ( var processor:IProcessor in swiz.processors )
 			{
@@ -143,7 +201,7 @@ package org.swizframework.ioc
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
 					//var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
-					var metadataTags:Array = new TypeDescriptor().fromInstance( bean ).getMetadataTagsByName( metadataProcessor.metadataName );
+					var metadataTags:Array = new TypeDescriptor().fromInstance( bean.source ).getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
@@ -156,7 +214,7 @@ package org.swizframework.ioc
 		/**
 		 * Remove Bean
 		 */
-		protected function removeBean( bean:Object ):void
+		protected function removeBean( bean:Bean ):void
 		{
 			for each ( var processor:IProcessor in swiz.processors )
 			{
@@ -192,7 +250,7 @@ package org.swizframework.ioc
 			
 			if ( ! ignoredClasses.test( className ) )
 			{
-				addBean( event.target );
+				addBean( getBean( event.target ) );
 			}
 		}
 		
@@ -205,7 +263,7 @@ package org.swizframework.ioc
 		 */
 		private function beanAddedHandler( event:BeanEvent ):void
 		{
-			addBean( event.bean );
+			addBean( getBean( event.bean ) );
 		}
 		
 		/**
@@ -213,7 +271,7 @@ package org.swizframework.ioc
 		 */
 		private function beanRemovedHandler( event:BeanEvent ):void
 		{
-			removeBean( event.bean );
+			removeBean( getBean( event.bean ) );
 		}
 	}
 }
