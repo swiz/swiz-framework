@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flexLibProperties version="1">
 <includeClasses>
-<classEntry path="org.swizframework.ISwizHost"/>
-<classEntry path="org.swizframework.Swiz"/>
-<classEntry path="org.swizframework.SwizConfig"/>
-<classEntry path="org.swizframework.di.AutowireManager"/>
-<classEntry path="org.swizframework.di.AutowiredStatus"/>
-<classEntry path="org.swizframework.di.Bean"/>
-<classEntry path="org.swizframework.ioc.BeanLoader"/>
 <classEntry path="org.swizframework.ioc.BeanFactory"/>
-<classEntry path="org.swizframework.ioc.IBeanProvider"/>
-<classEntry path="org.swizframework.reflection.BaseMetadataHost"/>
+<classEntry path="org.swizframework.reflection.MetadataTag"/>
+<classEntry path="org.swizframework.di.AutowiredStatus"/>
+<classEntry path="org.swizframework.reflection.MetadataHostType"/>
+<classEntry path="org.swizframework.SwizConfig"/>
+<classEntry path="org.swizframework.ioc.BeanLoader"/>
+<classEntry path="org.swizframework.reflection.MetadataHostProperty"/>
+<classEntry path="org.swizframework.di.Bean"/>
+<classEntry path="org.swizframework.Swiz"/>
+<classEntry path="org.swizframework.reflection.MetadataHostClass"/>
 <classEntry path="org.swizframework.reflection.IMetadataHost"/>
 <classEntry path="org.swizframework.reflection.MetadataArg"/>
-<classEntry path="org.swizframework.reflection.MetadataHostClass"/>
-<classEntry path="org.swizframework.reflection.MetadataHostMethod"/>
-<classEntry path="org.swizframework.reflection.MetadataHostProperty"/>
-<classEntry path="org.swizframework.reflection.MetadataHostType"/>
-<classEntry path="org.swizframework.reflection.MetadataTag"/>
 <classEntry path="org.swizframework.reflection.TypeDescriptor"/>
+<classEntry path="org.swizframework.reflection.MetadataHostMethod"/>
+<classEntry path="org.swizframework.ISwizHost"/>
+<classEntry path="org.swizframework.ioc.IBeanProvider"/>
+<classEntry path="org.swizframework.reflection.BaseMetadataHost"/>
 <classEntry path="org.swizframework.util.SwizLogger"/>
+<classEntry path="org.swizframework.di.AutowireManager"/>
 </includeClasses>
 <includeResources/>
 <namespaceManifests/>
