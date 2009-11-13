@@ -3,8 +3,12 @@ package org.swizframework
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
+	import mx.logging.ILogger;
+	import mx.logging.targets.TraceTarget;
+	
 	import org.swizframework.di.AutowireManager;
 	import org.swizframework.ioc.BeanFactory;
+	import org.swizframework.util.SwizLogger;
 	
 	/**
 	 * Core framework class that serves as an IoC container rooted
@@ -12,6 +16,11 @@ package org.swizframework
 	 */
 	public class Swiz
 	{
+		/**
+		 * 
+		 */
+		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
+		
 		// ========================================
 		// protected properties
 		// ========================================
@@ -51,9 +60,15 @@ package org.swizframework
 			this.beanManager = new BeanFactory();
 			
 			this.dispatcher = dispatcher;
+			
 			this.dispatcher.addEventListener( injectionEvent, handleInjectionEvent, true, 50, true );
 			
 			this.config = ( config != null ) ? config : new SwizConfig()
+			
+//			var tt:TraceTarget = new TraceTarget();
+//			tt.includeCategory = tt.includeLevel = true;
+//			tt.fieldSeparator = " - ";
+//			SwizLogger.setLogTargets( [ tt ] );
 			
 			if( dispatcher is ISwizHost )
 				ISwizHost( dispatcher ).swizInstance = this;
@@ -77,6 +92,7 @@ package org.swizframework
 		
 		public function addBeanProviders( providerClasses:Array ):void
 		{
+			logger.debug( "Processing bean provider classes {0}", providerClasses );
 			beanManager.processBeanProviders( providerClasses );
 		}
 	}
