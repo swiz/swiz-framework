@@ -1,20 +1,24 @@
 package org.swizframework
 {
-	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
-	import mx.logging.ILogger;
-	import mx.logging.targets.TraceTarget;
+	import mx.core.IMXMLObject;
 	
-	import org.swizframework.di.AutowireManager;
 	import org.swizframework.ioc.BeanFactory;
-	import org.swizframework.util.SwizLogger;
+	import org.swizframework.ioc.IBeanFactory;
+	import org.swizframework.processors.AutowireProcessor;
+	import org.swizframework.processors.IProcessor;
+	import org.swizframework.processors.MediateProcessor;
+	import org.swizframework.processors.RandomProcessor;
+	
+	[DefaultProperty( "beanProviders" )]
 	
 	/**
 	 * Core framework class that serves as an IoC container rooted
 	 * at the IEventDispatcher passed into its constructor.
 	 */
-	public class Swiz
+	public class Swiz extends EventDispatcher implements IMXMLObject, ISwiz
 	{
 		/**
 		 * 
@@ -22,78 +26,130 @@ package org.swizframework
 		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
 		
 		// ========================================
-		// protected properties
+		// private properties
+		// ========================================
+		
+		private var _dispatcher:IEventDispatcher;
+		private var _beanFactory:IBeanFactory;
+		private var _beanProviders:Array;
+		private var _processors:Array;
+		
+		// ========================================
+		// public properties
 		// ========================================
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
-		protected var dispatcher:IEventDispatcher;
+		public function get dispatcher():IEventDispatcher
+		{
+			return _dispatcher;
+		}
+		
+		public function set dispatcher( value:IEventDispatcher ):void
+		{
+			_dispatcher = value;
+		}
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
-		protected var config:SwizConfig;
+		public function get beanFactory():IBeanFactory
+		{
+			return _beanFactory;
+		}
+		
+		public function set beanFactory( value:IBeanFactory ):void
+		{
+			_beanFactory = value;
+		}
+		
+		[ArrayElementType( "org.swizframework.ioc.IBeanProvider" )]
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
-		protected var injectionEvent:String = "addedToStage";
+		public function get beanProviders():Array
+		{
+			return _beanProviders;
+		}
+		
+		public function set beanProviders( value:Array ):void
+		{
+			_beanProviders = value;
+		}
+		
+		[ArrayElementType( "org.swizframework.processors.IProcessor" )]
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
-		protected var autowireManager:AutowireManager;
+		public function get processors():Array
+		{
+			return _processors;
+		}
 		
-		/**
-		 * 
-		 */
-		protected var beanManager:BeanFactory;
+		public function set processors( value:Array ):void
+		{
+			_processors = value;
+		}
 		
 		// ========================================
 		// constructor
 		// ========================================
 		
-		public function Swiz( dispatcher:IEventDispatcher, config:SwizConfig = null )
+		/**
+		 * Constructor
+		 */
+		public function Swiz( dispatcher:IEventDispatcher = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, processors:Array = null )
 		{
-			this.autowireManager = new AutowireManager();
-			this.beanManager = new BeanFactory();
+			super();
 			
 			this.dispatcher = dispatcher;
-			
-			this.dispatcher.addEventListener( injectionEvent, handleInjectionEvent, true, 50, true );
-			
-			this.config = ( config != null ) ? config : new SwizConfig()
-			
-//			var tt:TraceTarget = new TraceTarget();
-//			tt.includeCategory = tt.includeLevel = true;
-//			tt.fieldSeparator = " - ";
-//			SwizLogger.setLogTargets( [ tt ] );
-			
-			if( dispatcher is ISwizHost )
-				ISwizHost( dispatcher ).swizInstance = this;
-		}
-		
-		// ========================================
-		// protected methods
-		// ========================================
-		
-		/**
-		 * 
-		 */
-		protected function handleInjectionEvent( injectionEvent:Event ):void
-		{
-			//autowireManager.autowire( injectionEvent.target, true );
+			this.beanFactory = beanFactory;
+			this.beanProviders = beanProviders;
+			this.processors = processors;
 		}
 		
 		// ========================================
 		// public methods
 		// ========================================
 		
-		public function addBeanProviders( providerClasses:Array ):void
+		/**
+		 * @inheritDoc
+		 */
+		public function init():void
 		{
-			logger.debug( "Processing bean provider classes {0}", providerClasses );
-			beanManager.processBeanProviders( providerClasses );
+			if ( dispatcher == null )
+			{
+				dispatcher == this;
+			}
+			
+			if ( beanFactory == null )
+			{
+				beanFactory = new BeanFactory();
+			}
+			
+			if ( processors == null )
+			{
+				processors = [ new MediateProcessor(), new AutowireProcessor(), new RandomProcessor() ];
+			}
+			
+			beanFactory.init( this );
 		}
+		
+		/**
+		 * @see mx.core.IMXMLObject#initialized
+		 */
+		public function initialized( document:Object, id:String ):void
+		{
+			if ( document is IEventDispatcher && dispatcher == null )
+			{
+				dispatcher = IEventDispatcher( document );
+			}
+			
+			init();
+		}
+		
 	}
 }
