@@ -121,6 +121,14 @@ package org.swizframework.ioc
 		/**
 		 * 
 		 */
+		public function containsBean( beanId:String ):Boolean
+		{
+			return getBeanById( beanId ) != null;
+		}
+		
+		/**
+		 * 
+		 */
 		public function getBeanById( beanId:String ):*
 		{
 			if( beans[ beanId ] != null )
