@@ -72,9 +72,9 @@ package org.swizframework.processors
 		/**
 		 * Process Queue By Name For Bean
 		 */
-		protected function processQueueByNameForBean( bean:Object ):void
+		protected function processQueueByNameForBean( bean:Bean ):void
 		{
-			var beanName:String = "";
+			var beanName:String = bean.name;
 			
 			if ( beanName in queueByName )
 			{
@@ -155,12 +155,12 @@ package org.swizframework.processors
 			
 			if ( source )
 			{
-				bean[ autowire.host.name ] = source[ autowire.property ];
-				addPropertyBinding( bean, autowire.host.name, source, autowire.property );
+				Bean( bean ).source[ autowire.host.name ] = Bean( source ).source[ autowire.property ];
+				addPropertyBinding( Bean( bean ).source, autowire.host.name, Bean( source ).source, autowire.property );
 				
 				if ( autowire.twoWay )
 				{
-					addPropertyBinding( source, autowire.property, bean, autowire.host.name );
+					addPropertyBinding( Bean( source ).source, autowire.property, Bean( bean ).source, autowire.host.name );
 				}
 			}
 			else
@@ -194,7 +194,7 @@ package org.swizframework.processors
 			
 			if ( source )
 			{
-				bean[ autowire.host.name ] = source;
+				Bean( bean ).source[ autowire.host.name ] = Bean( source ).source;
 			}
 			else
 			{
@@ -219,7 +219,7 @@ package org.swizframework.processors
 			
 			if ( source )
 			{
-				Bean( bean ).source[ autowire.host.name ] = source;
+				Bean( bean ).source[ autowire.host.name ] = Bean( source ).source;
 			}
 			else
 			{
