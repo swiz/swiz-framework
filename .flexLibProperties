@@ -3,20 +3,17 @@
 <includeClasses>
 <classEntry path="org.swizframework.ioc.BeanFactory"/>
 <classEntry path="org.swizframework.di.AutowiredStatus"/>
-<classEntry path="org.swizframework.util.MetadataUtil"/>
 <classEntry path="org.swizframework.reflection.MethodParameter"/>
 <classEntry path="org.swizframework.processors.RandomProcessor"/>
 <classEntry path="org.swizframework.metadata.MediateQueue"/>
 <classEntry path="org.swizframework.metadata.AutowireQueue"/>
 <classEntry path="org.swizframework.reflection.MetadataHostProperty"/>
 <classEntry path="org.swizframework.ioc.IBeanFactory"/>
-<classEntry path="org.swizframework.metadata.AutowireMetadata"/>
 <classEntry path="org.swizframework.metadata.MediateMetadataTag"/>
 <classEntry path="org.swizframework.ISwiz"/>
 <classEntry path="org.swizframework.Swiz"/>
 <classEntry path="org.swizframework.reflection.MetadataArg"/>
 <classEntry path="org.swizframework.processors.IBeanProcessor"/>
-<classEntry path="org.swizframework.metadata.MediateMetadata"/>
 <classEntry path="org.swizframework.reflection.BaseMetadataHost"/>
 <classEntry path="org.swizframework.util.SwizLogger"/>
 <classEntry path="org.swizframework.di.AutowireManager"/>
@@ -29,7 +26,6 @@
 <classEntry path="org.swizframework.reflection.MetadataHostClass"/>
 <classEntry path="org.swizframework.reflection.BaseMetadataTag"/>
 <classEntry path="org.swizframework.reflection.IMetadataHost"/>
-<classEntry path="org.swizframework.metadata.Metadata"/>
 <classEntry path="org.swizframework.reflection.TypeDescriptor"/>
 <classEntry path="org.swizframework.ioc.BeanProvider"/>
 <classEntry path="org.swizframework.reflection.MetadataHostMethod"/>
