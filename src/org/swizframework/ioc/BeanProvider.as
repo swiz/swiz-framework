@@ -4,6 +4,7 @@ package org.swizframework.ioc
 	
 	import org.swizframework.di.Bean;
 	import org.swizframework.events.BeanEvent;
+	import org.swizframework.reflection.TypeCache;
 	
 	[DefaultProperty( "beans" )]
 	
@@ -22,7 +23,7 @@ package org.swizframework.ioc
 		/**
 		 * Backing variable for <code>beans</code> getter.
 		 */
-		protected var _beans:Array;
+		protected var _beans:Array = [];
 		
 		// ========================================
 		// public properties
@@ -41,8 +42,7 @@ package org.swizframework.ioc
 			if ( value != _beans )
 			{
 				removeBeans();
-				_beans = value;
-				addBeans();
+				addBeans( value );
 			}
 		}
 		
@@ -64,17 +64,34 @@ package org.swizframework.ioc
 		// protected methods
 		// ========================================
 		
-		protected function addBeans():void
+		protected function addBeans( beansArray:Array ):void
 		{
-			for each ( var bean:Object in beans )
+			var bean:Bean;
+			
+			for each ( var beanSource:Object in beansArray )
 			{
+				if( beanSource is Bean )
+				{
+					bean = Bean( beanSource );
+				}
+				else
+				{
+					bean = new Bean();
+					bean.source = beanSource;
+				}
+				
+				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
+				
+				_beans.push( bean );
+				
 				dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
 			}
 		}
 		
+		// TODO: I don't think this does anything...
 		protected function removeBeans():void
 		{
-			for each ( var bean:Object in beans )
+			for each ( var bean:Bean in beans )
 			{
 				dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
 			}
@@ -84,7 +101,7 @@ package org.swizframework.ioc
 		// public methods
 		// ========================================
 		
-		public function addBean( bean:Object ):void
+		public function addBean( bean:Bean ):void
 		{
 			if ( beans )
 			{
@@ -98,7 +115,7 @@ package org.swizframework.ioc
 			dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
 		}
 		
-		public function removeBean( bean:Object ):void
+		public function removeBean( bean:Bean ):void
 		{
 			if ( beans )
 			{
