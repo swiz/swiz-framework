@@ -13,6 +13,7 @@ package org.swizframework.ioc
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.IMetadataTag;
+	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.reflection.TypeDescriptor;
 	
 	/**
@@ -201,7 +202,7 @@ package org.swizframework.ioc
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
 					//var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
-					var metadataTags:Array = new TypeDescriptor().fromInstance( bean.source ).getMetadataTagsByName( metadataProcessor.metadataName );
+					var metadataTags:Array = TypeCache.getTypeDescriptor( bean.source ).getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
@@ -223,7 +224,7 @@ package org.swizframework.ioc
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
 					//var metadatas:Array = MetadataUtil.findMetadataByName( bean, metadataProcessor.metadataName, metadataProcessor.metadataClass );
-					var metadataTags:Array = new TypeDescriptor().fromInstance( bean ).getMetadataTagsByName( metadataProcessor.metadataName );
+					var metadataTags:Array = TypeCache.getTypeDescriptor( bean ).getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
