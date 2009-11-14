@@ -116,17 +116,6 @@ package org.swizframework.ioc
 			beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
 		}
 		
-		protected function getBean( source:Object ):Bean
-		{
-			if( source is Bean )
-				return Bean( source );
-			
-			var bean:Bean = new Bean();
-			bean.source = source;
-			bean.typeDescriptor = TypeCache.getTypeDescriptor( source );
-			return bean;
-		}
-		
 		/**
 		 * Remove Bean Provider
 		 */
@@ -206,7 +195,14 @@ package org.swizframework.ioc
 			
 			if ( ! ignoredClasses.test( className ) )
 			{
-				addBean( getBean( event.target ) );
+				// wrap view component in Bean
+				var bean:Bean = new Bean();
+				bean.source = event.target;
+				// is this pointless?
+				if( bean.source.id != null )
+					bean.name = bean.source.id;
+				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
+				addBean( bean );
 			}
 		}
 		
