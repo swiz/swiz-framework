@@ -3,7 +3,6 @@ package org.swizframework.processors
 	import flash.events.Event;
 	
 	import org.swizframework.di.Bean;
-	import org.swizframework.metadata.MediateMetadata;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
 	
@@ -53,7 +52,7 @@ package org.swizframework.processors
 		/**
 		 * Remove Mediator
 		 */
-		protected function removeMediator( bean:Bean, mediator:MediateMetadata ):void
+		protected function removeMediator( bean:Bean, mediator:MediateMetadataTag ):void
 		{
 			swiz.dispatcher.removeEventListener( mediator.event, eventHandler, false );
 			delete mediatorsByEventType[ mediator.event ];
