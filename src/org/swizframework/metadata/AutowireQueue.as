@@ -1,12 +1,13 @@
 package org.swizframework.metadata
 {
+	import org.swizframework.di.Bean;
+	
 	public class AutowireQueue
 	{
-		
-		public var bean:Object;
+		public var bean:Bean;
 		public var autowire:AutowireMetadataTag;
 		
-		public function AutowireQueue( bean:Object = null, autowire:AutowireMetadataTag = null )
+		public function AutowireQueue( bean:Bean = null, autowire:AutowireMetadataTag = null )
 		{
 			super();
 			

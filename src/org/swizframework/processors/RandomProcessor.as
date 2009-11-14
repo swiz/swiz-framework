@@ -28,17 +28,17 @@ package org.swizframework.processors
 		/**
 		 * Add Random
 		 */
-		override public function addMetadata( bean:Object, metadata:IMetadataTag ):void
+		override public function addMetadata( bean:Bean, metadata:IMetadataTag ):void
 		{
-			Bean( bean ).source[ metadata.host.name ] = Math.random() * 1000;
+			bean.source[ metadata.host.name ] = Math.random() * 1000;
 		}
 		
 		/**
 		 * Remove Random
 		 */
-		override public function removeMetadata( bean:Object, metadata:IMetadataTag ):void
+		override public function removeMetadata( bean:Bean, metadata:IMetadataTag ):void
 		{
-			bean[ metadata.host.name ] = 0;
+			bean.source[ metadata.host.name ] = 0;
 		}
 		
 	}

@@ -2,7 +2,6 @@ package org.swizframework.metadata
 {
 	public class MediateQueue
 	{
-		
 		public var metadata:MediateMetadataTag;
 		public var method:Function;
 		
@@ -11,6 +10,5 @@ package org.swizframework.metadata
 			this.metadata = metadata;
 			this.method = method;
 		}
-		
 	}
 }

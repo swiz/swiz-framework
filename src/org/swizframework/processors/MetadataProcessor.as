@@ -3,7 +3,7 @@ package org.swizframework.processors
 	import flash.events.EventDispatcher;
 	
 	import org.swizframework.ISwiz;
-	import org.swizframework.metadata.Metadata;
+	import org.swizframework.di.Bean;
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	
@@ -82,7 +82,7 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function addMetadata( bean:Object, metadata:IMetadataTag ):void
+		public function addMetadata( bean:Bean, metadata:IMetadataTag ):void
 		{
 			addMethod( bean, metadata );
 		}
@@ -90,7 +90,7 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function removeMetadata( bean:Object, metadata:IMetadataTag ):void
+		public function removeMetadata( bean:Bean, metadata:IMetadataTag ):void
 		{
 			removeMethod( bean, metadata );
 		}

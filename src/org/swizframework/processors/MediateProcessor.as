@@ -44,16 +44,16 @@ package org.swizframework.processors
 		/**
 		 * Add Mediator
 		 */
-		protected function addMediator( bean:Object, mediator:MediateMetadataTag ):void
+		protected function addMediator( bean:Bean, mediator:MediateMetadataTag ):void
 		{
-			mediatorsByEventType[ mediator.event ] = new MediateQueue( mediator, Bean( bean ).source[ mediator.host.name ] );
+			mediatorsByEventType[ mediator.event ] = new MediateQueue( mediator, bean.source[ mediator.host.name ] );
 			swiz.dispatcher.addEventListener( mediator.event, eventHandler, false, mediator.priority, true );
 		}
 		
 		/**
 		 * Remove Mediator
 		 */
-		protected function removeMediator( bean:Object, mediator:MediateMetadata ):void
+		protected function removeMediator( bean:Bean, mediator:MediateMetadata ):void
 		{
 			swiz.dispatcher.removeEventListener( mediator.event, eventHandler, false );
 			delete mediatorsByEventType[ mediator.event ];
