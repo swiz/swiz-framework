@@ -11,7 +11,6 @@ package org.swizframework
 	import org.swizframework.processors.AutowireProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
-	import org.swizframework.processors.RandomProcessor;
 	import org.swizframework.util.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -134,7 +133,7 @@ package org.swizframework
 			
 			if ( processors == null )
 			{
-				processors = [ new MediateProcessor(), new AutowireProcessor(), new RandomProcessor() ];
+				processors = [ new AutowireProcessor(), new MediateProcessor() ];
 			}
 			
 			beanFactory.init( this );
