@@ -153,18 +153,6 @@ package org.swizframework.reflection
 			return this;
 		}
 		
-		private static var types:Dictionary = new Dictionary();
-		
-		public function fromInstance( obj:Object ):TypeDescriptor
-		{
-			var qn:String = getQualifiedClassName( obj );
-			if( types[ qn ] != null )
-				return types[ qn ];
-			
-			types[ qn ] = fromXML( describeType( obj ) );
-			return types[ qn ];
-		}
-		
 		/**
 		 * Determine whether or not this class has any instances of
 		 * metadata tags with the provided name.
