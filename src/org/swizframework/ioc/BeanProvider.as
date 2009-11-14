@@ -124,28 +124,24 @@ package org.swizframework.ioc
 			}
 		}
 		
-		public function getBeanByName( beanName:String ):Object
+		public function getBeanByName( beanName:String ):Bean
 		{
-			for each( var bean:Object in beans )
+			for each( var bean:Bean in beans )
 			{
-				if( bean is Bean && Bean( bean ).name == beanName )
+				if( bean.name == beanName )
 					return bean;
 			}
 			
 			return null;
 		}
 		
-		public function getBeanByType( beanType:Class ):Object
+		public function getBeanByType( beanType:Class ):Bean
 		{
-			var foundBean:Object;
+			var foundBean:Bean;
 			
-			for each( var bean:Object in beans )
+			for each( var bean:Bean in beans )
 			{
-				if( bean is Bean && Bean( bean ).source is beanType )
-				{
-					foundBean = bean;
-				}
-				else if ( bean is beanType )
+				if( bean.source is beanType )
 				{
 					if ( foundBean != null )
 					{
@@ -153,9 +149,6 @@ package org.swizframework.ioc
 					}
 					
 					foundBean = bean;
-					var wtfBean:Bean = new Bean();
-					wtfBean.source = foundBean;
-					return wtfBean;
 				}
 			}
 			

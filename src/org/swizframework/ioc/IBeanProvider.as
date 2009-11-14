@@ -15,7 +15,7 @@ package org.swizframework.ioc
 		function addBean( bean:Bean ):void;
 		function removeBean( bean:Bean ):void;
 		
-		function getBeanByName( name:String ):Object;
-		function getBeanByType( type:Class ):Object;
+		function getBeanByName( name:String ):Bean;
+		function getBeanByType( type:Class ):Bean;
 	}
 }
