@@ -2,6 +2,8 @@ package org.swizframework.events
 {
 	import flash.events.Event;
 	
+	import org.swizframework.di.Bean;
+	
 	public class BeanEvent extends Event
 	{
 		
@@ -16,7 +18,7 @@ package org.swizframework.events
 		// public properties
 		// ========================================
 		
-		public var bean:Object;
+		public var bean:Bean;
 		
 		// ========================================
 		// constructor
@@ -25,7 +27,7 @@ package org.swizframework.events
 		/**
 		 * Constructor
 		 */
-		public function BeanEvent( type:String, bean:Object = null )
+		public function BeanEvent( type:String, bean:Bean = null )
 		{
 			super( type, true, true );
 			

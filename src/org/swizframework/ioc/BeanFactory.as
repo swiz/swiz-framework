@@ -3,7 +3,6 @@ package org.swizframework.ioc
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
-	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
 	
 	import org.swizframework.ISwiz;
@@ -14,7 +13,6 @@ package org.swizframework.ioc
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
-	import org.swizframework.reflection.TypeDescriptor;
 	
 	/**
 	 * Bean Factory
@@ -95,33 +93,6 @@ package org.swizframework.ioc
 		// ========================================
 		
 		/**
-		 * Get TypeDescriptor instance for provided bean. If a TypeDescriptor
-		 * has already been created for this type that instance will be returned.
-		 * 
-		 * @see org.swizframework.di.TypeDescriptor
-		 */
-		protected function getTypeDescriptor( beanInstance:* ):TypeDescriptor
-		{
-			typeDescriptors ||= new Dictionary();
-			
-			// name of the property's class
-			var beanClassName:String = getQualifiedClassName( beanInstance );
-			
-			var td:TypeDescriptor = typeDescriptors[ beanClassName ];
-			
-			// check to see if we already have a TypeDescriptor for this class type
-			if( td == null )
-			{
-				// existing TypeDescriptor not found, so create one and store it
-				// TODO: implement type caching
-				td = new TypeDescriptor().fromXML( describeType( beanInstance ) );
-				typeDescriptors[ beanClassName ] = td;
-			}
-			
-			return td;
-		}
-		
-		/**
 		 * Add Bean Providers
 		 */
 		protected function addBeanProviders( beanProviders:Array ):void
@@ -137,22 +108,8 @@ package org.swizframework.ioc
 		 */
 		protected function addBeanProvider( beanProvider:IBeanProvider ):void
 		{
-			var bean:Bean;
-			
-			for each ( var beanSource:Object in beanProvider.beans )
+			for each ( var bean:Bean in beanProvider.beans )
 			{
-				if( beanSource is Bean )
-				{
-					bean = Bean( beanSource );
-				}
-				else
-				{
-					bean = new Bean();
-					bean.source = beanSource;
-				}
-				
-				bean.typeDescriptor = getTypeDescriptor( bean.source );
-				
 				addBean( bean );
 			}
 			
@@ -166,7 +123,7 @@ package org.swizframework.ioc
 			
 			var bean:Bean = new Bean();
 			bean.source = source;
-			bean.typeDescriptor = getTypeDescriptor( source );
+			bean.typeDescriptor = TypeCache.getTypeDescriptor( source );
 			return bean;
 		}
 		
@@ -264,7 +221,7 @@ package org.swizframework.ioc
 		 */
 		private function beanAddedHandler( event:BeanEvent ):void
 		{
-			addBean( getBean( event.bean ) );
+			addBean( event.bean );
 		}
 		
 		/**
@@ -272,7 +229,7 @@ package org.swizframework.ioc
 		 */
 		private function beanRemovedHandler( event:BeanEvent ):void
 		{
-			removeBean( getBean( event.bean ) );
+			removeBean( event.bean );
 		}
 	}
 }
