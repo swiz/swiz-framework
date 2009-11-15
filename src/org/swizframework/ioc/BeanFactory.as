@@ -199,7 +199,7 @@ package org.swizframework.ioc
 				var bean:Bean = new Bean();
 				bean.source = event.target;
 				// is this pointless?
-				if( bean.source.id != null )
+				if( "id" in bean.source && bean.source.id != null )
 					bean.name = bean.source.id;
 				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
 				addBean( bean );
