@@ -147,7 +147,7 @@ package org.swizframework.ioc
 				if ( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					var metadataTags:Array = TypeCache.getTypeDescriptor( bean.source ).getMetadataTagsByName( metadataProcessor.metadataName );
+					var metadataTags:Array = bean.typeDescriptor.getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
@@ -168,7 +168,7 @@ package org.swizframework.ioc
 				if ( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					var metadataTags:Array = TypeCache.getTypeDescriptor( bean ).getMetadataTagsByName( metadataProcessor.metadataName );
+					var metadataTags:Array = bean.typeDescriptor.getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
