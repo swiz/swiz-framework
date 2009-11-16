@@ -78,14 +78,7 @@ package org.swizframework.reflection
 					args.push( new MetadataArg( argNode.@key.toString(), argNode.@value.toString() ) );
 				}
 				
-				// create and store metadata tag as object
-				//var mt:IMetadataTag = new BaseMetadataTag( mdNode.@name.toString(), args, host );
-				// TODO: this is a temp fix
-				var tagName:String = mdNode.@name.toString();
-				var mt:IMetadataTag = ( tagName == "Autowire" ) ? new AutowireMetadataTag( args, host )
-																: ( tagName == "Mediate" ) ? new MediateMetadataTag( args, host )
-																							: new BaseMetadataTag( tagName, args, host );
-				host.metadataTags.push( mt );
+				host.metadataTags.push( new BaseMetadataTag( mdNode.@name.toString(), args, host ) );
 			}
 			
 			return metadataHosts;
