@@ -2,6 +2,9 @@ package org.swizframework
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	
 	import mx.core.IMXMLObject;
 	import mx.logging.ILogger;
@@ -149,7 +152,20 @@ package org.swizframework
 				dispatcher = IEventDispatcher( document );
 			}
 			
-			init();
+			// hack to delay call to init() to the next frame
+			// because Flex sucks
+			// ( complex objects/bound properties that are set as attributes are still null right now )
+			var t:Timer = new Timer( 0, 1 );
+			t.addEventListener( TimerEvent.TIMER, 
+			
+				function( e:TimerEvent ):void
+				{
+					e.currentTarget.removeEventListener( e.type, arguments.callee );
+					init();
+				}
+				
+			);
+			t.start();
 		}
 		
 	}
