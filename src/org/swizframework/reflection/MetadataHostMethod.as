@@ -48,7 +48,8 @@ package org.swizframework.reflection
 		{
 			super();
 			
-			_returnType = Class( getDefinitionByName( hostNode.@returnType ) );
+			if( hostNode.@returnType != "void" )
+				_returnType = Class( getDefinitionByName( hostNode.@returnType ) );
 			
 			for each( var pNode:XML in hostNode.parameter )
 			{
