@@ -11,6 +11,7 @@ package org.swizframework.ioc
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
+	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	
@@ -134,7 +135,9 @@ package org.swizframework.ioc
 		 */
 		protected function addBean( bean:Bean ):void
 		{
-			for each ( var processor:IProcessor in swiz.processors )
+			var processor:IProcessor;
+			
+			for each ( processor in swiz.processors )
 			{
 				// Handle Bean Processors
 				if ( processor is IBeanProcessor )
@@ -147,11 +150,21 @@ package org.swizframework.ioc
 				if ( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
+					var metadataTagClass:Class = metadataProcessor.metadataClass;
+					// get the tags this processor is interested in
 					var metadataTags:Array = bean.typeDescriptor.getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
-						metadataProcessor.addMetadata( bean, metadataTag );
+						// if this processor operates on a custom tag we create it here
+						if( metadataTagClass != BaseMetadataTag )
+						{
+							metadataProcessor.addMetadata( bean, new metadataTagClass( metadataTag.args, metadataTag.host ) );
+						}
+						else
+						{
+							metadataProcessor.addMetadata( bean, metadataTag );
+						}
 					}
 				}
 			}
