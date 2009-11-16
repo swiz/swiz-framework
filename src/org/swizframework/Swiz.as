@@ -13,6 +13,7 @@ package org.swizframework
 	import org.swizframework.processors.AutowireProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
+	import org.swizframework.processors.VirtualBeanProcessor;
 	import org.swizframework.util.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -135,7 +136,7 @@ package org.swizframework
 			
 			if ( processors == null )
 			{
-				processors = [ new AutowireProcessor(), new MediateProcessor() ];
+				processors = [ new AutowireProcessor(), new MediateProcessor(), new VirtualBeanProcessor() ];
 			}
 			
 			beanFactory.init( this );
