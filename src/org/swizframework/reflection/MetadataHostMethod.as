@@ -1,5 +1,7 @@
 package org.swizframework.reflection
 {
+	import flash.utils.getDefinitionByName;
+	
 	public class MetadataHostMethod extends BaseMetadataHost
 	{
 		// ========================================
@@ -14,7 +16,7 @@ package org.swizframework.reflection
 		/**
 		 * Backing variable for <code>parameters</code> getter/setter.
 		 */
-		protected var _parameters:Array;
+		protected var _parameters:Array = [];
 		
 		// ========================================
 		// public properties
@@ -28,11 +30,6 @@ package org.swizframework.reflection
 			return _returnType;
 		}
 		
-		public function set returnType( value:Class ):void
-		{
-			_returnType = value;
-		}
-		
 		[ArrayElementType( "org.swizframework.reflection.MethodParameter" )]
 		
 		/**
@@ -43,18 +40,20 @@ package org.swizframework.reflection
 			return _parameters;
 		}
 		
-		public function set parameters( value:Array ):void
-		{
-			_parameters = value;
-		}
-		
 		// ========================================
 		// constructor
 		// ========================================
 		
-		public function MetadataHostMethod()
+		public function MetadataHostMethod( hostNode:XML )
 		{
 			super();
+			
+			_returnType = Class( getDefinitionByName( hostNode.@returnType ) );
+			
+			for each( var pNode:XML in hostNode.parameter )
+			{
+				_parameters.push( new MethodParameter( int( pNode.@index ), Class( getDefinitionByName( pNode.@type ) ), pNode.@optional == "true" ) );
+			}
 		}
 	}
 }

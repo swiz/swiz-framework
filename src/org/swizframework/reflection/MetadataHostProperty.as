@@ -1,5 +1,7 @@
 package org.swizframework.reflection
 {
+	import flash.utils.getDefinitionByName;
+	
 	public class MetadataHostProperty extends BaseMetadataHost
 	{
 		// ========================================
@@ -21,9 +23,11 @@ package org.swizframework.reflection
 		// constructor
 		// ========================================
 		
-		public function MetadataHostProperty()
+		public function MetadataHostProperty( hostNode:XML )
 		{
 			super();
+			
+			type = getDefinitionByName( hostNode.@type.toString() ) as Class;
 		}
 	}
 }

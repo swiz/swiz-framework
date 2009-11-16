@@ -1,10 +1,9 @@
 package org.swizframework.reflection
 {
 	import flash.utils.Dictionary;
-	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
 	
+	import org.swizframework.factories.MetadataHostFactory;
 	import org.swizframework.metadata.AutowireMetadataTag;
 	import org.swizframework.metadata.MediateMetadataTag;
 	
@@ -39,11 +38,11 @@ package org.swizframework.reflection
 		public var interfaces:Array = [];
 		
 		/**
-		 * Array of IMetadataHost instances for this type.
+		 * Dictionary of IMetadataHost instances for this type, keyed by name.
 		 * 
 		 * @see org.swizframework.reflection.IMetadataHost
 		 */
-		public var metadataHosts:Array = [];
+		public var metadataHosts:Dictionary;
 		
 		// ========================================
 		// constructor
@@ -62,36 +61,15 @@ package org.swizframework.reflection
 		 * Gather and return all properties, methods or the class itself that 
 		 * are decorated with metadata.
 		 */
-		protected function getMetadataHosts( description:XML ):Array
+		protected function getMetadataHosts( description:XML ):Dictionary
 		{
-			var host:IMetadataHost;
+			metadataHosts = new Dictionary();
 			
 			// find all metadata tags in describeType()'s output XML
 			// parent node will be the actual property/method/class node
 			for each( var mdNode:XML in description..metadata )
 			{
-				// property, method or class?
-				var metadataHostKind:String = mdNode.parent().name();
-				// name of property/method
-				var metadataHostName:String = mdNode.parent().@name.toString();
-				
-				// if we don't already have an IMetadataHost object for this property/method
-				if( !hasMetadataHostWithName( metadataHostName ) )
-				{
-					// actual type is determined by metadata's parent tag
-					host = ( metadataHostKind == "method" ) ? new MetadataHostMethod()
-															: ( metadataHostKind == "type" ) ? new MetadataHostClass()
-																							 : new MetadataHostProperty();
-					
-					// TODO: more temp fix code
-					if( host is MetadataHostProperty )
-					{
-						MetadataHostProperty( host ).type = getDefinitionByName( mdNode.parent().@type.toString() ) as Class;
-					}
-					
-					host.name = metadataHostName;
-					metadataHosts.push( host );
-				}
+				var host:IMetadataHost = getMetadataHost( mdNode.parent() );
 				
 				// gather and store all key/value pairs for the metadata tag
 				var args:Array = [];
@@ -114,21 +92,22 @@ package org.swizframework.reflection
 		}
 		
 		/**
-		 * Check to see if this type already has an IMetadataHost with the given name.
 		 * 
-		 * @see org.swizframework.reflection.IMetadataHost
 		 */
-		protected function hasMetadataHostWithName( metadataHostName:String ):Boolean
+		protected function getMetadataHost( hostNode:XML ):IMetadataHost
 		{
-			for each( var metadataHost:IMetadataHost in metadataHosts )
-			{
-				if( metadataHost.name == metadataHostName )
-				{
-					return true;
-				}
-			}
+			var host:IMetadataHost;
 			
-			return false;
+			// name of property/method
+			var metadataHostName:String = hostNode.@name.toString();
+			
+			// if it has already been created, return it and bail
+			if( metadataHosts[ metadataHostName ] != null )
+				return IMetadataHost( metadataHosts[ metadataHostName ] );
+			
+			host = new MetadataHostFactory().getMetadataHost( hostNode );
+			
+			return metadataHosts[ metadataHostName ] = host;
 		}
 		
 		// ========================================
