@@ -4,7 +4,6 @@ package org.swizframework
 	import flash.events.IEventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import flash.utils.getTimer;
 	
 	import mx.core.IMXMLObject;
 	import mx.logging.ILogger;
