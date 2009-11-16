@@ -7,6 +7,8 @@ package org.swizframework.processors
 	import org.swizframework.ioc.IBeanProvider;
 	import org.swizframework.metadata.AutowireMetadataTag;
 	import org.swizframework.metadata.AutowireQueue;
+	import org.swizframework.reflection.MetadataHostMethod;
+	import org.swizframework.reflection.MethodParameter;
 	
 	/**
 	 * Autowire Processor
@@ -216,11 +218,22 @@ package org.swizframework.processors
 		 */
 		protected function addAutowireByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			var typedBean:Bean = getBeanByType( autowireTag.host.type );
+			// TODO: support injection into multi-param methods
+			var setterInjection:Boolean = autowireTag.host is MetadataHostMethod;
+			var targetType:Class = ( setterInjection ) ? MethodParameter( MetadataHostMethod( autowireTag.host ).parameters[ 0 ] ).type : autowireTag.host.type;
+			var typedBean:Bean = getBeanByType( targetType );
 			
 			if ( typedBean )
 			{
-				bean.source[ autowireTag.host.name ] = typedBean.source;
+				if( setterInjection )
+				{
+					var f:Function = bean.source[ autowireTag.host.name ] as Function;
+					f.apply( bean.source, [ typedBean.source ] );
+				}
+				else
+				{
+					bean.source[ autowireTag.host.name ] = typedBean.source;
+				}
 			}
 			else
 			{
