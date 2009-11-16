@@ -14,6 +14,11 @@ package org.swizframework.metadata
 			if( hasArg( "event" ) )
 				return getArg( "event" ).value;
 			
+			// event is the default attribute
+			// [Mediate( "someEvent" )] == [Mediate( event="someEvent" )]
+			if( hasArg( "" ) )
+				return getArg( "" ).value;
+			
 			return null;
 		}
 		

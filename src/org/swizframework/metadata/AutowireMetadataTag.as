@@ -14,6 +14,12 @@ package org.swizframework.metadata
 			if( hasArg( "bean" ) )
 				return getArg( "bean" ).value;
 			
+			// bean is the default attribute
+			// [Autowire( "appModel" )] == [Autowire( bean="appModel" )]
+			// TODO: simplify/formalize default attribute specification?
+			if( hasArg( "" ) )
+				return getArg( "" ).value;
+			
 			return null;
 		}
 		
