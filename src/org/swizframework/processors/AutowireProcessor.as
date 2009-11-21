@@ -107,22 +107,22 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire
 		 */
-		protected function addAutowire( bean:Bean, autowire:AutowireMetadataTag ):void
+		protected function addAutowire( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			if ( autowire.bean != null )
+			if ( autowireTag.bean != null )
 			{
-				if ( autowire.property != null )
+				if ( autowireTag.property != null )
 				{
-					addAutowireByProperty( bean, autowire );
+					addAutowireByProperty( bean, autowireTag );
 				}
 				else
 				{
-					addAutowireByName( bean, autowire );
+					addAutowireByName( bean, autowireTag );
 				}
 			}
 			else
 			{
-				addAutowireByType( bean, autowire );
+				addAutowireByType( bean, autowireTag );
 			}
 		}
 		
@@ -149,6 +149,61 @@ package org.swizframework.processors
 		}
 		
 		/**
+		 * 
+		 */
+		protected function getSourceObject( bean:Bean, autowireTag:AutowireMetadataTag ):Object
+		{
+			var sourceObject:Object = bean.source;
+			var sourcePropertyName:String = autowireTag.property;
+			
+			if( sourcePropertyName.indexOf( "." ) > -1 )
+			{
+				// property attribute is a dot path to a nested property
+				var arr:Array = sourcePropertyName.split( "." );
+				while( arr.length > 1 )
+				{
+					sourceObject = sourceObject[ arr.shift() ];
+				}
+			}
+			
+			return sourceObject;
+		}
+		
+		/**
+		 * 
+		 */
+		protected function getDestinationObject( bean:Bean, autowireTag:AutowireMetadataTag ):Object
+		{
+			if( autowireTag.destination == null )
+			{
+				return bean.source;
+			}
+			else
+			{
+				var arr:Array = autowireTag.destination.split( "." );
+				var dest:Object = bean.source;
+				while( arr.length > 1 ) dest = dest[ arr.shift() ];
+				return dest;
+			}
+		}
+		
+		/**
+		 * 
+		 */
+		protected function getDestinationPropertyName( autowireTag:AutowireMetadataTag ):String
+		{
+			if( autowireTag.destination == null )
+			{
+				return autowireTag.host.name;
+			}
+			else
+			{
+				var propName:String = autowireTag.destination;
+				return ( propName.indexOf( "." ) > -1 ) ? propName.substr( propName.lastIndexOf( "." ) + 1 ) : propName;
+			}
+		}
+		
+		/**
 		 * Add Autowire By Property
 		 */
 		protected function addAutowireByProperty( bean:Bean, autowireTag:AutowireMetadataTag ):void
@@ -157,12 +212,19 @@ package org.swizframework.processors
 			
 			if ( namedBean != null )
 			{
-				bean.source[ autowireTag.host.name ] = namedBean.source[ autowireTag.property ];
-				addPropertyBinding( bean.source, autowireTag.host.name, namedBean.source, autowireTag.property );
+				var sourceObject:Object = getSourceObject( namedBean, autowireTag );
+				var sourcePropertyName:String = autowireTag.property.split( "." ).pop();
+				
+				var destObject:Object = getDestinationObject( bean, autowireTag );
+				var destPropName:String = getDestinationPropertyName( autowireTag );
+				
+				destObject[ destPropName ] = sourceObject[ sourcePropertyName ];
+				
+				addPropertyBinding( destObject, destPropName, sourceObject, sourcePropertyName );
 				
 				if ( autowireTag.twoWay )
 				{
-					addPropertyBinding( namedBean.source, autowireTag.property, bean.source, autowireTag.host.name );
+					addPropertyBinding( sourceObject, sourcePropertyName, destObject, destPropName );
 				}
 			}
 			else
@@ -176,6 +238,7 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowireByProperty( bean:Bean, autowire:AutowireMetadataTag ):void
 		{
+			// TODO: update for dot path properties
 			var namedBean:Bean = getBeanByName( autowire.bean );
 			
 			removePropertyBinding( bean.source, autowire.host.name, namedBean.source, autowire.property );
@@ -197,7 +260,10 @@ package org.swizframework.processors
 			
 			if ( namedBean != null )
 			{
-				bean.source[ autowireTag.host.name ] = namedBean.source;
+				var destObject:Object = getDestinationObject( bean, autowireTag );
+				var destPropName:String = getDestinationPropertyName( autowireTag );
+				
+				destObject[ destPropName ] = namedBean.source;
 			}
 			else
 			{
@@ -210,7 +276,10 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowireByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			bean.source[ autowireTag.host.name ] = null;
+			var destObject:Object = getDestinationObject( bean, autowireTag );
+			var destPropName:String = getDestinationPropertyName( autowireTag );
+			
+			destObject[ destPropName ] = null;
 		}
 		
 		/**
@@ -225,14 +294,17 @@ package org.swizframework.processors
 			
 			if ( typedBean )
 			{
+				var destObject:Object = getDestinationObject( bean, autowireTag );
+				var destPropName:String = getDestinationPropertyName( autowireTag );
+				
 				if( setterInjection )
 				{
-					var f:Function = bean.source[ autowireTag.host.name ] as Function;
-					f.apply( bean.source, [ typedBean.source ] );
+					var f:Function = destObject[ destPropName ] as Function;
+					f.apply( destObject, [ typedBean.source ] );
 				}
 				else
 				{
-					bean.source[ autowireTag.host.name ] = typedBean.source;
+					destObject[ destPropName ] = typedBean.source;
 				}
 			}
 			else
@@ -246,7 +318,10 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowireByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			bean.source[ autowireTag.host.name ] = null;
+			var destObject:Object = getDestinationObject( bean, autowireTag );
+			var destPropName:String = getDestinationPropertyName( autowireTag );
+			
+			destObject[ destPropName ] = null;
 		}
 		
 		/**
