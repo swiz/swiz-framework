@@ -31,6 +31,14 @@ package org.swizframework.metadata
 			return null;
 		}
 		
+		public function get destination():String
+		{
+			if( hasArg( "destination" ) )
+				return getArg( "destination" ).value;
+			
+			return null;
+		}
+		
 		public function get twoWay():Boolean
 		{
 			return hasArg( "twoWay" ) && getArg( "twoWay" ).value == "true";
