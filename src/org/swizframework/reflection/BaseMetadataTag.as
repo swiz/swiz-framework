@@ -21,6 +21,11 @@ package org.swizframework.reflection
 		 */
 		protected var _host:IMetadataHost;
 		
+		/**
+		 * Backing variable for <code>defaultArgName</code> getter/setter.
+		 */
+		protected var _defaultArgName:String;
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -66,15 +71,29 @@ package org.swizframework.reflection
 			_host = value;
 		}
 		
+		/**
+		 * 
+		 */
+		public function get defaultArgName():String
+		{
+			return _defaultArgName;
+		}
+		
+		public function set defaultArgName( value:String ):void
+		{
+			_defaultArgName = value;
+		}
+		
 		// ========================================
 		// constructor
 		// ========================================
 		
-		public function BaseMetadataTag( name:String, args:Array, host:IMetadataHost )
+		public function BaseMetadataTag( name:String, args:Array, host:IMetadataHost, defaultArgName:String = null )
 		{
 			this.name = name;
 			this.args = args;
 			this.host = host;
+			this.defaultArgName = defaultArgName;
 		}
 		
 		// ========================================
@@ -85,7 +104,7 @@ package org.swizframework.reflection
 		{
 			for each( var arg:MetadataArg in args )
 			{
-				if( arg.key == argName )
+				if( arg.key == argName || argName == defaultArgName )
 					return true;
 			}
 			
@@ -96,7 +115,7 @@ package org.swizframework.reflection
 		{
 			for each( var arg:MetadataArg in args )
 			{
-				if( arg.key == argName )
+				if( arg.key == argName || ( arg.key == "" && argName == defaultArgName ) )
 					return arg;
 			}
 			

@@ -11,14 +11,10 @@ package org.swizframework.metadata
 		
 		public function get bean():String
 		{
-			if( hasArg( "bean" ) )
-				return getArg( "bean" ).value;
-			
 			// bean is the default attribute
 			// [Autowire( "appModel" )] == [Autowire( bean="appModel" )]
-			// TODO: simplify/formalize default attribute specification?
-			if( hasArg( "" ) )
-				return getArg( "" ).value;
+			if( hasArg( "bean" ) )
+				return getArg( "bean" ).value;
 			
 			return null;
 		}
@@ -63,7 +59,7 @@ package org.swizframework.metadata
 		
 		public function AutowireMetadataTag( args:Array, host:IMetadataHost )
 		{
-			super( "Autowire", args, host );
+			super( "Autowire", args, host, "bean" );
 		}
 	}
 }
