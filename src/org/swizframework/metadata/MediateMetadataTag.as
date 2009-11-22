@@ -11,13 +11,10 @@ package org.swizframework.metadata
 		
 		public function get event():String
 		{
-			if( hasArg( "event" ) )
-				return getArg( "event" ).value;
-			
 			// event is the default attribute
 			// [Mediate( "someEvent" )] == [Mediate( event="someEvent" )]
-			if( hasArg( "" ) )
-				return getArg( "" ).value;
+			if( hasArg( "event" ) )
+				return getArg( "event" ).value;
 			
 			return null;
 		}
@@ -65,7 +62,7 @@ package org.swizframework.metadata
 		
 		public function MediateMetadataTag( args:Array, host:IMetadataHost )
 		{
-			super( "Mediate", args, host );
+			super( "Mediate", args, host, "event" );
 		}
 	}
 }
