@@ -104,7 +104,7 @@ package org.swizframework.reflection
 		{
 			for each( var arg:MetadataArg in args )
 			{
-				if( arg.key == argName || argName == defaultArgName )
+				if( arg.key == argName || ( arg.key == "" && argName == defaultArgName ) )
 					return true;
 			}
 			
