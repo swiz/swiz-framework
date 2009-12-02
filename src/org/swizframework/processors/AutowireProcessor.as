@@ -1,12 +1,17 @@
 package org.swizframework.processors
 {
+	import flash.utils.Dictionary;
+	import flash.utils.getDefinitionByName;
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
+	import mx.utils.UIDUtil;
 	
 	import org.swizframework.di.Bean;
 	import org.swizframework.ioc.IBeanProvider;
 	import org.swizframework.metadata.AutowireMetadataTag;
 	import org.swizframework.metadata.AutowireQueue;
+	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
 	
@@ -28,7 +33,7 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 		
-		protected var autowireByProperty:Object = {};
+		protected var autowireByProperty:Dictionary = new Dictionary();
 		protected var autowireByName:Object = {};
 		protected var autowireByType:Object = {};
 		protected var queueByName:Object = {};
@@ -109,9 +114,9 @@ package org.swizframework.processors
 		 */
 		protected function addAutowire( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			if ( autowireTag.bean != null )
+			if ( autowireTag.source != null )
 			{
-				if ( autowireTag.property != null )
+				if ( autowireTag.source.indexOf( "." ) > -1 )
 				{
 					addAutowireByProperty( bean, autowireTag );
 				}
@@ -131,9 +136,9 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowire( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			if ( autowireTag.bean != null )
+			if ( autowireTag.source != null )
 			{
-				if ( autowireTag.property != null )
+				if ( autowireTag.source.indexOf( "." ) > -1 )
 				{
 					removeAutowireByProperty( bean, autowireTag );
 				}
@@ -146,27 +151,6 @@ package org.swizframework.processors
 			{
 				removeAutowireByType( bean, autowireTag );
 			}
-		}
-		
-		/**
-		 * 
-		 */
-		protected function getSourceObject( bean:Bean, autowireTag:AutowireMetadataTag ):Object
-		{
-			var sourceObject:Object = bean.source;
-			var sourcePropertyName:String = autowireTag.property;
-			
-			if( sourcePropertyName.indexOf( "." ) > -1 )
-			{
-				// property attribute is a dot path to a nested property
-				var arr:Array = sourcePropertyName.split( "." );
-				while( arr.length > 1 )
-				{
-					sourceObject = sourceObject[ arr.shift() ];
-				}
-			}
-			
-			return sourceObject;
 		}
 		
 		/**
@@ -198,8 +182,7 @@ package org.swizframework.processors
 			}
 			else
 			{
-				var propName:String = autowireTag.destination;
-				return ( propName.indexOf( "." ) > -1 ) ? propName.substr( propName.lastIndexOf( "." ) + 1 ) : propName;
+				return autowireTag.destination.split( "." ).pop();
 			}
 		}
 		
@@ -208,24 +191,11 @@ package org.swizframework.processors
 		 */
 		protected function addAutowireByProperty( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			var namedBean:Bean = getBeanByName( autowireTag.bean );
+			var namedBean:Bean = getBeanByName( autowireTag.source.split( "." )[ 0 ] );
 			
 			if ( namedBean != null )
 			{
-				var sourceObject:Object = getSourceObject( namedBean, autowireTag );
-				var sourcePropertyName:String = autowireTag.property.split( "." ).pop();
-				
-				var destObject:Object = getDestinationObject( bean, autowireTag );
-				var destPropName:String = getDestinationPropertyName( autowireTag );
-				
-				destObject[ destPropName ] = sourceObject[ sourcePropertyName ];
-				
-				addPropertyBinding( destObject, destPropName, sourceObject, sourcePropertyName );
-				
-				if ( autowireTag.twoWay )
-				{
-					addPropertyBinding( sourceObject, sourcePropertyName, destObject, destPropName );
-				}
+				addPropertyBinding( bean, namedBean, autowireTag );
 			}
 			else
 			{
@@ -236,19 +206,19 @@ package org.swizframework.processors
 		/**
 		 * Remove Autowire By Property
 		 */
-		protected function removeAutowireByProperty( bean:Bean, autowire:AutowireMetadataTag ):void
+		protected function removeAutowireByProperty( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
 			// TODO: update for dot path properties
-			var namedBean:Bean = getBeanByName( autowire.bean );
+			var namedBean:Bean = getBeanByName( autowireTag.source );
 			
-			removePropertyBinding( bean.source, autowire.host.name, namedBean.source, autowire.property );
+			removePropertyBinding( bean, namedBean, autowireTag );
 			
-			if ( autowire.twoWay )
+			if ( autowireTag.twoWay )
 			{
-				removePropertyBinding( namedBean.source, autowire.property, bean.source, autowire.host.name );
+				removePropertyBinding( namedBean, bean, autowireTag );
 			}
 			
-			bean.source[ autowire.host.name ] = null;
+			bean.source[ autowireTag.host.name ] = null;
 		}
 		
 		/**
@@ -256,7 +226,7 @@ package org.swizframework.processors
 		 */
 		protected function addAutowireByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			var namedBean:Bean = getBeanByName( autowireTag.bean );
+			var namedBean:Bean = getBeanByName( autowireTag.source.split( "." )[ 0 ] );
 			
 			if ( namedBean != null )
 			{
@@ -290,6 +260,8 @@ package org.swizframework.processors
 			// TODO: support injection into multi-param methods
 			var setterInjection:Boolean = autowireTag.host is MetadataHostMethod;
 			var targetType:Class = ( setterInjection ) ? MethodParameter( MetadataHostMethod( autowireTag.host ).parameters[ 0 ] ).type : autowireTag.host.type;
+			if( targetType == null && autowireTag.host is MetadataHostClass )
+				targetType = getDefinitionByName( autowireTag.host.name ) as Class;
 			var typedBean:Bean = getBeanByType( targetType );
 			
 			if ( typedBean )
@@ -363,45 +335,93 @@ package org.swizframework.processors
 		/**
 		 * Add To Queue By Name
 		 */
-		protected function addToQueueByName( bean:Bean, autowire:AutowireMetadataTag ):void
+		protected function addToQueueByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			if ( autowire.bean in queueByName )
+			if ( autowireTag.source in queueByName )
 			{
-				queueByName[ autowire.bean ].push( new AutowireQueue( bean, autowire ) );
+				queueByName[ autowireTag.source ].push( new AutowireQueue( bean, autowireTag ) );
 			}
 			else
 			{
-				queueByName[ autowire.bean ] = [ new AutowireQueue( bean, autowire ) ];
+				queueByName[ autowireTag.source ] = [ new AutowireQueue( bean, autowireTag ) ];
 			}
 		}
 		
 		/**
 		 * Add To Queue By Type
 		 */
-		protected function addToQueueByType( bean:Bean, autowire:AutowireMetadataTag ):void
+		protected function addToQueueByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			queueByType[ queueByType.length ] = new AutowireQueue( bean, autowire );
+			queueByType[ queueByType.length ] = new AutowireQueue( bean, autowireTag );
 		}
 		
 		/**
 		 * Add Property Binding
 		 */
-		protected function addPropertyBinding( target:Object, targetKey:String, source:Object, sourceKey:String ):void
+		protected function addPropertyBinding( destinationBean:Bean, sourceBean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			var id:String = target + targetKey + source + sourceKey;
+			var destObject:Object;
+			var destPropName:String;
+			var cw:ChangeWatcher;
+			var uid:String;
 			
-			autowireByProperty[ id ] = BindingUtils.bindProperty( target, targetKey, source, sourceKey );
+			// base scenario of binding an object or property to a property of a bean
+			
+			// this is a view added to the display list or a new bean being processed
+			destObject = getDestinationObject( destinationBean, autowireTag );
+			// name of property that will be bound to a source value
+			destPropName = getDestinationPropertyName( autowireTag );
+			
+			// we have to track any bindings we create so we can unwire them later if need be
+			
+			// get the uid of our view/new bean
+			uid = UIDUtil.getUID( destinationBean.source );
+			// create the binding
+			cw = BindingUtils.bindProperty( destObject, destPropName, sourceBean.source, autowireTag.source.split( "." ).slice( 1 ) );
+			// create an array to store bindings for this object if one does not already exist
+			autowireByProperty[ uid ] ||= [];
+			// store this binding
+			autowireByProperty[ uid ].push( cw );
+			
+			// if twoWay binding was requested we have to do things in reverse
+			// meaning the existing bean's property will also be bound to the view/new bean's property
+			if( autowireTag.twoWay )
+			{
+				// existing bean is the destination object this time
+				destObject = sourceBean.source;
+				// TODO: this assumes a dot path exists. fix.
+				var arr:Array = autowireTag.source.split( "." ).slice( 1 );
+				// walk the object chain to reach the actual destination object
+				while( arr.length > 1 ) destObject = destObject[ arr.shift() ];
+				// the last token of the source attribute is the actual property name
+				destPropName = autowireTag.source.split( "." ).pop();
+				
+				// create the reverse binding where the view/new bean is the source
+				// TODO: store this binding too
+				if( autowireTag.destination != null )
+				{
+					// if a destination was provided we can use it as the host chain value
+					BindingUtils.bindProperty( destObject, destPropName, destinationBean.source, autowireTag.destination.split( "." ) );
+				}
+				else
+				{
+					// if no destination was provided we use the name of the decorated property as the host chain value
+					BindingUtils.bindProperty( destObject, destPropName, destinationBean.source, autowireTag.host.name );
+				}
+			}
 		}
 		
 		/**
 		 * Remove Property Binding
 		 */
-		protected function removePropertyBinding( target:Object, targetKey:String, source:Object, sourceKey:String ):void
+		protected function removePropertyBinding( destination:Bean, source:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			var id:String = target + targetKey + source + sourceKey;
-			
-			ChangeWatcher( autowireByProperty[ id ] ).unwatch();				
-			delete autowireByProperty[ id ];
+			var uid:String = UIDUtil.getUID( destination.source );
+			for each( var cw:ChangeWatcher in autowireByProperty[ uid ] )
+			{
+				cw.unwatch();
+			}
+			delete autowireByProperty[ uid ];
 		}
 		
 	}
