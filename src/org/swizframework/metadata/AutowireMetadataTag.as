@@ -6,51 +6,71 @@ package org.swizframework.metadata
 	public class AutowireMetadataTag extends BaseMetadataTag
 	{
 		// ========================================
+		// protected properties
+		// ========================================
+		
+		/**
+		 * 
+		 */
+		protected var _source:String;
+		
+		/**
+		 * 
+		 */
+		protected var _destination:String;
+		
+		/**
+		 * 
+		 */
+		protected var _twoWay:Boolean = false;
+		
+		/**
+		 * 
+		 */
+		protected var _view:Boolean = false;
+		
+		/**
+		 * 
+		 */
+		protected var _bind:Boolean = true;
+		
+		/**
+		 * 
+		 */
+		protected var _lazy:Boolean = true;
+		
+		// ========================================
 		// public properties
 		// ========================================
 		
-		public function get bean():String
+		public function get source():String
 		{
-			// bean is the default attribute
-			// [Autowire( "appModel" )] == [Autowire( bean="appModel" )]
-			if( hasArg( "bean" ) )
-				return getArg( "bean" ).value;
-			
-			return null;
-		}
-		
-		public function get property():String
-		{
-			if( hasArg( "property" ) )
-				return getArg( "property" ).value;
-			
-			return null;
+			return _source;
 		}
 		
 		public function get destination():String
 		{
-			if( hasArg( "destination" ) )
-				return getArg( "destination" ).value;
-			
-			return null;
+			return _destination;
 		}
 		
 		public function get twoWay():Boolean
 		{
-			return hasArg( "twoWay" ) && getArg( "twoWay" ).value == "true";
+			return _twoWay;
 		}
 		
 		public function get view():Boolean
 		{
-			return hasArg( "view" ) && getArg( "view" ).value == "true";
+			return _view;
 		}
 		
 		public function get bind():Boolean
 		{
-			if( hasArg( "bind" ) )
-				return getArg( "bind" ).value == "true";
-			
-			return true;
+			return _bind;
+		}
+		
+		public function get lazy():Boolean
+		{
+			return _lazy;
 		}
 		
 		// ========================================
@@ -60,6 +80,49 @@ package org.swizframework.metadata
 		public function AutowireMetadataTag( args:Array, host:IMetadataHost )
 		{
 			super( "Autowire", args, host, "bean" );
+			parse();
+		}
+		
+		// ========================================
+		// protected methods
+		// ========================================
+		
+		/**
+		 * 
+		 */
+		protected function parse():void
+		{
+			if( hasArg( "bean" ) && hasArg( "source" ) )
+				// TODO: throw error. use one or the other
+			
+			if( hasArg( "property" ) )
+				// TODO: throw error. no longer supported.
+			
+			if( hasArg( "bean" ) )
+			{
+				// TODO: log deprecation message
+				_source = getArg( "bean" ).value;
+			}
+			
+			// source is the default attribute
+			// [Autowire( "appModel" )] == [Autowire( source="appModel" )]
+			if( hasArg( "source" ) )
+				_source = getArg( "source" ).value;
+			
+			if( hasArg( "destination" ) )
+				_destination = getArg( "destination" ).value;
+			
+			if( hasArg( "twoWay" ) )
+				_twoWay = getArg( "twoWay" ).value == "true";
+			
+			if( hasArg( "view" ) )
+				_view = getArg( "view" ).value == "true";
+			
+			if( hasArg( "bind" ) )
+				_bind = getArg( "bind" ).value == "true";
+			
+			if( hasArg( "lazy" ) )
+				_lazy = getArg( "lazy" ).value == "true";
 		}
 	}
 }
