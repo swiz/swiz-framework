@@ -3,6 +3,7 @@ package org.swizframework.ioc
 	import flash.events.EventDispatcher;
 	
 	import org.swizframework.di.Bean;
+	import org.swizframework.di.Prototype;
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.reflection.TypeCache;
 	
@@ -80,6 +81,7 @@ package org.swizframework.ioc
 					bean.source = beanSource;
 				}
 				
+				bean.provider = this;
 				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
 				
 				_beans.push( bean );
@@ -141,7 +143,7 @@ package org.swizframework.ioc
 			
 			for each( var bean:Bean in beans )
 			{
-				if( bean.source is beanType )
+				if( bean is Prototype && Prototype( bean ).classReference is beanType || bean.source is beanType )
 				{
 					if ( foundBean != null )
 					{
