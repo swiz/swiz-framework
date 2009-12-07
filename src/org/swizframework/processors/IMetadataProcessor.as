@@ -1,6 +1,6 @@
 package org.swizframework.processors
 {
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 	import org.swizframework.reflection.IMetadataTag;
 
 	public interface IMetadataProcessor extends IProcessor

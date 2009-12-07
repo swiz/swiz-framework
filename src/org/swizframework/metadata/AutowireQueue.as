@@ -1,6 +1,6 @@
 package org.swizframework.metadata
 {
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 	
 	public class AutowireQueue
 	{

@@ -1,4 +1,4 @@
-package org.swizframework.di
+package org.swizframework.core
 {
 	import org.swizframework.events.BeanEvent;
 

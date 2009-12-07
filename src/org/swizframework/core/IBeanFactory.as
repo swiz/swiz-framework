@@ -1,4 +1,4 @@
-package org.swizframework.ioc
+package org.swizframework.core
 {
 	import org.swizframework.ISwiz;
 	

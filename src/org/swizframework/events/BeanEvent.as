@@ -2,7 +2,7 @@ package org.swizframework.events
 {
 	import flash.events.Event;
 	
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 	
 	public class BeanEvent extends Event
 	{

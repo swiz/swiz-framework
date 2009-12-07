@@ -1,4 +1,4 @@
-package org.swizframework.ioc
+package org.swizframework.core
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -6,7 +6,7 @@ package org.swizframework.ioc
 	import flash.utils.getQualifiedClassName;
 	
 	import org.swizframework.ISwiz;
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
