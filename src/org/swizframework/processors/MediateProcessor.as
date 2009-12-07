@@ -2,7 +2,7 @@ package org.swizframework.processors
 {
 	import flash.events.Event;
 	
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
 	

@@ -7,8 +7,8 @@ package org.swizframework.processors
 	import mx.binding.utils.ChangeWatcher;
 	import mx.utils.UIDUtil;
 	
-	import org.swizframework.di.Bean;
-	import org.swizframework.ioc.IBeanProvider;
+	import org.swizframework.core.Bean;
+	import org.swizframework.core.IBeanProvider;
 	import org.swizframework.metadata.AutowireMetadataTag;
 	import org.swizframework.metadata.AutowireQueue;
 	import org.swizframework.reflection.MetadataHostClass;

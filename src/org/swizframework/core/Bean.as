@@ -1,6 +1,6 @@
-package org.swizframework.di
+package org.swizframework.core
 {
-	import org.swizframework.ioc.IBeanProvider;
+	import org.swizframework.core.IBeanProvider;
 	import org.swizframework.reflection.TypeDescriptor;
 	
 	[DefaultProperty( "source" )]

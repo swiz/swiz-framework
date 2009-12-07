@@ -1,9 +1,9 @@
-package org.swizframework.ioc
+package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
 	
-	import org.swizframework.di.Bean;
-	import org.swizframework.di.Prototype;
+	import org.swizframework.core.Bean;
+	import org.swizframework.core.Prototype;
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.reflection.TypeCache;
 	

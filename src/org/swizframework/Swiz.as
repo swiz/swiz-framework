@@ -8,8 +8,8 @@ package org.swizframework
 	import mx.core.IMXMLObject;
 	import mx.logging.ILogger;
 	
-	import org.swizframework.ioc.BeanFactory;
-	import org.swizframework.ioc.IBeanFactory;
+	import org.swizframework.core.BeanFactory;
+	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.processors.AutowireProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
@@ -68,7 +68,7 @@ package org.swizframework
 			_beanFactory = value;
 		}
 		
-		[ArrayElementType( "org.swizframework.ioc.IBeanProvider" )]
+		[ArrayElementType( "org.swizframework.core.IBeanProvider" )]
 		
 		/**
 		 * @inheritDoc

@@ -1,7 +1,7 @@
 package org.swizframework.processors
 {
-	import org.swizframework.di.Bean;
-	import org.swizframework.ioc.IBeanProvider;
+	import org.swizframework.core.Bean;
+	import org.swizframework.core.IBeanProvider;
 	import org.swizframework.processors.MetadataProcessor;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;

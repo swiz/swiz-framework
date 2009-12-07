@@ -1,8 +1,8 @@
-package org.swizframework.ioc
+package org.swizframework.core
 {
 	import flash.events.IEventDispatcher;
 	
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 
 	[Event( name="beanAdded", type="org.swizframework.events.BeanEvent" )]
 	[Event( name="beanRemoved", type="org.swizframework.events.BeanEvent" )]

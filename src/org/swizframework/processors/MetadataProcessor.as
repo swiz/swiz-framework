@@ -3,7 +3,7 @@ package org.swizframework.processors
 	import flash.events.EventDispatcher;
 	
 	import org.swizframework.ISwiz;
-	import org.swizframework.di.Bean;
+	import org.swizframework.core.Bean;
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	

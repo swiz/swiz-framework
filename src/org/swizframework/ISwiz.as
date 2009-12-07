@@ -2,7 +2,7 @@ package org.swizframework
 {
 	import flash.events.IEventDispatcher;
 	
-	import org.swizframework.ioc.IBeanFactory;
+	import org.swizframework.core.IBeanFactory;
 	
 	/**
 	 * Swiz Interface
@@ -20,7 +20,7 @@ package org.swizframework
 		function get dispatcher():IEventDispatcher;
 		function set dispatcher( value:IEventDispatcher ):void;
 		
-		[ArrayElementType( "org.swizframework.ioc.IBeanProvider" )]
+		[ArrayElementType( "org.swizframework.core.IBeanProvider" )]
 		
 		/**
 		 * Bean Providers
