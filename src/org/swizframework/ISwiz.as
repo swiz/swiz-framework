@@ -9,7 +9,6 @@ package org.swizframework
 	 */
 	public interface ISwiz
 	{
-		
 		// ========================================
 		// public properties
 		// ========================================
@@ -40,7 +39,11 @@ package org.swizframework
 		 * Processors
 		 */
 		function get processors():Array;
-		function set processors( value:Array ):void;
+		
+		/**
+		 * Custom Processors
+		 */
+		function set customProcessors( value:Array ):void;
 		
 		// ========================================
 		// public methods
@@ -50,6 +53,5 @@ package org.swizframework
 		 * Called once in initialize Swiz
 		 */
 		function init():void;
-		
 	}
 }
