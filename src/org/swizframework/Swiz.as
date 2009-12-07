@@ -24,19 +24,19 @@ package org.swizframework
 	 */
 	public class Swiz extends EventDispatcher implements IMXMLObject, ISwiz
 	{
+		// ========================================
+		// protected properties
+		// ========================================
+		
 		/**
 		 * 
 		 */
 		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
 		
-		// ========================================
-		// private properties
-		// ========================================
-		
-		private var _dispatcher:IEventDispatcher;
-		private var _beanFactory:IBeanFactory;
-		private var _beanProviders:Array;
-		private var _processors:Array;
+		protected var _dispatcher:IEventDispatcher;
+		protected var _beanFactory:IBeanFactory;
+		protected var _beanProviders:Array;
+		protected var _processors:Array = [ new AutowireProcessor(), new MediateProcessor(), new VirtualBeanProcessor() ];
 		
 		// ========================================
 		// public properties
@@ -93,9 +93,10 @@ package org.swizframework
 			return _processors;
 		}
 		
-		public function set processors( value:Array ):void
+		public function set customProcessors( value:Array ):void
 		{
-			_processors = value;
+			if( value != null )
+				_processors = _processors.concat( value );
 		}
 		
 		// ========================================
@@ -105,14 +106,14 @@ package org.swizframework
 		/**
 		 * Constructor
 		 */
-		public function Swiz( dispatcher:IEventDispatcher = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, processors:Array = null )
+		public function Swiz( dispatcher:IEventDispatcher = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, customProcessors:Array = null )
 		{
 			super();
 			
 			this.dispatcher = dispatcher;
 			this.beanFactory = beanFactory;
 			this.beanProviders = beanProviders;
-			this.processors = processors;
+			this.customProcessors = customProcessors;
 		}
 		
 		// ========================================
@@ -132,11 +133,6 @@ package org.swizframework
 			if ( beanFactory == null )
 			{
 				beanFactory = new BeanFactory();
-			}
-			
-			if ( processors == null )
-			{
-				processors = [ new AutowireProcessor(), new MediateProcessor(), new VirtualBeanProcessor() ];
 			}
 			
 			beanFactory.init( this );
