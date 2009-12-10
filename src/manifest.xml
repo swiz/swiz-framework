@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<componentPackage>
+	
+	<component class="org.swizframework.core.mxml.Swiz" />
+	
+	<!-- core package -->
+	<component class="org.swizframework.core.SwizConfig" />
+	<component class="org.swizframework.core.Bean" />
+	<component class="org.swizframework.core.BeanFactory" />
+	<component class="org.swizframework.core.BeanProvider" />
+	<component class="org.swizframework.core.Prototype" />
+	
+	<!-- events package -->
+	<component class="org.swizframework.events.BeanEvent" />
+	
+	<!-- factories package -->
+	<component class="org.swizframework.factories.MetadataHostFactory" />
+	
+	<!-- util package -->
+	<component class="org.swizframework.util.SwizLogger" />
+	
+</componentPackage>

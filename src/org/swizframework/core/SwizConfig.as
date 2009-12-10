@@ -1,4 +1,4 @@
-package org.swizframework
+package org.swizframework.core
 {
 	public class SwizConfig
 	{

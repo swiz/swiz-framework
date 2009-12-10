@@ -1,15 +1,10 @@
-package org.swizframework
+package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	
-	import mx.core.IMXMLObject;
 	import mx.logging.ILogger;
 	
-	import org.swizframework.core.BeanFactory;
-	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.processors.AutowireProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
@@ -17,12 +12,13 @@ package org.swizframework
 	import org.swizframework.util.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
+	[ExcludeClass]
 	
 	/**
 	 * Core framework class that serves as an IoC container rooted
 	 * at the IEventDispatcher passed into its constructor.
 	 */
-	public class Swiz extends EventDispatcher implements IMXMLObject, ISwiz
+	public class Swiz extends EventDispatcher implements ISwiz
 	{
 		// ========================================
 		// protected properties
@@ -137,32 +133,5 @@ package org.swizframework
 			
 			beanFactory.init( this );
 		}
-		
-		/**
-		 * @see mx.core.IMXMLObject#initialized
-		 */
-		public function initialized( document:Object, id:String ):void
-		{
-			if ( document is IEventDispatcher && dispatcher == null )
-			{
-				dispatcher = IEventDispatcher( document );
-			}
-			
-			// hack to delay call to init() to the next frame
-			// because Flex sucks
-			// ( complex objects/bound properties that are set as attributes are still null right now )
-			var t:Timer = new Timer( 0, 1 );
-			t.addEventListener( TimerEvent.TIMER, 
-			
-				function( e:TimerEvent ):void
-				{
-					e.currentTarget.removeEventListener( e.type, arguments.callee );
-					init();
-				}
-				
-			);
-			t.start();
-		}
-		
 	}
 }

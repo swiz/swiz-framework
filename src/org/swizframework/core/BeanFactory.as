@@ -5,8 +5,6 @@ package org.swizframework.core
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import org.swizframework.ISwiz;
-	import org.swizframework.core.Bean;
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
@@ -20,19 +18,13 @@ package org.swizframework.core
 	 */
 	public class BeanFactory extends EventDispatcher implements IBeanFactory
 	{
-		
-		// ========================================
-		// private properties
-		// ========================================
-		
-		private var _injectionEvent:String = "addedToStage";
-		
 		// ========================================
 		// protected properties
 		// ========================================
 		
 		protected var swiz:ISwiz;
 		protected var ignoredClasses:RegExp = /^mx\./;
+		protected var _injectionEvent:String = "addedToStage";
 		
 		/**
 		 * 
@@ -219,14 +211,10 @@ package org.swizframework.core
 			}
 		}
 		
-		// ========================================
-		// private methods
-		// ========================================
-		
 		/**
 		 * Bean Added Handler
 		 */
-		private function beanAddedHandler( event:BeanEvent ):void
+		protected function beanAddedHandler( event:BeanEvent ):void
 		{
 			addBean( event.bean );
 		}
@@ -234,7 +222,7 @@ package org.swizframework.core
 		/**
 		 * Bean Added Handler
 		 */
-		private function beanRemovedHandler( event:BeanEvent ):void
+		protected function beanRemovedHandler( event:BeanEvent ):void
 		{
 			removeBean( event.bean );
 		}

@@ -1,6 +1,6 @@
 package org.swizframework.processors
 {
-	import org.swizframework.ISwiz;
+	import org.swizframework.core.ISwiz;
 
 	public interface IProcessor
 	{
