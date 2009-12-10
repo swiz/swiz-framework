@@ -1,4 +1,4 @@
-package org.swizframework
+package org.swizframework.core
 {
 	/**
 	 * Interface that IEventDispatchers can optionally implement

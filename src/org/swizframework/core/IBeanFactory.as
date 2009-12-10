@@ -1,13 +1,10 @@
 package org.swizframework.core
 {
-	import org.swizframework.ISwiz;
-	
 	/**
 	 * Bean Factory Interface
 	 */
 	public interface IBeanFactory
 	{
-		
 		// ========================================
 		// public properties
 		// ========================================
@@ -26,6 +23,5 @@ package org.swizframework.core
 		 * Called by Swiz
 		 */
 		function init( swiz:ISwiz ):void;
-		
 	}
 }

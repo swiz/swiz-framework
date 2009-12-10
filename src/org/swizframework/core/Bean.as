@@ -1,18 +1,16 @@
 package org.swizframework.core
 {
-	import org.swizframework.core.IBeanProvider;
 	import org.swizframework.reflection.TypeDescriptor;
 	
 	[DefaultProperty( "source" )]
 	
 	public class Bean
 	{
-		
 		// ========================================
-		// private properties
+		// protected properties
 		// ========================================
 		
-		private var _source:*;
+		protected var _source:*;
 		
 		// ========================================
 		// public properties

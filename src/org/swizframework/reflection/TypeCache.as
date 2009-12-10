@@ -6,7 +6,7 @@ package org.swizframework.reflection
 	
 	public class TypeCache
 	{
-		private static var typeDescriptors:Dictionary;
+		protected static var typeDescriptors:Dictionary;
 		
 		public static function getTypeDescriptor( target:Object ):TypeDescriptor
 		{

@@ -2,8 +2,8 @@ package org.swizframework.processors
 {
 	import flash.events.EventDispatcher;
 	
-	import org.swizframework.ISwiz;
 	import org.swizframework.core.Bean;
+	import org.swizframework.core.ISwiz;
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	
@@ -12,14 +12,6 @@ package org.swizframework.processors
 	 */
 	public class MetadataProcessor extends EventDispatcher implements IMetadataProcessor
 	{
-		
-		// ========================================
-		// private properties
-		// ========================================
-		
-		private var _metadataName:String;
-		private var _metadataClass:Class;
-		
 		// ========================================
 		// protected properties
 		// ========================================
@@ -27,6 +19,8 @@ package org.swizframework.processors
 		protected var swiz:ISwiz;
 		protected var addMethod:Function;
 		protected var removeMethod:Function;
+		protected var _metadataName:String;
+		protected var _metadataClass:Class;
 		
 		// ========================================
 		// public properties

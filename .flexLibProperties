@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flexLibProperties version="1">
 <includeClasses>
-<classEntry path="org.swizframework.ISwiz"/>
-<classEntry path="org.swizframework.ISwizHost"/>
-<classEntry path="org.swizframework.Swiz"/>
-<classEntry path="org.swizframework.SwizConfig"/>
 <classEntry path="org.swizframework.core.Bean"/>
 <classEntry path="org.swizframework.core.BeanFactory"/>
 <classEntry path="org.swizframework.core.BeanProvider"/>
 <classEntry path="org.swizframework.core.IBeanFactory"/>
 <classEntry path="org.swizframework.core.IBeanProvider"/>
+<classEntry path="org.swizframework.core.ISwiz"/>
+<classEntry path="org.swizframework.core.ISwizHost"/>
 <classEntry path="org.swizframework.core.Prototype"/>
+<classEntry path="org.swizframework.core.Swiz"/>
+<classEntry path="org.swizframework.core.SwizConfig"/>
+<classEntry path="org.swizframework.core.mxml.Swiz"/>
 <classEntry path="org.swizframework.events.BeanEvent"/>
 <classEntry path="org.swizframework.factories.MetadataHostFactory"/>
 <classEntry path="org.swizframework.metadata.AutowireMetadataTag"/>
@@ -38,5 +39,7 @@
 <classEntry path="org.swizframework.util.SwizLogger"/>
 </includeClasses>
 <includeResources/>
-<namespaceManifests/>
+<namespaceManifests>
+<namespaceManifestEntry manifest="manifest.xml" namespace="http://swiz.swizframework.org/"/>
+</namespaceManifests>
 </flexLibProperties>

@@ -1,8 +1,6 @@
-package org.swizframework
+package org.swizframework.core
 {
 	import flash.events.IEventDispatcher;
-	
-	import org.swizframework.core.IBeanFactory;
 	
 	/**
 	 * Swiz Interface
