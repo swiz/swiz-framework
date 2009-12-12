@@ -79,7 +79,7 @@ package org.swizframework.metadata
 		
 		public function AutowireMetadataTag( args:Array, host:IMetadataHost )
 		{
-			super( "Autowire", args, host, "bean" );
+			super( "Autowire", args, host, "source" );
 			parse();
 		}
 		
@@ -92,10 +92,10 @@ package org.swizframework.metadata
 		 */
 		protected function parse():void
 		{
-			if( hasArg( "bean" ) && hasArg( "source" ) )
+			//if( hasArg( "bean" ) && hasArg( "source" ) )
 				// TODO: throw error. use one or the other
 			
-			if( hasArg( "property" ) )
+			//if( hasArg( "property" ) )
 				// TODO: throw error. no longer supported.
 			
 			if( hasArg( "bean" ) )
