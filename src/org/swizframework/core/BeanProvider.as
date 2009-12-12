@@ -28,8 +28,11 @@ package org.swizframework.core
 		// public properties
 		// ========================================
 		
+		[ArrayElementType( "Object" )]
+		
 		/**
 		 * Beans
+		 * ([ArrayElementType( "Object" )] metadata is to avoid http://j.mp/FB-12316)
 		 */
 		public function get beans():Array
 		{
