@@ -203,7 +203,7 @@ package org.swizframework.core
 				// wrap view component in Bean
 				var bean:Bean = new Bean();
 				bean.source = event.target;
-				// is this pointless?
+				// TODO: is this pointless?
 				if( "id" in bean.source && bean.source.id != null )
 					bean.name = bean.source.id;
 				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
