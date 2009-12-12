@@ -25,7 +25,7 @@ package org.swizframework.core.mxml
 		/**
 		 * 
 		 */
-		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
+		protected static const logger:ILogger = SwizLogger.getLogger( Swiz );
 		
 		// ========================================
 		// constructor
