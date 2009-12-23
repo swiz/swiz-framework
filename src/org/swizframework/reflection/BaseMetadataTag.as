@@ -122,5 +122,28 @@ package org.swizframework.reflection
 			// TODO: throw error
 			return null;
 		}
+		
+		public function get asString():String
+		{
+			var str:String = "[" + name;
+			
+			if( args != null && args.length > 0 )
+			{
+				str += "( ";
+				for( var i:int = 0; i < args.length; i++ )
+				{
+					var arg:MetadataArg = args[ i ];
+					
+					str += arg.key + "=\"" + arg.value + "\"";
+					
+					if( i + 1 < args.length )
+						str += ", ";
+				}
+				str += " )";
+			}
+			
+			str += "]";
+			return str;
+		}
 	}
 }
