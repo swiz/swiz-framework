@@ -9,6 +9,8 @@
 .flexProperties
 .flexLibProperties
 .project
+.sourceMate
+.sourceMateMetadataSettings
 
 Icon
 Thumbs.db
