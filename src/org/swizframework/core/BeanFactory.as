@@ -129,15 +129,9 @@ package org.swizframework.core
 		{
 			var processor:IProcessor;
 			
+			// process all bean pre-processors
 			for each ( processor in swiz.processors )
 			{
-				// Handle Bean Processors
-				if ( processor is IBeanProcessor )
-				{
-					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
-					beanProcessor.addBean( bean );
-				}
-				
 				// Handle Metadata Processors
 				if ( processor is IMetadataProcessor )
 				{
@@ -159,7 +153,37 @@ package org.swizframework.core
 						}
 					}
 				}
+			}	
+			
+			// if bean inplements ISwizInterface, handle those injections
+			if ( bean is ISwizInterface )
+				handleSwizInterfaces(bean);
+			
+			// process all bean post-processors				
+			for each ( processor in swiz.processors )
+			{	
+				// Handle Bean Processors
+				if ( processor is IBeanProcessor )
+				{
+					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
+					beanProcessor.addBean( bean );
+				}
 			}
+		}
+		
+		/**
+		 * Handle internal interfaces, like IDispatcherAware and ISwizAware
+		 */
+		protected function handleSwizInterfaces( bean:Bean ):void
+		{
+			if ( bean is ISwizAware )
+				ISwizAware(bean).swiz = swiz;
+			if ( bean is IBeanFactory )
+				IBeanFactoryAware(bean).beanFactory = this;
+			if ( bean is IDispatcherAware )
+				IDispatcherAware(bean).dispatcher = swiz.dispatcher;
+			if ( bean is IInitializing )
+				IInitializing(bean).init();				
 		}
 		
 		/**
