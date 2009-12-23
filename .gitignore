@@ -1,6 +1,14 @@
 /.settings/*
 
+/html-template/*
 /bin/*
+/bin-debug/*
+/bin-release/*
+
+.actionScriptProperties
+.flexProperties
+.flexLibProperties
+.project
 
 Icon
 Thumbs.db
