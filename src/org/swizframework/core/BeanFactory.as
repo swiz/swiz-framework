@@ -23,7 +23,7 @@ package org.swizframework.core
 		// ========================================
 		
 		protected var swiz:ISwiz;
-		protected var ignoredClasses:RegExp = /^mx\./;
+		protected var ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		protected var _injectionEvent:String = "addedToStage";
 		
 		/**
@@ -131,13 +131,6 @@ package org.swizframework.core
 			
 			for each ( processor in swiz.processors )
 			{
-				// Handle Bean Processors
-				if ( processor is IBeanProcessor )
-				{
-					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
-					beanProcessor.addBean( bean );
-				}
-				
 				// Handle Metadata Processors
 				if ( processor is IMetadataProcessor )
 				{
@@ -158,6 +151,13 @@ package org.swizframework.core
 							metadataProcessor.addMetadata( bean, metadataTag );
 						}
 					}
+				}
+				
+				// Handle Bean Processors
+				if ( processor is IBeanProcessor )
+				{
+					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
+					beanProcessor.addBean( bean );
 				}
 			}
 		}
