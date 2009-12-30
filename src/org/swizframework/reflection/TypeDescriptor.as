@@ -69,6 +69,11 @@ package org.swizframework.reflection
 			// parent node will be the actual property/method/class node
 			for each( var mdNode:XML in description..metadata )
 			{
+				// flex 4 includes crazy metadata on every single property and method
+				// in debug mode. the name starts with _, so we ignore that
+				if( String( mdNode.@name ).indexOf( "_" ) == 0 )
+					continue;
+				
 				var host:IMetadataHost = getMetadataHost( mdNode.parent() );
 				
 				// gather and store all key/value pairs for the metadata tag

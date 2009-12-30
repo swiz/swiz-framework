@@ -1,6 +1,14 @@
 /.settings/*
 
+/html-template/*
 /bin/*
+
+.actionScriptProperties
+.flexProperties
+.flexLibProperties
+.project
+.sourceMate
+.sourceMateMetadataSettings
 
 Icon
 Thumbs.db

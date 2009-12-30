@@ -23,7 +23,7 @@ package org.swizframework.core
 		// ========================================
 		
 		protected var swiz:ISwiz;
-		protected var ignoredClasses:RegExp = /^mx\./;
+		protected var ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		protected var _injectionEvent:String = "addedToStage";
 		
 		/**
