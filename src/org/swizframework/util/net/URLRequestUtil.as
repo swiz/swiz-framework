@@ -14,7 +14,7 @@ package org.swizframework.util.net
 		
 		public function set swiz( swiz :ISwiz ) : void
 		{
-			this.swiz = swiz;
+			_swiz = swiz;
 		}
 		
 		public function get swiz() : ISwiz

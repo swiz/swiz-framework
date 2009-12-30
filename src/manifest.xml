@@ -8,6 +8,7 @@
 	<component class="org.swizframework.core.Bean" />
 	<component class="org.swizframework.core.BeanFactory" />
 	<component class="org.swizframework.core.BeanProvider" />
+	<component class="org.swizframework.core.BeanLoader" />
 	<component class="org.swizframework.core.Prototype" />
 	
 	<!-- events package -->

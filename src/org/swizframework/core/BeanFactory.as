@@ -156,8 +156,8 @@ package org.swizframework.core
 			}	
 			
 			// if bean inplements ISwizInterface, handle those injections
-			if ( bean is ISwizInterface )
-				handleSwizInterfaces(bean);
+			if ( bean.source is ISwizInterface )
+				handleSwizInterfaces(bean.source);
 			
 			// process all bean post-processors				
 			for each ( processor in swiz.processors )
@@ -174,16 +174,16 @@ package org.swizframework.core
 		/**
 		 * Handle internal interfaces, like IDispatcherAware and ISwizAware
 		 */
-		protected function handleSwizInterfaces( bean:Bean ):void
+		protected function handleSwizInterfaces( obj:ISwizInterface ):void
 		{
-			if ( bean is ISwizAware )
-				ISwizAware(bean).swiz = swiz;
-			if ( bean is IBeanFactory )
-				IBeanFactoryAware(bean).beanFactory = this;
-			if ( bean is IDispatcherAware )
-				IDispatcherAware(bean).dispatcher = swiz.dispatcher;
-			if ( bean is IInitializing )
-				IInitializing(bean).init();				
+			if ( obj is ISwizAware )
+				ISwizAware(obj).swiz = swiz;
+			if ( obj is IBeanFactory )
+				IBeanFactoryAware(obj).beanFactory = this;
+			if ( obj is IDispatcherAware )
+				IDispatcherAware(obj).dispatcher = swiz.dispatcher;
+			if ( obj is IInitializing )
+				IInitializing(obj).init();				
 		}
 		
 		/**
