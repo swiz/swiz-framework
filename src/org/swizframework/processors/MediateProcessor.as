@@ -1,6 +1,7 @@
 package org.swizframework.processors
 {
 	import flash.events.Event;
+	import flash.events.EventPhase;
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
@@ -63,20 +64,34 @@ package org.swizframework.processors
 		 */
 		protected function eventHandler( event:Event ):void
 		{
-			var mediator:MediateQueue = MediateQueue( mediatorsByEventType[ event.type ] );
-
-			if ( mediator.metadata.properties != null )
+			if ( isHandleable( event ) )
 			{
-				mediator.method.apply( null, getEventArgs( event, mediator.metadata.properties ) );
+				var mediator:MediateQueue = MediateQueue( mediatorsByEventType[ event.type ] );
+	
+				if ( mediator.metadata.properties != null )
+				{
+					mediator.method.apply( null, getEventArgs( event, mediator.metadata.properties ) );
+				}
+				else if ( mediator.method.length == 1 )
+				{
+					mediator.method.apply( null, [ event ] );
+				}
+				else
+				{
+					mediator.method.apply();
+				}
 			}
-			else if ( mediator.method.length == 1 )
-			{
-				mediator.method.apply( null, [ event ] );
-			}
-			else
-			{
-				mediator.method.apply();
-			}
+		}
+		
+		/**
+		 * Checks whether Swiz is configured to handle this event.
+		 */
+		protected function isHandleable( event:Event ):Boolean
+		{
+			if ( event.eventPhase == EventPhase.BUBBLING_PHASE && !config.mediateBubbledEvents )
+				return false;
+			
+			return true;
 		}
 		
 		/**

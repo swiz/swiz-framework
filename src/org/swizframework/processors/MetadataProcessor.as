@@ -4,6 +4,7 @@ package org.swizframework.processors
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.ISwiz;
+	import org.swizframework.core.ISwizConfig;
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	
@@ -17,6 +18,7 @@ package org.swizframework.processors
 		// ========================================
 		
 		protected var swiz:ISwiz;
+		protected var config:ISwizConfig;
 		protected var addMethod:Function;
 		protected var removeMethod:Function;
 		protected var _metadataName:String;
@@ -71,6 +73,7 @@ package org.swizframework.processors
 		public function init( swiz:ISwiz ):void
 		{
 			this.swiz = swiz;
+			this.config = swiz.config;
 		}
 		
 		/**

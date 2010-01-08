@@ -17,6 +17,12 @@ package org.swizframework.core
 		function get dispatcher():IEventDispatcher;
 		function set dispatcher( value:IEventDispatcher ):void;
 		
+		/**
+		 * Config
+		 */
+		function get config():ISwizConfig;
+		function set config( value:ISwizConfig ):void;
+		
 		[ArrayElementType( "org.swizframework.core.IBeanProvider" )]
 		
 		/**

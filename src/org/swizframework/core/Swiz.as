@@ -25,11 +25,12 @@ package org.swizframework.core
 		// ========================================
 		
 		/**
-		 * 
+		 * Logger
 		 */
 		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
 		
 		protected var _dispatcher:IEventDispatcher;
+		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
 		protected var _processors:Array = [ new AutowireProcessor(), new MediateProcessor(), new VirtualBeanProcessor() ];
@@ -49,6 +50,19 @@ package org.swizframework.core
 		public function set dispatcher( value:IEventDispatcher ):void
 		{
 			_dispatcher = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get config():ISwizConfig
+		{
+			return _config;
+		}
+		
+		public function set config( value:ISwizConfig ):void
+		{
+			_config = value;
 		}
 		
 		/**
@@ -102,11 +116,12 @@ package org.swizframework.core
 		/**
 		 * Constructor
 		 */
-		public function Swiz( dispatcher:IEventDispatcher = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, customProcessors:Array = null )
+		public function Swiz( dispatcher:IEventDispatcher = null, config:ISwizConfig = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, customProcessors:Array = null )
 		{
 			super();
 			
 			this.dispatcher = dispatcher;
+			this.config = config;
 			this.beanFactory = beanFactory;
 			this.beanProviders = beanProviders;
 			this.customProcessors = customProcessors;
@@ -124,6 +139,11 @@ package org.swizframework.core
 			if ( dispatcher == null )
 			{
 				dispatcher == this;
+			}
+			
+			if ( config == null )
+			{
+				config = new SwizConfig();
 			}
 			
 			if ( beanFactory == null )

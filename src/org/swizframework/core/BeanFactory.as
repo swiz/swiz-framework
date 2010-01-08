@@ -23,30 +23,13 @@ package org.swizframework.core
 		// ========================================
 		
 		protected var swiz:ISwiz;
+		protected var config:ISwizConfig;
 		protected var ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
-		protected var _injectionEvent:String = "addedToStage";
 		
 		/**
 		 * 
 		 */
 		protected var typeDescriptors:Dictionary;
-		
-		// ========================================
-		// public properties
-		// ========================================
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get injectionEvent():String
-		{
-			return _injectionEvent;
-		}
-		
-		public function set injectionEvent( value:String ):void
-		{
-			_injectionEvent = value;
-		}
 		
 		// ========================================
 		// constructor
@@ -70,6 +53,7 @@ package org.swizframework.core
 		public function init( swiz:ISwiz ):void
 		{
 			this.swiz = swiz;
+			this.config = swiz.config;
 			
 			for each ( var processor:IProcessor in swiz.processors )
 			{
@@ -78,7 +62,7 @@ package org.swizframework.core
 			
 			addBeanProviders( swiz.beanProviders );
 			
-			swiz.dispatcher.addEventListener( injectionEvent, injectionEventHandler, true, 50, true );
+			swiz.dispatcher.addEventListener( config.injectionEvent, injectionEventHandler, true, 50, true );
 		}
 		
 		// ========================================

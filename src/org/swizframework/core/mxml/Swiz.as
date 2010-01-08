@@ -8,6 +8,7 @@ package org.swizframework.core.mxml
 	import mx.logging.ILogger;
 	
 	import org.swizframework.core.IBeanFactory;
+	import org.swizframework.core.ISwizConfig;
 	import org.swizframework.util.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -23,7 +24,7 @@ package org.swizframework.core.mxml
 		// ========================================
 		
 		/**
-		 * 
+		 * Logger
 		 */
 		protected static const logger:ILogger = SwizLogger.getLogger( Swiz );
 		
@@ -34,9 +35,9 @@ package org.swizframework.core.mxml
 		/**
 		 * Constructor
 		 */
-		public function Swiz( dispatcher:IEventDispatcher = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, customProcessors:Array = null )
+		public function Swiz( dispatcher:IEventDispatcher = null, config:ISwizConfig = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, customProcessors:Array = null )
 		{
-			super( dispatcher, beanFactory, beanProviders, customProcessors );
+			super( dispatcher, config, beanFactory, beanProviders, customProcessors );
 		}
 		
 		// ========================================
