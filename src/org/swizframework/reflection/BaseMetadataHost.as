@@ -1,5 +1,14 @@
 package org.swizframework.reflection
 {
+	/**
+	 * Base implementation of the IMetadataHost interface.
+	 * Implements getters and setters and initializes <code>metadataTags</code> Array.
+	 * 
+	 * @see org.swizframework.reflection.IMetadataHost
+	 * @see org.swizframework.reflection.MetadataHostClass
+	 * @see org.swizframework.reflection.MetadataHostMethod
+	 * @see org.swizframework.reflection.MetadataHostProperty
+	 */
 	public class BaseMetadataHost implements IMetadataHost
 	{
 		// ========================================
@@ -17,7 +26,7 @@ package org.swizframework.reflection
 		protected var _type:Class;
 		
 		/**
-		 * Backing variable for <code>metadata</code> getter/setter.
+		 * Backing variable for <code>metadataTags</code> getter/setter.
 		 */
 		protected var _metadataTags:Array;
 		
@@ -26,7 +35,7 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
 		public function get name():String
 		{
@@ -39,7 +48,7 @@ package org.swizframework.reflection
 		}
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
 		public function get type():Class
 		{
@@ -54,7 +63,7 @@ package org.swizframework.reflection
 		[ArrayElementType( "org.swizframework.reflection.IMetadataTag" )]
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
 		public function get metadataTags():Array
 		{
@@ -70,6 +79,9 @@ package org.swizframework.reflection
 		// constructor
 		// ========================================
 		
+		/**
+		 * Constructor initializes <code>metadataTags</code> Array.
+		 */		
 		public function BaseMetadataHost()
 		{
 			metadataTags = [];
