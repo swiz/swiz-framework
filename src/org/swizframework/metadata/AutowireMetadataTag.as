@@ -2,7 +2,10 @@ package org.swizframework.metadata
 {
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataHost;
-
+	
+	/**
+	 * Class to represent <code>[Autowire]</code> metadata tags.
+	 */
 	public class AutowireMetadataTag extends BaseMetadataTag
 	{
 		// ========================================
@@ -10,32 +13,32 @@ package org.swizframework.metadata
 		// ========================================
 		
 		/**
-		 * 
+		 * Backing variable for read-only <code>source</code> property.
 		 */
 		protected var _source:String;
 		
 		/**
-		 * 
+		 * Backing variable for read-only <code>destination</code> property.
 		 */
 		protected var _destination:String;
 		
 		/**
-		 * 
+		 * Backing variable for read-only <code>twoWay</code> property.
 		 */
 		protected var _twoWay:Boolean = false;
 		
 		/**
-		 * 
+		 * Backing variable for read-only <code>view</code> property.
 		 */
 		protected var _view:Boolean = false;
 		
 		/**
-		 * 
+		 * Backing variable for read-only <code>bind</code> property.
 		 */
 		protected var _bind:Boolean = true;
 		
 		/**
-		 * 
+		 * Backing variable for read-only <code>lazy</code> property.
 		 */
 		protected var _lazy:Boolean = true;
 		
@@ -43,31 +46,65 @@ package org.swizframework.metadata
 		// public properties
 		// ========================================
 		
+		/**
+		 * Returns source attribute of [Autowire] tag.
+		 * Refers to the source to be used for injection.
+		 */		
 		public function get source():String
 		{
 			return _source;
 		}
 		
+		/**
+		 * Returns destination attribute of [Autowire] tag.
+		 * Refers to the injection target.
+		 */		
 		public function get destination():String
 		{
 			return _destination;
 		}
 		
+		/**
+		 * Returns twoWay attribute of [Autowire] tag as a <code>Boolean</code> value.
+		 * If true will cause a two way binding to be established.
+		 * 
+		 * @default false
+		 */		
 		public function get twoWay():Boolean
 		{
 			return _twoWay;
 		}
 		
+		/**
+		 * Returns view attribute of [Autowire] tag as a <code>Boolean</code> value.
+		 * If true tells Swiz that the injection source is a view component
+		 * that must be injected once it is added to the display list.
+		 * 
+		 * @default false
+		 */		
 		public function get view():Boolean
 		{
 			return _view;
 		}
 		
+		/**
+		 * Returns bind attribute of [Autowire] tag as a <code>Boolean</code> value.
+		 * If true will cause a binding to be established.
+		 * 
+		 * @default true
+		 */		
 		public function get bind():Boolean
 		{
 			return _bind;
 		}
 		
+		/**
+		 * Returns lazy attribute of [Autowire] tag as a <code>Boolean</code> value.
+		 * If true will instruct Swiz to fill this dependency whenever (if at all) it can.
+		 * If false Swiz will throw an error if the dependency cannot be filled immediately.
+		 * 
+		 * @default true
+		 */		
 		public function get lazy():Boolean
 		{
 			return _lazy;
@@ -77,10 +114,16 @@ package org.swizframework.metadata
 		// constructor
 		// ========================================
 		
+		/**
+		 * Constructor initializes values.
+		 * 
+		 * @param args Array of <code>MetadataArg</code> instances
+		 * @param host Property, method or class decorated by this [Autowire] tag
+		 */		
 		public function AutowireMetadataTag( args:Array, host:IMetadataHost )
 		{
 			super( "Autowire", args, host, "source" );
-			parse();
+			parseAttributes();
 		}
 		
 		// ========================================
@@ -88,9 +131,9 @@ package org.swizframework.metadata
 		// ========================================
 		
 		/**
-		 * 
+		 * Initialize properties based on values provided in [Autowire] tag.
 		 */
-		protected function parse():void
+		protected function parseAttributes():void
 		{
 			//if( hasArg( "bean" ) && hasArg( "source" ) )
 				// TODO: throw error. use one or the other
