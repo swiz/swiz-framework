@@ -14,22 +14,22 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * Backing variable for <code>name</code> getter/setter.
+		 * Backing variable for <code>name</code> property.
 		 */
 		protected var _name:String;
 		
 		/**
-		 * Backing variable for <code>args</code> getter/setter.
+		 * Backing variable for <code>args</code> property.
 		 */
 		protected var _args:Array;
 		
 		/**
-		 * Backing variable for <code>host</code> getter/setter.
+		 * Backing variable for <code>host</code> property.
 		 */
 		protected var _host:IMetadataHost;
 		
 		/**
-		 * Backing variable for <code>defaultArgName</code> getter/setter.
+		 * Backing variable for <code>defaultArgName</code> property.
 		 */
 		protected var _defaultArgName:String;
 		
