@@ -76,7 +76,7 @@ package org.swizframework.reflection
 			{
 				// flex 4 includes crazy metadata on every single property and method
 				// in debug mode. the name starts with _, so we ignore that
-				if( false && String( mdNode.@name ).indexOf( "_" ) == 0 )
+				if( String( mdNode.@name ).indexOf( "_" ) == 0 )
 					continue;
 				
 				var host:IMetadataHost = getMetadataHost( mdNode.parent() );
