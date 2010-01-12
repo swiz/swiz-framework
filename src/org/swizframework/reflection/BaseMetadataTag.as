@@ -162,7 +162,10 @@ package org.swizframework.reflection
 				{
 					var arg:MetadataArg = args[ i ];
 					
-					str += arg.key + "=\"" + arg.value + "\"";
+					if( arg.key != "" )
+						str += arg.key + "=";
+					
+					str += "\"" + arg.value + "\""
 					
 					if( i + 1 < args.length )
 						str += ", ";
