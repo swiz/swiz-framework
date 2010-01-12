@@ -76,18 +76,17 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function addMetadata( bean:Bean, metadata:IMetadataTag ):void
+		public function addMetadata( metadataTag:IMetadataTag, bean:Bean ):void
 		{
-			addMethod( bean, metadata );
+			addMethod( metadataTag, bean );
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function removeMetadata( bean:Bean, metadata:IMetadataTag ):void
+		public function removeMetadata( metadataTag:IMetadataTag, bean:Bean ):void
 		{
-			removeMethod( bean, metadata );
+			removeMethod( metadataTag, bean );
 		}
-		
 	}
 }

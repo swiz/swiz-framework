@@ -27,12 +27,11 @@ package org.swizframework.processors
 		/**
 		 * Add Metadata
 		 */
-		function addMetadata( bean:Bean, metadata:IMetadataTag ):void;
+		function addMetadata( metadataTag:IMetadataTag, bean:Bean ):void;
 		
 		/**
 		 * Remove Metadata
 		 */
-		function removeMetadata( bean:Bean, metadata:IMetadataTag ):void;
-		
+		function removeMetadata( metadataTag:IMetadataTag, bean:Bean ):void;
 	}
 }

@@ -49,6 +49,8 @@ package org.swizframework.metadata
 		/**
 		 * Returns source attribute of [Autowire] tag.
 		 * Refers to the source to be used for injection.
+		 * Is the default attribute, meaning <code>[Autowire( "someModel" )]</code> is
+		 * equivalent to <code>[Autowire( source="someModel" )]</code>.
 		 */		
 		public function get source():String
 		{
@@ -148,7 +150,7 @@ package org.swizframework.metadata
 			}
 			
 			// source is the default attribute
-			// [Autowire( "appModel" )] == [Autowire( source="appModel" )]
+			// [Autowire( "someModel" )] == [Autowire( source="someModel" )]
 			if( hasArg( "source" ) )
 				_source = getArg( "source" ).value;
 			

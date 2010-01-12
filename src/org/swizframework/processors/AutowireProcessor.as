@@ -87,7 +87,7 @@ package org.swizframework.processors
 			{
 				for each ( var queue:AutowireQueue in queueByName[ beanName ] )
 				{
-					addAutowire( queue.bean, queue.autowire );
+					addAutowire( queue.autowireTag, queue.bean );
 				}
 				
 				delete queueByName[ beanName ];
@@ -101,9 +101,9 @@ package org.swizframework.processors
 		{
 			for each ( var queue:AutowireQueue in queueByType )
 			{
-				if ( bean.source is queue.autowire.host.type )
+				if ( bean.source is queue.autowireTag.host.type )
 				{
-					addAutowire( queue.bean, queue.autowire );
+					addAutowire( queue.autowireTag, queue.bean );
 					queueByType.splice( queueByType.indexOf( queue ), 1 );
 				}
 			}
@@ -112,51 +112,51 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire
 		 */
-		protected function addAutowire( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function addAutowire( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			if ( autowireTag.source != null )
 			{
 				if ( autowireTag.source.indexOf( "." ) > -1 )
 				{
-					addAutowireByProperty( bean, autowireTag );
+					addAutowireByProperty( autowireTag, bean );
 				}
 				else
 				{
-					addAutowireByName( bean, autowireTag );
+					addAutowireByName( autowireTag, bean );
 				}
 			}
 			else
 			{
-				addAutowireByType( bean, autowireTag );
+				addAutowireByType( autowireTag, bean );
 			}
 		}
 		
 		/**
 		 * Remove Autowire
 		 */
-		protected function removeAutowire( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function removeAutowire( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			if ( autowireTag.source != null )
 			{
 				if ( autowireTag.source.indexOf( "." ) > -1 )
 				{
-					removeAutowireByProperty( bean, autowireTag );
+					removeAutowireByProperty( autowireTag, bean );
 				}
 				else
 				{
-					removeAutowireByName( bean, autowireTag );
+					removeAutowireByName( autowireTag, bean );
 				}
 			}
 			else
 			{
-				removeAutowireByType( bean, autowireTag );
+				removeAutowireByType( autowireTag, bean );
 			}
 		}
 		
 		/**
 		 * 
 		 */
-		protected function getDestinationObject( bean:Bean, autowireTag:AutowireMetadataTag ):Object
+		protected function getDestinationObject( autowireTag:AutowireMetadataTag, bean:Bean ):Object
 		{
 			if( autowireTag.destination == null )
 			{
@@ -189,7 +189,7 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire By Property
 		 */
-		protected function addAutowireByProperty( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function addAutowireByProperty( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			var namedBean:Bean = getBeanByName( autowireTag.source.split( "." )[ 0 ] );
 			
@@ -199,14 +199,14 @@ package org.swizframework.processors
 			}
 			else
 			{
-				addToQueueByName( bean, autowireTag );
+				addToQueueByName( autowireTag, bean );
 			}
 		}
 		
 		/**
 		 * Remove Autowire By Property
 		 */
-		protected function removeAutowireByProperty( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function removeAutowireByProperty( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			// TODO: update for dot path properties
 			var namedBean:Bean = getBeanByName( autowireTag.source );
@@ -224,29 +224,29 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire By Name
 		 */
-		protected function addAutowireByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function addAutowireByName( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			var namedBean:Bean = getBeanByName( autowireTag.source.split( "." )[ 0 ] );
 			
 			if ( namedBean != null )
 			{
-				var destObject:Object = getDestinationObject( bean, autowireTag );
+				var destObject:Object = getDestinationObject( autowireTag, bean );
 				var destPropName:String = getDestinationPropertyName( autowireTag );
 				
 				destObject[ destPropName ] = namedBean.source;
 			}
 			else
 			{
-				addToQueueByName( bean, autowireTag );
+				addToQueueByName( autowireTag, bean );
 			}
 		}
 		
 		/**
 		 * Remove Autowire By Name
 		 */
-		protected function removeAutowireByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function removeAutowireByName( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
-			var destObject:Object = getDestinationObject( bean, autowireTag );
+			var destObject:Object = getDestinationObject( autowireTag, bean );
 			var destPropName:String = getDestinationPropertyName( autowireTag );
 			
 			destObject[ destPropName ] = null;
@@ -255,7 +255,7 @@ package org.swizframework.processors
 		/**
 		 * Add Autowire By Type
 		 */
-		protected function addAutowireByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function addAutowireByType( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			// TODO: support injection into multi-param methods
 			var setterInjection:Boolean = autowireTag.host is MetadataHostMethod;
@@ -266,7 +266,7 @@ package org.swizframework.processors
 			
 			if ( typedBean )
 			{
-				var destObject:Object = getDestinationObject( bean, autowireTag );
+				var destObject:Object = getDestinationObject( autowireTag, bean );
 				var destPropName:String = getDestinationPropertyName( autowireTag );
 				
 				if( setterInjection )
@@ -281,16 +281,16 @@ package org.swizframework.processors
 			}
 			else
 			{
-				addToQueueByType( bean, autowireTag );
+				addToQueueByType( autowireTag, bean );
 			}
 		}
 		
 		/**
 		 * Remove Autowire By Type
 		 */
-		protected function removeAutowireByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function removeAutowireByType( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
-			var destObject:Object = getDestinationObject( bean, autowireTag );
+			var destObject:Object = getDestinationObject( autowireTag, bean );
 			var destPropName:String = getDestinationPropertyName( autowireTag );
 			
 			destObject[ destPropName ] = null;
@@ -335,24 +335,24 @@ package org.swizframework.processors
 		/**
 		 * Add To Queue By Name
 		 */
-		protected function addToQueueByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function addToQueueByName( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
 			if ( autowireTag.source in queueByName )
 			{
-				queueByName[ autowireTag.source ].push( new AutowireQueue( bean, autowireTag ) );
+				queueByName[ autowireTag.source ].push( new AutowireQueue( autowireTag, bean ) );
 			}
 			else
 			{
-				queueByName[ autowireTag.source ] = [ new AutowireQueue( bean, autowireTag ) ];
+				queueByName[ autowireTag.source ] = [ new AutowireQueue( autowireTag, bean ) ];
 			}
 		}
 		
 		/**
 		 * Add To Queue By Type
 		 */
-		protected function addToQueueByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
+		protected function addToQueueByType( autowireTag:AutowireMetadataTag, bean:Bean ):void
 		{
-			queueByType[ queueByType.length ] = new AutowireQueue( bean, autowireTag );
+			queueByType[ queueByType.length ] = new AutowireQueue( autowireTag, bean );
 		}
 		
 		/**
@@ -368,7 +368,7 @@ package org.swizframework.processors
 			// base scenario of binding an object or property to a property of a bean
 			
 			// this is a view added to the display list or a new bean being processed
-			destObject = getDestinationObject( destinationBean, autowireTag );
+			destObject = getDestinationObject( autowireTag, destinationBean );
 			// name of property that will be bound to a source value
 			destPropName = getDestinationPropertyName( autowireTag );
 			
