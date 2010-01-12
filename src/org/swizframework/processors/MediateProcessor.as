@@ -43,19 +43,19 @@ package org.swizframework.processors
 		/**
 		 * Add Mediator
 		 */
-		protected function addMediator( bean:Bean, mediator:MediateMetadataTag ):void
+		protected function addMediator( mediateTag:MediateMetadataTag, bean:Bean ):void
 		{
-			mediatorsByEventType[ mediator.event ] = new MediateQueue( mediator, bean.source[ mediator.host.name ] );
-			swiz.dispatcher.addEventListener( mediator.event, eventHandler, false, mediator.priority, true );
+			mediatorsByEventType[ mediateTag.event ] = new MediateQueue( mediateTag, bean.source[ mediateTag.host.name ] );
+			swiz.dispatcher.addEventListener( mediateTag.event, eventHandler, false, mediateTag.priority, true );
 		}
 		
 		/**
 		 * Remove Mediator
 		 */
-		protected function removeMediator( bean:Bean, mediator:MediateMetadataTag ):void
+		protected function removeMediator( mediateTag:MediateMetadataTag, bean:Bean ):void
 		{
-			swiz.dispatcher.removeEventListener( mediator.event, eventHandler, false );
-			delete mediatorsByEventType[ mediator.event ];
+			swiz.dispatcher.removeEventListener( mediateTag.event, eventHandler, false );
+			delete mediatorsByEventType[ mediateTag.event ];
 		}
 		
 		/**
@@ -65,9 +65,9 @@ package org.swizframework.processors
 		{
 			var mediator:MediateQueue = MediateQueue( mediatorsByEventType[ event.type ] );
 
-			if ( mediator.metadata.properties != null )
+			if ( mediator.metadataTag.properties != null )
 			{
-				mediator.method.apply( null, getEventArgs( event, mediator.metadata.properties ) );
+				mediator.method.apply( null, getEventArgs( event, mediator.metadataTag.properties ) );
 			}
 			else if ( mediator.method.length == 1 )
 			{
