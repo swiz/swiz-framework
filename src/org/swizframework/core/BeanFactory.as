@@ -2,6 +2,7 @@ package org.swizframework.core
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.EventPhase;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
@@ -22,9 +23,9 @@ package org.swizframework.core
 		// protected properties
 		// ========================================
 		
+		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
+
 		protected var swiz:ISwiz;
-		protected var config:ISwizConfig;
-		protected var ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		
 		/**
 		 * 
@@ -53,7 +54,6 @@ package org.swizframework.core
 		public function init( swiz:ISwiz ):void
 		{
 			this.swiz = swiz;
-			this.config = swiz.config;
 			
 			for each ( var processor:IProcessor in swiz.processors )
 			{
@@ -61,8 +61,9 @@ package org.swizframework.core
 			}
 			
 			addBeanProviders( swiz.beanProviders );
-			
-			swiz.dispatcher.addEventListener( config.injectionEvent, injectionEventHandler, true, 50, true );
+
+			swiz.dispatcher.addEventListener( swiz.config.injectionEvent, injectionEventHandler, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
+			swiz.dispatcher.addEventListener( Event.REMOVED_FROM_STAGE, removeEventHandler, true, 50, true );
 		}
 		
 		// ========================================
@@ -91,6 +92,7 @@ package org.swizframework.core
 			}
 			
 			beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
+			beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
 		
 		/**
@@ -102,7 +104,8 @@ package org.swizframework.core
 			{
 				removeBean( bean );
 			}
-			
+
+			beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
 			beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
 		
@@ -126,7 +129,7 @@ package org.swizframework.core
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
 						// if this processor operates on a custom tag we create it here
-						if( metadataTagClass != BaseMetadataTag )
+						if ( metadataTagClass != BaseMetadataTag )
 						{
 							metadataProcessor.addMetadata( bean, new metadataTagClass( metadataTag.args, metadataTag.host ) );
 						}
@@ -157,11 +160,21 @@ package org.swizframework.core
 				if ( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
+					var metadataTagClass:Class = metadataProcessor.metadataClass;
+					// get the tags this processor is interested in
 					var metadataTags:Array = bean.typeDescriptor.getMetadataTagsByName( metadataProcessor.metadataName );
 					
 					for each ( var metadataTag:IMetadataTag in metadataTags )
 					{
-						metadataProcessor.removeMetadata( bean, metadataTag );
+						// if this processor operates on a custom tag we create it here
+						if ( metadataTagClass != BaseMetadataTag )
+						{
+							metadataProcessor.removeMetadata( bean, new metadataTagClass( metadataTag.args, metadataTag.host ) );
+						}
+						else
+						{
+							metadataProcessor.removeMetadata( bean, metadataTag );
+						}
 					}
 				}
 				
@@ -174,24 +187,60 @@ package org.swizframework.core
 				}
 			}
 		}
+
+		// TODO: Move to SwizConfig?
+
+		/**
+		 * Evaluate whether Swiz is configured such that the specified class is a potential injection target.
+		 */
+		protected function isPotentialInjectionTarget( instance:Object ):Boolean
+		{
+			if ( swiz.config.injectionMarkerFunction != null )
+			{
+				return swiz.config.injectionMarkerFunction( instance );
+			}
+			else
+			{
+				var className:String = getQualifiedClassName( instance );
+				
+				if ( swiz.config.viewPackages.length > 0 )
+				{
+					for each ( var viewPackage:String in swiz.config.viewPackages )
+					{
+						if ( className.indexOf( viewPackage ) == 0 )
+							return true;
+					}
+					
+					return false;
+				}
+				else
+				{
+					return ! ignoredClasses.test( className );
+				}
+			}
+		}
 		
 		/**
 		 * Injection Event Handler
 		 */
 		protected function injectionEventHandler( event:Event ):void
 		{
-			var className:String = getQualifiedClassName( event.target );
-			
-			if ( ! ignoredClasses.test( className ) )
+			if ( isPotentialInjectionTarget( event.target ) )
 			{
-				// wrap view component in Bean
-				var bean:Bean = new Bean();
-				bean.source = event.target;
-				// TODO: is this pointless?
-				if( "id" in bean.source && bean.source.id != null )
-					bean.name = bean.source.id;
-				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
+				var bean:Bean = createBean( event.target );
 				addBean( bean );
+			}
+		}
+		
+		/**
+		 * Remove Event Handler
+		 */
+		protected function removeEventHandler( event:Event ):void
+		{
+			if ( isPotentialInjectionTarget( event.target ) )
+			{
+				var bean:Bean = createBean( event.target );
+				removeBean( bean );
 			}
 		}
 		
@@ -209,6 +258,27 @@ package org.swizframework.core
 		protected function beanRemovedHandler( event:BeanEvent ):void
 		{
 			removeBean( event.bean );
+		}
+		
+		/**
+		 * Create Bean
+		 * 
+		 * @param instance An Object instance to introspect and wrap in a Bean.
+		 * @returns The Bean representation of the Object instance.
+		 */
+		protected function createBean( instance:Object ):Bean
+		{
+			var bean:Bean = new Bean();
+
+			bean.source = instance;
+
+			// TODO: Is this necessary?
+			if ( "id" in bean.source && bean.source.id != null )
+				bean.name = bean.source.id;
+
+			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
+
+			return bean;	
 		}
 	}
 }

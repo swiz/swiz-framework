@@ -1,11 +1,14 @@
 package org.swizframework.processors
 {
-	import flash.events.Event;
-	import flash.events.EventPhase;
+	import flash.utils.Dictionary;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
+	import org.swizframework.reflection.ClassConstant;
+	import org.swizframework.reflection.TypeCache;
+	import org.swizframework.reflection.TypeDescriptor;
 	
 	/**
 	 * Mediate Processor
@@ -23,7 +26,7 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 		
-		protected var mediatorsByEventType:Object = {};
+		protected var mediatorsByEventType:Dictionary = new Dictionary();
 		
 		// ========================================
 		// constructor
@@ -44,69 +47,120 @@ package org.swizframework.processors
 		/**
 		 * Add Mediator
 		 */
-		protected function addMediator( bean:Bean, mediator:MediateMetadataTag ):void
+		protected function addMediator( bean:Bean, mediateTag:MediateMetadataTag ):void
 		{
-			mediatorsByEventType[ mediator.event ] = new MediateQueue( mediator, bean.source[ mediator.host.name ] );
-			swiz.dispatcher.addEventListener( mediator.event, eventHandler, false, mediator.priority, true );
+			if ( validateMediateMetadataTag( mediateTag ) )
+			{
+				var eventType:String = parseEventTypeExpression( mediateTag.event );
+				
+				addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+			}
 		}
 		
 		/**
 		 * Remove Mediator
 		 */
-		protected function removeMediator( bean:Bean, mediator:MediateMetadataTag ):void
+		protected function removeMediator( bean:Bean, mediateTag:MediateMetadataTag ):void
 		{
-			swiz.dispatcher.removeEventListener( mediator.event, eventHandler, false );
-			delete mediatorsByEventType[ mediator.event ];
+			var eventType:String = parseEventTypeExpression( mediateTag.event );
+			
+			removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+		}
+	
+		/**
+		 * Add Mediator By Event Type
+		 */
+		protected function addMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
+		{
+			var mediator:MediateQueue = new MediateQueue( mediateTag, method );
+			
+			mediatorsByEventType[ eventType ] ||= [];
+			mediatorsByEventType[ eventType ].push( mediator );
+			
+			swiz.dispatcher.addEventListener( eventType, mediator.mediate, false, mediateTag.priority, true );
 		}
 		
 		/**
-		 * Event Handler
+		 * Remove Mediator By Event Type
 		 */
-		protected function eventHandler( event:Event ):void
+		protected function removeMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
 		{
-			if ( isHandleable( event ) )
+			if ( mediatorsByEventType[ eventType ] is Array )
 			{
-				var mediator:MediateQueue = MediateQueue( mediatorsByEventType[ event.type ] );
-	
-				if ( mediator.metadata.properties != null )
+				var mediatorIndex:int = 0;
+				for each ( var mediator:MediateQueue in mediatorsByEventType[ eventType ] )
 				{
-					mediator.method.apply( null, getEventArgs( event, mediator.metadata.properties ) );
-				}
-				else if ( mediator.method.length == 1 )
-				{
-					mediator.method.apply( null, [ event ] );
-				}
-				else
-				{
-					mediator.method.apply();
-				}
+					if ( mediator.method == method )
+					{
+						swiz.dispatcher.removeEventListener( eventType, mediator.mediate, false );
+						
+						mediatorsByEventType[ eventType ].splice( mediatorIndex, 1 );
+						break;
+					}
+					
+					mediatorIndex++;
+				}			
+
+				if ( mediatorsByEventType[ eventType ].length == 0 )
+					delete mediatorsByEventType[ eventType ];				
 			}
 		}
 		
 		/**
-		 * Checks whether Swiz is configured to handle this event.
+		 * Parse Event Type Expression
+		 * 
+		 * Processes an event type expression into an event type. Accepts a String specifying either the event type 
+		 * (ex. 'type') or a class constant reference (ex. 'SomeEvent.TYPE').  If a class constant reference is specified,
+		 * it will be evaluted to obtain its String value.
+		 * 
+		 * Class constant references are only supported in 'strict' mode.
+		 * 
+		 * @param value A String that defines a Event type expression.
+		 * @returns The event type.
 		 */
-		protected function isHandleable( event:Event ):Boolean
+		protected function parseEventTypeExpression( value:String ):String
 		{
-			if ( event.eventPhase == EventPhase.BUBBLING_PHASE && !config.mediateBubbledEvents )
-				return false;
+			if ( swiz.config.strict && ClassConstant.isClassConstant( value ) )
+			{
+				return ClassConstant.getConstantValue( ClassConstant.getClass( value, swiz.config.eventPackages ), ClassConstant.getConstantName( value ) ); 
+			}
+			else
+			{
+				return value;
+			}
+		}
+		
+		/**
+		 * Validate Mediate Metadata Tag
+		 * 
+		 * @param mediator The MediateMetadataTag
+		 */
+		protected function validateMediateMetadataTag( mediator:MediateMetadataTag ):Boolean
+		{
+			if ( ClassConstant.isClassConstant( mediator.event ) )
+			{
+				var eventClass:Class = ClassConstant.getClass( mediator.event, swiz.config.eventPackages );
+				var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( eventClass );
+				
+				// TODO: Support DynamicEvent (skip validation) and Event subclasses (enforce validation).
+				// TODO: flash.events.Event is returning 'true' for isDynamic - figure out workaround?
+				
+				var isDynamic:Boolean = ( descriptor.description.@isDynamic.toString() == "true" );
+				if ( ! isDynamic )
+				{
+					for each ( var property:String in mediator.properties )
+					{
+						var variableList:XMLList = descriptor.description.factory.variable.( @name == property );
+						var accessorList:XMLList = descriptor.description.factory.accessor.( @name == property );
+						if ( variableList.length() == 0 && accessorList.length() == 0 )
+						{
+							throw new Error(  "Unable to mediate event: " + property + " does not exist as a property of " + getQualifiedClassName( eventClass ) + "." );
+						}
+					}
+				}
+			}
 			
 			return true;
-		}
-		
-		/**
-		 * Get Event Arguments
-		 */
-		protected function getEventArgs( event:Event, properties:Array ):Array
-		{
-			var args:Array = [];
-			
-			for each ( var property:String in properties )
-			{
-				args[ args.length ] = event[ property ];
-			}
-			
-			return args;
 		}
 		
 	}
