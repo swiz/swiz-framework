@@ -141,7 +141,7 @@ package org.swizframework.metadata
 				_event = getArg( "event" ).value;
 			
 			if( hasArg( "properties" ) )
-				_properties = getArg( "properties" ).value.split( ", " ).join( "," ).split( "," );
+				_properties = getArg( "properties" ).value.replace( /\ /g, "" ).split( "," );
 			
 			if( hasArg( "view" ) )
 				_view = getArg( "view" ).value == "true";
