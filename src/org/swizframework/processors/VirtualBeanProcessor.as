@@ -31,13 +31,13 @@ package org.swizframework.processors
 		/**
 		 * Add Random
 		 */
-		override public function addMetadata( bean:Bean, metadata:IMetadataTag ):void
+		override public function addMetadata( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var virtualBean:Bean = new Bean();
-			if( metadata.args.length > 0 )
-				virtualBean.name = metadata.args[ 0 ][ "value" ];
-			virtualBean.source = bean.source[ metadata.host.name ];
-			virtualBean.typeDescriptor = TypeCache.getTypeDescriptor( metadata.host.type );
+			if( metadataTag.args.length > 0 )
+				virtualBean.name = metadataTag.args[ 0 ][ "value" ];
+			virtualBean.source = bean.source[ metadataTag.host.name ];
+			virtualBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
 			
 			IBeanProvider( swiz.beanProviders[ 0 ] ).addBean( virtualBean );
 		}
@@ -45,9 +45,9 @@ package org.swizframework.processors
 		/**
 		 * Remove Random
 		 */
-		override public function removeMetadata( bean:Bean, metadata:IMetadataTag ):void
+		override public function removeMetadata( metadataTag:IMetadataTag, bean:Bean ):void
 		{
-			IBeanProvider( swiz.beanProviders[ 0 ] ).removeBean( bean.source[ metadata.host.name ] );
+			IBeanProvider( swiz.beanProviders[ 0 ] ).removeBean( bean.source[ metadataTag.host.name ] );
 		}
 		
 	}
