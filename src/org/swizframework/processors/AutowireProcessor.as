@@ -208,8 +208,7 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowireByProperty( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			// TODO: update for dot path properties
-			var namedBean:Bean = getBeanByName( autowireTag.source );
+			var namedBean:Bean = getBeanByName( autowireTag.source.split( "." )[ 0 ] );
 			
 			removePropertyBinding( bean, namedBean, autowireTag );
 			
@@ -218,7 +217,7 @@ package org.swizframework.processors
 				removePropertyBinding( namedBean, bean, autowireTag );
 			}
 			
-			bean.source[ autowireTag.host.name ] = null;
+			setDestinationValue( bean, autowireTag, null );
 		}
 		
 		/**
@@ -230,10 +229,7 @@ package org.swizframework.processors
 			
 			if ( namedBean != null )
 			{
-				var destObject:Object = getDestinationObject( bean, autowireTag );
-				var destPropName:String = getDestinationPropertyName( autowireTag );
-				
-				destObject[ destPropName ] = namedBean.source;
+				setDestinationValue( bean, autowireTag, namedBean.source );
 			}
 			else
 			{
@@ -246,10 +242,7 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowireByName( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
-			var destObject:Object = getDestinationObject( bean, autowireTag );
-			var destPropName:String = getDestinationPropertyName( autowireTag );
-			
-			destObject[ destPropName ] = null;
+			setDestinationValue( bean, autowireTag, null );
 		}
 		
 		/**
@@ -266,18 +259,7 @@ package org.swizframework.processors
 			
 			if ( typedBean )
 			{
-				var destObject:Object = getDestinationObject( bean, autowireTag );
-				var destPropName:String = getDestinationPropertyName( autowireTag );
-				
-				if( setterInjection )
-				{
-					var f:Function = destObject[ destPropName ] as Function;
-					f.apply( destObject, [ typedBean.source ] );
-				}
-				else
-				{
-					destObject[ destPropName ] = typedBean.source;
-				}
+				setDestinationValue( bean, autowireTag, typedBean.source );
 			}
 			else
 			{
@@ -290,10 +272,28 @@ package org.swizframework.processors
 		 */
 		protected function removeAutowireByType( bean:Bean, autowireTag:AutowireMetadataTag ):void
 		{
+			setDestinationValue( bean, autowireTag, null );
+		}
+		
+		/**
+		 * Set Destination Value
+		 */
+		protected function setDestinationValue( bean:Bean, autowireTag:AutowireMetadataTag, value:* ):void
+		{
+			var setterInjection:Boolean = autowireTag.host is MetadataHostMethod;
+			
 			var destObject:Object = getDestinationObject( bean, autowireTag );
 			var destPropName:String = getDestinationPropertyName( autowireTag );
 			
-			destObject[ destPropName ] = null;
+			if ( setterInjection )
+			{
+				var f:Function = destObject[ destPropName ] as Function;
+				f.apply( destObject, [ value ] );
+			}
+			else
+			{
+				destObject[ destPropName ] = value;
+			}
 		}
 		
 		/**
