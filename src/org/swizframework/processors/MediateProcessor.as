@@ -47,7 +47,7 @@ package org.swizframework.processors
 		/**
 		 * Add Mediator
 		 */
-		protected function addMediator( bean:Bean, mediateTag:MediateMetadataTag ):void
+		protected function addMediator( mediateTag:MediateMetadataTag, bean:Bean ):void
 		{
 			if ( validateMediateMetadataTag( mediateTag ) )
 			{
@@ -60,7 +60,7 @@ package org.swizframework.processors
 		/**
 		 * Remove Mediator
 		 */
-		protected function removeMediator( bean:Bean, mediateTag:MediateMetadataTag ):void
+		protected function removeMediator( mediateTag:MediateMetadataTag, bean:Bean ):void
 		{
 			var eventType:String = parseEventTypeExpression( mediateTag.event );
 			
@@ -102,7 +102,7 @@ package org.swizframework.processors
 				}			
 
 				if ( mediatorsByEventType[ eventType ].length == 0 )
-					delete mediatorsByEventType[ eventType ];				
+					delete mediatorsByEventType[ eventType ];
 			}
 		}
 		

@@ -1,5 +1,12 @@
 package org.swizframework.reflection
 {
+	/**
+	 * Base implementation of the IMetadataTag interface.
+	 * Implements getters and setters, <code>hasArg</code> and <code>getArg</code>
+	 * methods. Also adds <code>defaultArgName</code> support and defines
+	 * <code>asString</code> method for reconstructing the tag as it
+	 * looks in the source code (mostly for debugging purposes).
+	 */
 	public class BaseMetadataTag implements IMetadataTag
 	{
 		// ========================================
@@ -7,22 +14,22 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * Backing variable for <code>name</code> getter/setter.
+		 * Backing variable for <code>name</code> property.
 		 */
 		protected var _name:String;
 		
 		/**
-		 * Backing variable for <code>args</code> getter/setter.
+		 * Backing variable for <code>args</code> property.
 		 */
 		protected var _args:Array;
 		
 		/**
-		 * Backing variable for <code>host</code> getter/setter.
+		 * Backing variable for <code>host</code> property.
 		 */
 		protected var _host:IMetadataHost;
 		
 		/**
-		 * Backing variable for <code>defaultArgName</code> getter/setter.
+		 * Backing variable for <code>defaultArgName</code> property.
 		 */
 		protected var _defaultArgName:String;
 		
@@ -31,7 +38,7 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
 		public function get name():String
 		{
@@ -46,7 +53,7 @@ package org.swizframework.reflection
 		[ArrayElementType( "org.swizframework.reflection.MetadataArg" )]
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
 		public function get args():Array
 		{
@@ -59,7 +66,7 @@ package org.swizframework.reflection
 		}
 		
 		/**
-		 * 
+		 * @inheritDoc
 		 */
 		public function get host():IMetadataHost
 		{
@@ -72,7 +79,8 @@ package org.swizframework.reflection
 		}
 		
 		/**
-		 * 
+		 * Name that will be assumed/used when a default argument value is provided,
+		 * e.g. [Autowire( "someModel" )]
 		 */
 		public function get defaultArgName():String
 		{
@@ -88,6 +96,14 @@ package org.swizframework.reflection
 		// constructor
 		// ========================================
 		
+		/**
+		 * Constructor sets initial values of required parameters.
+		 * 
+		 * @param name
+		 * @param args
+		 * @param host
+		 * @param defaultArgName
+		 */		
 		public function BaseMetadataTag( name:String, args:Array, host:IMetadataHost, defaultArgName:String = null )
 		{
 			this.name = name;
@@ -100,6 +116,9 @@ package org.swizframework.reflection
 		// public methods
 		// ========================================
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function hasArg( argName:String ):Boolean
 		{
 			for each( var arg:MetadataArg in args )
@@ -111,6 +130,9 @@ package org.swizframework.reflection
 			return false;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function getArg( argName:String ):MetadataArg
 		{
 			for each( var arg:MetadataArg in args )
@@ -123,6 +145,12 @@ package org.swizframework.reflection
 			return null;
 		}
 		
+		/**
+		 * Utility method useful for development and debugging 
+		 * that returns string showing what this tag looked like defined in code.
+		 * 
+		 * @return String representation of this tag as it looks in code.
+		 */		
 		public function get asString():String
 		{
 			var str:String = "[" + name;
@@ -134,7 +162,10 @@ package org.swizframework.reflection
 				{
 					var arg:MetadataArg = args[ i ];
 					
-					str += arg.key + "=\"" + arg.value + "\"";
+					if( arg.key != "" )
+						str += arg.key + "=";
+					
+					str += "\"" + arg.value + "\""
 					
 					if( i + 1 < args.length )
 						str += ", ";

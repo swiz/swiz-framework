@@ -131,11 +131,11 @@ package org.swizframework.core
 						// if this processor operates on a custom tag we create it here
 						if ( metadataTagClass != BaseMetadataTag )
 						{
-							metadataProcessor.addMetadata( bean, new metadataTagClass( metadataTag.args, metadataTag.host ) );
+							metadataProcessor.addMetadata( new metadataTagClass( metadataTag.args, metadataTag.host ), bean );
 						}
 						else
 						{
-							metadataProcessor.addMetadata( bean, metadataTag );
+							metadataProcessor.addMetadata( metadataTag, bean );
 						}
 					}
 				}
@@ -169,11 +169,11 @@ package org.swizframework.core
 						// if this processor operates on a custom tag we create it here
 						if ( metadataTagClass != BaseMetadataTag )
 						{
-							metadataProcessor.removeMetadata( bean, new metadataTagClass( metadataTag.args, metadataTag.host ) );
+							metadataProcessor.removeMetadata( new metadataTagClass( metadataTag.args, metadataTag.host ), bean );
 						}
 						else
 						{
-							metadataProcessor.removeMetadata( bean, metadataTag );
+							metadataProcessor.removeMetadata( metadataTag, bean );
 						}
 					}
 				}

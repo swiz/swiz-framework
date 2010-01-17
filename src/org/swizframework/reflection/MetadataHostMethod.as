@@ -2,6 +2,9 @@ package org.swizframework.reflection
 {
 	import flash.utils.getDefinitionByName;
 	
+	/**
+	 * Representation of a method that has been decorated with metadata.
+	 */
 	public class MetadataHostMethod extends BaseMetadataHost
 	{
 		// ========================================
@@ -23,7 +26,7 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * 
+		 * @return Reference to type returned by this method. Will be null if return type is <code>void</code> or <code>*</code>.
 		 */
 		public function get returnType():Class
 		{
@@ -33,7 +36,7 @@ package org.swizframework.reflection
 		[ArrayElementType( "org.swizframework.reflection.MethodParameter" )]
 		
 		/**
-		 * 
+		 * @return Array of <code>MethodParameter</code> instances representing this method's parameters.
 		 */
 		public function get parameters():Array
 		{
@@ -44,6 +47,13 @@ package org.swizframework.reflection
 		// constructor
 		// ========================================
 		
+		/**
+		 * Constructor sets <code>returnType</code> property based on value found in <code>hostNode</code> XML node,
+		 * as long as return type is not <code>void</code> or <code>*</code>. Also populates <code>parameters</code>
+		 * property from information found in <code>hostNode</code> XML node.
+		 * 
+		 * @param hostNode XML node from <code>describeType</code> output that represents this method.
+		 */		
 		public function MetadataHostMethod( hostNode:XML )
 		{
 			super();
@@ -53,7 +63,8 @@ package org.swizframework.reflection
 			
 			for each( var pNode:XML in hostNode.parameter )
 			{
-				_parameters.push( new MethodParameter( int( pNode.@index ), Class( getDefinitionByName( pNode.@type ) ), pNode.@optional == "true" ) );
+				var pType:Class = ( pNode.@type != "*" ) ? Class( getDefinitionByName( pNode.@type ) ) : null;
+				_parameters.push( new MethodParameter( int( pNode.@index ), pType, pNode.@optional == "true" ) );
 			}
 		}
 	}

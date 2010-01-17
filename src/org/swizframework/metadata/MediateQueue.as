@@ -6,6 +6,9 @@ package org.swizframework.metadata
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
 	
+	/**
+	 * Represents a queued request for mediation.
+	 */
 	public class MediateQueue
 	{
 		// ========================================
@@ -15,7 +18,7 @@ package org.swizframework.metadata
 		/**
 		 * Backing variable for <code>metadata</code> property.
 		 */
-		protected var _metadata:MediateMetadataTag;
+		protected var _metadataTag:MediateMetadataTag;
 
 		/**
 		 * Backing variable for <code>method</code> property.
@@ -27,21 +30,21 @@ package org.swizframework.metadata
 		// ========================================
 
 		/**
-		 * Mediate Metadata Tag
+		 * The corresponding [Mediate] tag.
 		 */
-		public function get metadata():MediateMetadataTag
+		public function get metadataTag():MediateMetadataTag
 		{
-			return _metadata;
+			return _metadataTag;
 		}
 		
 		/**
-		 * Mediated Method
+		 * The function decorated with the [Mediate] tag.
 		 */
 		public function get method():Function
 		{
 			return _method;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
@@ -49,9 +52,9 @@ package org.swizframework.metadata
 		/**
 		 * Constructor
 		 */
-		public function MediateQueue( metadata:MediateMetadataTag, method:Function )
+		public function MediateQueue( metadataTag:MediateMetadataTag, method:Function )
 		{
-			_metadata = metadata;
+			_metadataTag = metadataTag;
 			_method = method;
 		}
 
@@ -66,10 +69,10 @@ package org.swizframework.metadata
 		 */
 		public function mediate( event:Event ):void
 		{
-			if ( metadata.properties != null )
+			if ( metadataTag.properties != null )
 			{
-				if ( validateEvent( event, metadata.properties ) )
-					method.apply( null, getEventArgs( event, metadata.properties ) );
+				if ( validateEvent( event, metadataTag.properties ) )
+					method.apply( null, getEventArgs( event, metadataTag.properties ) );
 			}
 			else if ( getRequiredParameterCount() <= 1 )
 			{
@@ -80,13 +83,13 @@ package org.swizframework.metadata
 			}
 			else
 			{
-				throw new Error( "Unable to mediate event: " + metadata.host.name + "() requires " + getRequiredParameterCount() + " parameters, and no properties were specified." ); 
+				throw new Error( "Unable to mediate event: " + metadataTag.host.name + "() requires " + getRequiredParameterCount() + " parameters, and no properties were specified." ); 
 			}
 			
-			if ( metadata.stopPropagation )
+			if ( metadataTag.stopPropagation )
 				event.stopPropagation();
 			
-			if ( metadata.stopImmediatePropagation )
+			if ( metadataTag.stopImmediatePropagation )
 				event.stopImmediatePropagation();
 		}
 
@@ -99,8 +102,9 @@ package org.swizframework.metadata
 		 * 
 		 * Evalutes an Event to ensure it has all of the required properties specified in the [Mediate] tag, if applicable.
 		 * 
-		 * @param event The Event to evalute
-		 * @param mediator The MediateMetadataTag
+		 * @param event The Event to validate.
+		 * @param properties The required properties specified in the [Mediate] tag.
+		 * @returns A Boolean value indicating whether the event has all of the required properties specified in the [Mediate] tag.
 		 */
 		protected function validateEvent( event:Event, properties:Array ):Boolean
 		{
@@ -140,7 +144,7 @@ package org.swizframework.metadata
 		{
 			var requiredParameterCount:int = 0;
 			
-			var parameters:Array = ( metadata.host as MetadataHostMethod ).parameters;
+			var parameters:Array = ( metadataTag.host as MetadataHostMethod ).parameters;
 			for each ( var parameter:MethodParameter in parameters )
 			{
 				if ( parameter.optional )
@@ -160,7 +164,7 @@ package org.swizframework.metadata
 		 */
 		protected function getParameterType( parameterIndex:int ):Class
 		{
-			var parameters:Array = ( metadata.host as MetadataHostMethod ).parameters;
+			var parameters:Array = ( metadataTag.host as MetadataHostMethod ).parameters;
 			
 			if ( parameterIndex < parameters.length )
 				return ( parameters[ parameterIndex ] as MethodParameter ).type;
