@@ -19,7 +19,7 @@ package org.swizframework.processors
 		protected var swiz:ISwiz;
 		protected var addMethod:Function;
 		protected var removeMethod:Function;
-		protected var _metadataName:String;
+		protected var _metadataNames:Array;
 		protected var _metadataClass:Class;
 		
 		// ========================================
@@ -29,9 +29,9 @@ package org.swizframework.processors
 		/**
 		 * @inheritDoc
 		 */
-		public function get metadataName():String
+		public function get metadataNames():Array
 		{
-			return _metadataName;
+			return _metadataNames;
 		}
 		
 		/**
@@ -49,11 +49,11 @@ package org.swizframework.processors
 		/**
 		 * Constructor
 		 */
-		public function MetadataProcessor( metadataName:String, metadataClass:Class = null, addMethod:Function = null, removeMethod:Function = null )
+		public function MetadataProcessor( metadataNames:Array, metadataClass:Class = null, addMethod:Function = null, removeMethod:Function = null )
 		{
 			super();
 			
-			this._metadataName = metadataName;
+			this._metadataNames = metadataNames;
 			this._metadataClass = metadataClass ||= BaseMetadataTag;
 			
 			this.addMethod = addMethod;

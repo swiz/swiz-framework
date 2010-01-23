@@ -5,7 +5,6 @@ package org.swizframework.processors
 
 	public interface IMetadataProcessor extends IProcessor
 	{
-		
 		// ========================================
 		// public properties
 		// ========================================
@@ -13,7 +12,7 @@ package org.swizframework.processors
 		/**
 		 * Metadata Name
 		 */
-		function get metadataName():String;
+		function get metadataNames():Array;
 		
 		/**
 		 * Metadata Class
