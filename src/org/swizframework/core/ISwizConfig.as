@@ -59,7 +59,7 @@ package org.swizframework.core
 		 * Advanced developers can use this property to specify a function to detect 'marker' properties or interfaces.
 		 * 
 		 * This function should conform to the following signature: 
-		 * <code>f( instance:Object ):Boolean
+		 * <code>f( instance:Object ):Boolean</code>
 		 * where the return value is true if the specified instance should be processed for metadata.
 		 * 
 		 * @param injectionMarkerFunction The injection marker function.

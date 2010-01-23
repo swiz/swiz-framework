@@ -26,7 +26,7 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * @return Reference to type returned by this method. Will be null if return type is <code>void</code> or <code>*</code>.
+		 * @return Reference to type returned by this method. Will be null if return type is <code>void</code> or <code>* </code>.
 		 */
 		public function get returnType():Class
 		{
@@ -49,7 +49,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Constructor sets <code>returnType</code> property based on value found in <code>hostNode</code> XML node,
-		 * as long as return type is not <code>void</code> or <code>*</code>. Also populates <code>parameters</code>
+		 * as long as return type is not <code>void</code> or <code>* </code>. Also populates <code>parameters</code>
 		 * property from information found in <code>hostNode</code> XML node.
 		 * 
 		 * @param hostNode XML node from <code>describeType</code> output that represents this method.
