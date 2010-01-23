@@ -138,7 +138,7 @@ package org.swizframework.core
 		{
 			if ( dispatcher == null )
 			{
-				dispatcher == this;
+				dispatcher = this;
 			}
 			
 			if ( config == null )
