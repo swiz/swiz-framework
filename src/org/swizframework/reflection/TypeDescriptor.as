@@ -1,11 +1,8 @@
 package org.swizframework.reflection
 {
 	import flash.utils.Dictionary;
-	import flash.utils.getDefinitionByName;
 	
 	import org.swizframework.factories.MetadataHostFactory;
-	import org.swizframework.metadata.AutowireMetadataTag;
-	import org.swizframework.metadata.MediateMetadataTag;
 	
 	/**
 	 * Object representation of a given type, based on <code>flash.utils.describeType</code>

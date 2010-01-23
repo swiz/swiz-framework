@@ -1,29 +1,29 @@
-package org.swizframework.storage {
-	
+package org.swizframework.storage
+{
 	/**
-	 * The IEncryptedLocalStorageBean should be used as the type of the autowired variable.
+	 * The IEncryptedLocalStorageBean should be used as the type of the injected variable.
 	 * Define the implementation <code>EncryptedLocalStorageBean</code> in a <code>BeanLoader</code>
 	 *
 	 * The IEncryptedLocalStorageBean wrappes the functionality of the EncryptedLocalStorageBean
 	 * to supply easier access and to avoid repetitive code.
 	 */
-	public interface IEncryptedLocalStorageBean {
-		
+	public interface IEncryptedLocalStorageBean
+	{
 		/**
 		 * Resets the ELS and removes all values.
 		 *
 		 */
-		function reset() : void;
-		
-		
+		function reset():void;
+
+
 		/**
 		 * Removes an item out of the EncryptedLocalStorage pass the item name.
 		 *
 		 * @param name Name of the item to be removed
 		 *
 		 */
-		function removeItem( name : String ) : void;
-		
+		function removeItem( name : String ):void;
+
 		/**
 		 * Returns an item expected to contain a String value of the ELS.
 		 * If the item is not defined yet null is returned.
@@ -32,8 +32,8 @@ package org.swizframework.storage {
 		 * @return Item values as String.
 		 *
 		 */
-		function getString( name : String ) : String;
-		
+		function getString( name : String ):String;
+
 		/**
 		 * Set an ELS item with a String value.
 		 *
@@ -42,8 +42,8 @@ package org.swizframework.storage {
 		 * @param stronglyBound
 		 *
 		 */
-		function setString( name : String, s : String, stronglyBound : Boolean = false ) : void;
-		
+		function setString( name : String, s : String, stronglyBound : Boolean = false ):void;
+
 		/**
 		 * Returns an item expected to contain a Boolean value of the ELS.
 		 * If the item is not defined yet undefined is returned.
@@ -52,8 +52,8 @@ package org.swizframework.storage {
 		 * @return Item value as Boolean.
 		 *
 		 */
-		function getBoolean( name : String ) : Boolean;
-		
+		function getBoolean( name : String ):Boolean;
+
 		/**
 		 * Set an ELS item with a boolean value.
 		 *
@@ -62,8 +62,8 @@ package org.swizframework.storage {
 		 * @param stronglyBound
 		 *
 		 */
-		function setBoolean( name : String, b : Boolean, stronglyBound : Boolean = false ) : void;
-		
+		function setBoolean( name : String, b : Boolean, stronglyBound : Boolean = false ):void;
+
 		/**
 		 * Returns an item as Object of the ELS.
 		 * If the item is not defined yet null is returned.
@@ -72,8 +72,8 @@ package org.swizframework.storage {
 		 * @return Item as Object.
 		 *
 		 */
-		function getObject( name : String ) : Object;
-		
+		function getObject( name : String ):Object;
+
 		/**
 		 * Set an ELS item with an Object.
 		 *
@@ -82,6 +82,6 @@ package org.swizframework.storage {
 		 * @param stronglyBound
 		 *
 		 */
-		function setObject( name : String, o : Object, stronglyBound : Boolean = false ) : void;
+		function setObject( name : String, o : Object, stronglyBound : Boolean = false ):void;
 	}
 }

@@ -2,7 +2,7 @@ package org.swizframework.metadata
 {
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataHost;
-
+	
 	/**
 	 * Class to represent <code>[Mediate]</code> metadata tags.
 	 */
@@ -51,7 +51,7 @@ package org.swizframework.metadata
 		 * Refers to the event type that will trigger the decorated method.
 		 * Is the default attribute, meaning [Mediate( "someEvent" )] is
 		 * equivalent to [Mediate( event="someEvent" )].
-		 */		
+		 */
 		public function get event():String
 		{
 			return _event;
@@ -61,7 +61,7 @@ package org.swizframework.metadata
 		 * Returns properties attribute of [Mediate] tag as an <code>Array</code>.
 		 * Lists properties that will be pulled off of the event object and passed
 		 * to the decorated method.
-		 */		
+		 */
 		public function get properties():Array
 		{
 			return _properties;
@@ -71,9 +71,9 @@ package org.swizframework.metadata
 		 * Returns view attribute of [Mediate] tag as a <code>Boolean</code>.
 		 * If true instructs Swiz to create a listener on the specified view
 		 * type whenever one is added to the display list.
-		 * 
+		 *
 		 * @default false
-		 */		
+		 */
 		public function get view():Boolean
 		{
 			return _view;
@@ -82,7 +82,7 @@ package org.swizframework.metadata
 		/**
 		 * Returns priority attribute of [Mediate] tag.
 		 * Synonymous to the priority argument of <code>flash.events.addEventListener</code>.
-		 */		
+		 */
 		public function get priority():int
 		{
 			return _priority;
@@ -91,9 +91,9 @@ package org.swizframework.metadata
 		/**
 		 * Returns stopPropagation attribute of [Mediate] tag as a <code>Boolean</code>.
 		 * Synonymous to the stopPropagation argument of <code>flash.events.addEventListener</code>.
-		 * 
+		 *
 		 * @default false
-		 */		
+		 */
 		public function get stopPropagation():Boolean
 		{
 			return _stopPropagation;
@@ -102,9 +102,9 @@ package org.swizframework.metadata
 		/**
 		 * Returns stopImmediatePropagation attribute of [Mediate] tag as a <code>Boolean</code>.
 		 * Synonymous to the stopImmediatePropagation argument of <code>flash.events.addEventListener</code>.
-		 * 
+		 *
 		 * @default false
-		 */		
+		 */
 		public function get stopImmediatePropagation():Boolean
 		{
 			return _stopImmediatePropagation;
@@ -116,13 +116,13 @@ package org.swizframework.metadata
 		
 		/**
 		 * Constructor initializes values.
-		 * 
+		 *
 		 * @param args Array of <code>MetadataArg</code> instances
 		 * @param host Property, method or class decorated by this [Mediate] tag
-		 */		
-		public function MediateMetadataTag( args:Array, host:IMetadataHost )
+		 */
+		public function MediateMetadataTag( name:String = "Mediate", args:Array = null, host:IMetadataHost = null, defaultArgName:String = "event" )
 		{
-			super( "Mediate", args, host, "event" );
+			super( name, args, host, defaultArgName );
 			parseAttributes();
 		}
 		

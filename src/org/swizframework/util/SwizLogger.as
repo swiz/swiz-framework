@@ -51,24 +51,24 @@ package org.swizframework.util
 		 *            filter expressions found in the filters list, <code>false</code>
 		 *            otherwise.
 		 */
-		public static function categoryMatchInFilterList(category:String, filters:Array):Boolean
+		public static function categoryMatchInFilterList( category:String, filters:Array ):Boolean
 		{
 			var result:Boolean = false;
 			var filter:String;
 			var index:int = -1;
 			for( var i:uint = 0; i < filters.length; i++ )
 			{
-				filter = filters[i];
+				filter = filters[ i ];
 				// first check to see if we need to do a partial match
 				// do we have an asterisk?
-				index = filter.indexOf("*");
+				index = filter.indexOf( "*" );
 				
 				if( index == 0 )
 					return true;
 				
-				index = index < 0 ? index = category.length : index -1;
+				index = index < 0 ? index = category.length : index - 1;
 				
-				if( category.substring(0, index) == filter.substring(0, index) )
+				if( category.substring( 0, index ) == filter.substring( 0, index ) )
 					return true;
 			}
 			return false;
@@ -103,10 +103,10 @@ package org.swizframework.util
 			
 			_category = getQualifiedClassName( target );
 		}
-	
+		
 		/**
 		 *  The category this logger send messages for.
-		 */	
+		 */
 		public function get category():String
 		{
 			return _category;
@@ -117,7 +117,7 @@ package org.swizframework.util
 			// replace all of the parameters in the msg string
 			for( var i:int = 0; i < params.length; i++ )
 			{
-				msg = msg.replace( new RegExp( "\\{" + i + "\\}", "g"), params[ i ] );
+				msg = msg.replace( new RegExp( "\\{" + i + "\\}", "g" ), params[ i ] );
 			}
 			return msg;
 		}
