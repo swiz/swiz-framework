@@ -11,6 +11,11 @@ package org.swizframework.processors
 	 */
 	public class VirtualBeanProcessor extends MetadataProcessor
 	{
+		// ========================================
+		// protected static constants
+		// ========================================
+		
+		protected static const VIRTUAL_BEAN:String = "VirtualBean";
 		
 		// ========================================
 		// constructor
@@ -21,7 +26,7 @@ package org.swizframework.processors
 		 */
 		public function VirtualBeanProcessor()
 		{
-			super( "VirtualBean" );
+			super( [ VIRTUAL_BEAN ] );
 		}
 		
 		// ========================================

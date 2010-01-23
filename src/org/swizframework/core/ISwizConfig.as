@@ -82,10 +82,10 @@ package org.swizframework.core
 		function set eventPackages( value:* ):void;
 		
 		/**
-		 * If this property is set, Swiz will only introspect and potentially autowire components
+		 * If this property is set, Swiz will only introspect and potentially inject into components
 		 * added to the display list that match a provided package. It is primarily for performance
-		 * purposes and its use is strongly recommended. Beans declared in a <code>BeanProvider</code>
-		 * are always eligible for autowiring.
+		 * purposes and its use is strongly recommended. Beans declared in an <code>IBeanProvider</code>
+		 * are always eligible for injection.
 		 *
 		 * @param viewPackages An array of Strings or a single String that will be split on ","
 		 * @default []

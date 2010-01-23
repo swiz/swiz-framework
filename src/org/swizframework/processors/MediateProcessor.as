@@ -15,12 +15,11 @@ package org.swizframework.processors
 	 */
 	public class MediateProcessor extends MetadataProcessor
 	{
-		
 		// ========================================
-		// public static constants
+		// protected static constants
 		// ========================================
 		
-		public static const MEDIATE:String = "Mediate";
+		protected static const MEDIATE:String = "Mediate";
 		
 		// ========================================
 		// protected properties
@@ -37,7 +36,7 @@ package org.swizframework.processors
 		 */
 		public function MediateProcessor()
 		{
-			super( MEDIATE, MediateMetadataTag, addMediator, removeMediator );
+			super( [ MEDIATE ], MediateMetadataTag, addMediator, removeMediator );
 		}
 		
 		// ========================================
