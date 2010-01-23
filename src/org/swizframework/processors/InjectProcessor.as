@@ -2,15 +2,15 @@ package org.swizframework.processors
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
 	import mx.utils.UIDUtil;
-
+	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanProvider;
-	import org.swizframework.metadata.Injection;
 	import org.swizframework.metadata.InjectMetadataTag;
+	import org.swizframework.metadata.Injection;
 	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;

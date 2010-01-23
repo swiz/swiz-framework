@@ -223,7 +223,7 @@ package org.swizframework.core
 				}
 				else
 				{
-					return! ignoredClasses.test( className );
+					return !ignoredClasses.test( className );
 				}
 			}
 		}
