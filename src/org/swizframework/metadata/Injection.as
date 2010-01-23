@@ -3,21 +3,21 @@ package org.swizframework.metadata
 	import org.swizframework.core.Bean;
 	
 	/**
-	 * Represents a queued request for autowiring.
+	 * Represents a deferred request for injection.
 	 */
-	public class AutowireQueue
+	public class Injection
 	{
 		// ========================================
 		// public properties
 		// ========================================
 		
 		/**
-		 * The corresponding [Autowire] tag.
+		 * The corresponding [Inject] tag.
 		 */
-		public var autowireTag:AutowireMetadataTag;
+		public var injectTag:InjectMetadataTag;
 		
 		/**
-		 * The object that contains the [Autowire] tag.
+		 * The object that contains the [Inject] tag.
 		 */
 		public var bean:Bean;
 		
@@ -25,11 +25,11 @@ package org.swizframework.metadata
 		// constructor
 		// ========================================
 		
-		public function AutowireQueue( autowireTag:AutowireMetadataTag = null, bean:Bean = null )
+		public function Injection( injectTag:InjectMetadataTag = null, bean:Bean = null )
 		{
 			super();
 			
-			this.autowireTag = autowireTag;
+			this.injectTag = injectTag;
 			this.bean = bean;
 		}
 	}
