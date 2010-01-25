@@ -55,6 +55,8 @@ package org.swizframework.core
 		{
 			this.swiz = swiz;
 
+			swiz.processors.sortOn( "priority" );
+
 			for each( var processor:IProcessor in swiz.processors )
 			{
 				processor.init( swiz );
@@ -223,7 +225,7 @@ package org.swizframework.core
 				}
 				else
 				{
-					return !ignoredClasses.test( className );
+					return ignoredClasses.test( className ) != true;
 				}
 			}
 		}

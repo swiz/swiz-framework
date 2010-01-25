@@ -33,7 +33,7 @@ package org.swizframework.core
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
-		protected var _processors:Array = [ new InjectProcessor(), new MediateProcessor(), new VirtualBeanProcessor() ];
+		protected var _processors:Array = [ new VirtualBeanProcessor(), new InjectProcessor(), new MediateProcessor() ];
 
 		// ========================================
 		// public properties

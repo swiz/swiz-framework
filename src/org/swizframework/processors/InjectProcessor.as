@@ -18,7 +18,7 @@ package org.swizframework.processors
 	/**
 	 * Inject Processor
 	 */
-	public class InjectProcessor extends MetadataProcessor implements IBeanProcessor
+	public class InjectProcessor extends BaseMetadataProcessor implements IBeanProcessor
 	{
 		// ========================================
 		// protected static constants
@@ -36,6 +36,18 @@ package org.swizframework.processors
 		protected var injectByType:Object = {};
 		protected var queueByName:Object = {};
 		protected var queueByType:Array = [];
+
+		// ========================================
+		// public properties
+		// ========================================
+
+		/**
+		 *
+		 */
+		override public function get priority():int
+		{
+			return ProcessorPriority.INJECT;
+		}
 
 		// ========================================
 		// constructor
