@@ -8,26 +8,26 @@ package org.swizframework.processors
 		// ========================================
 		// public properties
 		// ========================================
-		
+
 		/**
 		 * Metadata Name
 		 */
 		function get metadataNames():Array;
-		
+
 		/**
 		 * Metadata Class
 		 */
 		function get metadataClass():Class;
-		
+
 		// ========================================
 		// public methods
 		// ========================================
-		
+
 		/**
 		 * Add Metadata
 		 */
 		function addMetadata( metadataTag:IMetadataTag, bean:Bean ):void;
-		
+
 		/**
 		 * Remove Metadata
 		 */

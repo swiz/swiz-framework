@@ -6,26 +6,26 @@ package org.swizframework.processors
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
-	
+
 	/**
 	 * Metadata Processor
 	 */
-	public class MetadataProcessor extends EventDispatcher implements IMetadataProcessor
+	public class BaseMetadataProcessor extends EventDispatcher implements IMetadataProcessor
 	{
 		// ========================================
 		// protected properties
 		// ========================================
-		
+
 		protected var swiz:ISwiz;
 		protected var addMethod:Function;
 		protected var removeMethod:Function;
 		protected var _metadataNames:Array;
 		protected var _metadataClass:Class;
-		
+
 		// ========================================
 		// public properties
 		// ========================================
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -33,7 +33,7 @@ package org.swizframework.processors
 		{
 			return _metadataNames;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -41,30 +41,37 @@ package org.swizframework.processors
 		{
 			return _metadataClass;
 		}
-		
+
+		/**
+		 *
+		 */
+		public function get priority():int
+		{
+			return ProcessorPriority.DEFAULT;
+		}
+
 		// ========================================
 		// constructor
 		// ========================================
-		
+
 		/**
 		 * Constructor
 		 */
-		public function MetadataProcessor( metadataNames:Array, metadataClass:Class = null, addMethod:Function = null, removeMethod:Function = null )
+		public function BaseMetadataProcessor( metadataNames:Array, metadataClass:Class = null, addMethod:Function = null, removeMethod:Function = null )
 		{
 			super();
-			
+
 			this._metadataNames = metadataNames;
 			this._metadataClass = metadataClass ||= BaseMetadataTag;
-			
+
 			this.addMethod = addMethod;
 			this.removeMethod = removeMethod;
-			
 		}
-		
+
 		// ========================================
 		// public methods
 		// ========================================
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -72,7 +79,7 @@ package org.swizframework.processors
 		{
 			this.swiz = swiz;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -80,7 +87,7 @@ package org.swizframework.processors
 		{
 			addMethod( metadataTag, bean );
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
