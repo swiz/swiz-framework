@@ -2,6 +2,7 @@ package org.swizframework.metadata
 {
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataHost;
+	import org.swizframework.reflection.IMetadataTag;
 
 	/**
 	 * Class to represent <code>[Inject]</code> metadata tags.
@@ -122,54 +123,51 @@ package org.swizframework.metadata
 		 * @param args Array of <code>MetadataArg</code> instances
 		 * @param host Property, method or class decorated by this [Inject] tag
 		 */
-		public function InjectMetadataTag( name:String = "Inject", args:Array = null, host:IMetadataHost = null, defaultArgName:String = "source" )
+		public function InjectMetadataTag()
 		{
-			super( name, args, host, defaultArgName );
-			parseAttributes();
-
-			// TODO: log deprecation warning
-			if( name == "Autowire" )
-				trace( "Autowire is deprecated!!!" );
+			defaultArgName = "source";
 		}
-
+		
 		// ========================================
-		// protected methods
+		// public methods
 		// ========================================
-
-		/**
-		 * Initialize properties based on values provided in [Inject] tag.
-		 */
-		protected function parseAttributes():void
+		
+		override public function copyFrom( metadataTag:IMetadataTag ):void
 		{
+			super.copyFrom( metadataTag );
+			
+			//if( name == "Autowire" )
+			// TODO: log deprecation warning
+			
 			//if( hasArg( "bean" ) && hasArg( "source" ) )
 			// TODO: throw error. use one or the other
-
+			
 			//if( hasArg( "property" ) )
 			// TODO: throw error. no longer supported.
-
+			
 			if( hasArg( "bean" ) )
 			{
 				// TODO: log deprecation message
 				_source = getArg( "bean" ).value;
 			}
-
+			
 			// source is the default attribute
 			// [Inject( "someModel" )] == [Inject( source="someModel" )]
 			if( hasArg( "source" ) )
 				_source = getArg( "source" ).value;
-
+			
 			if( hasArg( "destination" ) )
 				_destination = getArg( "destination" ).value;
-
+			
 			if( hasArg( "twoWay" ) )
 				_twoWay = getArg( "twoWay" ).value == "true";
-
+			
 			if( hasArg( "view" ) )
 				_view = getArg( "view" ).value == "true";
-
+			
 			if( hasArg( "bind" ) )
 				_bind = getArg( "bind" ).value == "true";
-
+			
 			if( hasArg( "lazy" ) )
 				_lazy = getArg( "lazy" ).value == "true";
 		}

@@ -5,7 +5,7 @@ package org.swizframework.core
 	import flash.events.EventPhase;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-
+	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
@@ -124,33 +124,21 @@ package org.swizframework.core
 				if( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					var metadataTagClass:Class = metadataProcessor.metadataClass;
+					
 					// get the tags this processor is interested in
 					var metadataTags:Array = [];
 					for each( var metadataName:String in metadataProcessor.metadataNames )
 					{
 						metadataTags = metadataTags.concat( bean.typeDescriptor.getMetadataTagsByName( metadataName ) );
 					}
-
-					for each( var metadataTag:IMetadataTag in metadataTags )
-					{
-						// if this processor operates on a custom tag we create it here
-						if( metadataTagClass != BaseMetadataTag )
-						{
-							metadataProcessor.addMetadata( new metadataTagClass( metadataTag.name, metadataTag.args, metadataTag.host ), bean );
-						}
-						else
-						{
-							metadataProcessor.addMetadata( metadataTag, bean );
-						}
-					}
+					
+					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
 
 				// Handle Bean Processors
 				if( processor is IBeanProcessor )
 				{
-					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
-					beanProcessor.addBean( bean );
+					IBeanProcessor( processor ).addBean( bean );
 				}
 			}
 		}
@@ -166,7 +154,7 @@ package org.swizframework.core
 				if( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					var metadataTagClass:Class = metadataProcessor.metadataClass;
+					
 					// get the tags this processor is interested in
 					var metadataTags:Array = [];
 					for each( var metadataName:String in metadataProcessor.metadataNames )
@@ -174,26 +162,13 @@ package org.swizframework.core
 						metadataTags = metadataTags.concat( bean.typeDescriptor.getMetadataTagsByName( metadataName ) );
 					}
 
-					for each( var metadataTag:IMetadataTag in metadataTags )
-					{
-						// if this processor operates on a custom tag we create it here
-						if( metadataTagClass != BaseMetadataTag )
-						{
-							metadataProcessor.removeMetadata( new metadataTagClass( metadataTag.name, metadataTag.args, metadataTag.host ), bean );
-						}
-						else
-						{
-							metadataProcessor.removeMetadata( metadataTag, bean );
-						}
-					}
+					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
 
 				// Handle Bean Processors
 				if( processor is IBeanProcessor )
 				{
-					var beanProcessor:IBeanProcessor = IBeanProcessor( processor );
-
-					beanProcessor.removeBean( bean );
+					IBeanProcessor( processor ).removeBean( bean );
 				}
 			}
 		}

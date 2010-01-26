@@ -2,15 +2,16 @@ package org.swizframework.processors
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
 	import mx.utils.UIDUtil;
-	
+
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanProvider;
 	import org.swizframework.metadata.InjectMetadataTag;
 	import org.swizframework.metadata.Injection;
+	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
@@ -58,7 +59,7 @@ package org.swizframework.processors
 		 */
 		public function InjectProcessor()
 		{
-			super( [ INJECT, AUTOWIRE ], InjectMetadataTag, addInject, removeInject );
+			super( [ INJECT, AUTOWIRE ], InjectMetadataTag );
 		}
 
 		// ========================================
@@ -97,7 +98,7 @@ package org.swizframework.processors
 			{
 				for each( var queue:Injection in queueByName[ beanName ] )
 				{
-					addInject( queue.injectTag, queue.bean );
+					setUpMetadataTag( queue.injectTag, queue.bean );
 				}
 
 				delete queueByName[ beanName ];
@@ -113,7 +114,7 @@ package org.swizframework.processors
 			{
 				if( bean.source is queue.injectTag.host.type )
 				{
-					addInject( queue.injectTag, queue.bean );
+					setUpMetadataTag( queue.injectTag, queue.bean );
 					queueByType.splice( queueByType.indexOf( queue ), 1 );
 				}
 			}
@@ -122,8 +123,10 @@ package org.swizframework.processors
 		/**
 		 * Add Inject
 		 */
-		protected function addInject( injectTag:InjectMetadataTag, bean:Bean ):void
+		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
+			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
+
 			if( injectTag.source != null )
 			{
 				if( injectTag.source.indexOf( "." ) > -1 )
@@ -144,8 +147,10 @@ package org.swizframework.processors
 		/**
 		 * Remove Inject
 		 */
-		protected function removeInject( injectTag:InjectMetadataTag, bean:Bean ):void
+		override public function tearDownMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
+			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
+
 			if( injectTag.source != null )
 			{
 				if( injectTag.source.indexOf( "." ) > -1 )
