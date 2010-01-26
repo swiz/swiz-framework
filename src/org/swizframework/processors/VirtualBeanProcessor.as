@@ -7,7 +7,7 @@ package org.swizframework.processors
 	import org.swizframework.reflection.TypeCache;
 
 	/**
-	 * Random Processor
+	 * VirtualBean Processor
 	 */
 	public class VirtualBeanProcessor extends BaseMetadataProcessor
 	{
