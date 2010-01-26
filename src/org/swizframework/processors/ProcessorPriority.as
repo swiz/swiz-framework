@@ -19,7 +19,7 @@ package org.swizframework.processors
 		 *
 		 * @see org.swizframework.processors.ComponentProcessor
 		 */
-		public static const VIRTUAL_BEAN		:int = 100;
+		public static const VIRTUAL_BEAN	:int = 100;
 
 		/**
 		 * Built-in <code>InjectProcessor</code> is the second native processor run to
