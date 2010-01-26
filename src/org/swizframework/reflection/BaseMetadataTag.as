@@ -97,19 +97,11 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * Constructor sets initial values of required parameters.
-		 *
-		 * @param name
-		 * @param args
-		 * @param host
-		 * @param defaultArgName
+		 * Constructor
 		 */
-		public function BaseMetadataTag( name:String, args:Array, host:IMetadataHost, defaultArgName:String = null )
+		public function BaseMetadataTag()
 		{
-			this.name = name;
-			this.args = args;
-			this.host = host;
-			this.defaultArgName = defaultArgName;
+			
 		}
 		
 		// ========================================
@@ -143,6 +135,13 @@ package org.swizframework.reflection
 			
 			// TODO: throw error
 			return null;
+		}
+		
+		public function copyFrom( metadataTag:IMetadataTag ):void
+		{
+			name = metadataTag.name;
+			args = metadataTag.args;
+			host = metadataTag.host;
 		}
 		
 		/**
