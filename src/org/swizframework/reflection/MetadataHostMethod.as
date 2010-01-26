@@ -63,7 +63,8 @@ package org.swizframework.reflection
 			
 			for each( var pNode:XML in hostNode.parameter )
 			{
-				var pType:Class = ( pNode.@type != "*" ) ? Class( getDefinitionByName( pNode.@type ) ) : null;
+				// Convert * type to Object class, lookup everything else
+				var pType:Class = pNode.@type != "*" ? Class( getDefinitionByName( pNode.@type ) ) : Object;
 				_parameters.push( new MethodParameter( int( pNode.@index ), pType, pNode.@optional == "true" ) );
 			}
 		}
