@@ -10,27 +10,30 @@ package org.swizframework.processors
 		// ========================================
 
 		/**
-		 * Metadata Name
+		 * Name of metadata tags in which this processor is interested.
 		 */
 		function get metadataNames():Array;
-
-		/**
-		 * Metadata Class
-		 */
-		function get metadataClass():Class;
 
 		// ========================================
 		// public methods
 		// ========================================
 
 		/**
-		 * Add Metadata
+		 * Process the metadata tags for the provided <code>Bean</code>
+		 * so they are ready to use.
+		 *
+		 * @param metadataTags Array of tags culled from this <code>Bean</code>'s <code>TypeDescriptor</code>
+		 * @param bean		   <code>Bean</code> instance to process
 		 */
-		function addMetadata( metadataTag:IMetadataTag, bean:Bean ):void;
+		function setUpMetadataTags( metadataTags:Array, bean:Bean ):void;
 
 		/**
-		 * Remove Metadata
+		 * Process the metadata tags for the provided <code>Bean</code>
+		 * so they are ready to be cleaned up.
+		 *
+		 * @param metadataTags Array of tags culled from this <code>Bean</code>'s <code>TypeDescriptor</code>
+		 * @param bean		   <code>Bean</code> instance to process
 		 */
-		function removeMetadata( metadataTag:IMetadataTag, bean:Bean ):void;
+		function tearDownMetadataTags( metadataTags:Array, bean:Bean ):void;
 	}
 }

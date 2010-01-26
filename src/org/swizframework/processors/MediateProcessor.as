@@ -2,11 +2,13 @@ package org.swizframework.processors
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-	
+
 	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
+	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.ClassConstant;
+	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.reflection.TypeDescriptor;
 
@@ -48,18 +50,20 @@ package org.swizframework.processors
 		 */
 		public function MediateProcessor()
 		{
-			super( [ MEDIATE ], MediateMetadataTag, addMediator, removeMediator );
+			super( [ MEDIATE ], MediateMetadataTag );
 		}
 
 		// ========================================
-		// protected methods
+		// public methods
 		// ========================================
 
 		/**
-		 * Add Mediator
+		 * @inheritDoc
 		 */
-		protected function addMediator( mediateTag:MediateMetadataTag, bean:Bean ):void
+		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
+			var mediateTag:MediateMetadataTag = metadataTag as MediateMetadataTag;
+
 			if( validateMediateMetadataTag( mediateTag ) )
 			{
 				var eventType:String = parseEventTypeExpression( mediateTag.event );
@@ -69,14 +73,19 @@ package org.swizframework.processors
 		}
 
 		/**
-		 * Remove Mediator
+		 * @inheritDoc
 		 */
-		protected function removeMediator( mediateTag:MediateMetadataTag, bean:Bean ):void
+		override public function tearDownMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
+			var mediateTag:MediateMetadataTag = metadataTag as MediateMetadataTag;
 			var eventType:String = parseEventTypeExpression( mediateTag.event );
 
 			removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
 		}
+
+		// ========================================
+		// protected methods
+		// ========================================
 
 		/**
 		 * Add Mediator By Event Type

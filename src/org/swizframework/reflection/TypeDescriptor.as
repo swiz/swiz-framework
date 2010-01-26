@@ -76,8 +76,6 @@ package org.swizframework.reflection
 				if( String( mdNode.@name ).indexOf( "_" ) == 0 )
 					continue;
 				
-				var host:IMetadataHost = getMetadataHost( mdNode.parent() );
-				
 				// gather and store all key/value pairs for the metadata tag
 				var args:Array = [];
 				for each( var argNode:XML in mdNode.arg )
@@ -85,7 +83,13 @@ package org.swizframework.reflection
 					args.push( new MetadataArg( argNode.@key.toString(), argNode.@value.toString() ) );
 				}
 				
-				host.metadataTags.push( new BaseMetadataTag( mdNode.@name.toString(), args, host ) );
+				var host:IMetadataHost = getMetadataHost( mdNode.parent() );
+				
+				var metadataTag:IMetadataTag = new BaseMetadataTag();
+				metadataTag.name = mdNode.@name.toString();
+				metadataTag.args = args;
+				metadataTag.host = host;
+				host.metadataTags.push( metadataTag );
 			}
 			
 			return metadataHosts;
