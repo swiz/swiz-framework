@@ -76,7 +76,7 @@ package org.swizframework.metadata
 			}
 			else if ( getRequiredParameterCount() <= 1 )
 			{
-				if ( event is getParameterType( 0 ) )
+				if ( ( getParameterCount() > 0 ) && ( event is getParameterType( 0 ) ) )
 					method.apply( null, [ event ] );
 				else
 					method.apply();
@@ -133,6 +133,16 @@ package org.swizframework.metadata
 			}
 			
 			return args;
+		}
+		
+		/**
+		 * Get Parameter Count
+		 * 
+		 * @returns The number of parameters for the mediated method.
+		 */
+		protected function getParameterCount():int
+		{
+			return ( metadataTag.host as MetadataHostMethod ).parameters.length;
 		}
 		
 		/**
