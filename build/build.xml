@@ -1,0 +1,83 @@
+<project name="swiz-framework" basedir="../" default="compile">
+
+	<property environment="env" />
+	
+	<!-- Configuration -->
+	<property file="${basedir}/build/build.properties" />
+	
+	<!-- Setup Flex Ant Resources -->
+	<property name="FLEX_HOME" location="${env.FLEX_HOME}" />
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+	
+	<target name="clean" description="Removes artifacts from previous builds">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.loc}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${test.bin.loc}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${docs}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${dist.loc}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${report.loc}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="init" description="Initializes project and destination folders">
+		<echo message="Project: ${ant.project.name}" />
+		<echo message="Flex SDK: ${FLEX_HOME}" />
+		<echo message="" />
+
+		<!-- Create direectories -->
+		<mkdir dir="${bin.loc}" />
+		<mkdir dir="${test.bin.loc}" />
+		<mkdir dir="${docs.loc}" />
+		<mkdir dir="${dist.loc}" />
+		<mkdir dir="${report.loc}" />
+	</target>
+	
+	<target name="compile" depends="init" description="Compile the swc library">
+		<compc output="${bin.loc}/${swiz.name}.swc">
+			<source-path path-element="${src.loc}" />
+			
+			<!--
+			<library-path dir="${libs.loc}" append="true">
+				<include name="*.swc" />
+			</library-path>
+			-->
+			
+			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
+			<include-namespaces uri="${swiz.namespace}" />
+			
+			<keep-as3-metadata>Autowire</keep-as3-metadata>
+			
+			<verbose-stacktraces>true</verbose-stacktraces>
+			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
+			<headless-server>true</headless-server>
+		</compc>
+	</target>
+	
+	<target name="asdoc" depends="init" description="Generate ASDoc documentation">
+		<java jar="${FLEX_HOME}/lib/asdoc.jar" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+			<!--<arg line="-doc-sources ${src.loc}"/>-->
+			<arg line="-namespace ${swiz.namespace} ${src.loc}/manifest.xml " />
+			<arg line="-doc-namespaces ${swiz.namespace}" />
+			<arg line="-source-path ${src.loc}"/>
+			<arg line="-output ${docs.loc}"/>
+			<arg line="-window-title 'Swiz ${swiz.version}'"/>
+		</java>
+	</target>
+	
+	<!--
+	<target name="package>
+		 TODO: Zip docs and framework.swc, with readme, etc.
+	</target>
+	-->
+	
+</project>

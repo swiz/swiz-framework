@@ -38,7 +38,8 @@ package org.swizframework.reflection
 		{
 			super();
 			
-			type = getDefinitionByName( hostNode.@type.toString() ) as Class;
+			// Convert * type to Object class, lookup everything else
+			type = hostNode.@type != "*" ? Class( getDefinitionByName( hostNode.@type ) ) : Object;
 		}
 	}
 }

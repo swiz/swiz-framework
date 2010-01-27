@@ -49,7 +49,7 @@ package org.swizframework.core.mxml
 		 */
 		public function initialized( document:Object, id:String ):void
 		{
-			if ( document is IEventDispatcher && dispatcher == null )
+			if( document is IEventDispatcher && dispatcher == null )
 			{
 				dispatcher = IEventDispatcher( document );
 			}
@@ -58,15 +58,15 @@ package org.swizframework.core.mxml
 			// because Flex sucks
 			// ( complex objects/bound properties that are set as attributes are still null right now )
 			var t:Timer = new Timer( 0, 1 );
-			t.addEventListener( TimerEvent.TIMER, 
-			
-				function( e:TimerEvent ):void
+			t.addEventListener( TimerEvent.TIMER,
+				
+								function( e:TimerEvent ):void
 				{
 					e.currentTarget.removeEventListener( e.type, arguments.callee );
 					init();
 				}
 				
-			);
+				);
 			t.start();
 		}
 	}

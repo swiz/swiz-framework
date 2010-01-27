@@ -15,7 +15,7 @@ package org.swizframework.reflection
 		public var index:int;
 		
 		/**
-		 * Type of this parameter. Null if typed as <code>*</code>.
+		 * Type of this parameter. Null if typed as <code>* </code>.
 		 */		
 		public var type:Class;
 		

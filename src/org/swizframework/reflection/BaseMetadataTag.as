@@ -80,7 +80,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Name that will be assumed/used when a default argument value is provided,
-		 * e.g. [Autowire( "someModel" )]
+		 * e.g. [Inject( "someModel" )]
 		 */
 		public function get defaultArgName():String
 		{
@@ -97,19 +97,11 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * Constructor sets initial values of required parameters.
-		 * 
-		 * @param name
-		 * @param args
-		 * @param host
-		 * @param defaultArgName
-		 */		
-		public function BaseMetadataTag( name:String, args:Array, host:IMetadataHost, defaultArgName:String = null )
+		 * Constructor
+		 */
+		public function BaseMetadataTag()
 		{
-			this.name = name;
-			this.args = args;
-			this.host = host;
-			this.defaultArgName = defaultArgName;
+			
 		}
 		
 		// ========================================
@@ -145,12 +137,19 @@ package org.swizframework.reflection
 			return null;
 		}
 		
+		public function copyFrom( metadataTag:IMetadataTag ):void
+		{
+			name = metadataTag.name;
+			args = metadataTag.args;
+			host = metadataTag.host;
+		}
+		
 		/**
-		 * Utility method useful for development and debugging 
+		 * Utility method useful for development and debugging
 		 * that returns string showing what this tag looked like defined in code.
-		 * 
+		 *
 		 * @return String representation of this tag as it looks in code.
-		 */		
+		 */
 		public function get asString():String
 		{
 			var str:String = "[" + name;

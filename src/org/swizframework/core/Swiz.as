@@ -2,18 +2,19 @@ package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	
+
 	import mx.logging.ILogger;
-	
-	import org.swizframework.processors.AutowireProcessor;
+
+	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
+	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.VirtualBeanProcessor;
 	import org.swizframework.util.SwizLogger;
-	
+
 	[DefaultProperty( "beanProviders" )]
 	[ExcludeClass]
-	
+
 	/**
 	 * Core framework class that serves as an IoC container rooted
 	 * at the IEventDispatcher passed into its constructor.
@@ -23,22 +24,23 @@ package org.swizframework.core
 		// ========================================
 		// protected properties
 		// ========================================
-		
+
 		/**
 		 * Logger
 		 */
 		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
-		
+
 		protected var _dispatcher:IEventDispatcher;
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
-		protected var _processors:Array = [ new AutowireProcessor(), new MediateProcessor(), new VirtualBeanProcessor() ];
-		
+		protected var _processors:Array = [ new VirtualBeanProcessor(), new InjectProcessor(), 
+			new PostConstructProcessor(), new MediateProcessor() ];
+
 		// ========================================
 		// public properties
 		// ========================================
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -46,12 +48,12 @@ package org.swizframework.core
 		{
 			return _dispatcher;
 		}
-		
+
 		public function set dispatcher( value:IEventDispatcher ):void
 		{
 			_dispatcher = value;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -59,12 +61,12 @@ package org.swizframework.core
 		{
 			return _config;
 		}
-		
+
 		public function set config( value:ISwizConfig ):void
 		{
 			_config = value;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -72,14 +74,14 @@ package org.swizframework.core
 		{
 			return _beanFactory;
 		}
-		
+
 		public function set beanFactory( value:IBeanFactory ):void
 		{
 			_beanFactory = value;
 		}
-		
+
 		[ArrayElementType( "org.swizframework.core.IBeanProvider" )]
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -87,14 +89,14 @@ package org.swizframework.core
 		{
 			return _beanProviders;
 		}
-		
+
 		public function set beanProviders( value:Array ):void
 		{
 			_beanProviders = value;
 		}
-		
+
 		[ArrayElementType( "org.swizframework.processors.IProcessor" )]
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -102,55 +104,55 @@ package org.swizframework.core
 		{
 			return _processors;
 		}
-		
+
 		public function set customProcessors( value:Array ):void
 		{
 			if( value != null )
 				_processors = _processors.concat( value );
 		}
-		
+
 		// ========================================
 		// constructor
 		// ========================================
-		
+
 		/**
 		 * Constructor
 		 */
 		public function Swiz( dispatcher:IEventDispatcher = null, config:ISwizConfig = null, beanFactory:IBeanFactory = null, beanProviders:Array = null, customProcessors:Array = null )
 		{
 			super();
-			
+
 			this.dispatcher = dispatcher;
 			this.config = config;
 			this.beanFactory = beanFactory;
 			this.beanProviders = beanProviders;
 			this.customProcessors = customProcessors;
 		}
-		
+
 		// ========================================
 		// public methods
 		// ========================================
-		
+
 		/**
 		 * @inheritDoc
 		 */
 		public function init():void
 		{
-			if ( dispatcher == null )
+			if( dispatcher == null )
 			{
-				dispatcher == this;
+				dispatcher = this;
 			}
-			
-			if ( config == null )
+
+			if( config == null )
 			{
 				config = new SwizConfig();
 			}
-			
-			if ( beanFactory == null )
+
+			if( beanFactory == null )
 			{
 				beanFactory = new BeanFactory();
 			}
-			
+
 			beanFactory.init( this );
 		}
 	}

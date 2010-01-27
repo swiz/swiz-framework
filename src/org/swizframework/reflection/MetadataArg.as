@@ -10,12 +10,12 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * Name of metadata tag argument, e.g. "source" for [Autowire( source="someModel" )]
+		 * Name of metadata tag argument, e.g. "source" for [Inject( source="someModel" )]
 		 */		
 		public var key:String;
 		
 		/**
-		 * Value of metadata tag argument, e.g. "someModel" for [Autowire( source="someModel" )]
+		 * Value of metadata tag argument, e.g. "someModel" for [Inject( source="someModel" )]
 		 */		
 		public var value:String;
 		
