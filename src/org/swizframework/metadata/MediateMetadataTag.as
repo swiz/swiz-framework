@@ -116,10 +116,7 @@ package org.swizframework.metadata
 		// ========================================
 
 		/**
-		 * Constructor initializes values.
-		 *
-		 * @param args Array of <code>MetadataArg</code> instances
-		 * @param host Property, method or class decorated by this [Mediate] tag
+		 * Constructor sets <code>defaultArgName</code>.
 		 */
 		public function MediateMetadataTag()
 		{
@@ -137,7 +134,7 @@ package org.swizframework.metadata
 		{
 			// super will set name, args and host for us
 			super.copyFrom( metadataTag );
-			
+
 			// event is the default attribute
 			// [Mediate( "someEvent" )] == [Mediate( event="someEvent" )]
 			if( hasArg( "event" ) )

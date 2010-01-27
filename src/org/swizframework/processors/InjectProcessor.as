@@ -266,7 +266,6 @@ package org.swizframework.processors
 		 */
 		protected function addInjectByType( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
-			// TODO: support injection into multi-param methods
 			var setterInjection:Boolean = injectTag.host is MetadataHostMethod;
 			var targetType:Class = ( setterInjection ) ? MethodParameter( MetadataHostMethod( injectTag.host ).parameters[ 0 ] ).type : injectTag.host.type;
 			if( targetType == null && injectTag.host is MetadataHostClass )

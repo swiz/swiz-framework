@@ -118,56 +118,53 @@ package org.swizframework.metadata
 		// ========================================
 
 		/**
-		 * Constructor initializes values.
-		 *
-		 * @param args Array of <code>MetadataArg</code> instances
-		 * @param host Property, method or class decorated by this [Inject] tag
+		 * Constructor sets <code>defaultArgName</code>.
 		 */
 		public function InjectMetadataTag()
 		{
 			defaultArgName = "source";
 		}
-		
+
 		// ========================================
 		// public methods
 		// ========================================
-		
+
 		override public function copyFrom( metadataTag:IMetadataTag ):void
 		{
 			super.copyFrom( metadataTag );
-			
+
 			//if( name == "Autowire" )
 			// TODO: log deprecation warning
-			
+
 			//if( hasArg( "bean" ) && hasArg( "source" ) )
 			// TODO: throw error. use one or the other
-			
+
 			//if( hasArg( "property" ) )
 			// TODO: throw error. no longer supported.
-			
+
 			if( hasArg( "bean" ) )
 			{
 				// TODO: log deprecation message
 				_source = getArg( "bean" ).value;
 			}
-			
+
 			// source is the default attribute
 			// [Inject( "someModel" )] == [Inject( source="someModel" )]
 			if( hasArg( "source" ) )
 				_source = getArg( "source" ).value;
-			
+
 			if( hasArg( "destination" ) )
 				_destination = getArg( "destination" ).value;
-			
+
 			if( hasArg( "twoWay" ) )
 				_twoWay = getArg( "twoWay" ).value == "true";
-			
+
 			if( hasArg( "view" ) )
 				_view = getArg( "view" ).value == "true";
-			
+
 			if( hasArg( "bind" ) )
 				_bind = getArg( "bind" ).value == "true";
-			
+
 			if( hasArg( "lazy" ) )
 				_lazy = getArg( "lazy" ).value == "true";
 		}
