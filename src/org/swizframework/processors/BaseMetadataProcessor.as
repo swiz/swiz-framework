@@ -81,16 +81,20 @@ package org.swizframework.processors
 		 */
 		public function setUpMetadataTags( metadataTags:Array, bean:Bean ):void
 		{
-			for each( var metadataTag:BaseMetadataTag in metadataTags )
+			var metadataTag:IMetadataTag;
+
+			if( metadataClass != null )
 			{
-				if( metadataClass != null )
+				for( var i:int = 0; i < metadataTags.length; i++ )
 				{
-					setUpMetadataTag( createMetadataTag( metadataTag ), bean );
+					metadataTag = metadataTags[ i ] as IMetadataTag;
+					metadataTags.splice( i, 1, createMetadataTag( metadataTag ) );
 				}
-				else
-				{
-					setUpMetadataTag( metadataTag, bean );
-				}
+			}
+
+			for each( metadataTag in metadataTags )
+			{
+				setUpMetadataTag( metadataTag, bean );
 			}
 		}
 
@@ -104,16 +108,20 @@ package org.swizframework.processors
 		 */
 		public function tearDownMetadataTags( metadataTags:Array, bean:Bean ):void
 		{
-			for each( var metadataTag:BaseMetadataTag in metadataTags )
+			var metadataTag:IMetadataTag;
+
+			if( metadataClass != null )
 			{
-				if( metadataClass != null )
+				for( var i:int = 0; i < metadataTags.length; i++ )
 				{
-					tearDownMetadataTag( createMetadataTag( metadataTag ), bean );
+					metadataTag = metadataTags[ i ] as IMetadataTag;
+					metadataTags.splice( i, 1, createMetadataTag( metadataTag ) );
 				}
-				else
-				{
-					tearDownMetadataTag( metadataTag, bean );
-				}
+			}
+
+			for each( metadataTag in metadataTags )
+			{
+				tearDownMetadataTag( metadataTag, bean );
 			}
 		}
 
@@ -122,7 +130,7 @@ package org.swizframework.processors
 			// empty, subclasses should override
 		}
 
-		protected function createMetadataTag( metadataTag:BaseMetadataTag ):IMetadataTag
+		protected function createMetadataTag( metadataTag:IMetadataTag ):IMetadataTag
 		{
 			var tag:IMetadataTag = new metadataClass();
 			tag.copyFrom( metadataTag );

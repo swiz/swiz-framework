@@ -8,6 +8,7 @@ package org.swizframework.core
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.MediateProcessor;
+	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.VirtualBeanProcessor;
 	import org.swizframework.util.SwizLogger;
 
@@ -33,7 +34,8 @@ package org.swizframework.core
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
-		protected var _processors:Array = [ new VirtualBeanProcessor(), new InjectProcessor(), new MediateProcessor() ];
+		protected var _processors:Array = [ new VirtualBeanProcessor(), new InjectProcessor(), 
+			new PostConstructProcessor(), new MediateProcessor() ];
 
 		// ========================================
 		// public properties
