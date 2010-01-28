@@ -6,16 +6,6 @@ package org.swizframework.core
 	public interface IBeanFactory
 	{
 		// ========================================
-		// public properties
-		// ========================================
-		
-		/**
-		 * Injection Event
-		 */
-		function get injectionEvent():String;
-		function set injectionEvent( value:String ):void;
-		
-		// ========================================
 		// public methods
 		// ========================================
 		
