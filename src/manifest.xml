@@ -18,6 +18,6 @@
 	<component class="org.swizframework.factories.MetadataHostFactory" />
 	
 	<!-- util package -->
-	<component class="org.swizframework.util.SwizLogger" />
+	<component class="org.swizframework.utils.SwizLogger" />
 	
 </componentPackage>

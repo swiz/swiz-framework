@@ -1,4 +1,4 @@
-package org.swizframework.util.test
+package org.swizframework.utils.test
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
@@ -35,7 +35,7 @@ package org.swizframework.util.test
 			
 			// initialize bean factory with configurec bean provider
 			if (_swiz == null && _beanProviders != null) {
-				_swiz = new Swiz(null, null, _beanProviders);
+				_swiz = new Swiz(null, null, null, _beanProviders);
 				_swiz.init();
 				
 				// wrap the unit test in a Bean definition

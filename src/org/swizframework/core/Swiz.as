@@ -10,7 +10,7 @@ package org.swizframework.core
 	import org.swizframework.processors.MediateProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.VirtualBeanProcessor;
-	import org.swizframework.util.SwizLogger;
+	import org.swizframework.utils.SwizLogger;
 
 	[DefaultProperty( "beanProviders" )]
 	[ExcludeClass]

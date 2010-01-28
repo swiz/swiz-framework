@@ -9,7 +9,7 @@ package org.swizframework.core.mxml
 	
 	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwizConfig;
-	import org.swizframework.util.SwizLogger;
+	import org.swizframework.utils.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
 	

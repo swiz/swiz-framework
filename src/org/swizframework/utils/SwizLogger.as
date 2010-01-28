@@ -1,4 +1,4 @@
-package org.swizframework.util
+package org.swizframework.utils
 {
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
