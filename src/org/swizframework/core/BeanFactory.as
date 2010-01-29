@@ -10,8 +10,6 @@ package org.swizframework.core
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
-	import org.swizframework.reflection.BaseMetadataTag;
-	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 
 	/**
