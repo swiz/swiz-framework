@@ -17,7 +17,9 @@
 	<!-- factories package -->
 	<component class="org.swizframework.factories.MetadataHostFactory" />
 	
-	<!-- util package -->
+	<!-- utils package -->
 	<component class="org.swizframework.utils.SwizLogger" />
+	<component class="org.swizframework.utils.services.ServiceRequestUtil" />
+	<component class="org.swizframework.utils.services.URLRequestUtil" />
 	
 </componentPackage>
