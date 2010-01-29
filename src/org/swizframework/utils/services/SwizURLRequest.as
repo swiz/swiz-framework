@@ -7,7 +7,7 @@ package org.swizframework.utils.services
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	
+
 	/**
 	 *
 	 * DynamicUrlRequest can be used to wrap URLLoader calles.
@@ -20,8 +20,9 @@ package org.swizframework.utils.services
 	 * the Swiz internal generic fault shows up.
 	 *
 	 */
-	public class SwizURLRequest {
-		
+	internal class SwizURLRequest
+	{
+
 		/**
 		 *
 		 * @param request
@@ -32,17 +33,18 @@ package org.swizframework.utils.services
 		 * @param eventArgs The eventArgs will be applied to the signature of the resultHandler function.
 		 *
 		 */
-		public function SwizURLRequest( request : URLRequest, resultHandler : Function, 
-										   faultHandler : Function = null, progressHandler : Function = null, 
-										   httpStatusHandler : Function = null, eventArgs : Array = null ) {
-										   	
+		public function SwizURLRequest( request:URLRequest, resultHandler:Function, 
+			faultHandler:Function = null, progressHandler:Function = null, 
+			httpStatusHandler:Function = null, eventArgs:Array = null )
+		{
+
 			var loader:URLLoader = new URLLoader();
-			
-			loader.addEventListener( Event.COMPLETE, function( e : Event ) : void
+
+			loader.addEventListener( Event.COMPLETE, function( e:Event ):void
 				{
 					// we could apply the result directly but from the current knowledge applying the event itself
 					// seems more flexible. This may change in the future if we don't see any necessarity for this.
-					
+
 					if ( eventArgs == null ) {
 						resultHandler( e );
 					} else {
@@ -50,8 +52,8 @@ package org.swizframework.utils.services
 						resultHandler.apply( null, eventArgs );
 					}
 				} );
-			
-			loader.addEventListener( IOErrorEvent.IO_ERROR, function( e : IOErrorEvent ) : void
+
+			loader.addEventListener( IOErrorEvent.IO_ERROR, function( e:IOErrorEvent ):void
 				{
 					if ( faultHandler != null )
 						faultHandler( e );
@@ -59,7 +61,7 @@ package org.swizframework.utils.services
 						// todo: what if there is no fault handler applied to dynamic url request
 					}
 				} );
-			loader.addEventListener( SecurityErrorEvent.SECURITY_ERROR, function( e : SecurityErrorEvent ) : void
+			loader.addEventListener( SecurityErrorEvent.SECURITY_ERROR, function( e:SecurityErrorEvent ):void
 				{
 					if ( faultHandler != null )
 						faultHandler( e );
@@ -67,20 +69,23 @@ package org.swizframework.utils.services
 						// todo: what if there is no fault handler applied to dynamic url request
 					}
 				} );
-			
-			if ( progressHandler != null ) {
-				loader.addEventListener( ProgressEvent.PROGRESS, function( e : ProgressEvent ) : void
+
+			if( progressHandler != null )
+			{
+				loader.addEventListener( ProgressEvent.PROGRESS, function( e:ProgressEvent ):void
 					{
 						progressHandler( e );
 					} );
 			}
-			if ( httpStatusHandler != null ) {
-				loader.addEventListener( HTTPStatusEvent.HTTP_STATUS, function( e : HTTPStatusEvent ) : void
+
+			if( httpStatusHandler != null )
+			{
+				loader.addEventListener( HTTPStatusEvent.HTTP_STATUS, function( e:HTTPStatusEvent ):void
 					{
 						httpStatusHandler( e );
 					} );
 			}
-			
+
 			loader.load( request );
 		}
 	}
