@@ -22,7 +22,7 @@ package org.swizframework.storage
 		 * @param name Name of the item to be removed
 		 *
 		 */
-		function removeItem( name : String ):void;
+		function removeItem( name:String ):void;
 
 		/**
 		 * Returns an item expected to contain a String value of the ELS.
@@ -32,7 +32,7 @@ package org.swizframework.storage
 		 * @return Item values as String.
 		 *
 		 */
-		function getString( name : String ):String;
+		function getString( name:String ):String;
 
 		/**
 		 * Set an ELS item with a String value.
@@ -42,7 +42,7 @@ package org.swizframework.storage
 		 * @param stronglyBound
 		 *
 		 */
-		function setString( name : String, s : String, stronglyBound : Boolean = false ):void;
+		function setString( name:String, s:String, stronglyBound:Boolean = false ):void;
 
 		/**
 		 * Returns an item expected to contain a Boolean value of the ELS.
@@ -52,7 +52,7 @@ package org.swizframework.storage
 		 * @return Item value as Boolean.
 		 *
 		 */
-		function getBoolean( name : String ):Boolean;
+		function getBoolean( name:String ):Boolean;
 
 		/**
 		 * Set an ELS item with a boolean value.
@@ -62,7 +62,7 @@ package org.swizframework.storage
 		 * @param stronglyBound
 		 *
 		 */
-		function setBoolean( name : String, b : Boolean, stronglyBound : Boolean = false ):void;
+		function setBoolean( name:String, b:Boolean, stronglyBound:Boolean = false ):void;
 
 		/**
 		 * Returns an item as Object of the ELS.
@@ -72,7 +72,7 @@ package org.swizframework.storage
 		 * @return Item as Object.
 		 *
 		 */
-		function getObject( name : String ):Object;
+		function getObject( name:String ):Object;
 
 		/**
 		 * Set an ELS item with an Object.
@@ -82,6 +82,6 @@ package org.swizframework.storage
 		 * @param stronglyBound
 		 *
 		 */
-		function setObject( name : String, o : Object, stronglyBound : Boolean = false ):void;
+		function setObject( name:String, o:Object, stronglyBound:Boolean = false ):void;
 	}
 }

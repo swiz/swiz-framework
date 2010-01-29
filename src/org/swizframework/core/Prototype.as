@@ -4,42 +4,42 @@ package org.swizframework.core
 
 	public class Prototype extends Bean
 	{
-		
+
 		public var classReference:Object;
 		public var constructorArguments:*;
 		public var singleton:Boolean = false;
-		
+
 		override public function get source():*
 		{
-			if ( singleton )
+			if( singleton )
 			{
 				return super.source ||= createInstance();
 			}
 			else
 			{
 				var instance:Object = createInstance();
-				
+
 				return instance;
 			}
 		}
-		
+
 		public function Prototype()
 		{
 			super();
 		}
-		
+
 		protected function createInstance():Object
 		{
-			if ( classReference == null )
+			if( classReference == null )
 				return null;
-			
-			var instance : *;
-			
-			if ( constructorArguments != null )
+
+			var instance:*;
+
+			if( constructorArguments != null )
 			{
 				var args:Array = constructorArguments is Array ? constructorArguments : [constructorArguments ];
-				
-				switch ( args.length )
+
+				switch( args.length )
 				{
 					case 1:
 						instance = new classReference( args[ 0 ] );
@@ -71,9 +71,9 @@ package org.swizframework.core
 			{
 				instance = new classReference();
 			}
-			
+
 			provider.dispatchEvent( new BeanEvent( BeanEvent.ADDED, new Bean( instance, name, typeDescriptor ) ) );
-			
+
 			return instance;
 		}
 	}
