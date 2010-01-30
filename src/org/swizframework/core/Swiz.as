@@ -2,9 +2,9 @@ package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	
+
 	import mx.logging.ILogger;
-	
+
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.MediateProcessor;
@@ -29,8 +29,8 @@ package org.swizframework.core
 		 * Logger
 		 */
 		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
-		
-		
+
+
 		// ben probably wants to move this!
 		protected var _defaultFaultHandler:Function;
 
@@ -52,12 +52,12 @@ package org.swizframework.core
 		{
 			return _defaultFaultHandler;
 		}
-		
+
 		public function set defaultFaultHandler(faultHandler:Function):void
 		{
 			_defaultFaultHandler = faultHandler;
 		}
-		
+
 		/**
 		 * @inheritDoc
 		 */
@@ -169,36 +169,35 @@ package org.swizframework.core
 			{
 				beanFactory = new BeanFactory();
 			}
-			
+
 			constructProviders();
 
 			beanFactory.init( this );
 		}
-		
+
 		/**
-		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders 
+		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders
 		 * ensures that provider is created and initialized before the bean factory accesses them.
 		 */
-		private function constructProviders():void 
+		private function constructProviders():void
 		{
 			var providerClass:Class;
 			var providerInst:IBeanProvider;
-			
-			for (var i:int=0; i<beanProviders.length; i++) {
-				
+
+			for( var i:int = 0; i < beanProviders.length; i++ )
+			{
 				// if the provider is a class, intantiate it, if a beanLoader, initialize
 				// then replace the item in the array
-				if (beanProviders[i] is Class) {
-					
-					providerClass = beanProviders[i] as Class;
+				if( beanProviders[ i ] is Class )
+				{
+					providerClass = beanProviders[ i ] as Class;
 					providerInst = new providerClass();
-					
-					if (providerInst is BeanLoader)
+
+					if( providerInst is BeanLoader )
 						BeanLoader(providerInst).initialize();
-						
-					beanProviders[i] = providerInst;
+
+					beanProviders[ i ] = providerInst;
 				}
-				
 			}
 		}
 	}

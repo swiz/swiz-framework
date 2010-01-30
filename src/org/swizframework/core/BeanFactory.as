@@ -5,7 +5,7 @@ package org.swizframework.core
 	import flash.events.EventPhase;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-	
+
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
@@ -122,27 +122,26 @@ package org.swizframework.core
 				if( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					
+
 					// get the tags this processor is interested in
 					var metadataTags:Array = [];
 					for each( var metadataName:String in metadataProcessor.metadataNames )
 					{
 						metadataTags = metadataTags.concat( bean.typeDescriptor.getMetadataTagsByName( metadataName ) );
 					}
-					
+
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
-				
-			}	
-			
-			// if bean inplements ISwizInterface, handle those injections
-			if ( bean.source is ISwizInterface )
-				handleSwizInterfaces(bean.source);
-			
-			// process all bean post-processors				
-			for each ( processor in swiz.processors )
-			{	
 
+			}
+
+			// if bean inplements ISwizInterface, handle those injections
+			if( bean.source is ISwizInterface )
+				handleSwizInterfaces(bean.source);
+
+			// process all bean post-processors				
+			for each( processor in swiz.processors )
+			{
 				// Handle Bean Processors
 				if( processor is IBeanProcessor )
 				{
@@ -156,16 +155,16 @@ package org.swizframework.core
 		 */
 		protected function handleSwizInterfaces( obj:ISwizInterface ):void
 		{
-			if ( obj is ISwizAware )
+			if( obj is ISwizAware )
 				ISwizAware(obj).swiz = swiz;
-			if ( obj is IBeanFactory )
+			if( obj is IBeanFactory )
 				IBeanFactoryAware(obj).beanFactory = this;
-			if ( obj is IDispatcherAware )
+			if( obj is IDispatcherAware )
 				IDispatcherAware(obj).dispatcher = swiz.dispatcher;
-			if ( obj is IInitializing )
-				IInitializing(obj).init();				
+			if( obj is IInitializing )
+				IInitializing(obj).init();
 		}
-		
+
 		/**
 		 * Remove Bean
 		 */
@@ -177,7 +176,7 @@ package org.swizframework.core
 				if( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-					
+
 					// get the tags this processor is interested in
 					var metadataTags:Array = [];
 					for each( var metadataName:String in metadataProcessor.metadataNames )
