@@ -6,11 +6,14 @@ package org.swizframework.core
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 
+	import mx.logging.ILogger;
+
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.TypeCache;
+	import org.swizframework.utils.SwizLogger;
 
 	/**
 	 * Bean Factory
@@ -20,6 +23,8 @@ package org.swizframework.core
 		// ========================================
 		// protected properties
 		// ========================================
+
+		protected var logger:ILogger = SwizLogger.getLogger( this );
 
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 
@@ -137,7 +142,7 @@ package org.swizframework.core
 
 			// if bean inplements ISwizInterface, handle those injections
 			if( bean.source is ISwizInterface )
-				handleSwizInterfaces(bean.source);
+				handleSwizInterfaces( bean.source );
 
 			// process all bean post-processors				
 			for each( processor in swiz.processors )
@@ -156,13 +161,13 @@ package org.swizframework.core
 		protected function handleSwizInterfaces( obj:ISwizInterface ):void
 		{
 			if( obj is ISwizAware )
-				ISwizAware(obj).swiz = swiz;
+				ISwizAware( obj ).swiz = swiz;
 			if( obj is IBeanFactory )
-				IBeanFactoryAware(obj).beanFactory = this;
+				IBeanFactoryAware( obj ).beanFactory = this;
 			if( obj is IDispatcherAware )
-				IDispatcherAware(obj).dispatcher = swiz.dispatcher;
+				IDispatcherAware( obj ).dispatcher = swiz.dispatcher;
 			if( obj is IInitializing )
-				IInitializing(obj).init();
+				IInitializing( obj ).init();
 		}
 
 		/**
