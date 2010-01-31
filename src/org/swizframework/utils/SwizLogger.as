@@ -3,44 +3,44 @@ package org.swizframework.utils
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-	
+
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
 	import mx.logging.LogEvent;
 	import mx.logging.LogEventLevel;
-	
+
 	public class SwizLogger extends EventDispatcher implements ILogger
 	{
 		protected static var loggers:Dictionary;
-		protected static var logTargets:Array;
-		
+		protected static var loggingTargets:Array;
+
 		public static function getLogger( target:Object ):ILogger
 		{
 			loggers ||= new Dictionary();
-			
+
 			var className:String = getQualifiedClassName( target );
 			var logger:SwizLogger = loggers[ className ];
-			
+
 			// if the logger doesn't already exist, create and store it
 			if( logger == null )
 			{
 				logger = new SwizLogger( className );
 				loggers[ className ] = logger;
 			}
-			
+
 			// check for existing targets interested in this logger
-			if( logTargets != null )
+			if( loggingTargets != null )
 			{
-				for each( var logTarget:ILoggingTarget in logTargets )
+				for each( var logTarget:ILoggingTarget in loggingTargets )
 				{
-					if( SwizLogger.categoryMatchInFilterList( logger.category, logTarget.filters ) )
+					if( categoryMatchInFilterList( logger.category, logTarget.filters ) )
 						logTarget.addLogger( logger );
 				}
 			}
-			
+
 			return logger;
 		}
-		
+
 		/**
 		 *  This method checks that the specified category matches any of the filter
 		 *  expressions provided in the <code>filters</code> Array.
@@ -62,48 +62,50 @@ package org.swizframework.utils
 				// first check to see if we need to do a partial match
 				// do we have an asterisk?
 				index = filter.indexOf( "*" );
-				
+
 				if( index == 0 )
 					return true;
-				
+
 				index = index < 0 ? index = category.length : index - 1;
-				
+
 				if( category.substring( 0, index ) == filter.substring( 0, index ) )
 					return true;
 			}
 			return false;
 		}
-		
-		public static function setLogTargets( logTargetsArr:Array ):void
+
+		public static function addLoggingTarget( loggingTarget:ILoggingTarget ):void
 		{
-			logTargets = logTargetsArr;
-			
-			for each( var logTarget:ILoggingTarget in logTargets )
+			loggingTargets ||= [];
+			if( loggingTargets.indexOf( loggingTarget ) < 0 )
+				loggingTargets.push( loggingTarget );
+
+			if( loggers != null )
 			{
 				for each( var logger:ILogger in loggers )
 				{
-					if( categoryMatchInFilterList( logger.category, logTarget.filters ) )
-						logTarget.addLogger( logger );
+					if( categoryMatchInFilterList( logger.category, loggingTarget.filters ) )
+						loggingTarget.addLogger( logger );
 				}
 			}
 		}
-		
+
 		// ========================================
 		// static stuff above
 		// ========================================
 		// ========================================
 		// instance stuff below
 		// ========================================
-		
+
 		protected var _category:String;
-		
-		public function SwizLogger( target:Object )
+
+		public function SwizLogger( className:String )
 		{
 			super();
-			
-			_category = getQualifiedClassName( target );
+
+			_category = className;
 		}
-		
+
 		/**
 		 *  The category this logger send messages for.
 		 */
@@ -111,7 +113,7 @@ package org.swizframework.utils
 		{
 			return _category;
 		}
-		
+
 		protected function constructMessage( msg:String, params:Array ):String
 		{
 			// replace all of the parameters in the msg string
@@ -121,11 +123,11 @@ package org.swizframework.utils
 			}
 			return msg;
 		}
-		
+
 		// ========================================
 		// public methods
 		// ========================================
-		
+
 		/**
 		 *  @inheritDoc
 		 */
@@ -136,7 +138,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), level ) );
 			}
 		}
-		
+
 		/**
 		 *  @inheritDoc
 		 */
@@ -147,7 +149,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.DEBUG ) );
 			}
 		}
-		
+
 		/**
 		 *  @inheritDoc
 		 */
@@ -158,7 +160,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.INFO ) );
 			}
 		}
-		
+
 		/**
 		 *  @inheritDoc
 		 */
@@ -169,7 +171,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.WARN ) );
 			}
 		}
-		
+
 		/**
 		 *  @inheritDoc
 		 */
@@ -180,7 +182,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.ERROR ) );
 			}
 		}
-		
+
 		/**
 		 *  @inheritDoc
 		 */

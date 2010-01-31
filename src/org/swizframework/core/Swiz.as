@@ -4,6 +4,7 @@ package org.swizframework.core
 	import flash.events.IEventDispatcher;
 
 	import mx.logging.ILogger;
+	import mx.logging.ILoggingTarget;
 
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
@@ -28,16 +29,16 @@ package org.swizframework.core
 		/**
 		 * Logger
 		 */
-		protected static var logger:ILogger = SwizLogger.getLogger( Swiz );
+		protected var logger:ILogger = SwizLogger.getLogger( this );
 
-
-		// ben probably wants to move this!
+		// TODO: ben probably wants to move this!
 		protected var _defaultFaultHandler:Function;
 
 		protected var _dispatcher:IEventDispatcher;
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
+		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new VirtualBeanProcessor(), new InjectProcessor(), 
 			new PostConstructProcessor(), new MediateProcessor() ];
 
@@ -128,6 +129,26 @@ package org.swizframework.core
 				_processors = _processors.concat( value );
 		}
 
+		[ArrayElementType( "mx.logging.ILoggingTarget" )]
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get loggingTargets():Array
+		{
+			return _loggingTargets;
+		}
+
+		public function set loggingTargets( value:Array ):void
+		{
+			_loggingTargets = value;
+
+			for each( var loggingTarget:ILoggingTarget in value )
+			{
+				SwizLogger.addLoggingTarget( loggingTarget );
+			}
+		}
+
 		// ========================================
 		// constructor
 		// ========================================
@@ -175,11 +196,15 @@ package org.swizframework.core
 			beanFactory.init( this );
 		}
 
+		// ========================================
+		// protected methods
+		// ========================================
+
 		/**
 		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders
 		 * ensures that provider is created and initialized before the bean factory accesses them.
 		 */
-		private function constructProviders():void
+		protected function constructProviders():void
 		{
 			var providerClass:Class;
 			var providerInst:IBeanProvider;
