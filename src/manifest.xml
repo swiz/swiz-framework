@@ -20,6 +20,7 @@
 	<!-- utils package -->
 	<component class="org.swizframework.utils.SwizLogger" />
 	<component class="org.swizframework.utils.services.ServiceRequestUtil" />
+	<component class="org.swizframework.utils.services.MockDelegateUtil" />
 	<component class="org.swizframework.utils.services.URLRequestUtil" />
 	
 </componentPackage>
