@@ -1,10 +1,21 @@
 package org.swizframework.utils.chain
 {
-	public class EventChain
+	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+	
+	public class EventChain extends AbstractChain
 	{
-		public function EventChain()
+		public function EventChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true )
 		{
+			super( dispatcher, stopOnError );
 		}
-
+		
+		/**
+		 *
+		 */
+		override public function doProceed():void
+		{
+			dispatcher.dispatchEvent( Event( members[ position ] ) );
+		}
 	}
 }
