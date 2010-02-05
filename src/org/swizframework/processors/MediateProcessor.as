@@ -3,6 +3,8 @@ package org.swizframework.processors
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 
+	import mx.logging.ILogger;
+
 	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
@@ -11,6 +13,7 @@ package org.swizframework.processors
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.reflection.TypeDescriptor;
+	import org.swizframework.utils.SwizLogger;
 
 	/**
 	 * Mediate Processor
@@ -27,6 +30,7 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 
+		protected var logger:ILogger = SwizLogger.getLogger( this );
 		protected var mediatorsByEventType:Dictionary = new Dictionary();
 
 		// ========================================
@@ -70,6 +74,8 @@ package org.swizframework.processors
 
 				addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
 			}
+
+			logger.debug( "MediateProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
 
 		/**
@@ -81,6 +87,8 @@ package org.swizframework.processors
 			var eventType:String = parseEventTypeExpression( mediateTag.event );
 
 			removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+
+			logger.debug( "MediateProcessor tore down {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
 
 		// ========================================
@@ -98,6 +106,7 @@ package org.swizframework.processors
 			mediatorsByEventType[ eventType ].push( mediator );
 
 			swiz.dispatcher.addEventListener( eventType, mediator.mediate, false, mediateTag.priority, true );
+			logger.debug( "MediateProcessor added listener to dispatcher for {0}, {1}", eventType, String( mediator.method ) );
 		}
 
 		/**

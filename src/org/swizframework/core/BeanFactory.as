@@ -65,10 +65,17 @@ package org.swizframework.core
 				processor.init( swiz );
 			}
 
+			logger.debug( "Processors initialized" );
+
 			addBeanProviders( swiz.beanProviders );
 
 			swiz.dispatcher.addEventListener( swiz.config.injectionEvent, injectionEventHandler, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
+			logger.debug( "Injection trigger event type set to {0}", swiz.config.injectionEvent );
+			logger.debug( "Injection trigger event phase set to {0}", ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
+			logger.debug( "Injection trigger event priority set to {0}", swiz.config.injectionEventPriority );
 			swiz.dispatcher.addEventListener( Event.REMOVED_FROM_STAGE, removeEventHandler, true, 50, true );
+
+			logger.info( "BeanFactory initialized" );
 		}
 
 		// ========================================
@@ -91,6 +98,8 @@ package org.swizframework.core
 		 */
 		protected function addBeanProvider( beanProvider:IBeanProvider ):void
 		{
+			logger.debug( "IBeanProvider {0} added", beanProvider );
+
 			for each( var bean:Bean in beanProvider.beans )
 			{
 				addBean( bean );
@@ -119,6 +128,8 @@ package org.swizframework.core
 		 */
 		protected function addBean( bean:Bean ):void
 		{
+			logger.debug( "BeanFactory::addBean( {0} )", bean );
+
 			var processor:IProcessor;
 
 			for each( processor in swiz.processors )
@@ -137,7 +148,6 @@ package org.swizframework.core
 
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
-
 			}
 
 			// if bean inplements ISwizInterface, handle those injections
@@ -247,6 +257,7 @@ package org.swizframework.core
 		/**
 		 * Remove Event Handler
 		 */
+		// TODO: this probably needs to be removed or customizable
 		protected function removeEventHandler( event:Event ):void
 		{
 			if( isPotentialInjectionTarget( event.target ) )

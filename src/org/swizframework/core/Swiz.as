@@ -26,9 +26,6 @@ package org.swizframework.core
 		// protected properties
 		// ========================================
 
-		/**
-		 * Logger
-		 */
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 
 		// TODO: ben probably wants to move this!
@@ -70,6 +67,8 @@ package org.swizframework.core
 		public function set dispatcher( value:IEventDispatcher ):void
 		{
 			_dispatcher = value;
+
+			logger.info( "Swiz dispatcher set to {0}", value );
 		}
 
 		/**
@@ -194,6 +193,8 @@ package org.swizframework.core
 			constructProviders();
 
 			beanFactory.init( this );
+
+			logger.info( "Swiz initialized" );
 		}
 
 		// ========================================

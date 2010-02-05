@@ -2,11 +2,12 @@ package org.swizframework.processors
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-
+	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
+	import mx.logging.ILogger;
 	import mx.utils.UIDUtil;
-
+	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanProvider;
 	import org.swizframework.metadata.InjectMetadataTag;
@@ -15,7 +16,8 @@ package org.swizframework.processors
 	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
-
+	import org.swizframework.utils.SwizLogger;
+	
 	/**
 	 * Inject Processor
 	 */
@@ -24,24 +26,25 @@ package org.swizframework.processors
 		// ========================================
 		// protected static constants
 		// ========================================
-
+		
 		protected static const INJECT:String = "Inject";
 		protected static const AUTOWIRE:String = "Autowire";
-
+		
 		// ========================================
 		// protected properties
 		// ========================================
-
+		
+		protected var logger:ILogger = SwizLogger.getLogger( this );
 		protected var injectByProperty:Dictionary = new Dictionary();
 		protected var injectByName:Object = {};
 		protected var injectByType:Object = {};
 		protected var queueByName:Object = {};
 		protected var queueByType:Array = [];
-
+		
 		// ========================================
 		// public properties
 		// ========================================
-
+		
 		/**
 		 *
 		 */
@@ -49,11 +52,11 @@ package org.swizframework.processors
 		{
 			return ProcessorPriority.INJECT;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor
 		 */
@@ -61,20 +64,22 @@ package org.swizframework.processors
 		{
 			super( [ INJECT, AUTOWIRE ], InjectMetadataTag );
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		/**
 		 * @inheritDoc
 		 */
 		public function addBean( bean:Bean ):void
 		{
+			logger.info( "InjectProcessor::addBean( {0} )", bean );
+			
 			processQueueByNameForBean( bean );
 			processQueueByTypeForBean( bean );
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -82,29 +87,29 @@ package org.swizframework.processors
 		{
 			// nothing to do here
 		}
-
+		
 		// ========================================
 		// protected methods
 		// ========================================
-
+		
 		/**
 		 * Process Queue By Name For Bean
 		 */
 		protected function processQueueByNameForBean( bean:Bean ):void
 		{
 			var beanName:String = bean.name;
-
+			
 			if( beanName in queueByName )
 			{
 				for each( var queue:Injection in queueByName[ beanName ] )
 				{
 					setUpMetadataTag( queue.injectTag, queue.bean );
 				}
-
+				
 				delete queueByName[ beanName ];
 			}
 		}
-
+		
 		/**
 		 * Process Queue By Type For Bean
 		 */
@@ -119,14 +124,17 @@ package org.swizframework.processors
 				}
 			}
 		}
-
+		
 		/**
 		 * Add Inject
 		 */
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
-
+			
+			if( injectTag.name == AUTOWIRE )
+				logger.warn( "[Autowire] has been deprecated in favor of [Inject]. Please update {0} accordingly.", bean );
+			
 			if( injectTag.source != null )
 			{
 				if( injectTag.source.indexOf( "." ) > -1 )
@@ -142,15 +150,17 @@ package org.swizframework.processors
 			{
 				addInjectByType( injectTag, bean );
 			}
+			
+			logger.debug( "InjectProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
-
+		
 		/**
 		 * Remove Inject
 		 */
 		override public function tearDownMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
-
+			
 			if( injectTag.source != null )
 			{
 				if( injectTag.source.indexOf( "." ) > -1 )
@@ -166,8 +176,10 @@ package org.swizframework.processors
 			{
 				removeInjectByType( injectTag, bean );
 			}
+			
+			logger.debug( "InjectProcessor tore down {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
-
+		
 		/**
 		 *
 		 */
@@ -186,7 +198,7 @@ package org.swizframework.processors
 				return dest;
 			}
 		}
-
+		
 		/**
 		 *
 		 */
@@ -201,14 +213,14 @@ package org.swizframework.processors
 				return injectTag.destination.split( "." ).pop();
 			}
 		}
-
+		
 		/**
 		 * Add Inject By Property
 		 */
 		protected function addInjectByProperty( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
 			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
-
+			
 			if( namedBean != null )
 			{
 				addPropertyBinding( bean, namedBean, injectTag );
@@ -218,31 +230,31 @@ package org.swizframework.processors
 				addToQueueByName( injectTag, bean );
 			}
 		}
-
+		
 		/**
 		 * Remove Inject By Property
 		 */
 		protected function removeInjectByProperty( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
 			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
-
+			
 			removePropertyBinding( bean, namedBean, injectTag );
-
+			
 			if( injectTag.twoWay )
 			{
 				removePropertyBinding( namedBean, bean, injectTag );
 			}
-
+			
 			setDestinationValue( injectTag, bean,  null );
 		}
-
+		
 		/**
 		 * Add Inject By Name
 		 */
 		protected function addInjectByName( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
 			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
-
+			
 			if( namedBean != null )
 			{
 				setDestinationValue( injectTag, bean, namedBean.source );
@@ -252,7 +264,7 @@ package org.swizframework.processors
 				addToQueueByName( injectTag, bean );
 			}
 		}
-
+		
 		/**
 		 * Remove Inject By Name
 		 */
@@ -260,7 +272,7 @@ package org.swizframework.processors
 		{
 			setDestinationValue( injectTag, bean, null );
 		}
-
+		
 		/**
 		 * Add Inject By Type
 		 */
@@ -271,7 +283,7 @@ package org.swizframework.processors
 			if( targetType == null && injectTag.host is MetadataHostClass )
 				targetType = getDefinitionByName( injectTag.host.name ) as Class;
 			var typedBean:Bean = getBeanByType( targetType );
-
+			
 			if( typedBean )
 			{
 				setDestinationValue( injectTag, bean, typedBean.source );
@@ -281,7 +293,7 @@ package org.swizframework.processors
 				addToQueueByType( injectTag, bean );
 			}
 		}
-
+		
 		/**
 		 * Remove Inject By Type
 		 */
@@ -289,17 +301,17 @@ package org.swizframework.processors
 		{
 			setDestinationValue( injectTag, bean, null );
 		}
-
+		
 		/**
 		 * Set Destination Value
 		 */
 		protected function setDestinationValue( injectTag:InjectMetadataTag, bean:Bean, value:* ):void
 		{
 			var setterInjection:Boolean = injectTag.host is MetadataHostMethod;
-
+			
 			var destObject:Object = getDestinationObject( injectTag, bean );
 			var destPropName:String = getDestinationPropertyName( injectTag );
-
+			
 			if( setterInjection )
 			{
 				var f:Function = destObject[ destPropName ] as Function;
@@ -310,7 +322,7 @@ package org.swizframework.processors
 				destObject[ destPropName ] = value;
 			}
 		}
-
+		
 		/**
 		 * Get Bean By Name
 		 */
@@ -319,16 +331,16 @@ package org.swizframework.processors
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				var foundBean:Bean = beanProvider.getBeanByName( name );
-
+				
 				if( foundBean != null )
 				{
 					return foundBean;
 				}
 			}
-
+			
 			return null;
 		}
-
+		
 		/**
 		 * Get Bean By Type
 		 */
@@ -337,16 +349,16 @@ package org.swizframework.processors
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				var foundBean:Bean = beanProvider.getBeanByType( type );
-
+				
 				if( foundBean != null )
 				{
 					return foundBean;
 				}
 			}
-
+			
 			return null;
 		}
-
+		
 		/**
 		 * Add To Queue By Name
 		 */
@@ -361,7 +373,7 @@ package org.swizframework.processors
 				queueByName[ injectTag.source ] = [ new Injection( injectTag, bean ) ];
 			}
 		}
-
+		
 		/**
 		 * Add To Queue By Type
 		 */
@@ -369,7 +381,7 @@ package org.swizframework.processors
 		{
 			queueByType[ queueByType.length ] = new Injection( injectTag, bean );
 		}
-
+		
 		/**
 		 * Add Property Binding
 		 */
@@ -379,16 +391,16 @@ package org.swizframework.processors
 			var destPropName:String;
 			var cw:ChangeWatcher;
 			var uid:String;
-
+			
 			// base scenario of binding an object or property to a property of a bean
-
+			
 			// this is a view added to the display list or a new bean being processed
 			destObject = getDestinationObject( injectTag, destinationBean );
 			// name of property that will be bound to a source value
 			destPropName = getDestinationPropertyName( injectTag );
-
+			
 			// we have to track any bindings we create so we can unwire them later if need be
-
+			
 			// get the uid of our view/new bean
 			uid = UIDUtil.getUID( destinationBean.source );
 			// create the binding
@@ -397,7 +409,7 @@ package org.swizframework.processors
 			injectByProperty[ uid ] ||= [];
 			// store this binding
 			injectByProperty[ uid ].push( cw );
-
+			
 			// if twoWay binding was requested we have to do things in reverse
 			// meaning the existing bean's property will also be bound to the view/new bean's property
 			if( injectTag.twoWay )
@@ -411,7 +423,7 @@ package org.swizframework.processors
 					destObject = destObject[ arr.shift() ];
 				// the last token of the source attribute is the actual property name
 				destPropName = injectTag.source.split( "." ).pop();
-
+				
 				// create the reverse binding where the view/new bean is the source
 				// TODO: store this binding too
 				if( injectTag.destination != null )
@@ -426,7 +438,7 @@ package org.swizframework.processors
 				}
 			}
 		}
-
+		
 		/**
 		 * Remove Property Binding
 		 */
