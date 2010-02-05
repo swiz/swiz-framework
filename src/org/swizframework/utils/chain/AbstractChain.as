@@ -99,10 +99,11 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		public function addMember( member:IChainMember ):void
+		public function addMember( member:IChainMember ):IChain
 		{
 			member.chain = this;
 			members.push( member );
+			return this;
 		}
 		
 		/**
@@ -144,14 +145,25 @@ package org.swizframework.utils.chain
 		 */
 		public function proceed():void
 		{
-			if( hasNext() )
+			if( mode == SEQUENCE )
 			{
-				position++;
-				doProceed();
+				if( hasNext() )
+				{
+					position++;
+					doProceed();
+				}
+				else
+				{
+					complete();
+				}
 			}
 			else
 			{
-				complete();
+				for( var i:int = 0; i < members.length; i++ )
+				{
+					position = i;
+					doProceed();
+				}
 			}
 		}
 		
