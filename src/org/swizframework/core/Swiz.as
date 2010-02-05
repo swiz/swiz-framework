@@ -218,12 +218,15 @@ package org.swizframework.core
 				{
 					providerClass = beanProviders[ i ] as Class;
 					providerInst = new providerClass();
-
-					if( providerInst is BeanLoader )
-						BeanLoader(providerInst).initialize();
-
 					beanProviders[ i ] = providerInst;
 				}
+				else
+				{
+					providerInst = beanProviders[ i ];
+				}
+				// now if the current provider is a BeanLoader, it needs to be initialized
+				if( providerInst is BeanLoader )
+					BeanLoader(providerInst).initialize();
 			}
 		}
 	}

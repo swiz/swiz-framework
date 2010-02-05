@@ -48,8 +48,7 @@ package org.swizframework.core
 					else
 					{
 						bean = new Bean();
-						if( "id" in child )
-							bean.name = child.id;
+						bean.name = name;
 						bean.source = child;
 					}
 
