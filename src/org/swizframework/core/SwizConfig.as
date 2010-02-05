@@ -8,29 +8,29 @@ package org.swizframework.core
 		// ========================================
 		// protected static constants
 		// ========================================
-
+		
 		/**
 		 * Regular expression to evaluate a 'wildcard' (ex. 'org.swizframework.*') package description.
-		 * 
+		 *
 		 * Matches: package.*
 		 * Captures: package
- 		 */
+		 */
 		protected static const WILDCARD_PACKAGE:RegExp = /\A(.*)(\.\**)\Z/;
 		
 		// ========================================
 		// protected properties
 		// ========================================
-
+		
 		/**
 		 * Backing variable for the <code>strict</code> property.
 		 */
-		protected var _strict:Boolean = false;
+		protected var _strict:Boolean = true;
 		
 		/**
 		 * Backing variable for the <code>injectionEvent</code> property.
 		 */
 		protected var _injectionEvent:String = Event.ADDED_TO_STAGE;
-
+		
 		/**
 		 * Backing variable for the <code>injectionEventPriority</code> property.
 		 */
@@ -55,7 +55,7 @@ package org.swizframework.core
 		 * Backing variable for the <code>viewPackages</code> property.
 		 */
 		protected var _viewPackages:Array = [];
-
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -72,7 +72,7 @@ package org.swizframework.core
 		{
 			_strict = value;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -85,7 +85,7 @@ package org.swizframework.core
 		{
 			_injectionEvent = value;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -162,24 +162,24 @@ package org.swizframework.core
 		{
 			super();
 		}
-
+		
 		// ========================================
 		// protected methods
 		// ========================================
 		
 		/**
 		 * Internal setter for <code>eventPackages</code> property.
-		 * 
+		 *
 		 * @param value An Array of Strings or a single String that will be split on ","
 		 */
 		protected function setEventPackages( value:* ):void
 		{
 			_eventPackages = parsePackageValue( value );
 		}
-
+		
 		/**
 		 * Internal setter for <code>viewPackages</code> property.
-		 * 
+		 *
 		 * @param value An Array of Strings or a single String that will be split on ","
 		 */
 		protected function setViewPackages( value:* ):void
@@ -189,21 +189,21 @@ package org.swizframework.core
 		
 		/**
 		 * Parses a wildcard type package property value into an Array of parsed package names.
-		 * 
+		 *
 		 * @param value An Array of Strings or a single String that will be split on ","
 		 * @returns An Array of package name strings in a common format.
 		 */
 		protected function parsePackageValue( value:* ):Array
 		{
-			if ( value == null )
+			if( value == null )
 			{
 				return [];
 			}
-			else if ( value is Array )
+			else if( value is Array )
 			{
 				return parsePackageNames( value as Array );
 			}
-			else if ( value is String )
+			else if( value is String )
 			{
 				return parsePackageNames( value.replace( /\ /g, "" ).split( "," ) );
 			}
@@ -216,7 +216,7 @@ package org.swizframework.core
 		/**
 		 * Parses an array of package names.
 		 * Processes the package names to a common format - removing trailing '.*' wildcard notation.
-		 * 
+		 *
 		 * @param packageNames The package names to parse.
 		 * @returns An Array of the parsed package names.
 		 */
@@ -224,7 +224,7 @@ package org.swizframework.core
 		{
 			var parsedPackageNames:Array = [];
 			
-			for each ( var packageName:String in packageNames )
+			for each( var packageName:String in packageNames )
 			{
 				parsedPackageNames.push( parsePackageName( packageName ) );
 			}
@@ -235,17 +235,17 @@ package org.swizframework.core
 		/**
 		 * Parse Package Name
 		 * Processes the package name to a common format - removing trailing '.*' wildcard notation.
-		 * 
+		 *
 		 * @param packageName The package name to parse.
 		 * @returns The package name with the wildcard notation stripped.
 		 */
 		protected function parsePackageName( packageName:String ):String
 		{
 			var match:Object = WILDCARD_PACKAGE.exec( packageName );
-			if ( match )
+			if( match )
 				return match[ 1 ];
-
-			return packageName;			
+			
+			return packageName;
 		}
 	}
 }

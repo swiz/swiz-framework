@@ -5,8 +5,8 @@ package org.swizframework.utils.chain
 	
 	import mx.collections.ArrayCollection;
 	
-	public class CommandChain {
-		
+	public class CommandChain
+	{
 		public static const SERIES : int = 0;
 		public static const PARALLEL : int = 1;
 		
@@ -35,63 +35,77 @@ package org.swizframework.utils.chain
 		// event type to create and distach after chain fails
 		public var faultEventType : String;
 		
-		public function CommandChain( dispatcher : IEventDispatcher, mode : int = PARALLEL ) {
+		public function CommandChain( dispatcher : IEventDispatcher, mode : int = PARALLEL )
+		{
 			this.commands = new ArrayCollection();
 			this.dispatcher = dispatcher;
 			this.mode = mode;
 		}
 		
-		public function addCommand( command : SwizCommand ) : CommandChain {
+		public function addCommand( command : SwizCommand ):CommandChain
+		{
 			commands.addItem( command );
 			command.setCommandChain( this );
 			return this;
 		}
 		
-		public function proceed() : void {
-			if ( mode == SERIES ) {
+		public function proceed():void
+		{
+			if( mode == SERIES )
+			{
 				// in series mode, we check for the next command to execute
 				index++
-				if ( index < commands.length ) {
+				if( index < commands.length )
+				{
 					SwizCommand( commands.getItemAt( index ) ).execute();
 					complete = false;
-				} else {
+				}
+				else
+				{
 					complete = true;
 				}
-			} else {
+			}
+			else
+			{
 				// in parallel, we need to fire ALL commands, and in each subsequent proceed call check for competion
 				complete = true;
-				for each ( var command : SwizCommand in commands ) {
-					if ( !command.complete ) {
+				for each( var command:SwizCommand in commands )
+				{
+					if( !command.complete )
+					{
 						complete = false;
-						if ( !command.executed )
+						if( !command.executed )
 							command.execute();
 					}
 				}
 			}
 			// if we have now completed the chain, we need to fire of appropriate events / functions
-			if ( complete )
+			if( complete )
 				completeChain();
 		}
 		
-		public function fail() : void {
+		public function fail():void
+		{
 			failChain();
 		}
 		
-		private function completeChain() : void {
-			if ( completeEvent != null )
+		private function completeChain():void
+		{
+			if( completeEvent != null )
 				dispatcher.dispatchEvent( completeEvent );
-			if ( completeEventType != null )
+			if( completeEventType != null )
 				dispatcher.dispatchEvent( new Event( completeEventType ) );
-			if ( completeHandler != null )
+			if( completeHandler != null )
 				completeHandler();
 		}
 		
-		private function failChain() : void {
-			if ( faultEvent != null )
+		private function failChain():void
+		{
+			if( faultEvent != null )
 				dispatcher.dispatchEvent( faultEvent );
-			if ( faultEventType != null )
+			if( faultEventType != null )
 				dispatcher.dispatchEvent( new Event( faultEventType ) );
-			if ( faultHandler != null )
+			if( faultHandler != null )
 				faultHandler();
 		}
 	}

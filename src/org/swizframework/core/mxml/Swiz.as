@@ -20,15 +20,6 @@ package org.swizframework.core.mxml
 	public class Swiz extends org.swizframework.core.Swiz implements IMXMLObject
 	{
 		// ========================================
-		// protected properties
-		// ========================================
-		
-		/**
-		 * Logger
-		 */
-		protected static const logger:ILogger = SwizLogger.getLogger( Swiz );
-		
-		// ========================================
 		// constructor
 		// ========================================
 		
@@ -60,7 +51,7 @@ package org.swizframework.core.mxml
 			var t:Timer = new Timer( 0, 1 );
 			t.addEventListener( TimerEvent.TIMER,
 				
-								function( e:TimerEvent ):void
+				function( e:TimerEvent ):void
 				{
 					e.currentTarget.removeEventListener( e.type, arguments.callee );
 					init();

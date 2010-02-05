@@ -101,7 +101,7 @@ package org.swizframework.reflection
 		 */
 		public function BaseMetadataTag()
 		{
-			
+		
 		}
 		
 		// ========================================
@@ -150,7 +150,7 @@ package org.swizframework.reflection
 		 *
 		 * @return String representation of this tag as it looks in code.
 		 */
-		public function get asString():String
+		public function toString():String
 		{
 			var str:String = "[" + name;
 			

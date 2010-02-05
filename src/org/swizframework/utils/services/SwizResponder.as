@@ -1,14 +1,15 @@
 package org.swizframework.utils.services
 {
 	import mx.rpc.IResponder;
-
-	internal class SwizResponder implements IResponder
+	
+	[ExcludeClass]
+	
+	public class SwizResponder implements IResponder
 	{
-
 		private var resultHandler:Function;
 		private var faultHandler:Function;
 		private var args:Array;
-
+		
 		public function SwizResponder( resultHandler:Function,
 			faultHandler:Function = null,
 			args:Array = null )
@@ -17,7 +18,7 @@ package org.swizframework.utils.services
 			this.faultHandler = faultHandler;
 			this.args = args;
 		}
-
+		
 		public function result( data:Object ):void
 		{
 			if( args == null )
@@ -30,7 +31,7 @@ package org.swizframework.utils.services
 				resultHandler.apply( null, args );
 			}
 		}
-
+		
 		public function fault( info:Object ):void
 		{
 			if( faultHandler != null )

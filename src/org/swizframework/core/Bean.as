@@ -50,12 +50,22 @@ package org.swizframework.core
 		
 		public function Bean( source:* = null, name:String = null, typeDescriptor:TypeDescriptor = null, provider:IBeanProvider = null )
 		{
-			super();
-			
 			this.source = source;
 			this.name = name;
 			this.typeDescriptor = typeDescriptor;
 			this.provider = provider;
+		}
+		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		/**
+		 *
+		 */
+		public function toString():String
+		{
+			return "Bean{ source: " + source + ", name: " + name + " }";
 		}
 	}
 }

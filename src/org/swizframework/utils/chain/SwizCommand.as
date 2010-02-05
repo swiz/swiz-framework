@@ -2,24 +2,26 @@ package org.swizframework.utils.chain
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.IResponder;
-
-	internal class SwizCommand implements IResponder
+	
+	[ExcludeClass]
+	
+	public class SwizCommand implements IResponder
 	{
-
+		
 		private var delayedCall:Function;
 		private var args:Array;
 		private var resultHandler:Function;
 		private var faultHandler:Function;
 		private var eventArgs:Array;
-
+		
 		// command chain, if this command is chained
 		private var chain:CommandChain;
-
+		
 		// complete / fault are read by a CommandChain object
 		public var executed:Boolean = false;
 		public var complete:Boolean = false;
 		public var failed:Boolean = false;
-
+		
 		public function SwizCommand( delayedCall:Function,
 			args:Array,
 			resultHandler:Function,
@@ -32,7 +34,7 @@ package org.swizframework.utils.chain
 			this.faultHandler = faultHandler;
 			this.eventArgs = eventArgs;
 		}
-
+		
 		public function execute():void
 		{
 			executed = true;
@@ -46,7 +48,7 @@ package org.swizframework.utils.chain
 				call.addResponder( this );
 			}
 		}
-
+		
 		public function result( data:Object ):void
 		{
 			if( eventArgs == null )
@@ -58,12 +60,12 @@ package org.swizframework.utils.chain
 				eventArgs.unshift( data );
 				resultHandler.apply( null, eventArgs );
 			}
-
+			
 			complete = true;
 			if( chain != null )
 				chain.proceed();
 		}
-
+		
 		public function fault( info:Object ):void
 		{
 			failed = true;
@@ -76,7 +78,7 @@ package org.swizframework.utils.chain
 			if( chain != null )
 				chain.fail();
 		}
-
+		
 		public function setCommandChain( chain:CommandChain ):void
 		{
 			this.chain = chain;
