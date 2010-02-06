@@ -28,7 +28,7 @@ package org.swizframework.utils.chain
 		/** Constructs a dynamic command */
 		public function createChain( mode:int = 0 ):CommandChain
 		{
-			return new CommandChain( _dispatcher, true, mode );
+			return new CommandChain( true, mode );
 		}
 	}
 }

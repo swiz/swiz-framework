@@ -4,9 +4,9 @@ package org.swizframework.utils.chain
 	
 	public class CommandChain extends AbstractChain
 	{
-		public function CommandChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true, mode:int = AbstractChain.SEQUENCE )
+		public function CommandChain( stopOnError:Boolean = true, mode:int = AbstractChain.SEQUENCE )
 		{
-			super( dispatcher, stopOnError, mode );
+			super( null, stopOnError, mode );
 		}
 		
 		/**

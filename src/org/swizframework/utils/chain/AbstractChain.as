@@ -98,7 +98,7 @@ package org.swizframework.utils.chain
 			_stopOnError = value;
 		}
 		
-		public function AbstractChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true, mode:int = SEQUENCE )
+		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:int = SEQUENCE )
 		{
 			this.dispatcher = dispatcher;
 			this.stopOnError = stopOnError;
