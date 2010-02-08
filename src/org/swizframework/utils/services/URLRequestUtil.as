@@ -30,8 +30,8 @@ package org.swizframework.utils.services
 		{
 
 			// use default fault handler defined for swiz instance if not provided									  	
-			if( faultHandler == null && swiz.defaultFaultHandler != null )
-				faultHandler = swiz.defaultFaultHandler;
+			if( faultHandler == null && swiz.config.defaultFaultHandler != null )
+				faultHandler = swiz.config.defaultFaultHandler;
 
 			var dynamicURLRequest:SwizURLRequest = new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs );
 		}

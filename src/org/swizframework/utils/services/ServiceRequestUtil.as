@@ -28,8 +28,8 @@ package org.swizframework.utils.services
 			faultHandler:Function = null, eventArgs:Array = null ):void
 		{
 			// use default fault handler defined for swiz instance if not provided									   	
-			if( faultHandler == null && swiz.defaultFaultHandler != null )
-				faultHandler = swiz.defaultFaultHandler;
+			if( faultHandler == null && swiz.config.defaultFaultHandler != null )
+				faultHandler = swiz.config.defaultFaultHandler;
 			
 			call.addResponder( new SwizResponder( resultHandler, faultHandler, eventArgs ) );
 		}

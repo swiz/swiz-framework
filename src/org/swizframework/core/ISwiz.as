@@ -12,12 +12,6 @@ package org.swizframework.core
 		// ========================================
 
 		/**
-		 * Default Fault Handler
-		 */
-		function get defaultFaultHandler():Function;
-		function set defaultFaultHandler( faultHandler:Function ):void;
-
-		/**
 		 * Dispatcher
 		 */
 		function get dispatcher():IEventDispatcher;

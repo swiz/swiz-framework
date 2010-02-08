@@ -55,6 +55,11 @@ package org.swizframework.core
 		 * Backing variable for the <code>viewPackages</code> property.
 		 */
 		protected var _viewPackages:Array = [];
+
+		/**
+		 * Backing variable for the <code>defaultFaultHandler</code> property.
+		 */
+		protected var _defaultFaultHandler:Function;
 		
 		// ========================================
 		// public properties
@@ -149,6 +154,19 @@ package org.swizframework.core
 		public function set viewPackages( value:* ):void
 		{
 			setViewPackages( value );
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get defaultFaultHandler():Function
+		{
+			return _defaultFaultHandler;
+		}
+
+		public function set defaultFaultHandler( faultHandler:Function ):void
+		{
+			_defaultFaultHandler = faultHandler;
 		}
 		
 		// ========================================

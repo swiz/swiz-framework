@@ -28,9 +28,6 @@ package org.swizframework.core
 
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 
-		// TODO: ben probably wants to move this!
-		protected var _defaultFaultHandler:Function;
-
 		protected var _dispatcher:IEventDispatcher;
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
@@ -42,19 +39,6 @@ package org.swizframework.core
 		// ========================================
 		// public properties
 		// ========================================
-
-		/**
-		 * @inheritDoc
-		 */
-		public function get defaultFaultHandler():Function
-		{
-			return _defaultFaultHandler;
-		}
-
-		public function set defaultFaultHandler(faultHandler:Function):void
-		{
-			_defaultFaultHandler = faultHandler;
-		}
 
 		/**
 		 * @inheritDoc

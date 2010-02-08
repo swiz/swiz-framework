@@ -42,8 +42,8 @@ package org.swizframework.controller
 			faultHandler:Function = null, eventArgs:Array = null ):void
 		{
 			
-			if( faultHandler == null && _swiz.defaultFaultHandler != null )
-				faultHandler = _swiz.defaultFaultHandler;
+			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
+				faultHandler = _swiz.config.defaultFaultHandler;
 			
 			call.addResponder( new SwizResponder( resultHandler, faultHandler, eventArgs ) );
 		}
@@ -54,8 +54,8 @@ package org.swizframework.controller
 			eventArgs:Array = null ):void
 		{
 			
-			if( faultHandler == null && _swiz.defaultFaultHandler != null )
-				faultHandler = _swiz.defaultFaultHandler;
+			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
+				faultHandler = _swiz.config.defaultFaultHandler;
 			
 			var swizURLRequest:SwizURLRequest = 
 				new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs );
