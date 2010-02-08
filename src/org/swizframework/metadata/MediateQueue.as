@@ -110,7 +110,7 @@ package org.swizframework.metadata
 		{
 			for each ( var property:String in properties )
 			{
-				if ( ! event.hasOwnProperty( property ) )
+				if ( ! ( property in event ) )
 					throw new Error(  "Unable to mediate event: " + property + " does not exist as a property of " + getQualifiedClassName( event ) + "." );
 			}
 						
