@@ -63,7 +63,7 @@ package org.swizframework.utils.chain
 			
 			complete = true;
 			if( chain != null )
-				chain.proceed();
+				chain.stepComplete();
 		}
 		
 		public function fault( info:Object ):void
@@ -76,7 +76,7 @@ package org.swizframework.utils.chain
 				// todo: what if there is no fault handler for DynamicCommand?
 			}
 			if( chain != null )
-				chain.fail();
+				chain.stepError();
 		}
 		
 		public function setCommandChain( chain:CommandChain ):void

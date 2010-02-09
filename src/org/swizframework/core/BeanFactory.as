@@ -1,11 +1,14 @@
 package org.swizframework.core
 {
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.EventPhase;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
+	import mx.core.UIComponent;
 	import mx.logging.ILogger;
 	
 	import org.swizframework.events.BeanEvent;
@@ -14,7 +17,7 @@ package org.swizframework.core
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.utils.SwizLogger;
-
+	
 	/**
 	 * Bean Factory
 	 */
@@ -23,22 +26,22 @@ package org.swizframework.core
 		// ========================================
 		// protected properties
 		// ========================================
-
+		
 		protected var logger:ILogger = SwizLogger.getLogger( this );
-
+		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
-
+		
 		protected var swiz:ISwiz;
-
+		
 		/**
 		 *
 		 */
 		protected var typeDescriptors:Dictionary;
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor
 		 */
@@ -46,42 +49,46 @@ package org.swizframework.core
 		{
 			super();
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		/**
 		 * @inheritDoc
 		 */
 		public function init( swiz:ISwiz ):void
 		{
 			this.swiz = swiz;
-
+			
 			swiz.processors.sortOn( "priority" );
-
+			
 			for each( var processor:IProcessor in swiz.processors )
 			{
 				processor.init( swiz );
 			}
-
+			
 			logger.debug( "Processors initialized" );
-
+			
 			addBeanProviders( swiz.beanProviders );
-
+			
 			swiz.dispatcher.addEventListener( swiz.config.injectionEvent, injectionEventHandler, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
 			logger.debug( "Injection trigger event type set to {0}", swiz.config.injectionEvent );
 			logger.debug( "Injection trigger event phase set to {0}", ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
 			logger.debug( "Injection trigger event priority set to {0}", swiz.config.injectionEventPriority );
+			
+			if( "systemManager" in swiz.dispatcher )
+				UIComponent( swiz.dispatcher ).systemManager.addEventListener( swiz.config.injectionEvent, injectionEventHandlerSysMgr, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
+			
 			swiz.dispatcher.addEventListener( Event.REMOVED_FROM_STAGE, removeEventHandler, true, 50, true );
-
+			
 			logger.info( "BeanFactory initialized" );
 		}
-
+		
 		// ========================================
 		// protected methods
 		// ========================================
-
+		
 		/**
 		 * Add Bean Providers
 		 */
@@ -92,23 +99,23 @@ package org.swizframework.core
 				addBeanProvider( beanProvider );
 			}
 		}
-
+		
 		/**
 		 * Add Bean Provider
 		 */
 		protected function addBeanProvider( beanProvider:IBeanProvider ):void
 		{
 			logger.debug( "IBeanProvider {0} added", beanProvider );
-
+			
 			for each( var bean:Bean in beanProvider.beans )
 			{
 				addBean( bean );
 			}
-
+			
 			beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
 			beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
-
+		
 		/**
 		 * Remove Bean Provider
 		 */
@@ -118,42 +125,42 @@ package org.swizframework.core
 			{
 				removeBean( bean );
 			}
-
+			
 			beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
 			beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
-
+		
 		/**
 		 * Add Bean
 		 */
 		protected function addBean( bean:Bean ):void
 		{
 			logger.debug( "BeanFactory::addBean( {0} )", bean );
-
+			
 			var processor:IProcessor;
-
+			
 			for each( processor in swiz.processors )
 			{
 				// Handle Metadata Processors
 				if( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-
+					
 					// get the tags this processor is interested in
 					var metadataTags:Array = [];
 					for each( var metadataName:String in metadataProcessor.metadataNames )
 					{
 						metadataTags = metadataTags.concat( bean.typeDescriptor.getMetadataTagsByName( metadataName ) );
 					}
-
+					
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
 			}
-
+			
 			// if bean inplements ISwizInterface, handle those injections
 			if( bean.source is ISwizInterface )
 				handleSwizInterfaces( bean.source );
-
+			
 			// process all bean post-processors				
 			for each( processor in swiz.processors )
 			{
@@ -164,7 +171,7 @@ package org.swizframework.core
 				}
 			}
 		}
-
+		
 		/**
 		 * Handle internal interfaces, like IDispatcherAware and ISwizAware
 		 */
@@ -179,7 +186,7 @@ package org.swizframework.core
 			if( obj is IInitializing )
 				IInitializing( obj ).init();
 		}
-
+		
 		/**
 		 * Remove Bean
 		 */
@@ -191,17 +198,17 @@ package org.swizframework.core
 				if( processor is IMetadataProcessor )
 				{
 					var metadataProcessor:IMetadataProcessor = IMetadataProcessor( processor );
-
+					
 					// get the tags this processor is interested in
 					var metadataTags:Array = [];
 					for each( var metadataName:String in metadataProcessor.metadataNames )
 					{
 						metadataTags = metadataTags.concat( bean.typeDescriptor.getMetadataTagsByName( metadataName ) );
 					}
-
+					
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
-
+				
 				// Handle Bean Processors
 				if( processor is IBeanProcessor )
 				{
@@ -209,9 +216,9 @@ package org.swizframework.core
 				}
 			}
 		}
-
+		
 		// TODO: Move to SwizConfig?
-
+		
 		/**
 		 * Evaluate whether Swiz is configured such that the specified class is a potential injection target.
 		 */
@@ -224,7 +231,7 @@ package org.swizframework.core
 			else
 			{
 				var className:String = getQualifiedClassName( instance );
-
+				
 				if( swiz.config.viewPackages.length > 0 )
 				{
 					for each( var viewPackage:String in swiz.config.viewPackages )
@@ -232,7 +239,7 @@ package org.swizframework.core
 						if( className.indexOf( viewPackage ) == 0 )
 							return true;
 					}
-
+					
 					return false;
 				}
 				else
@@ -241,7 +248,7 @@ package org.swizframework.core
 				}
 			}
 		}
-
+		
 		/**
 		 * Injection Event Handler
 		 */
@@ -253,7 +260,20 @@ package org.swizframework.core
 				addBean( bean );
 			}
 		}
-
+		
+		/**
+		 * Injection Event Handler defined on SysMgr
+		 */
+		protected function injectionEventHandlerSysMgr( event:Event ):void
+		{
+			// make sure the view is not a descendant of the main dispatcher
+			// if its not, it is a popup, so we pass it along for processing
+			if( !Sprite( swiz.dispatcher ).contains( DisplayObject( event.target ) ) )
+			{
+				injectionEventHandler( event );
+			}
+		}
+		
 		/**
 		 * Remove Event Handler
 		 */
@@ -266,7 +286,7 @@ package org.swizframework.core
 				removeBean( bean );
 			}
 		}
-
+		
 		/**
 		 * Bean Added Handler
 		 */
@@ -274,7 +294,7 @@ package org.swizframework.core
 		{
 			addBean( event.bean );
 		}
-
+		
 		/**
 		 * Bean Added Handler
 		 */
@@ -282,7 +302,7 @@ package org.swizframework.core
 		{
 			removeBean( event.bean );
 		}
-
+		
 		/**
 		 * Create Bean
 		 *
@@ -292,15 +312,15 @@ package org.swizframework.core
 		protected function createBean( instance:Object ):Bean
 		{
 			var bean:Bean = new Bean();
-
+			
 			bean.source = instance;
-
+			
 			// TODO: Is this necessary?
 			if( "id" in bean.source && bean.source.id != null )
 				bean.name = bean.source.id;
-
+			
 			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
-
+			
 			return bean;
 		}
 	}

@@ -2,66 +2,63 @@ package org.swizframework.processors
 {
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanProvider;
-	import org.swizframework.processors.BaseMetadataProcessor;
-	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
-
+	
 	/**
-	 * VirtualBean Processor
+	 * Outject Processor
 	 */
-	public class VirtualBeanProcessor extends BaseMetadataProcessor
+	public class OutjectProcessor extends BaseMetadataProcessor
 	{
 		// ========================================
 		// protected static constants
 		// ========================================
-
-		protected static const VIRTUAL_BEAN:String = "VirtualBean";
-
+		
+		protected static const OUTJECT:String = "Outject";
+		
 		// ========================================
 		// public properties
 		// ========================================
-
+		
 		/**
 		 *
 		 */
 		override public function get priority():int
 		{
-			return ProcessorPriority.VIRTUAL_BEAN;
+			return ProcessorPriority.OUTJECT;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor
 		 */
-		public function VirtualBeanProcessor()
+		public function OutjectProcessor()
 		{
-			super( [ VIRTUAL_BEAN ] );
+			super( [ OUTJECT ] );
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		/**
 		 * @inheritDoc
 		 */
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
-			var virtualBean:Bean = new Bean();
+			var outjectBean:Bean = new Bean();
 			if( metadataTag.args.length > 0 )
-				virtualBean.name = metadataTag.args[ 0 ][ "value" ];
-			virtualBean.source = bean.source[ metadataTag.host.name ];
-			virtualBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
+				outjectBean.name = metadataTag.args[ 0 ][ "value" ];
+			outjectBean.source = bean.source[ metadataTag.host.name ];
+			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
 			// TODO: does it matter which IBeanProvider this is added to?
 			//should probably be same one as Bean
-			IBeanProvider( swiz.beanProviders[ 0 ] ).addBean( virtualBean );
+			IBeanProvider( swiz.beanProviders[ 0 ] ).addBean( outjectBean );
 		}
-
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -69,6 +66,5 @@ package org.swizframework.processors
 		{
 			IBeanProvider( swiz.beanProviders[ 0 ] ).removeBean( bean.source[ metadataTag.host.name ] );
 		}
-
 	}
 }

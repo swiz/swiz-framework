@@ -92,5 +92,14 @@ package org.swizframework.core
 		 */
 		function get viewPackages():Array;
 		function set viewPackages( value:* ):void;
+
+		/**
+		 * Default Fault Handler
+		 * 
+		 * @param faultHandler A fault handling Function.
+		 * @default null
+		 */
+		function get defaultFaultHandler():Function;
+		function set defaultFaultHandler( faultHandler:Function ):void;
 	}
 }

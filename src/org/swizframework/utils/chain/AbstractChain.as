@@ -1,11 +1,19 @@
 package org.swizframework.utils.chain
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
-	public class AbstractChain implements IChain, IChainMember
+	[Event( name="chainStarted",type="flash.events.Event" )]
+	[Event( name="chainStepComplete",type="flash.events.Event" )]
+	[Event( name="chainStepError",type="flash.events.Event" )]
+	[Event( name="chainComplete",type="flash.events.Event" )]
+	[Event( name="chainFailure",type="flash.events.Event" )]
+	
+	public class AbstractChain extends EventDispatcher implements IChain, IChainMember
 	{
-		public const SEQUENCE:int = 0;
-		public const PARALLEL:int = 1;
+		public static const SEQUENCE:int = 0;
+		public static const PARALLEL:int = 1;
 		
 		public var mode:int = SEQUENCE;
 		
@@ -90,10 +98,11 @@ package org.swizframework.utils.chain
 			_stopOnError = value;
 		}
 		
-		public function AbstractChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true )
+		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:int = SEQUENCE )
 		{
 			this.dispatcher = dispatcher;
 			this.stopOnError = stopOnError;
+			this.mode = mode;
 		}
 		
 		/**
@@ -119,12 +128,14 @@ package org.swizframework.utils.chain
 		 */
 		public function start():void
 		{
+			dispatchEvent( new Event( "chainStarted" ) );
 			position = -1;
 			proceed();
 		}
 		
 		public function stepComplete():void
 		{
+			dispatchEvent( new Event( "chainStepComplete" ) );
 			if( mode == SEQUENCE )
 			{
 				proceed();
@@ -181,7 +192,7 @@ package org.swizframework.utils.chain
 		 */
 		public function stepError():void
 		{
-			// TODO: dispatch event
+			dispatchEvent( new Event( "chainStepError" ) );
 			if( !stopOnError )
 				proceed();
 			else
@@ -193,7 +204,7 @@ package org.swizframework.utils.chain
 		 */
 		protected function complete():void
 		{
-			// TODO: dispatch event
+			dispatchEvent( new Event( "chainComplete" ) );
 			_isComplete = true;
 			if( chain != null )
 				chain.stepComplete();
@@ -204,7 +215,7 @@ package org.swizframework.utils.chain
 		 */
 		protected function fail():void
 		{
-			// TODO: dispatch event
+			dispatchEvent( new Event( "chainFailure" ) );
 			_isComplete = true;
 			if( chain != null )
 				chain.stepError();

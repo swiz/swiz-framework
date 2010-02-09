@@ -10,7 +10,7 @@ package org.swizframework.core
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.MediateProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
-	import org.swizframework.processors.VirtualBeanProcessor;
+	import org.swizframework.processors.OutjectProcessor;
 	import org.swizframework.utils.SwizLogger;
 
 	[DefaultProperty( "beanProviders" )]
@@ -28,33 +28,17 @@ package org.swizframework.core
 
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 
-		// TODO: ben probably wants to move this!
-		protected var _defaultFaultHandler:Function;
-
 		protected var _dispatcher:IEventDispatcher;
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
-		protected var _processors:Array = [ new VirtualBeanProcessor(), new InjectProcessor(), 
+		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), 
 			new PostConstructProcessor(), new MediateProcessor() ];
 
 		// ========================================
 		// public properties
 		// ========================================
-
-		/**
-		 * @inheritDoc
-		 */
-		public function get defaultFaultHandler():Function
-		{
-			return _defaultFaultHandler;
-		}
-
-		public function set defaultFaultHandler(faultHandler:Function):void
-		{
-			_defaultFaultHandler = faultHandler;
-		}
 
 		/**
 		 * @inheritDoc
