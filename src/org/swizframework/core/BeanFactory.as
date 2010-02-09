@@ -5,9 +5,9 @@ package org.swizframework.core
 	import flash.events.EventPhase;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-
+	
 	import mx.logging.ILogger;
-
+	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
@@ -172,7 +172,7 @@ package org.swizframework.core
 		{
 			if( obj is ISwizAware )
 				ISwizAware( obj ).swiz = swiz;
-			if( obj is IBeanFactory )
+			if( obj is IBeanFactoryAware )
 				IBeanFactoryAware( obj ).beanFactory = this;
 			if( obj is IDispatcherAware )
 				IDispatcherAware( obj ).dispatcher = swiz.dispatcher;
