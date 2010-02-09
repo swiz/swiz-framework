@@ -2,15 +2,15 @@ package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-
+	
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
-
+	
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.MediateProcessor;
-	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.OutjectProcessor;
+	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.utils.SwizLogger;
 
 	[DefaultProperty( "beanProviders" )]
@@ -35,6 +35,8 @@ package org.swizframework.core
 		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), 
 			new PostConstructProcessor(), new MediateProcessor() ];
+			
+		protected var _parentSwiz:ISwiz;
 
 		// ========================================
 		// public properties
@@ -111,6 +113,19 @@ package org.swizframework.core
 			if( value != null )
 				_processors = _processors.concat( value );
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get parentSwiz():ISwiz
+		{
+			return _parentSwiz;
+		}
+		
+		public function set parentSwiz(parentSwiz:ISwiz):void
+		{
+			_parentSwiz = parentSwiz;
+		}
 
 		[ArrayElementType( "mx.logging.ILoggingTarget" )]
 
@@ -177,8 +192,28 @@ package org.swizframework.core
 			constructProviders();
 
 			beanFactory.init( this );
+			
+			initializeAllBeans();
 
 			logger.info( "Swiz initialized" );
+		}
+		
+		public function getBeanByName( name:String ):Bean
+		{
+			var bean:Bean = beanFactory.getBeanByName( name );
+			if (bean == null && parentSwiz != null)
+				bean = parentSwiz.getBeanByName( name );
+				
+			return bean;
+		}
+		
+		public function getBeanByType( type:Class ):Bean
+		{
+			var bean:Bean = beanFactory.getBeanByType( type );
+			if (bean == null && parentSwiz != null)
+				bean = parentSwiz.getBeanByType( type );
+				
+			return bean;
 		}
 
 		// ========================================
@@ -211,6 +246,22 @@ package org.swizframework.core
 				// now if the current provider is a BeanLoader, it needs to be initialized
 				if( providerInst is BeanLoader )
 					BeanLoader(providerInst).initialize();
+			}
+		}
+		
+		
+		
+		/**
+		 * Initializes all beans in the bean factory.
+		 */
+		private function initializeAllBeans():void
+		{
+			for each( var beanProvider:IBeanProvider in beanProviders )
+			{
+				for each( var bean:Bean in beanProvider.beans )
+				{
+					if (!bean.initialized) beanFactory.initializeBean( bean );
+				}
 			}
 		}
 	}

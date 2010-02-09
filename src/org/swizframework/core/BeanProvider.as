@@ -87,7 +87,7 @@ package org.swizframework.core
 				
 				_beans.push( bean );
 				
-				dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
+				// dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
 			}
 		}
 		

@@ -75,9 +75,10 @@ package org.swizframework.processors
 		public function addBean( bean:Bean ):void
 		{
 			logger.info( "InjectProcessor::addBean( {0} )", bean );
+			logger.info( "InjectProcessor::addBean( {0} ) is now ignored!", bean );
 			
-			processQueueByNameForBean( bean );
-			processQueueByTypeForBean( bean );
+			// processQueueByNameForBean( bean );
+			// processQueueByTypeForBean( bean );
 		}
 		
 		/**
@@ -94,7 +95,7 @@ package org.swizframework.processors
 		
 		/**
 		 * Process Queue By Name For Bean
-		 */
+		 *
 		protected function processQueueByNameForBean( bean:Bean ):void
 		{
 			var beanName:String = bean.name;
@@ -108,11 +109,11 @@ package org.swizframework.processors
 				
 				delete queueByName[ beanName ];
 			}
-		}
+		}*/
 		
 		/**
 		 * Process Queue By Type For Bean
-		 */
+		 *
 		protected function processQueueByTypeForBean( bean:Bean ):void
 		{
 			for each( var queue:Injection in queueByType )
@@ -123,7 +124,7 @@ package org.swizframework.processors
 					queueByType.splice( queueByType.indexOf( queue ), 1 );
 				}
 			}
-		}
+		}*/
 		
 		/**
 		 * Add Inject
@@ -227,7 +228,8 @@ package org.swizframework.processors
 			}
 			else
 			{
-				addToQueueByName( injectTag, bean );
+				// addToQueueByName( injectTag, bean );
+				logger.info( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
 			}
 		}
 		
@@ -261,7 +263,8 @@ package org.swizframework.processors
 			}
 			else
 			{
-				addToQueueByName( injectTag, bean );
+				// addToQueueByName( injectTag, bean );
+				logger.info( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
 			}
 		}
 		
@@ -290,7 +293,8 @@ package org.swizframework.processors
 			}
 			else
 			{
-				addToQueueByType( injectTag, bean );
+				// addToQueueByType( injectTag, bean );
+				logger.info( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
 			}
 		}
 		
@@ -328,6 +332,7 @@ package org.swizframework.processors
 		 */
 		protected function getBeanByName( name:String ):Bean
 		{
+			/*
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				var foundBean:Bean = beanProvider.getBeanByName( name );
@@ -339,6 +344,9 @@ package org.swizframework.processors
 			}
 			
 			return null;
+			*/
+			
+			return swiz.getBeanByName( name );
 		}
 		
 		/**
@@ -346,6 +354,7 @@ package org.swizframework.processors
 		 */
 		protected function getBeanByType( type:Class ):Bean
 		{
+			/*
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				var foundBean:Bean = beanProvider.getBeanByType( type );
@@ -355,13 +364,15 @@ package org.swizframework.processors
 					return foundBean;
 				}
 			}
-			
 			return null;
+			*/
+			
+			return swiz.getBeanByType( type );
 		}
 		
 		/**
 		 * Add To Queue By Name
-		 */
+		 *
 		protected function addToQueueByName( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
 			if( injectTag.source in queueByName )
@@ -372,15 +383,15 @@ package org.swizframework.processors
 			{
 				queueByName[ injectTag.source ] = [ new Injection( injectTag, bean ) ];
 			}
-		}
+		} */
 		
 		/**
 		 * Add To Queue By Type
-		 */
+		 *
 		protected function addToQueueByType( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
 			queueByType[ queueByType.length ] = new Injection( injectTag, bean );
-		}
+		} */
 		
 		/**
 		 * Add Property Binding

@@ -84,6 +84,42 @@ package org.swizframework.core
 			
 			logger.info( "BeanFactory initialized" );
 		}
+
+		public function getBeanByName( name:String ):Bean
+		{
+			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
+			{
+				var foundBean:Bean = beanProvider.getBeanByName( name );
+				
+				if( foundBean != null )
+				{
+					// initialize bean (runs autowiring and all processors), if needed
+					if (!foundBean.initialized) initializeBean(foundBean);
+					
+					return foundBean;
+				}
+			}
+			
+			return null;
+		}
+		
+		public function getBeanByType( type:Class ):Bean
+		{
+			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
+			{
+				var foundBean:Bean = beanProvider.getBeanByType( type );
+				
+				if( foundBean != null )
+				{
+					// initialize bean (runs autowiring and all processors), if needed
+					if (!foundBean.initialized) initializeBean(foundBean);
+					
+					return foundBean;
+				}
+			}
+			
+			return null
+		}
 		
 		// ========================================
 		// protected methods
@@ -107,12 +143,13 @@ package org.swizframework.core
 		{
 			logger.debug( "IBeanProvider {0} added", beanProvider );
 			
+			/*
 			for each( var bean:Bean in beanProvider.beans )
 			{
 				addBean( bean );
-			}
+			}*/
 			
-			beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
+			// beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
 			beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
 		
@@ -126,16 +163,17 @@ package org.swizframework.core
 				removeBean( bean );
 			}
 			
-			beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
+			// beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
 			beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
 		
 		/**
-		 * Add Bean
+		 * Initialze Bean
 		 */
-		protected function addBean( bean:Bean ):void
+		public function initializeBean( bean:Bean ):void
 		{
-			logger.debug( "BeanFactory::addBean( {0} )", bean );
+			logger.debug( "BeanFactory::initializeBean( {0} )", bean );
+			bean.initialized = true;
 			
 			var processor:IProcessor;
 			
@@ -257,7 +295,7 @@ package org.swizframework.core
 			if( isPotentialInjectionTarget( event.target ) )
 			{
 				var bean:Bean = createBean( event.target );
-				addBean( bean );
+				initializeBean( bean );
 			}
 		}
 		
@@ -289,11 +327,11 @@ package org.swizframework.core
 		
 		/**
 		 * Bean Added Handler
-		 */
+		 *
 		protected function beanAddedHandler( event:BeanEvent ):void
 		{
 			addBean( event.bean );
-		}
+		}*/
 		
 		/**
 		 * Bean Added Handler

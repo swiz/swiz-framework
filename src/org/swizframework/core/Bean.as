@@ -44,6 +44,11 @@ package org.swizframework.core
 		 */
 		public var provider:IBeanProvider;
 		
+		/**
+		 * Initialzed
+		 */
+		public var initialized:Boolean = false;
+		
 		// ========================================
 		// constructor
 		// ========================================
