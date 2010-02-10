@@ -8,27 +8,25 @@ package org.swizframework.utils.services
 	{
 		private var resultHandler:Function;
 		private var faultHandler:Function;
-		private var args:Array;
+		private var resultHandlerArgs:Array;
 		
-		public function SwizResponder( resultHandler:Function,
-			faultHandler:Function = null,
-			args:Array = null )
+		public function SwizResponder( resultHandler:Function, faultHandler:Function = null, resultHandlerArgs:Array = null )
 		{
 			this.resultHandler = resultHandler;
 			this.faultHandler = faultHandler;
-			this.args = args;
+			this.resultHandlerArgs = resultHandlerArgs;
 		}
 		
 		public function result( data:Object ):void
 		{
-			if( args == null )
+			if( resultHandlerArgs == null )
 			{
 				resultHandler( data );
 			}
 			else
 			{
-				args.unshift( data );
-				resultHandler.apply( null, args );
+				resultHandlerArgs.unshift( data );
+				resultHandler.apply( null, resultHandlerArgs );
 			}
 		}
 		

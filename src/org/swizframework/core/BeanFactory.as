@@ -96,6 +96,7 @@ package org.swizframework.core
 		{
 			for each( var beanProvider:IBeanProvider in beanProviders )
 			{
+				beanProvider.dispatcher = swiz.dispatcher;
 				addBeanProvider( beanProvider );
 			}
 		}
