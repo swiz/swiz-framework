@@ -89,7 +89,7 @@ package org.swizframework.core
 		{
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
-				var foundBean:Bean = beanProvider.getBeanByName( name );
+				var foundBean:Bean = findBeanByName(beanProvider.beans, name); // beanProvider.getBeanByName( name );
 				
 				if( foundBean != null )
 				{
@@ -107,7 +107,7 @@ package org.swizframework.core
 		{
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
-				var foundBean:Bean = beanProvider.getBeanByType( type );
+				var foundBean:Bean = findBeanByType(beanProvider.beans, type); // beanProvider.getBeanByType( type );
 				
 				if( foundBean != null )
 				{
@@ -150,7 +150,7 @@ package org.swizframework.core
 			}*/
 			
 			// beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
-			beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
+			// beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
 		
 		/**
@@ -164,7 +164,7 @@ package org.swizframework.core
 			}
 			
 			// beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
-			beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
+			// beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
 		
 		/**
@@ -360,6 +360,44 @@ package org.swizframework.core
 			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
 			
 			return bean;
+		}
+		
+		
+		
+		// ========================================
+		// private methods
+		// ========================================
+		
+		
+		private function findBeanByName( beans:Array, beanName:String ):Bean
+		{
+			for each( var bean:Bean in beans )
+			{
+				if( bean.name == beanName )
+					return bean;
+			}
+			
+			return null;
+		}
+		
+		private function findBeanByType( beans:Array, beanType:Class ):Bean
+		{
+			var foundBean:Bean;
+			
+			for each( var bean:Bean in beans )
+			{
+				if( bean is Prototype && Prototype( bean ).classReference is beanType || bean.source is beanType )
+				{
+					if ( foundBean != null )
+					{
+						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
+					}
+					
+					foundBean = bean;
+				}
+			}
+			
+			return foundBean;
 		}
 	}
 }

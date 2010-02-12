@@ -39,9 +39,9 @@ package org.swizframework.metadata
 		protected var _bind:Boolean = true;
 
 		/**
-		 * Backing variable for read-only <code>lazy</code> property.
+		 * Backing variable for read-only <code>required</code> property.
 		 */
-		protected var _lazy:Boolean = true;
+		protected var _required:Boolean = true;
 
 		// ========================================
 		// public properties
@@ -102,15 +102,14 @@ package org.swizframework.metadata
 		}
 
 		/**
-		 * Returns lazy attribute of [Inject] tag as a <code>Boolean</code> value.
-		 * If true will instruct Swiz to fill this dependency whenever (if at all) it can.
-		 * If false Swiz will throw an error if the dependency cannot be filled immediately.
+		 * Returns required attribute of [Inject] tag as a <code>Boolean</code> value.
+		 * If true Swiz will throw an error if it fails to fill this dependency.
 		 *
 		 * @default true
 		 */
-		public function get lazy():Boolean
+		public function get required():Boolean
 		{
-			return _lazy;
+			return _required;
 		}
 
 		// ========================================
@@ -165,8 +164,8 @@ package org.swizframework.metadata
 			if( hasArg( "bind" ) )
 				_bind = getArg( "bind" ).value == "true";
 
-			if( hasArg( "lazy" ) )
-				_lazy = getArg( "lazy" ).value == "true";
+			if( hasArg( "required" ) )
+				_required = getArg( "required" ).value == "true";
 		}
 	}
 }

@@ -71,8 +71,9 @@ package org.swizframework.core
 			{
 				instance = new classReference();
 			}
-
-			provider.dispatchEvent( new BeanEvent( BeanEvent.ADDED, new Bean( instance, name, typeDescriptor ) ) );
+			
+			// todo: how does prototype get initialized now???
+			// provider.dispatchEvent( new BeanEvent( BeanEvent.ADDED, new Bean( instance, name, typeDescriptor ) ) );
 
 			return instance;
 		}

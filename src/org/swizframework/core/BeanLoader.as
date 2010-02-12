@@ -13,7 +13,7 @@ package org.swizframework.core
 		{
 			// retrieve beans
 			var beans:Array = getBeans();
-			addBeans(beans);
+			initializeBeans(beans);
 		}
 
 		/**

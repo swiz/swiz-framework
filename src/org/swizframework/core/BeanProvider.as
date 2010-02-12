@@ -1,5 +1,6 @@
 package org.swizframework.core
 {
+	
 	import flash.events.EventDispatcher;
 	
 	import org.swizframework.events.BeanEvent;
@@ -44,7 +45,7 @@ package org.swizframework.core
 			if ( value != _beans )
 			{
 				removeBeans();
-				addBeans( value );
+				initializeBeans( value );
 			}
 		}
 		
@@ -66,7 +67,7 @@ package org.swizframework.core
 		// protected methods
 		// ========================================
 		
-		protected function addBeans( beansArray:Array ):void
+		protected function initializeBeans( beansArray:Array ):void
 		{
 			var bean:Bean;
 			
@@ -86,8 +87,6 @@ package org.swizframework.core
 				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
 				
 				_beans.push( bean );
-				
-				// dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
 			}
 		}
 		
@@ -96,8 +95,9 @@ package org.swizframework.core
 		{
 			for each ( var bean:Bean in beans )
 			{
-				dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
+				// dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
 			}
+			
 		}
 		
 		// ========================================
@@ -114,8 +114,6 @@ package org.swizframework.core
 			{
 				beans = [ bean ];
 			}
-			
-			dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
 		}
 		
 		public function removeBean( bean:Bean ):void
@@ -123,39 +121,7 @@ package org.swizframework.core
 			if ( beans )
 			{
 				beans.splice( beans.indexOf( bean ), 1 );
-				dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
 			}
-		}
-		
-		public function getBeanByName( beanName:String ):Bean
-		{
-			for each( var bean:Bean in beans )
-			{
-				if( bean.name == beanName )
-					return bean;
-			}
-			
-			return null;
-		}
-		
-		public function getBeanByType( beanType:Class ):Bean
-		{
-			var foundBean:Bean;
-			
-			for each( var bean:Bean in beans )
-			{
-				if( bean is Prototype && Prototype( bean ).classReference is beanType || bean.source is beanType )
-				{
-					if ( foundBean != null )
-					{
-						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
-					}
-					
-					foundBean = bean;
-				}
-			}
-			
-			return foundBean;
 		}
 	}
 }
