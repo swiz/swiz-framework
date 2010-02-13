@@ -26,7 +26,7 @@ package org.swizframework.utils.chain
 		}
 		
 		/** Constructs a dynamic command */
-		public function createChain( mode:int = 0 ):CommandChain
+		public function createChain( mode:String = "sequence" ):CommandChain
 		{
 			return new CommandChain( true, mode );
 		}

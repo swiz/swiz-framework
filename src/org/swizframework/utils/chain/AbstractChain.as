@@ -12,10 +12,10 @@ package org.swizframework.utils.chain
 	
 	public class AbstractChain extends EventDispatcher implements IChain, IChainMember
 	{
-		public static const SEQUENCE:int = 0;
-		public static const PARALLEL:int = 1;
+		public static const SEQUENCE:String = "sequence";
+		public static const PARALLEL:String = "parallel";
 		
-		public var mode:int = SEQUENCE;
+		public var mode:String = SEQUENCE;
 		
 		public var members:Array = [];
 		
@@ -98,7 +98,7 @@ package org.swizframework.utils.chain
 			_stopOnError = value;
 		}
 		
-		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:int = SEQUENCE )
+		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:String = SEQUENCE )
 		{
 			this.dispatcher = dispatcher;
 			this.stopOnError = stopOnError;
