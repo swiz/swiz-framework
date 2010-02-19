@@ -21,16 +21,16 @@ package org.swizframework.core
 		
 		protected function getObject():*
 		{
-			var instance:* = source;
+			var instance:* = _source;
 			
 			if (source == null) 
 			{
 				// if source is null, create and initialize it (runs all processors)
-				source = instance = createInstance();
+				_source = instance = createInstance();
 				beanFactory.initializeBean( new Bean( source, name, typeDescriptor ) );
 				
 				// if this prototype is not a singleton, remove the source
-				if (!singleton) source = null;
+				if (!singleton) _source = null;
 			}
 			
 			return instance;
