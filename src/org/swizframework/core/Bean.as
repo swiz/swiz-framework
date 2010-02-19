@@ -45,6 +45,11 @@ package org.swizframework.core
 		public var provider:IBeanProvider;
 		
 		/**
+		 * BeanFactory
+		 */
+		public var beanFactory:IBeanFactory;
+		
+		/**
 		 * Initialzed
 		 */
 		public var initialized:Boolean = false;

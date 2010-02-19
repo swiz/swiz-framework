@@ -188,6 +188,7 @@ package org.swizframework.core
 			{
 				for each( var bean:Bean in beanProvider.beans)
 				{
+					bean.beanFactory = this;
 					beans.push( bean );
 				}
 			}
@@ -231,14 +232,14 @@ package org.swizframework.core
 		{
 			for each( var bean:Bean in beans )
 			{
-				if (!bean.initialized) initializeBean( bean );
+				if (!(bean is Prototype) && !bean.initialized) initializeBean( bean );
 			}
 		}
 		
 		/**
 		 * Initialze Bean
 		 */
-		protected function initializeBean( bean:Bean ):void
+		public function initializeBean( bean:Bean ):void
 		{
 			logger.debug( "BeanFactory::initializeBean( {0} )", bean );
 			bean.initialized = true;

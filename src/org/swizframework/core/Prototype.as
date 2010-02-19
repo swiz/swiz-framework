@@ -4,35 +4,44 @@ package org.swizframework.core
 
 	public class Prototype extends Bean
 	{
-
+		// public var className:String;
 		public var classReference:Object;
 		public var constructorArguments:*;
 		public var singleton:Boolean = false;
 
 		override public function get source():*
 		{
-			if( singleton )
-			{
-				return super.source ||= createInstance();
-			}
-			else
-			{
-				var instance:Object = createInstance();
-
-				return instance;
-			}
+			return getObject();
 		}
 
 		public function Prototype()
 		{
 			super();
 		}
+		
+		protected function getObject():*
+		{
+			var instance:* = source;
+			
+			if (source == null) 
+			{
+				// if source is null, create and initialize it (runs all processors)
+				source = instance = createInstance();
+				beanFactory.initializeBean( new Bean( source, name, typeDescriptor ) );
+				
+				// if this prototype is not a singleton, remove the source
+				if (!singleton) source = null;
+			}
+			
+			return instance;
+		}
 
 		protected function createInstance():Object
 		{
-			if( classReference == null )
-				return null;
-
+			if( classReference == null ) // && className == null)
+				return null; // throw new Error( "Bean Creation exception! You must supply classReference or className to Prototype!" );
+			
+			// var clazz : Class = getClass();
 			var instance:*;
 
 			if( constructorArguments != null )
@@ -72,9 +81,6 @@ package org.swizframework.core
 				instance = new classReference();
 			}
 			
-			// todo: how does prototype get initialized now???
-			// provider.dispatchEvent( new BeanEvent( BeanEvent.ADDED, new Bean( instance, name, typeDescriptor ) ) );
-
 			return instance;
 		}
 	}

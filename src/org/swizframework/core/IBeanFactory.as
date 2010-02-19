@@ -14,7 +14,7 @@ package org.swizframework.core
 		 */
 		function init( swiz:ISwiz ):void;
 		function initializeBeans():void;
-		//function initializeBean( bean:Bean ):void;
+		function initializeBean( bean:Bean ):void;
 		
 		/**
 		 * Parent Swiz instance, for nesting and modules

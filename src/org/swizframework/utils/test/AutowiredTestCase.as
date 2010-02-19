@@ -39,13 +39,12 @@ package org.swizframework.utils.test
 				_swiz.init();
 				
 				// wrap the unit test in a Bean definition
-				// wrap view component in Bean
 				var bean:Bean = new Bean();
 				bean.source = this;
 				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
 				
-				// dispatch a bean added event, to autowire
-				_beanProviders[0].dispatchEvent( new BeanEvent( BeanEvent.ADDED, bean ) );
+				// autowire test case with bean factory
+				_swiz.beanFactory.initializeBean( bean );
 			}
 		}
 		
