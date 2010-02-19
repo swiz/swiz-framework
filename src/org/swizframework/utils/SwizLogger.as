@@ -3,7 +3,7 @@ package org.swizframework.utils
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-
+	
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
 	import mx.logging.LogEvent;
