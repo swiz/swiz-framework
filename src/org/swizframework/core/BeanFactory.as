@@ -186,6 +186,7 @@ package org.swizframework.core
 		{
 			for each( var beanProvider:IBeanProvider in beanProviders )
 			{
+				beanProvider.dispatcher = swiz.dispatcher;
 				for each( var bean:Bean in beanProvider.beans)
 				{
 					bean.beanFactory = this;

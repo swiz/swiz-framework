@@ -2,6 +2,7 @@ package org.swizframework.core
 {
 	
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.reflection.TypeCache;
@@ -42,11 +43,30 @@ package org.swizframework.core
 		
 		public function set beans( value:Array ):void
 		{
-			if ( value != _beans )
+			if( value != _beans )
 			{
 				removeBeans();
 				initializeBeans( value );
 			}
+		}
+		
+		/**
+		 * Backing variable for <code>dispatcher</code> getter/setter.
+		 */
+		protected var _dispatcher:IEventDispatcher;
+		
+		[Bindable]
+		/**
+		 * Dispatcher used for sending app level notifications by classes that will not live on display list.
+		 */
+		public function get dispatcher():IEventDispatcher
+		{
+			return _dispatcher;
+		}
+		
+		public function set dispatcher( value:IEventDispatcher ):void
+		{
+			_dispatcher = value;
 		}
 		
 		// ========================================
@@ -71,7 +91,7 @@ package org.swizframework.core
 		{
 			var bean:Bean;
 			
-			for each ( var beanSource:Object in beansArray )
+			for each( var beanSource:Object in beansArray )
 			{
 				if( beanSource is Bean )
 				{
@@ -93,7 +113,7 @@ package org.swizframework.core
 		// TODO: I don't think this does anything...
 		protected function removeBeans():void
 		{
-			for each ( var bean:Bean in beans )
+			for each( var bean:Bean in beans )
 			{
 				// dispatchEvent( new BeanEvent( BeanEvent.REMOVED, bean ) );
 			}
@@ -106,7 +126,7 @@ package org.swizframework.core
 		
 		public function addBean( bean:Bean ):void
 		{
-			if ( beans )
+			if( beans )
 			{
 				beans[ beans.length ] = bean;
 			}
@@ -118,7 +138,7 @@ package org.swizframework.core
 		
 		public function removeBean( bean:Bean ):void
 		{
-			if ( beans )
+			if( beans )
 			{
 				beans.splice( beans.indexOf( bean ), 1 );
 			}

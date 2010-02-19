@@ -25,13 +25,13 @@ package org.swizframework.utils.services
 		
 		/** Delegates execute service call to Swiz */
 		public function executeServiceCall( call:AsyncToken, resultHandler:Function,
-			faultHandler:Function = null, eventArgs:Array = null ):void
+			faultHandler:Function = null, resultHandlerArgs:Array = null ):void
 		{
 			// use default fault handler defined for swiz instance if not provided									   	
 			if( faultHandler == null && swiz.config.defaultFaultHandler != null )
 				faultHandler = swiz.config.defaultFaultHandler;
 			
-			call.addResponder( new SwizResponder( resultHandler, faultHandler, eventArgs ) );
+			call.addResponder( new SwizResponder( resultHandler, faultHandler, resultHandlerArgs ) );
 		}
 	}
 }
