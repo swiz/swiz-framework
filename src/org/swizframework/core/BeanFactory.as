@@ -89,7 +89,7 @@ package org.swizframework.core
 			
 			logger.info( "BeanFactory initialized" );
 		}
-
+		
 		public function getBeanByName( name:String ):Bean
 		{
 			var foundBean:Bean = null;
@@ -100,29 +100,29 @@ package org.swizframework.core
 					foundBean = bean;
 			}
 			
-			if ( foundBean != null && !foundBean.initialized )
+			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
 				initializeBean(foundBean);
-			else if (foundBean == null && parentBeanFactory != null)
+			else if( foundBean == null && parentBeanFactory != null )
 				foundBean = parentBeanFactory.getBeanByName( name );
 			
 			return foundBean;
-			
-			/* 
-			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
-			{
-				var foundBean:Bean = findBeanByName(beanProvider.beans, name); // beanProvider.getBeanByName( name );
-				
-				if( foundBean != null )
-				{
-					// initialize bean (runs autowiring and all processors), if needed
-					if (!foundBean.initialized) initializeBean(foundBean);
-					
-					return foundBean;
-				}
-			}
-			
-			return null;
-			*/
+		
+		/*
+		   for each( var beanProvider:IBeanProvider in swiz.beanProviders )
+		   {
+		   var foundBean:Bean = findBeanByName(beanProvider.beans, name); // beanProvider.getBeanByName( name );
+		
+		   if( foundBean != null )
+		   {
+		   // initialize bean (runs autowiring and all processors), if needed
+		   if (!foundBean.initialized) initializeBean(foundBean);
+		
+		   return foundBean;
+		   }
+		   }
+		
+		   return null;
+		 */
 		}
 		
 		public function getBeanByType( type:Class ):Bean
@@ -131,9 +131,9 @@ package org.swizframework.core
 			
 			for each( var bean:Bean in beans )
 			{
-				if( bean is Prototype && Prototype( bean ).classReference is type || bean.source is type )
+				if( bean.type == type )
 				{
-					if ( foundBean != null )
+					if( foundBean != null )
 					{
 						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + type );
 					}
@@ -142,27 +142,27 @@ package org.swizframework.core
 				}
 			}
 			
-			if ( foundBean != null && !foundBean.initialized )
+			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
 				initializeBean(foundBean);
-			else if (foundBean == null && parentBeanFactory != null)
+			else if( foundBean == null && parentBeanFactory != null )
 				foundBean = parentBeanFactory.getBeanByType( type );
 			
 			return foundBean;
-			
-			/* for each( var beanProvider:IBeanProvider in swiz.beanProviders )
-			{
-				var foundBean:Bean = findBeanByType(beanProvider.beans, type); // beanProvider.getBeanByType( type );
-				
-				if( foundBean != null )
-				{
-					// initialize bean (runs autowiring and all processors), if needed
-					if (!foundBean.initialized) initializeBean(foundBean);
-					
-					return foundBean;
-				}
-			}
-			
-			return null; */
+		
+		/* for each( var beanProvider:IBeanProvider in swiz.beanProviders )
+		   {
+		   var foundBean:Bean = findBeanByType(beanProvider.beans, type); // beanProvider.getBeanByType( type );
+		
+		   if( foundBean != null )
+		   {
+		   // initialize bean (runs autowiring and all processors), if needed
+		   if (!foundBean.initialized) initializeBean(foundBean);
+		
+		   return foundBean;
+		   }
+		   }
+		
+		 return null; */
 		}
 		
 		public function set parentBeanFactory(beanFactory:IBeanFactory):void
@@ -187,7 +187,7 @@ package org.swizframework.core
 			for each( var beanProvider:IBeanProvider in beanProviders )
 			{
 				beanProvider.dispatcher = swiz.dispatcher;
-				for each( var bean:Bean in beanProvider.beans)
+				for each( var bean:Bean in beanProvider.beans )
 				{
 					bean.beanFactory = this;
 					beans.push( bean );
@@ -198,19 +198,19 @@ package org.swizframework.core
 		/**
 		 * Add Bean Provider
 		 *
-		protected function addBeanProvider( beanProvider:IBeanProvider ):void
-		{
-			logger.debug( "IBeanProvider {0} added", beanProvider );
-			
-			//
-			//for each( var bean:Bean in beanProvider.beans )
-			//{
-				//addBean( bean );
-			//}
-			
-			// beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
-			// beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
-		} */
+		   protected function addBeanProvider( beanProvider:IBeanProvider ):void
+		   {
+		   logger.debug( "IBeanProvider {0} added", beanProvider );
+		
+		   //
+		   //for each( var bean:Bean in beanProvider.beans )
+		   //{
+		   //addBean( bean );
+		   //}
+		
+		   // beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
+		   // beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
+		 } */
 		
 		/**
 		 * Remove Bean Provider
@@ -221,7 +221,7 @@ package org.swizframework.core
 			{
 				removeBean( bean );
 			}
-			
+		
 			// beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
 			// beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
 		}
@@ -233,7 +233,8 @@ package org.swizframework.core
 		{
 			for each( var bean:Bean in beans )
 			{
-				if (!(bean is Prototype) && !bean.initialized) initializeBean( bean );
+				if( !(bean is Prototype) && !bean.initialized )
+					initializeBean( bean );
 			}
 		}
 		
@@ -266,8 +267,8 @@ package org.swizframework.core
 			}
 			
 			// if bean inplements ISwizInterface, handle those injections
-			if( bean.source is ISwizInterface )
-				handleSwizInterfaces( bean.source );
+			if( bean.type is ISwizInterface )
+				handleSwizInterfaces( ISwizInterface( bean.type ) );
 			
 			// process all bean post-processors				
 			for each( processor in swiz.processors )
@@ -398,10 +399,10 @@ package org.swizframework.core
 		/**
 		 * Bean Added Handler
 		 *
-		protected function beanAddedHandler( event:BeanEvent ):void
-		{
-			addBean( event.bean );
-		}*/
+		   protected function beanAddedHandler( event:BeanEvent ):void
+		   {
+		   addBean( event.bean );
+		 }*/
 		
 		/**
 		 * Bean Added Handler
@@ -424,51 +425,51 @@ package org.swizframework.core
 			bean.source = instance;
 			
 			// TODO: Is this necessary?
-			if( "id" in bean.source && bean.source.id != null )
+			if( ! bean is Prototype && "id" in bean.source && bean.source.id != null )
 				bean.name = bean.source.id;
 			
-			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
+			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
 			
 			return bean;
 		}
-		
-		
-		
+	
+	
+	
 		// ========================================
 		// private methods
 		// ========================================
-		
-		/*
-		private function findBeanByName( beans:Array, beanName:String ):Bean
-		{
-			for each( var bean:Bean in beans )
-			{
-				if( bean.name == beanName )
-					return bean;
-			}
-			
-			return null;
-		}
-		
-		private function findBeanByType( beans:Array, beanType:Class ):Bean
-		{
-			var foundBean:Bean;
-			
-			for each( var bean:Bean in beans )
-			{
-				if( bean is Prototype && Prototype( bean ).classReference is beanType || bean.source is beanType )
-				{
-					if ( foundBean != null )
-					{
-						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
-					}
-					
-					foundBean = bean;
-				}
-			}
-			
-			return foundBean;
-		}
-		*/
+	
+	/*
+	   private function findBeanByName( beans:Array, beanName:String ):Bean
+	   {
+	   for each( var bean:Bean in beans )
+	   {
+	   if( bean.name == beanName )
+	   return bean;
+	   }
+	
+	   return null;
+	   }
+	
+	   private function findBeanByType( beans:Array, beanType:Class ):Bean
+	   {
+	   var foundBean:Bean;
+	
+	   for each( var bean:Bean in beans )
+	   {
+	   if( bean is Prototype && Prototype( bean ).classReference is beanType || bean.source is beanType )
+	   {
+	   if ( foundBean != null )
+	   {
+	   throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
+	   }
+	
+	   foundBean = bean;
+	   }
+	   }
+	
+	   return foundBean;
+	   }
+	 */
 	}
 }

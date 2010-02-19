@@ -1,5 +1,8 @@
 package org.swizframework.core
 {
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
+	
 	import org.swizframework.reflection.TypeDescriptor;
 	
 	[DefaultProperty( "source" )]
@@ -53,6 +56,11 @@ package org.swizframework.core
 		 * Initialzed
 		 */
 		public var initialized:Boolean = false;
+		
+		public function get type():Class
+		{
+			return Class( getDefinitionByName( getQualifiedClassName( source ) ) );
+		}
 		
 		// ========================================
 		// constructor
