@@ -104,7 +104,11 @@ package org.swizframework.core
 				}
 				
 				bean.provider = this;
-				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
+				
+				if (bean is Prototype)
+					bean.typeDescriptor = TypeCache.getTypeDescriptor( Prototype(bean).classReference );
+				else
+					bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.source );
 				
 				_beans.push( bean );
 			}
