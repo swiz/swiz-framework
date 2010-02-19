@@ -13,7 +13,14 @@ package org.swizframework.core
 		 * Called by Swiz
 		 */
 		function init( swiz:ISwiz ):void;
-		function initializeBean( bean:Bean ):void;
+		function initializeBeans():void;
+		//function initializeBean( bean:Bean ):void;
+		
+		/**
+		 * Parent Swiz instance, for nesting and modules
+		 */
+		function get parentBeanFactory():IBeanFactory;
+		function set parentBeanFactory(parentBeanFactory:IBeanFactory):void;
 		
 		/**
 		 * Maybe better to extend bean provider interface

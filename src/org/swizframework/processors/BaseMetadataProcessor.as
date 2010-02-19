@@ -1,8 +1,9 @@
 package org.swizframework.processors
 {
 	import flash.events.EventDispatcher;
-
+	
 	import org.swizframework.core.Bean;
+	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataHost;
@@ -18,6 +19,8 @@ package org.swizframework.processors
 		// ========================================
 
 		protected var swiz:ISwiz;
+		protected var beanFactory:IBeanFactory;
+		
 		protected var _metadataNames:Array;
 		protected var _metadataClass:Class;
 
@@ -74,6 +77,7 @@ package org.swizframework.processors
 		public function init( swiz:ISwiz ):void
 		{
 			this.swiz = swiz;
+			this.beanFactory = swiz.beanFactory;
 		}
 
 		/**

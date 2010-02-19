@@ -74,8 +74,8 @@ package org.swizframework.core
 		
 		/**
 		 * Maybe better to extend bean provider interface
-		 */
+		 *
 		function getBeanByName( name:String ):Bean;
-		function getBeanByType( type:Class ):Bean;
+		function getBeanByType( type:Class ):Bean; */
 	}
 }

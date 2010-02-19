@@ -125,6 +125,7 @@ package org.swizframework.core
 		public function set parentSwiz(parentSwiz:ISwiz):void
 		{
 			_parentSwiz = parentSwiz;
+			_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
 		}
 
 		[ArrayElementType( "mx.logging.ILoggingTarget" )]
@@ -190,14 +191,17 @@ package org.swizframework.core
 			}
 
 			constructProviders();
+			
+			initializeProcessors();
 
 			beanFactory.init( this );
 			
-			initializeAllBeans();
+			beanFactory.initializeBeans();
 
 			logger.info( "Swiz initialized" );
 		}
 		
+		/*
 		public function getBeanByName( name:String ):Bean
 		{
 			var bean:Bean = beanFactory.getBeanByName( name );
@@ -215,16 +219,29 @@ package org.swizframework.core
 				
 			return bean;
 		}
+		*/
 
 		// ========================================
-		// protected methods
+		// private methods
 		// ========================================
+		
+		private function initializeProcessors():void
+		{
+			processors.sortOn( "priority" );
+			
+			for each( var processor:IProcessor in processors )
+			{
+				processor.init( this );
+			}
+			
+			logger.debug( "Processors initialized" );
+		}
 
 		/**
 		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders
 		 * ensures that provider is created and initialized before the bean factory accesses them.
 		 */
-		protected function constructProviders():void
+		private function constructProviders():void
 		{
 			var providerClass:Class;
 			var providerInst:IBeanProvider;
@@ -253,7 +270,7 @@ package org.swizframework.core
 		
 		/**
 		 * Initializes all beans in the bean factory.
-		 */
+		 *
 		private function initializeAllBeans():void
 		{
 			for each( var beanProvider:IBeanProvider in beanProviders )
@@ -263,6 +280,6 @@ package org.swizframework.core
 					if (!bean.initialized) beanFactory.initializeBean( bean );
 				}
 			}
-		}
+		} */
 	}
 }

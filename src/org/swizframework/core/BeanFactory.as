@@ -31,12 +31,26 @@ package org.swizframework.core
 		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		
+		/**
+		 * BeanFactories will pull all beans from BeanProviders into a local cache.
+		 */
+		protected var beans:Array = [];
+		
 		protected var swiz:ISwiz;
 		
 		/**
 		 *
 		 */
 		protected var typeDescriptors:Dictionary;
+		
+		// ========================================
+		// private properties
+		// ========================================
+		
+		/**
+		 *
+		 */
+		private var _beanFactory:IBeanFactory;
 		
 		// ========================================
 		// constructor
@@ -61,15 +75,6 @@ package org.swizframework.core
 		{
 			this.swiz = swiz;
 			
-			swiz.processors.sortOn( "priority" );
-			
-			for each( var processor:IProcessor in swiz.processors )
-			{
-				processor.init( swiz );
-			}
-			
-			logger.debug( "Processors initialized" );
-			
 			addBeanProviders( swiz.beanProviders );
 			
 			swiz.dispatcher.addEventListener( swiz.config.injectionEvent, injectionEventHandler, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
@@ -87,6 +92,22 @@ package org.swizframework.core
 
 		public function getBeanByName( name:String ):Bean
 		{
+			var foundBean:Bean = null;
+			
+			for each( var bean:Bean in beans )
+			{
+				if( bean.name == name )
+					foundBean = bean;
+			}
+			
+			if ( foundBean != null && !foundBean.initialized )
+				initializeBean(foundBean);
+			else if (foundBean == null && parentBeanFactory != null)
+				foundBean = parentBeanFactory.getBeanByName( name );
+			
+			return foundBean;
+			
+			/* 
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				var foundBean:Bean = findBeanByName(beanProvider.beans, name); // beanProvider.getBeanByName( name );
@@ -101,11 +122,34 @@ package org.swizframework.core
 			}
 			
 			return null;
+			*/
 		}
 		
 		public function getBeanByType( type:Class ):Bean
 		{
-			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
+			var foundBean:Bean;
+			
+			for each( var bean:Bean in beans )
+			{
+				if( bean is Prototype && Prototype( bean ).classReference is type || bean.source is type )
+				{
+					if ( foundBean != null )
+					{
+						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + type );
+					}
+					
+					foundBean = bean;
+				}
+			}
+			
+			if ( foundBean != null && !foundBean.initialized )
+				initializeBean(foundBean);
+			else if (foundBean == null && parentBeanFactory != null)
+				foundBean = parentBeanFactory.getBeanByType( type );
+			
+			return foundBean;
+			
+			/* for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				var foundBean:Bean = findBeanByType(beanProvider.beans, type); // beanProvider.getBeanByType( type );
 				
@@ -118,7 +162,17 @@ package org.swizframework.core
 				}
 			}
 			
-			return null
+			return null; */
+		}
+		
+		public function set parentBeanFactory(beanFactory:IBeanFactory):void
+		{
+			_beanFactory = beanFactory;
+		}
+		
+		public function get parentBeanFactory():IBeanFactory
+		{
+			return _beanFactory;
 		}
 		
 		// ========================================
@@ -132,26 +186,29 @@ package org.swizframework.core
 		{
 			for each( var beanProvider:IBeanProvider in beanProviders )
 			{
-				addBeanProvider( beanProvider );
+				for each( var bean:Bean in beanProvider.beans)
+				{
+					beans.push( bean );
+				}
 			}
 		}
 		
 		/**
 		 * Add Bean Provider
-		 */
+		 *
 		protected function addBeanProvider( beanProvider:IBeanProvider ):void
 		{
 			logger.debug( "IBeanProvider {0} added", beanProvider );
 			
-			/*
-			for each( var bean:Bean in beanProvider.beans )
-			{
-				addBean( bean );
-			}*/
+			//
+			//for each( var bean:Bean in beanProvider.beans )
+			//{
+				//addBean( bean );
+			//}
 			
 			// beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
 			// beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
-		}
+		} */
 		
 		/**
 		 * Remove Bean Provider
@@ -168,9 +225,20 @@ package org.swizframework.core
 		}
 		
 		/**
+		 * Initializes all beans in the beans cache.
+		 */
+		public function initializeBeans():void
+		{
+			for each( var bean:Bean in beans )
+			{
+				if (!bean.initialized) initializeBean( bean );
+			}
+		}
+		
+		/**
 		 * Initialze Bean
 		 */
-		public function initializeBean( bean:Bean ):void
+		protected function initializeBean( bean:Bean ):void
 		{
 			logger.debug( "BeanFactory::initializeBean( {0} )", bean );
 			bean.initialized = true;
@@ -368,7 +436,7 @@ package org.swizframework.core
 		// private methods
 		// ========================================
 		
-		
+		/*
 		private function findBeanByName( beans:Array, beanName:String ):Bean
 		{
 			for each( var bean:Bean in beans )
@@ -399,5 +467,6 @@ package org.swizframework.core
 			
 			return foundBean;
 		}
+		*/
 	}
 }
