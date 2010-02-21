@@ -425,7 +425,7 @@ package org.swizframework.core
 			bean.source = instance;
 			
 			// TODO: Is this necessary?
-			if( ! bean is Prototype && "id" in bean.source && bean.source.id != null )
+			if( "id" in bean.source && bean.source.id != null )
 				bean.name = bean.source.id;
 			
 			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
