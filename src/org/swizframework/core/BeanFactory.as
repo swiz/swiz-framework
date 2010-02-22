@@ -207,9 +207,12 @@ package org.swizframework.core
 		 */
 		public function initializeBeans():void
 		{
+			// add main dispatcher as bean
+			beans.push( createBean( swiz.dispatcher ) );
+			
 			for each( var bean:Bean in beans )
 			{
-				if( !(bean is Prototype) && !bean.initialized )
+				if( !( bean is Prototype ) && !bean.initialized )
 					initializeBean( bean );
 			}
 		}
