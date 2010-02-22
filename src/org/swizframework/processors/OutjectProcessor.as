@@ -55,7 +55,7 @@ package org.swizframework.processors
 			outjectBean.source = bean.source[ metadataTag.host.name ];
 			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
 			
-			swiz.beanFactory.beans.push( outjectBean );
+			beanFactory.beans.push( outjectBean );
 		}
 		
 		/**

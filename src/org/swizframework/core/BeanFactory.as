@@ -134,7 +134,7 @@ package org.swizframework.core
 			}
 			
 			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
-				initializeBean(foundBean);
+				initializeBean( foundBean );
 			else if( foundBean == null && parentBeanFactory != null )
 				foundBean = parentBeanFactory.getBeanByType( type );
 			
@@ -207,14 +207,17 @@ package org.swizframework.core
 		 */
 		public function initializeBeans():void
 		{
-			// add main dispatcher as bean
-			beans.push( createBean( swiz.dispatcher ) );
-			
 			for each( var bean:Bean in beans )
 			{
 				if( !( bean is Prototype ) && !bean.initialized )
 					initializeBean( bean );
 			}
+			
+			// add main dispatcher as bean to collection
+			var rootDispatcherBean:Bean = createBean( swiz.dispatcher );
+			beans.push( rootDispatcherBean );
+			// manually trigger processing now that all defined beans are done
+			initializeBean( rootDispatcherBean );
 		}
 		
 		/**
