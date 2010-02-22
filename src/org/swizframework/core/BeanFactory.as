@@ -172,37 +172,6 @@ package org.swizframework.core
 		}
 		
 		/**
-		 * Add Bean Provider
-		 *
-		   protected function addBeanProvider( beanProvider:IBeanProvider ):void
-		   {
-		   logger.debug( "IBeanProvider {0} added", beanProvider );
-		
-		   //
-		   //for each( var bean:Bean in beanProvider.beans )
-		   //{
-		   //addBean( bean );
-		   //}
-		
-		   // beanProvider.addEventListener( BeanEvent.ADDED, beanAddedHandler );
-		   // beanProvider.addEventListener( BeanEvent.REMOVED, beanRemovedHandler );
-		 } */
-		
-		/**
-		 * Remove Bean Provider
-		 */
-		protected function removeBeanProvider( beanProvider:IBeanProvider ):void
-		{
-			for each( var bean:Bean in beanProvider.beans )
-			{
-				removeBean( bean );
-			}
-		
-			// beanProvider.removeEventListener( BeanEvent.ADDED, beanAddedHandler );
-			// beanProvider.removeEventListener( BeanEvent.REMOVED, beanRemovedHandler );
-		}
-		
-		/**
 		 * Initializes all beans in the beans cache.
 		 */
 		public function initializeBeans():void
@@ -376,22 +345,6 @@ package org.swizframework.core
 				var bean:Bean = createBean( event.target );
 				removeBean( bean );
 			}
-		}
-		
-		/**
-		 * Bean Added Handler
-		 *
-		   protected function beanAddedHandler( event:BeanEvent ):void
-		   {
-		   addBean( event.bean );
-		 }*/
-		
-		/**
-		 * Bean Added Handler
-		 */
-		protected function beanRemovedHandler( event:BeanEvent ):void
-		{
-			removeBean( event.bean );
 		}
 		
 		/**
