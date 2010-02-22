@@ -31,11 +31,6 @@ package org.swizframework.core
 		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		
-		/**
-		 * BeanFactories will pull all beans from BeanProviders into a local cache.
-		 */
-		protected var beans:Array = [];
-		
 		protected var swiz:ISwiz;
 		
 		/**
@@ -43,14 +38,27 @@ package org.swizframework.core
 		 */
 		protected var typeDescriptors:Dictionary;
 		
-		// ========================================
-		// private properties
-		// ========================================
-		
 		/**
 		 *
 		 */
-		private var _beanFactory:IBeanFactory;
+		protected var _parentBeanFactory:IBeanFactory;
+		
+		// ========================================
+		// public properties
+		// ========================================
+		
+		/**
+		 * Backing variable for <code>beans</code> getter/setter.
+		 */
+		protected var _beans:Array = [];
+		
+		/**
+		 * BeanFactories will pull all beans from BeanProviders into a local cache.
+		 */
+		public function get beans():Array
+		{
+			return _beans;
+		}
 		
 		// ========================================
 		// constructor
@@ -106,23 +114,6 @@ package org.swizframework.core
 				foundBean = parentBeanFactory.getBeanByName( name );
 			
 			return foundBean;
-		
-		/*
-		   for each( var beanProvider:IBeanProvider in swiz.beanProviders )
-		   {
-		   var foundBean:Bean = findBeanByName(beanProvider.beans, name); // beanProvider.getBeanByName( name );
-		
-		   if( foundBean != null )
-		   {
-		   // initialize bean (runs autowiring and all processors), if needed
-		   if (!foundBean.initialized) initializeBean(foundBean);
-		
-		   return foundBean;
-		   }
-		   }
-		
-		   return null;
-		 */
 		}
 		
 		public function getBeanByType( type:Class ):Bean
@@ -148,31 +139,16 @@ package org.swizframework.core
 				foundBean = parentBeanFactory.getBeanByType( type );
 			
 			return foundBean;
-		
-		/* for each( var beanProvider:IBeanProvider in swiz.beanProviders )
-		   {
-		   var foundBean:Bean = findBeanByType(beanProvider.beans, type); // beanProvider.getBeanByType( type );
-		
-		   if( foundBean != null )
-		   {
-		   // initialize bean (runs autowiring and all processors), if needed
-		   if (!foundBean.initialized) initializeBean(foundBean);
-		
-		   return foundBean;
-		   }
-		   }
-		
-		 return null; */
 		}
 		
-		public function set parentBeanFactory(beanFactory:IBeanFactory):void
+		public function set parentBeanFactory( beanFactory:IBeanFactory ):void
 		{
-			_beanFactory = beanFactory;
+			_parentBeanFactory = beanFactory;
 		}
 		
 		public function get parentBeanFactory():IBeanFactory
 		{
-			return _beanFactory;
+			return _parentBeanFactory;
 		}
 		
 		// ========================================
@@ -190,7 +166,7 @@ package org.swizframework.core
 				for each( var bean:Bean in beanProvider.beans )
 				{
 					bean.beanFactory = this;
-					beans.push( bean );
+					_beans.push( bean );
 				}
 			}
 		}
@@ -432,44 +408,5 @@ package org.swizframework.core
 			
 			return bean;
 		}
-	
-	
-	
-		// ========================================
-		// private methods
-		// ========================================
-	
-	/*
-	   private function findBeanByName( beans:Array, beanName:String ):Bean
-	   {
-	   for each( var bean:Bean in beans )
-	   {
-	   if( bean.name == beanName )
-	   return bean;
-	   }
-	
-	   return null;
-	   }
-	
-	   private function findBeanByType( beans:Array, beanType:Class ):Bean
-	   {
-	   var foundBean:Bean;
-	
-	   for each( var bean:Bean in beans )
-	   {
-	   if( bean is Prototype && Prototype( bean ).classReference is beanType || bean.source is beanType )
-	   {
-	   if ( foundBean != null )
-	   {
-	   throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
-	   }
-	
-	   foundBean = bean;
-	   }
-	   }
-	
-	   return foundBean;
-	   }
-	 */
 	}
 }

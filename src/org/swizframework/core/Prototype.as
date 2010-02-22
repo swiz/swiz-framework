@@ -52,10 +52,9 @@ package org.swizframework.core
 		
 		protected function createInstance():Object
 		{
-			if( type == null ) // && className == null)
-				return null; // throw new Error( "Bean Creation exception! You must supply type or className to Prototype!" );
+			if( type == null )
+				throw new Error( "Bean Creation exception! You must supply type to Prototype!" );
 			
-			// var clazz : Class = getClass();
 			var instance:*;
 			
 			if( constructorArguments != null )

@@ -54,9 +54,8 @@ package org.swizframework.processors
 				outjectBean.name = metadataTag.args[ 0 ][ "value" ];
 			outjectBean.source = bean.source[ metadataTag.host.name ];
 			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
-			// TODO: does it matter which IBeanProvider this is added to?
-			//should probably be same one as Bean
-			IBeanProvider( swiz.beanProviders[ 0 ] ).addBean( outjectBean );
+			
+			swiz.beanFactory.beans.push( outjectBean );
 		}
 		
 		/**
