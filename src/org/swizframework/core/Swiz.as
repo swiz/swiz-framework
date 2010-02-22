@@ -35,9 +35,9 @@ package org.swizframework.core
 		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), 
 			new PostConstructProcessor(), new MediateProcessor() ];
-			
+		
 		protected var _parentSwiz:ISwiz;
-
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -127,6 +127,7 @@ package org.swizframework.core
 			_parentSwiz = parentSwiz;
 			_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
 		}
+		
 		[ArrayElementType( "mx.logging.ILoggingTarget" )]
 		
 		/**
@@ -192,34 +193,14 @@ package org.swizframework.core
 			constructProviders();
 			
 			initializeProcessors();
-
+			
 			beanFactory.init( this );
 			
 			beanFactory.initializeBeans();
-
+			
 			logger.info( "Swiz initialized" );
 		}
 		
-		/*
-		public function getBeanByName( name:String ):Bean
-		{
-			var bean:Bean = beanFactory.getBeanByName( name );
-			if (bean == null && parentSwiz != null)
-				bean = parentSwiz.getBeanByName( name );
-				
-			return bean;
-		}
-		
-		public function getBeanByType( type:Class ):Bean
-		{
-			var bean:Bean = beanFactory.getBeanByType( type );
-			if (bean == null && parentSwiz != null)
-				bean = parentSwiz.getBeanByType( type );
-				
-			return bean;
-		}
-		*/
-
 		// ========================================
 		// private methods
 		// ========================================
@@ -235,7 +216,7 @@ package org.swizframework.core
 			
 			logger.debug( "Processors initialized" );
 		}
-
+		
 		/**
 		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders
 		 * ensures that provider is created and initialized before the bean factory accesses them.
@@ -264,21 +245,5 @@ package org.swizframework.core
 					BeanLoader(providerInst).initialize();
 			}
 		}
-		
-		
-		
-		/**
-		 * Initializes all beans in the bean factory.
-		 *
-		private function initializeAllBeans():void
-		{
-			for each( var beanProvider:IBeanProvider in beanProviders )
-			{
-				for each( var bean:Bean in beanProvider.beans )
-				{
-					if (!bean.initialized) beanFactory.initializeBean( bean );
-				}
-			}
-		} */
 	}
 }
