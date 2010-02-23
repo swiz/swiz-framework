@@ -304,7 +304,7 @@ package org.swizframework.core
 				}
 				else
 				{
-					return ignoredClasses.test( className ) != true;
+					return !( ignoredClasses.test( className ) );
 				}
 			}
 		}

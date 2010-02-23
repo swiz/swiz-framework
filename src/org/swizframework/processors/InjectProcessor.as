@@ -170,7 +170,7 @@ package org.swizframework.processors
 			}
 			else
 			{
-				if (injectTag.required)
+				if( injectTag.required )
 					throw new Error("InjectionProcessorError: bean not found: "+injectTag.source);
 				else
 					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
@@ -207,7 +207,7 @@ package org.swizframework.processors
 			}
 			else
 			{
-				if (injectTag.required)
+				if( injectTag.required )
 					throw new Error("InjectionProcessorError: bean not found: "+injectTag.source);
 				else
 					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
@@ -239,7 +239,7 @@ package org.swizframework.processors
 			}
 			else
 			{
-				if (injectTag.required)
+				if( injectTag.required )
 					throw new Error("InjectionProcessorError: bean not found: "+injectTag.source);
 				else
 					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
