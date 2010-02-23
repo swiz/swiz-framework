@@ -40,19 +40,22 @@ package org.swizframework.core
 					// BeanProvider will take care of setting the type descriptor, 
 					// but we want to wrap the intances in Bean classes to set the Bean.name to id
 					child = this[ name ];
-
-					if( child is Bean )
+					
+					if ( child != null )
 					{
-						bean = Bean(child);
-					}
-					else
-					{
-						bean = new Bean();
-						bean.name = name;
-						bean.source = child;
+						if( child is Bean )
+						{
+							bean = Bean(child);
+						}
+						else
+						{
+							bean = new Bean();
+							bean.name = name;
+							bean.source = child;
+						}
+						beans.push(bean);
 					}
 
-					beans.push(bean);
 				}
 			}
 			return beans;

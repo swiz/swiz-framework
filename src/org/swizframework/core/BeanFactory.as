@@ -116,17 +116,17 @@ package org.swizframework.core
 			return foundBean;
 		}
 		
-		public function getBeanByType( type:Class ):Bean
+		public function getBeanByType( beanType:Class ):Bean
 		{
 			var foundBean:Bean;
 			
 			for each( var bean:Bean in beans )
 			{
-				if( bean.type == type )
+				if( bean.type is beanType )
 				{
-					if( foundBean != null )
+					if ( foundBean != null )
 					{
-						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + type );
+						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
 					}
 					
 					foundBean = bean;
@@ -136,7 +136,7 @@ package org.swizframework.core
 			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
 				initializeBean( foundBean );
 			else if( foundBean == null && parentBeanFactory != null )
-				foundBean = parentBeanFactory.getBeanByType( type );
+				foundBean = parentBeanFactory.getBeanByType( beanType );
 			
 			return foundBean;
 		}

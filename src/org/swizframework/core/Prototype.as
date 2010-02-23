@@ -12,7 +12,7 @@ package org.swizframework.core
 		 */
 		protected var _type:Class;
 		
-		override public function get type():Class
+		override public function get type():*
 		{
 			return _type;
 		}

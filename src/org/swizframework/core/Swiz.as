@@ -6,6 +6,7 @@ package org.swizframework.core
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
 	
+	import org.swizframework.events.SwizEvent;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.MediateProcessor;
@@ -190,6 +191,9 @@ package org.swizframework.core
 				beanFactory = new BeanFactory();
 			}
 			
+			// dispatch a swiz created event before fully initializing
+			dispatchSwizCreatedEvent();
+			
 			constructProviders();
 			
 			initializeProcessors();
@@ -244,6 +248,33 @@ package org.swizframework.core
 				if( providerInst is BeanLoader )
 					BeanLoader(providerInst).initialize();
 			}
+		}
+		
+		/**
+		 * Dispatches a Swiz creation event to find parents and attaches a listener to 
+		 * find potential children.
+		 */
+		private function dispatchSwizCreatedEvent():void {
+			// dispatch a creation event to find parents
+			dispatcher.dispatchEvent( new SwizEvent(SwizEvent.CREATED, this) );
+			// and attach a listener for children
+			dispatcher.addEventListener( SwizEvent.CREATED, handleSwizCreatedEvent );
+			
+			logger.info( "Dispatched Swiz Created Event to find parents" );
+		}
+		
+		/**
+		 * Receives swiz creation events from potential child swiz instances, and sets this instance 
+		 * as the parent. Relies on display list ordering as a means of conveying parent / child 
+		 * relationships. Pure AS projects will need to call setParent explicitly.
+		 */
+		private function handleSwizCreatedEvent(event:SwizEvent):void
+		{
+			if (event.swiz != null) {
+				event.swiz.parentSwiz = this;
+			}
+			
+			logger.info( "Received SwizCreationEvent, set self to parent." );
 		}
 	}
 }

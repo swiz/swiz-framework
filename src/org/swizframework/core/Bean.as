@@ -57,9 +57,10 @@ package org.swizframework.core
 		 */
 		public var initialized:Boolean = false;
 		
-		public function get type():Class
+		public function get type():*
 		{
-			return Class( getDefinitionByName( getQualifiedClassName( source ) ) );
+			// return Class( getDefinitionByName( getQualifiedClassName( source ) ) );
+			return source;
 		}
 		
 		// ========================================
