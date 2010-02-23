@@ -59,7 +59,6 @@ package org.swizframework.core
 		
 		public function get type():*
 		{
-			// return Class( getDefinitionByName( getQualifiedClassName( source ) ) );
 			return source;
 		}
 		

@@ -119,12 +119,14 @@ package org.swizframework.core
 		public function getBeanByType( beanType:Class ):Bean
 		{
 			var foundBean:Bean;
+			// should we just have sent in the className for beanType instead??
+			var beanTypeName:String = getQualifiedClassName(beanType);
 			
 			for each( var bean:Bean in beans )
 			{
-				if( bean.type is beanType )
+				if( bean.typeDescriptor.satisfiesType( beanTypeName ) )
 				{
-					if ( foundBean != null )
+					if( foundBean != null )
 					{
 						throw new Error( "AmbiguousReferenceError. More than one bean was found with type: " + beanType );
 					}

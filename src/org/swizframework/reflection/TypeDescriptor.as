@@ -1,6 +1,8 @@
 package org.swizframework.reflection
 {
 	import flash.utils.Dictionary;
+	import flash.utils.describeType;
+	import flash.utils.getDefinitionByName;
 	
 	import org.swizframework.factories.MetadataHostFactory;
 	
@@ -20,6 +22,11 @@ package org.swizframework.reflection
 		public var description:XML;
 		
 		/**
+		 * The Class of this type.
+		 */
+		public var type:Class;
+		
+		/**
 		 * The fully qualified name of this type.
 		 */
 		public var className:String;
@@ -27,7 +34,12 @@ package org.swizframework.reflection
 		/**
 		 * The fully qualified name of this type's super class.
 		 */
-		public var superClassName:String;
+		// public var superClassName:String;
+		
+		/**
+		 * The fully qualified name of all superclasses this type extends.
+		 */
+		public var superClasses:Array = [];
 		
 		/**
 		 * The fully qualified name of all interfaces this type implements.
@@ -124,13 +136,30 @@ package org.swizframework.reflection
 		 * 
 		 * @see flash.utils.describeType
 		 */
-		public function fromXML( description:XML ):TypeDescriptor
+		public function fromXML( describeTypeXml:XML ):TypeDescriptor
 		{
-			this.description = description;
-			className = description.@name;
-			superClassName = description.@base;
-			for each( var node:XML in description.implementsInterface )
-				interfaces.push( node.@type.toString() );
+			description = describeTypeXml;
+			
+			var classDescription:XML = null;
+			
+			if( description.factory == undefined ) 
+			{
+				classDescription = description;
+				className = classDescription.@name;
+			} 
+			else 
+			{
+				classDescription = description.factory[ 0 ];
+				className = classDescription.@type;
+			}
+			
+			type = getDefinitionByName( className ) as Class;
+			
+			for each( var extendsNode:XML in classDescription.extendsClass )
+				superClasses.push( extendsNode.@type.toString() );
+			for each( var interfaceNode:XML in classDescription.implementsInterface )
+				interfaces.push( interfaceNode.@type.toString() );
+			
 			metadataHosts = getMetadataHosts( description );
 			
 			return this;
@@ -271,6 +300,26 @@ package org.swizframework.reflection
 			}
 			
 			return hostMethods;
+		}
+		
+		/**
+		 * Returns true if this descriptor's className, superClass, or any interfaces
+		 * match a typeName.
+		 */
+		public function satisfiesType( typeName:String ):Boolean
+		{
+			if( className == typeName )
+				return true;
+			
+			for each( var superClass:String in superClasses )
+				if( superClass == typeName ) 
+					return true;
+			
+			for each( var interfaceName:String in interfaces )
+				if( interfaceName == typeName ) 
+					return true;
+			
+			return false;
 		}
 	}
 }
