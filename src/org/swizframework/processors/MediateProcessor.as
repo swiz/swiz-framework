@@ -2,9 +2,9 @@ package org.swizframework.processors
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
-
+	
 	import mx.logging.ILogger;
-
+	
 	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
@@ -169,6 +169,10 @@ package org.swizframework.processors
 			if( ClassConstant.isClassConstant( mediator.event ) )
 			{
 				var eventClass:Class = ClassConstant.getClass( mediator.event, swiz.config.eventPackages );
+				
+				if( eventClass == null )
+					throw new Error( "Could not get a reference to class for " + mediator.event + ". Did you specify its package in SwizConfig::eventPackages?" );
+				
 				var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( eventClass );
 
 				// TODO: Support DynamicEvent (skip validation) and Event subclasses (enforce validation).
@@ -183,7 +187,7 @@ package org.swizframework.processors
 						var accessorList:XMLList = descriptor.description.factory.accessor.( @name == property );
 						if( variableList.length() == 0 && accessorList.length() == 0 )
 						{
-							throw new Error(  "Unable to mediate event: " + property + " does not exist as a property of " + getQualifiedClassName( eventClass ) + "." );
+							throw new Error( "Unable to mediate event: " + property + " does not exist as a property of " + getQualifiedClassName( eventClass ) + "." );
 						}
 					}
 				}
