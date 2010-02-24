@@ -123,10 +123,13 @@ package org.swizframework.core
 			return _parentSwiz;
 		}
 		
-		public function set parentSwiz(parentSwiz:ISwiz):void
+		public function set parentSwiz( parentSwiz:ISwiz ):void
 		{
 			_parentSwiz = parentSwiz;
 			_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
+			
+			config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
+			config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
 		}
 		
 		[ArrayElementType( "mx.logging.ILoggingTarget" )]
