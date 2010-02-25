@@ -8,30 +8,30 @@ package org.swizframework.reflection
 		// ========================================
 		// protected static constants
 		// ========================================
-
+		
 		/**
 		 * Class constant regular expression.
-		 * 
+		 *
 		 * Matches: Class.CONSTANT or package.Class.CONSTANT
 		 * Captures: class, constant name
 		 */
-		protected static const CLASS_CONSTANT_PATTERN:RegExp = /([^.]+)\.([a-zA-Z0-9_]+)$/;
+		protected static const CLASS_CONSTANT_PATTERN:RegExp = /([^.]+)\.([a-zA-Z0-9_*]+)$/;
 		
 		/**
 		 * Class package constant regular expression.
-		 * 
+		 *
 		 * Matches: package.Class.CONSTANT
 		 * Captures: package, class, constant name
 		 */
 		protected static const CLASS_PACKAGE_CONSTANT_PATTERN:RegExp = /^(.*)\.([^.]+)\.([a-zA-Z0-9_]+)$/;
-
+		
 		// ========================================
 		// public static methods
 		// ========================================
 		
 		/**
 		 * Evaluates whether the specified value defines a class constant.  (Ex. 'Class.CONSTANT')
-		 * 
+		 *
 		 * @param value A text value that potentially defines a class constant.
 		 * @returns A Boolean evaluation of whether the specified value defines a class constant.
 		 */
@@ -39,67 +39,67 @@ package org.swizframework.reflection
 		{
 			return CLASS_CONSTANT_PATTERN.exec( value );
 		}
-
+		
 		/**
 		 * Gets the class name portion of a class constant.
-		 * 
+		 *
 		 * @param constant A String that defines a class constant. (Ex. 'Class.CONSTANT')
 		 * @returns Returns the class name portion of a class constant. (Ex. 'Class' for 'Class.CONSTANT')
 		 */
 		public static function getClassName( constant:String ):String
 		{
 			var match:Object = CLASS_CONSTANT_PATTERN.exec( constant );
-			if ( match )
+			if( match )
 				return match[ 1 ] as String;
 			
-			return null;			
+			return null;
 		}
-
+		
 		/**
 		 * Gets the constant name portion of a class constant.
-		 * 
+		 *
 		 * @param constant A String that defines a class constant. (Ex. 'Class.CONSTANT')
 		 * @returns Returns the constant name portion of a class constant. (Ex. 'CONSTANT' for 'Class.CONSTANT')
 		 */
 		public static function getConstantName( constant:String ):String
 		{
 			var match:Object = CLASS_CONSTANT_PATTERN.exec( constant );
-			if ( match )
+			if( match )
 				return match[ 2 ] as String;
 			
-			return null;			
+			return null;
 		}
 		
 		/**
 		 * Gets the associated value for the specified class and class constant name.
-		 * 
+		 *
 		 * @param definition The class definition.
 		 * @param constantName The constant name.
 		 * @param constantType The expected constant type.
-		 * @return Returns the associated value for the specified class constant. 
+		 * @return Returns the associated value for the specified class constant.
 		 */
 		public static function getConstantValue( definition:Class, constantName:String, constantType:String = "String" ):*
 		{
 			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( definition );
 			
 			var node:XMLList = descriptor.description.constant.(@name == constantName );
-			if ( node.length() == 0 )
+			if( node.length() == 0 )
 			{
 				throw new Error( getQualifiedClassName( definition ) + " has no constant named " + constantName + "." );
 			}
 			
 			var nodeType:String = node.@type;
-			if ( nodeType != constantType )
+			if( nodeType != constantType )
 			{
 				throw new Error( getQualifiedClassName( definition ) + "." + constantName + " is not typed " + constantType + " but instead is typed as " + nodeType + "." );
 			}
-
+			
 			return definition[ constantName ];
 		}
 		
 		/**
 		 * Gets the class referenced by the specified relative or fully qualified class constant.
-		 * 
+		 *
 		 * @param constant A relative or fully qualified class constant.
 		 * @param packageNames A set of package names to search to for a relative class constant.  (Optional)
 		 * @returns The class referenced by the specified class constant, if found. Otherwise, returns null.
@@ -107,13 +107,13 @@ package org.swizframework.reflection
 		public static function getClass( constant:String, packageNames:Array = null ):Class
 		{
 			var match:Object = CLASS_CONSTANT_PATTERN.exec( constant );
-			if ( match )
+			if( match )
 			{
 				var className:String = match[ 1 ] as String;
 				var constantName:String = match[ 2 ] as String;
 				
 				var packageMatch:Object = CLASS_PACKAGE_CONSTANT_PATTERN.exec( constant );
-				if ( packageMatch )
+				if( packageMatch )
 				{
 					var packageName:String = packageMatch[ 1 ] as String;
 					
@@ -131,20 +131,20 @@ package org.swizframework.reflection
 		// ========================================
 		// protected static methods
 		// ========================================
-
+		
 		/**
 		 * Finds the class definition given a class name and set of potential package names.
-		 * 
+		 *
 		 * @param className The class name.
 		 * @param packageNames The set of potential package names to search.
 		 * @returns Returns the class definition if found. Otherwise returns null.
 		 */
 		protected static function findClassDefinition( className:String, packageNames:Array ):Class
 		{
-			for each ( var packageName:String in packageNames )
+			for each( var packageName:String in packageNames )
 			{
 				var definition:Class = getClassDefinition( packageName + "." + className );
-				if ( definition != null )
+				if( definition != null )
 					return definition;
 			}
 			
@@ -153,7 +153,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Safely returns a reference to the class object of the class specified by the name parameter.
-		 * 
+		 *
 		 * @param name The fully qualified name of a class.
 		 * @returns Returns a reference to the class object of the class specified by the name parameter.
 		 */
@@ -163,11 +163,11 @@ package org.swizframework.reflection
 			{
 				return getDefinitionByName( name ) as Class;
 			}
-			catch ( e:ReferenceError )
+			catch( e:ReferenceError )
 			{
 			}
-
-			return null;		
+			
+			return null;
 		}
 	}
 }

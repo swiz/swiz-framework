@@ -8,13 +8,13 @@ package org.swizframework.processors
 	import org.swizframework.core.Bean;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.MediateQueue;
-	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.ClassConstant;
+	import org.swizframework.reflection.Constant;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.reflection.TypeDescriptor;
 	import org.swizframework.utils.SwizLogger;
-
+	
 	/**
 	 * Mediate Processor
 	 */
@@ -23,20 +23,20 @@ package org.swizframework.processors
 		// ========================================
 		// protected static constants
 		// ========================================
-
+		
 		protected static const MEDIATE:String = "Mediate";
-
+		
 		// ========================================
 		// protected properties
 		// ========================================
-
+		
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 		protected var mediatorsByEventType:Dictionary = new Dictionary();
-
+		
 		// ========================================
 		// public properties
 		// ========================================
-
+		
 		/**
 		 *
 		 */
@@ -44,11 +44,11 @@ package org.swizframework.processors
 		{
 			return ProcessorPriority.MEDIATE;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor
 		 */
@@ -56,28 +56,37 @@ package org.swizframework.processors
 		{
 			super( [ MEDIATE ], MediateMetadataTag );
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		/**
 		 * @inheritDoc
 		 */
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var mediateTag:MediateMetadataTag = metadataTag as MediateMetadataTag;
-
+			
 			if( validateMediateMetadataTag( mediateTag ) )
 			{
-				var eventType:String = parseEventTypeExpression( mediateTag.event );
-
-				addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+				if( mediateTag.event.substr( -2 ) == ".*" )
+				{
+					var clazz:Class = ClassConstant.getClass( mediateTag.event, swiz.config.eventPackages );
+					var td:TypeDescriptor = TypeCache.getTypeDescriptor( clazz );
+					for each( var constant:Constant in td.constants )
+						addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], constant.value );
+				}
+				else
+				{
+					var eventType:String = parseEventTypeExpression( mediateTag.event );
+					addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+				}
 			}
-
+			
 			logger.debug( "MediateProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -85,30 +94,30 @@ package org.swizframework.processors
 		{
 			var mediateTag:MediateMetadataTag = metadataTag as MediateMetadataTag;
 			var eventType:String = parseEventTypeExpression( mediateTag.event );
-
+			
 			removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
-
+			
 			logger.debug( "MediateProcessor tore down {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
-
+		
 		// ========================================
 		// protected methods
 		// ========================================
-
+		
 		/**
 		 * Add Mediator By Event Type
 		 */
 		protected function addMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
 		{
 			var mediator:MediateQueue = new MediateQueue( mediateTag, method );
-
+			
 			mediatorsByEventType[ eventType ] ||= [];
 			mediatorsByEventType[ eventType ].push( mediator );
-
+			
 			swiz.dispatcher.addEventListener( eventType, mediator.mediate, false, mediateTag.priority, true );
 			logger.debug( "MediateProcessor added listener to dispatcher for {0}, {1}", eventType, String( mediator.method ) );
 		}
-
+		
 		/**
 		 * Remove Mediator By Event Type
 		 */
@@ -122,19 +131,19 @@ package org.swizframework.processors
 					if( mediator.method == method )
 					{
 						swiz.dispatcher.removeEventListener( eventType, mediator.mediate, false );
-
+						
 						mediatorsByEventType[ eventType ].splice( mediatorIndex, 1 );
 						break;
 					}
-
+					
 					mediatorIndex++;
 				}
-
+				
 				if( mediatorsByEventType[ eventType ].length == 0 )
 					delete mediatorsByEventType[ eventType ];
 			}
 		}
-
+		
 		/**
 		 * Parse Event Type Expression
 		 *
@@ -158,7 +167,7 @@ package org.swizframework.processors
 				return value;
 			}
 		}
-
+		
 		/**
 		 * Validate Mediate Metadata Tag
 		 *
@@ -174,10 +183,10 @@ package org.swizframework.processors
 					throw new Error( "Could not get a reference to class for " + mediator.event + ". Did you specify its package in SwizConfig::eventPackages?" );
 				
 				var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( eventClass );
-
+				
 				// TODO: Support DynamicEvent (skip validation) and Event subclasses (enforce validation).
 				// TODO: flash.events.Event is returning 'true' for isDynamic - figure out workaround?
-
+				
 				var isDynamic:Boolean = ( descriptor.description.@isDynamic.toString() == "true" );
 				if( ! isDynamic )
 				{
@@ -192,9 +201,9 @@ package org.swizframework.processors
 					}
 				}
 			}
-
+			
 			return true;
 		}
-
+	
 	}
 }
