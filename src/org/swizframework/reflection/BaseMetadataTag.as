@@ -92,6 +92,14 @@ package org.swizframework.reflection
 			_defaultArgName = value;
 		}
 		
+		/**
+		 * String showing what this tag looks like in code. Useful for debugging.
+		 */
+		public function get asTag():String
+		{
+			return toString();
+		}
+		
 		// ========================================
 		// constructor
 		// ========================================
