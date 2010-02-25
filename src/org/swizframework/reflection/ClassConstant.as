@@ -23,7 +23,7 @@ package org.swizframework.reflection
 		 * Matches: package.Class.CONSTANT
 		 * Captures: package, class, constant name
 		 */
-		protected static const CLASS_PACKAGE_CONSTANT_PATTERN:RegExp = /^(.*)\.([^.]+)\.([a-zA-Z0-9_]+)$/;
+		protected static const CLASS_PACKAGE_CONSTANT_PATTERN:RegExp = /^(.*)\.([^.]+)\.([a-zA-Z0-9_*]+)$/;
 		
 		// ========================================
 		// public static methods
