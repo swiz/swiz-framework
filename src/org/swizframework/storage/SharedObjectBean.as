@@ -1,4 +1,5 @@
-package org.swizframework.storage {
+package org.swizframework.storage
+{
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.SharedObject;
@@ -6,8 +7,9 @@ package org.swizframework.storage {
 	import mx.logging.ILogger;
 	import mx.logging.Log;
 	
-	public class SharedObjectBean extends EventDispatcher implements ISharedObjectBean {
-		private static const logger : ILogger = Log.getLogger( "org.swizframework.storage.SharedObjectBean" );
+	public class SharedObjectBean extends EventDispatcher implements ISharedObjectBean
+	{
+		private static const logger:ILogger = Log.getLogger( "org.swizframework.storage.SharedObjectBean" );
 		
 		private var so:SharedObject;
 		
@@ -17,7 +19,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function set localPath( path : String ) : void {
+		public function set localPath( path:String ):void
+		{
 			_path = path;
 			invalidate();
 		}
@@ -25,7 +28,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function set name( name : String ) : void {
+		public function set name( name:String ):void
+		{
 			_name = name;
 			invalidate();
 		}
@@ -33,40 +37,48 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function get size() : Number {
-			if ( so != null ) {
+		public function get size():Number
+		{
+			if( so != null )
+			{
 				return so.size
 			}
 			return NaN;
 		}
 		
-		public function SharedObjectBean() {
+		public function SharedObjectBean()
+		{
 		}
 		
-		protected function invalidate() : void {
+		protected function invalidate():void
+		{
 			so = SharedObject.getLocal( _name, _path );
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function clear() : void {
+		public function clear():void
+		{
 			so.clear();
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function hasValue( name : String ) : Boolean {
+		public function hasValue( name:String ):Boolean
+		{
 			return so.data[name] != undefined;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function getValue( name : String, initValue : * = null ) : * {
+		public function getValue( name:String, initValue:* = null ):*
+		{
 			var o:Object = so.data;
-			if ( o[name] == null && initValue != null ) {
+			if( o[name] == null && initValue != null )
+			{
 				o[name] = initValue;
 				so.flush();
 			}
@@ -77,7 +89,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function setValue( name : String, value : * ) : void {
+		public function setValue( name:String, value:* ):void
+		{
 			var o:Object = so.data;
 			o[name] = value;
 			so.flush();
@@ -86,9 +99,11 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function getString( name : String, initValue : String = null ) : String {
+		public function getString( name:String, initValue:String = null ):String
+		{
 			var o:Object = so.data;
-			if ( o[name] == null && initValue != null ) {
+			if( o[name] == null && initValue != null )
+			{
 				o[name] = initValue;
 				so.flush();
 			}
@@ -99,7 +114,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function setString( name : String, value : String ) : void {
+		public function setString( name:String, value:String ):void
+		{
 			var o:Object = so.data;
 			o[name] = value;
 			so.flush();
@@ -108,9 +124,11 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function getBoolean( name : String, initValue : Boolean = undefined ) : Boolean {
+		public function getBoolean( name:String, initValue:Boolean = undefined ):Boolean
+		{
 			var o:Object = so.data;
-			if ( o[name] == null ) {
+			if( o[name] == null )
+			{
 				o[name] = initValue;
 				so.flush();
 			}
@@ -121,7 +139,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function setBoolean( name : String, value : Boolean ) : void {
+		public function setBoolean( name:String, value:Boolean ):void
+		{
 			var o:Object = so.data;
 			o[name] = value;
 			so.flush();
@@ -130,9 +149,11 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function getNumber( name : String, initValue : Number = NaN ) : Number {
+		public function getNumber( name:String, initValue:Number = NaN ):Number
+		{
 			var o:Object = so.data;
-			if ( o[name] == null ) {
+			if( o[name] == null )
+			{
 				o[name] = initValue;
 				so.flush();
 			}
@@ -143,7 +164,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function setNumber( name : String, value : Number ) : void {
+		public function setNumber( name:String, value:Number ):void
+		{
 			var o:Object = so.data;
 			o[name] = value;
 			so.flush();
@@ -152,9 +174,11 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function getInt( name : String, initValue : int = undefined ) : int {
+		public function getInt( name:String, initValue:int = undefined ):int
+		{
 			var o:Object = so.data;
-			if ( o[name] == null ) {
+			if( o[name] == null )
+			{
 				o[name] = initValue;
 				so.flush();
 			}
@@ -165,7 +189,8 @@ package org.swizframework.storage {
 		/**
 		 * @inheritDoc
 		 */
-		public function setInt( name : String, value : int ) : void {
+		public function setInt( name:String, value:int ):void
+		{
 			var o:Object = so.data;
 			o[name] = value;
 			so.flush();
