@@ -32,9 +32,9 @@ package org.swizframework.reflection
 		public var className:String;
 		
 		/**
-		 * The fully qualified name of this type's super class.
+		 * The constants defined by this class.
 		 */
-		// public var superClassName:String;
+		public var constants:Array = [];
 		
 		/**
 		 * The fully qualified name of all superclasses this type extends.
@@ -48,7 +48,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Dictionary of <code>IMetadataHost</code> instances for this type, keyed by name.
-		 * 
+		 *
 		 * @see org.swizframework.reflection.IMetadataHost
 		 */
 		public var metadataHosts:Dictionary;
@@ -59,7 +59,7 @@ package org.swizframework.reflection
 		
 		public function TypeDescriptor()
 		{
-			
+		
 		}
 		
 		// ========================================
@@ -67,9 +67,9 @@ package org.swizframework.reflection
 		// ========================================
 		
 		/**
-		 * Gather and return all properties, methods or the class itself that 
+		 * Gather and return all properties, methods or the class itself that
 		 * are decorated with metadata.
-		 * 
+		 *
 		 * @return <code>IMetadataHost</code> instances
 		 */
 		protected function getMetadataHosts( description:XML ):Dictionary
@@ -109,7 +109,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Get <code>IMetadataHost</code> for provided XML node.
-		 * 
+		 *
 		 * @param hostNode Node from <code>flash.utils.describeType</code> output
 		 * @return <code>IMetadataHost</code> instance
 		 */
@@ -133,7 +133,7 @@ package org.swizframework.reflection
 		/**
 		 * Populates the <code>TypeDescriptor</code> instance from the data returned
 		 * by <code>flash.utils.describeType</code>.
-		 * 
+		 *
 		 * @see flash.utils.describeType
 		 */
 		public function fromXML( describeTypeXml:XML ):TypeDescriptor
@@ -142,12 +142,12 @@ package org.swizframework.reflection
 			
 			var classDescription:XML = null;
 			
-			if( description.factory == undefined ) 
+			if( description.factory == undefined )
 			{
 				classDescription = description;
 				className = classDescription.@name;
-			} 
-			else 
+			}
+			else
 			{
 				classDescription = description.factory[ 0 ];
 				className = classDescription.@type;
@@ -155,8 +155,12 @@ package org.swizframework.reflection
 			
 			type = getDefinitionByName( className ) as Class;
 			
+			for each( var constNode:XML in description.constant )
+				constants.push( new Constant( constNode.@name, type[ constNode.@name ] ) );
+			
 			for each( var extendsNode:XML in classDescription.extendsClass )
 				superClasses.push( extendsNode.@type.toString() );
+			
 			for each( var interfaceNode:XML in classDescription.implementsInterface )
 				interfaces.push( interfaceNode.@type.toString() );
 			
@@ -168,9 +172,9 @@ package org.swizframework.reflection
 		/**
 		 * Determine whether or not this class has any instances of
 		 * metadata tags with the provided name.
-		 * 
+		 *
 		 * @param metadataTagName
-		 * @return Flag indicating whether or not the metadata tag is present 
+		 * @return Flag indicating whether or not the metadata tag is present
 		 */
 		public function hasMetadataTag( metadataTagName:String ):Boolean
 		{
@@ -188,7 +192,7 @@ package org.swizframework.reflection
 		/**
 		 * Get all <code>IMetadataHost</code> instances for this type that are decorated
 		 * with metadata tags with the provided name.
-		 * 
+		 *
 		 * @param metadataTagName Name of tags to retrieve
 		 * @return <code>IMetadataHost</code> instances
 		 */
@@ -213,7 +217,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Get all <code>IMetadataTag</code> instances for class member with the provided name.
-		 * 
+		 *
 		 * @param tagName Name of metadata tags to find
 		 * @return <code>IMetadataTag</code> instances
 		 */
@@ -237,7 +241,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Get all <code>IMetadataTag</code> instances for class member with the provided name.
-		 * 
+		 *
 		 * @param memberName Name of class member (property or method)
 		 * @return  <code>IMetadataTag</code> instances
 		 */
@@ -258,9 +262,9 @@ package org.swizframework.reflection
 		
 		/**
 		 * Return all <code>MetadataHostProperty</code> instances for this type.
-		 * 
+		 *
 		 * @return <code>MetadataHostProperty</code> instances
-		 * 
+		 *
 		 * @see org.swizframework.reflection.MetadataHostProperty
 		 */
 		public function getMetadataHostProperties():Array
@@ -281,9 +285,9 @@ package org.swizframework.reflection
 		
 		/**
 		 * Return all <code>MetadataHostMethod</code> instances for this type.
-		 * 
+		 *
 		 * @return <code>MetadataHostMethod</code> instances
-		 * 
+		 *
 		 * @see org.swizframework.reflection.MetadataHostMethod
 		 */
 		public function getMetadataHostMethods():Array
@@ -312,11 +316,11 @@ package org.swizframework.reflection
 				return true;
 			
 			for each( var superClass:String in superClasses )
-				if( superClass == typeName ) 
+				if( superClass == typeName )
 					return true;
 			
 			for each( var interfaceName:String in interfaces )
-				if( interfaceName == typeName ) 
+				if( interfaceName == typeName )
 					return true;
 			
 			return false;

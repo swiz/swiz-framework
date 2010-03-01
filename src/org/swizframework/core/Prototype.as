@@ -27,9 +27,11 @@ package org.swizframework.core
 			return getObject();
 		}
 		
-		public function Prototype()
+		public function Prototype( type:Class = null )
 		{
 			super();
+			
+			this.type = type;
 		}
 		
 		protected function getObject():*
