@@ -5,9 +5,9 @@ package org.swizframework.events
 	import org.swizframework.core.Bean;
 	
 	/**
-	 * Dispatched when a Bean is added to or removed from a 
+	 * Dispatched when a Bean is added to or removed from a
 	 * <code>BeanProvider</code>.
-	 * 
+	 *
 	 * @see org.swizframework.core.BeanProvider
 	 */
 	public class BeanEvent extends Event
@@ -17,13 +17,13 @@ package org.swizframework.events
 		// ========================================
 		
 		/**
-		 * The BeanEvent.ADDED constant defines the value of the type property 
+		 * The BeanEvent.ADDED constant defines the value of the type property
 		 * of a beanAdded event object.
 		 */
 		public static const ADDED:String = "beanAdded";
 		
 		/**
-		 * The BeanEvent.REMOVED constant defines the value of the type property 
+		 * The BeanEvent.REMOVED constant defines the value of the type property
 		 * of a beanRemoved event object.
 		 */
 		public static const REMOVED:String = "beanRemoved";

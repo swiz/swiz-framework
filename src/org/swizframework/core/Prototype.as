@@ -1,7 +1,5 @@
 package org.swizframework.core
 {
-	import org.swizframework.events.BeanEvent;
-	
 	public class Prototype extends Bean
 	{
 		public var constructorArguments:*;

@@ -11,7 +11,6 @@ package org.swizframework.core
 	import mx.core.UIComponent;
 	import mx.logging.ILogger;
 	
-	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;

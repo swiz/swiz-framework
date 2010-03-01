@@ -51,9 +51,9 @@ package org.swizframework.reflection
 		 * Constructor sets <code>returnType</code> property based on value found in <code>hostNode</code> XML node,
 		 * as long as return type is not <code>void</code> or <code>* </code>. Also populates <code>parameters</code>
 		 * property from information found in <code>hostNode</code> XML node.
-		 * 
+		 *
 		 * @param hostNode XML node from <code>describeType</code> output that represents this method.
-		 */		
+		 */
 		public function MetadataHostMethod( hostNode:XML )
 		{
 			super();

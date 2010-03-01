@@ -1,8 +1,5 @@
 package org.swizframework.core
 {
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
-	
 	import org.swizframework.reflection.TypeDescriptor;
 	
 	[DefaultProperty( "source" )]

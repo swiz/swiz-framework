@@ -3,8 +3,6 @@ package org.swizframework.utils.chain
 	import mx.rpc.AsyncToken;
 	import mx.rpc.IResponder;
 	
-	import org.swizframework.utils.services.ServiceRequestUtil;
-	
 	public class AsyncChainStepCommand extends ChainStepCommand implements IResponder
 	{
 		// ========================================

@@ -15,7 +15,6 @@ package org.swizframework.storage
 		 */
 		function reset():void;
 		
-		
 		/**
 		 * Removes an item out of the EncryptedLocalStorage pass the item name.
 		 *

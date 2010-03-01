@@ -2,18 +2,18 @@ package org.swizframework.storage
 {
 	import flash.data.EncryptedLocalStore;
 	import flash.utils.ByteArray;
-
+	
 	/**
 	 * @see org.swizframework.storage.IEncryptedLocalStorageBean
 	 *
 	 */
 	public class EncryptedLocalStorageBean implements IEncryptedLocalStorageBean
 	{
-
+		
 		public function EncryptedLocalStorageBean()
 		{
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -21,7 +21,7 @@ package org.swizframework.storage
 		{
 			EncryptedLocalStore.reset();
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -29,7 +29,7 @@ package org.swizframework.storage
 		{
 			EncryptedLocalStore.removeItem( name );
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -40,7 +40,7 @@ package org.swizframework.storage
 				return ba.readUTFBytes( ba.length );
 			return null;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -50,7 +50,7 @@ package org.swizframework.storage
 			ba.writeUTFBytes( s );
 			EncryptedLocalStore.setItem( name, ba, stronglyBound );
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -61,7 +61,7 @@ package org.swizframework.storage
 				return ba.readBoolean();
 			return undefined;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -71,7 +71,7 @@ package org.swizframework.storage
 			ba.writeBoolean( b );
 			EncryptedLocalStore.setItem( name, ba, stronglyBound );
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -82,7 +82,7 @@ package org.swizframework.storage
 				return ba.readObject();
 			return null;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
