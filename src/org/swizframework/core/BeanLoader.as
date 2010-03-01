@@ -24,7 +24,10 @@ package org.swizframework.core
 		private function getBeans():Array
 		{
 			var xmlDescription:XML = describeType( this );
+			
 			var accessors:XMLList = xmlDescription.accessor.( @access == "readwrite" ).@name;
+			// var variables:XMLList = xmlDescription.variable;
+			// var variables:XMLList = xmlDescription.variable.( @access == "readwrite" ).@name;
 
 			var child:*;
 			var bean:Bean;
