@@ -111,9 +111,19 @@ package org.swizframework.processors
 				}
 				else
 				{
+					// not an outject, just a regular named bean
 					if( namedBean != null )
 					{
-						setDestinationValue( injectTag, bean, namedBean.source );
+						// if not using dot notation, simply assign the bean
+						if( injectTag.source.indexOf( "." ) < 0 )
+						{
+							setDestinationValue( injectTag, bean, namedBean.source );
+						}
+						else
+						{
+							// if dots present we have to do do property injection
+							addPropertyBinding( bean, namedBean, injectTag );
+						}
 					}
 					else
 					{
@@ -310,6 +320,7 @@ package org.swizframework.processors
 			
 			// get the uid of our view/new bean
 			uid = UIDUtil.getUID( destinationBean.source );
+			// TODO: need to make sure all parties are bindable?
 			// create the binding
 			cw = BindingUtils.bindProperty( destObject, destPropName, sourceBean.source, injectTag.source.split( "." ).slice( 1 ) );
 			// create an array to store bindings for this object if one does not already exist
