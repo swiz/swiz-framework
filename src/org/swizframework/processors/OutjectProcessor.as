@@ -2,6 +2,7 @@ package org.swizframework.processors
 {
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanProvider;
+	import org.swizframework.core.OutjectBean;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	
@@ -49,16 +50,21 @@ package org.swizframework.processors
 		 */
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
-			var outjectBean:Bean = new Bean();
+			var outjectBean:OutjectBean = new OutjectBean();
+			
+			// store ref to bean containing [Outject] definition
+			outjectBean.parentBean = bean;
+			// store name of property decorated with [Outject]
+			outjectBean.outjectedPropName = metadataTag.host.name;
+			// outjecting a bean by type should be extremely rare, but we gotta check
 			if( metadataTag.args.length > 0 )
 				outjectBean.name = metadataTag.args[ 0 ][ "value" ];
+			// store ref to the actual outjected value
 			outjectBean.source = bean.source[ metadataTag.host.name ];
-			
-			outjectBean.parent = bean.name;
-			outjectBean.propName = metadataTag.host.name;
-			
+			// gotta have a descriptor
 			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
 			
+			// add new bean to the factory
 			beanFactory.beans.push( outjectBean );
 		}
 		

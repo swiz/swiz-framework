@@ -9,6 +9,7 @@ package org.swizframework.processors
 	import mx.utils.UIDUtil;
 	
 	import org.swizframework.core.Bean;
+	import org.swizframework.core.OutjectBean;
 	import org.swizframework.metadata.InjectMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.MetadataHostClass;
@@ -78,71 +79,57 @@ package org.swizframework.processors
 			if( injectTag.name == AUTOWIRE )
 				logger.warn( "[Autowire] has been deprecated in favor of [Inject]. Please update {0} accordingly.", bean );
 			
-			
+			// no source attribute means we're injecting by type
 			if( injectTag.source == null )
 			{
 				addInjectByType( injectTag, bean );
 			}
 			else
 			{
-				// injecting by name/prop
+				// source attribute found - means we're injecting by name and potentially by property
 				
 				// try to obtain the bean by using the first part of the source attribute
 				var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
 				
-				// if propName is set, this is an outjected bean
-				if( namedBean.propName != null )
+				if( namedBean == null )
 				{
-					// build a dot notation source using the outjected bean's containing bean name
-					// and the name of the property within that bean
-					injectTag.source = namedBean.parent + "." + namedBean.propName;
-					// update the namedBean ref to the bean where the outject was defined
-					namedBean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
-					
-					// make sure we've found the source bean so we can bind to its property ( the outjected bean )
-					if( namedBean != null )
-					{
-						addPropertyBinding( bean, namedBean, injectTag );
-					}
+					// if the bean was not found and is required, throw an error
+					// if it's been set to not required we log a warning that it wasn't available
+					if( injectTag.required )
+						throw new Error( "InjectionProcessorError: bean not found: " + injectTag.source );
 					else
-					{
-						beanNotFound = true;
-					}
+						logger.warn( "InjectProcessor could not fulfill {0} tag on {1}", injectTag.asTag, bean );
+					
+					// bail
+					return;
+				}
+				
+				// this is a view added to the display list or a new bean being processed
+				var destObject:Object = getDestinationObject( injectTag, bean );
+				// name of property that will be bound to a source value
+				var destPropName:String = getDestinationPropertyName( injectTag );
+				
+				// check to see if this is an outjected bean
+				if( namedBean is OutjectBean )
+				{
+					addPropertyBinding( destObject, destPropName, OutjectBean( namedBean ).parentBean.source, [ OutjectBean( namedBean ).outjectedPropName ], injectTag.twoWay );
 				}
 				else
 				{
-					// not an outject, just a regular named bean
-					if( namedBean != null )
+					// if not using dot notation, simply assign the bean's current value
+					if( injectTag.source.indexOf( "." ) < 0 )
 					{
-						// if not using dot notation, simply assign the bean
-						if( injectTag.source.indexOf( "." ) < 0 )
-						{
-							setDestinationValue( injectTag, bean, namedBean.source );
-						}
-						else
-						{
-							// if dots present we have to do do property injection
-							addPropertyBinding( bean, namedBean, injectTag );
-						}
+						setDestinationValue( injectTag, bean, namedBean.source );
 					}
 					else
 					{
-						beanNotFound = true;
+						// if dots present we have to do property injection (and potential binding)
+						addPropertyBinding( destObject, destPropName, namedBean.source, injectTag.source.split( "." ).slice( 1 ), injectTag.twoWay );
 					}
 				}
 			}
 			
-			if( beanNotFound )
-			{
-				if( injectTag.required )
-					throw new Error( "InjectionProcessorError: bean not found: " + injectTag.source );
-				else
-					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
-			}
-			else
-			{
-				logger.debug( "InjectProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
-			}
+			logger.debug( "InjectProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
 		
 		/**
@@ -302,27 +289,18 @@ package org.swizframework.processors
 		/**
 		 * Add Property Binding
 		 */
-		protected function addPropertyBinding( destinationBean:Bean, sourceBean:Bean, injectTag:InjectMetadataTag ):void
+		protected function addPropertyBinding( destObject:Object, destPropName:String, sourceObject:Object, sourcePropertyChain:Array, twoWay:Boolean = false ):void
 		{
-			var destObject:Object;
-			var destPropName:String;
 			var cw:ChangeWatcher;
 			var uid:String;
-			
-			// base scenario of binding an object or property to a property of a bean
-			
-			// this is a view added to the display list or a new bean being processed
-			destObject = getDestinationObject( injectTag, destinationBean );
-			// name of property that will be bound to a source value
-			destPropName = getDestinationPropertyName( injectTag );
 			
 			// we have to track any bindings we create so we can unwire them later if need be
 			
 			// get the uid of our view/new bean
-			uid = UIDUtil.getUID( destinationBean.source );
+			uid = UIDUtil.getUID( destObject );
 			// TODO: need to make sure all parties are bindable?
 			// create the binding
-			cw = BindingUtils.bindProperty( destObject, destPropName, sourceBean.source, injectTag.source.split( "." ).slice( 1 ) );
+			cw = BindingUtils.bindProperty( destObject, destPropName, sourceObject, sourcePropertyChain );
 			// create an array to store bindings for this object if one does not already exist
 			injectByProperty[ uid ] ||= [];
 			// store this binding
@@ -330,29 +308,28 @@ package org.swizframework.processors
 			
 			// if twoWay binding was requested we have to do things in reverse
 			// meaning the existing bean's property will also be bound to the view/new bean's property
-			if( injectTag.twoWay )
+			if( twoWay )
 			{
-				// existing bean is the destination object this time
-				destObject = sourceBean.source;
 				// TODO: this assumes a dot path exists. fix.
-				var arr:Array = injectTag.source.split( "." ).slice( 1 );
+				var arr:Array = sourcePropertyChain;
 				// walk the object chain to reach the actual destination object
 				while( arr.length > 1 )
-					destObject = destObject[ arr.shift() ];
+					sourceObject = sourceObject[ arr.shift() ];
 				// the last token of the source attribute is the actual property name
-				destPropName = injectTag.source.split( "." ).pop();
+				var sourcePropName:String = arr[ 0 ];
 				
 				// create the reverse binding where the view/new bean is the source
 				// TODO: store this binding too
-				if( injectTag.destination != null )
+				//if( injectTag.destination != null )
+				if( true )
 				{
 					// if a destination was provided we can use it as the host chain value
-					BindingUtils.bindProperty( destObject, destPropName, destinationBean.source, injectTag.destination.split( "." ) );
+					BindingUtils.bindProperty( sourceObject, sourcePropName, destObject, destPropName );
 				}
 				else
 				{
 					// if no destination was provided we use the name of the decorated property as the host chain value
-					BindingUtils.bindProperty( destObject, destPropName, destinationBean.source, injectTag.host.name );
+					//BindingUtils.bindProperty( destObject, destPropName, destinationBean.source, injectTag.host.name );
 				}
 			}
 		}
