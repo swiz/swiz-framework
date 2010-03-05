@@ -83,6 +83,10 @@ package org.swizframework.reflection
 			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( definition );
 			
 			var node:XMLList = descriptor.description.constant.(@name == constantName );
+			// todo: do we need to check for jackasses who don't make their event types constants?
+			//       I'm looking at you mapquest!
+			var variableNode:XMLList = descriptor.description.variable.(@name == constantName );
+			
 			if( node.length() == 0 )
 			{
 				throw new Error( getQualifiedClassName( definition ) + " has no constant named " + constantName + "." );

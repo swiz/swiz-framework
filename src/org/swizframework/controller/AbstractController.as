@@ -35,6 +35,11 @@ package org.swizframework.controller
 			_dispatcher = dispatcher;
 		}
 		
+		protected function get dispatcher():IEventDispatcher
+		{
+			return _dispatcher;
+		}
+		
 		/** Delegates execute service call to Swiz */
 		protected function executeServiceCall( call:AsyncToken, resultHandler:Function,
 			faultHandler:Function = null, eventArgs:Array = null ):void

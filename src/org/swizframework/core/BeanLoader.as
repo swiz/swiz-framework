@@ -1,64 +1,31 @@
 package org.swizframework.core
 {
-	import flash.utils.describeType;
+	import mx.logging.ILogger;
 	
+	import org.swizframework.utils.SwizLogger;
+
+	/**
+	 * @deprecated 
+	 */
 	public class BeanLoader extends BeanProvider
-	{
-		public function BeanLoader()
-		{
-			super();
-		}
+	{	
+		// ========================================
+		// protected properties
+		// ========================================
 		
-		public function initialize():void
-		{
-			// retrieve beans
-			var beans:Array = getBeans();
-			initializeBeans(beans);
-		}
+		protected var logger:ILogger = SwizLogger.getLogger( this );
+		
+		// ========================================
+		// Constructor
+		// ========================================
 		
 		/**
-		 * Returns an of the beans contained in this loader.
-		 *
-		 * @return Array
-		 */
-		protected function getBeans():Array
+		 * Constructor, logs as deprecated
+		 */ 
+		public function BeanLoader( beans:Array = null )
 		{
-			var xmlDescription:XML = describeType( this );
-			var accessors:XMLList = xmlDescription.accessor.( @access == "readwrite" ).@name;
-			
-			var child:*;
-			var bean:Bean;
-			var beans:Array = new Array();
-			var name:String;
-			
-			for( var i:uint = 0; i < accessors.length(); i++ )
-			{
-				name = accessors[ i ];
-				if( name != "beans" )
-				{
-					
-					// BeanProvider will take care of setting the type descriptor, 
-					// but we want to wrap the intances in Bean classes to set the Bean.name to id
-					child = this[ name ];
-					
-					if( child != null )
-					{
-						if( child is Bean )
-						{
-							bean = Bean(child);
-						}
-						else
-						{
-							bean = new Bean();
-							bean.name = name;
-							bean.source = child;
-						}
-						beans.push(bean);
-					}
-					
-				}
-			}
-			return beans;
+			super();
+			logger.warn("BeanLoader is deprecated! Please refactor your loaders to BeanProvider as this class will be removed eventually!");
 		}
 	}
 }
