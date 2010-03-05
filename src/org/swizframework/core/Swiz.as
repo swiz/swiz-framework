@@ -254,10 +254,11 @@ package org.swizframework.core
 		}
 		
 		/**
-		 * Dispatches a Swiz creation event to find parents and attaches a listener to 
+		 * Dispatches a Swiz creation event to find parents and attaches a listener to
 		 * find potential children.
 		 */
-		private function dispatchSwizCreatedEvent():void {
+		private function dispatchSwizCreatedEvent():void
+		{
 			// dispatch a creation event to find parents
 			dispatcher.dispatchEvent( new SwizEvent(SwizEvent.CREATED, this) );
 			// and attach a listener for children
@@ -267,13 +268,14 @@ package org.swizframework.core
 		}
 		
 		/**
-		 * Receives swiz creation events from potential child swiz instances, and sets this instance 
-		 * as the parent. Relies on display list ordering as a means of conveying parent / child 
+		 * Receives swiz creation events from potential child swiz instances, and sets this instance
+		 * as the parent. Relies on display list ordering as a means of conveying parent / child
 		 * relationships. Pure AS projects will need to call setParent explicitly.
 		 */
 		private function handleSwizCreatedEvent(event:SwizEvent):void
 		{
-			if (event.swiz != null) {
+			if( event.swiz != null )
+			{
 				event.swiz.parentSwiz = this;
 			}
 			

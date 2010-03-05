@@ -2,7 +2,7 @@ package org.swizframework.reflection
 {
 	/**
 	 * Representation of a method parameter.
-	 */	
+	 */
 	public class MethodParameter
 	{
 		// ========================================
@@ -16,7 +16,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Type of this parameter. Null if typed as <code>* </code>.
-		 */		
+		 */
 		public var type:Class;
 		
 		/**
@@ -30,11 +30,11 @@ package org.swizframework.reflection
 		
 		/**
 		 * Constructor sets initial values of required parameters.
-		 *  
+		 *
 		 * @param index
 		 * @param type
 		 * @param optional
-		 */		
+		 */
 		public function MethodParameter( index:int, type:Class, optional:Boolean )
 		{
 			this.index = index;

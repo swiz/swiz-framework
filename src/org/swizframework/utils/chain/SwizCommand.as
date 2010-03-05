@@ -7,7 +7,6 @@ package org.swizframework.utils.chain
 	
 	public class SwizCommand implements IResponder
 	{
-		
 		private var delayedCall:Function;
 		private var args:Array;
 		private var resultHandler:Function;

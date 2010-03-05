@@ -1,7 +1,5 @@
 package org.swizframework.utils.chain
 {
-	import flash.events.IEventDispatcher;
-	
 	public class CommandChain extends AbstractChain
 	{
 		public function CommandChain( stopOnError:Boolean = true, mode:String = AbstractChain.SEQUENCE )

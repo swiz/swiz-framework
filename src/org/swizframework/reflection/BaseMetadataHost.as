@@ -3,7 +3,7 @@ package org.swizframework.reflection
 	/**
 	 * Base implementation of the IMetadataHost interface.
 	 * Implements getters and setters and initializes <code>metadataTags</code> Array.
-	 * 
+	 *
 	 * @see org.swizframework.reflection.IMetadataHost
 	 * @see org.swizframework.reflection.MetadataHostClass
 	 * @see org.swizframework.reflection.MetadataHostMethod
@@ -81,7 +81,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * Constructor initializes <code>metadataTags</code> Array.
-		 */		
+		 */
 		public function BaseMetadataHost()
 		{
 			metadataTags = [];

@@ -8,26 +8,26 @@ package org.swizframework.utils
 	import mx.logging.ILoggingTarget;
 	import mx.logging.LogEvent;
 	import mx.logging.LogEventLevel;
-
+	
 	public class SwizLogger extends EventDispatcher implements ILogger
 	{
 		protected static var loggers:Dictionary;
 		protected static var loggingTargets:Array;
-
+		
 		public static function getLogger( target:Object ):ILogger
 		{
 			loggers ||= new Dictionary();
-
+			
 			var className:String = getQualifiedClassName( target );
 			var logger:SwizLogger = loggers[ className ];
-
+			
 			// if the logger doesn't already exist, create and store it
 			if( logger == null )
 			{
 				logger = new SwizLogger( className );
 				loggers[ className ] = logger;
 			}
-
+			
 			// check for existing targets interested in this logger
 			if( loggingTargets != null )
 			{
@@ -37,10 +37,10 @@ package org.swizframework.utils
 						logTarget.addLogger( logger );
 				}
 			}
-
+			
 			return logger;
 		}
-
+		
 		/**
 		 *  This method checks that the specified category matches any of the filter
 		 *  expressions provided in the <code>filters</code> Array.
@@ -62,24 +62,24 @@ package org.swizframework.utils
 				// first check to see if we need to do a partial match
 				// do we have an asterisk?
 				index = filter.indexOf( "*" );
-
+				
 				if( index == 0 )
 					return true;
-
+				
 				index = index < 0 ? index = category.length : index - 1;
-
+				
 				if( category.substring( 0, index ) == filter.substring( 0, index ) )
 					return true;
 			}
 			return false;
 		}
-
+		
 		public static function addLoggingTarget( loggingTarget:ILoggingTarget ):void
 		{
 			loggingTargets ||= [];
 			if( loggingTargets.indexOf( loggingTarget ) < 0 )
 				loggingTargets.push( loggingTarget );
-
+			
 			if( loggers != null )
 			{
 				for each( var logger:ILogger in loggers )
@@ -89,23 +89,23 @@ package org.swizframework.utils
 				}
 			}
 		}
-
+		
 		// ========================================
 		// static stuff above
 		// ========================================
 		// ========================================
 		// instance stuff below
 		// ========================================
-
+		
 		protected var _category:String;
-
+		
 		public function SwizLogger( className:String )
 		{
 			super();
-
+			
 			_category = className;
 		}
-
+		
 		/**
 		 *  The category this logger send messages for.
 		 */
@@ -113,7 +113,7 @@ package org.swizframework.utils
 		{
 			return _category;
 		}
-
+		
 		protected function constructMessage( msg:String, params:Array ):String
 		{
 			// replace all of the parameters in the msg string
@@ -123,11 +123,11 @@ package org.swizframework.utils
 			}
 			return msg;
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		/**
 		 *  @inheritDoc
 		 */
@@ -138,7 +138,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), level ) );
 			}
 		}
-
+		
 		/**
 		 *  @inheritDoc
 		 */
@@ -149,7 +149,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.DEBUG ) );
 			}
 		}
-
+		
 		/**
 		 *  @inheritDoc
 		 */
@@ -160,7 +160,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.INFO ) );
 			}
 		}
-
+		
 		/**
 		 *  @inheritDoc
 		 */
@@ -171,7 +171,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.WARN ) );
 			}
 		}
-
+		
 		/**
 		 *  @inheritDoc
 		 */
@@ -182,7 +182,7 @@ package org.swizframework.utils
 				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.ERROR ) );
 			}
 		}
-
+		
 		/**
 		 *  @inheritDoc
 		 */

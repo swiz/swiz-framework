@@ -19,8 +19,8 @@ package org.swizframework.core
 		function set strict( value:Boolean ):void;
 		
 		/**
-		 * Swiz will listen for this event and perform injections in response. 
-		 * Default value is <code>addedToStage</code>. Potential alternatives are <code>preinitialize</code>, 
+		 * Swiz will listen for this event and perform injections in response.
+		 * Default value is <code>addedToStage</code>. Potential alternatives are <code>preinitialize</code>,
 		 * <code>initialize</code>, <code>creationComplete</code> and <code>addedToStage</code>.
 		 * Any event can be used, but you should obviously favor events that happen once per component.
 		 *
@@ -33,12 +33,12 @@ package org.swizframework.core
 		/**
 		 * Swiz will listen for the injection event at the specified priority.
 		 * Default value is 50.
-		 * The priority level of the event listener. The priority is designated by a signed 32-bit integer. 
+		 * The priority level of the event listener. The priority is designated by a signed 32-bit integer.
 		 * The higher the number, the higher the priority.
 		 *
-		 * @param injectionEventPriority The injection event priority. 
+		 * @param injectionEventPriority The injection event priority.
 		 * @default 50
-		 */		
+		 */
 		function get injectionEventPriority():int;
 		function set injectionEventPriority( value:int ):void;
 		
@@ -46,7 +46,7 @@ package org.swizframework.core
 		 * Swiz will listen for the injection event at this specified injection event phase and perform injections in
 		 * response. Default value is <code>flash.events.EventPhase.CAPTURING_PHASE</code>. Valid options are
 		 * <code>flash.events.EventPhase.BUBBLING_PHASE</code> and <code>flash.events.EventPhase.CAPTURE_PHASE</code>.
-		 * 
+		 *
 		 * @param injectionEventPhase The flash.events.EventPhase constant associated with the desired event phase.
 		 * @default flash.events.EventPhase.CAPTURING_PHASE
 		 */
@@ -54,14 +54,14 @@ package org.swizframework.core
 		function set injectionEventPhase( value:uint ):void;
 		
 		/**
-		 * The optional <code>injectionMarkerFunction</code> property specifies a function that Swiz will call when 
+		 * The optional <code>injectionMarkerFunction</code> property specifies a function that Swiz will call when
 		 * handling an injection event to evaluate whether to process metadata on the associated object instance.
 		 * Advanced developers can use this property to specify a function to detect 'marker' properties or interfaces.
-		 * 
-		 * This function should conform to the following signature: 
+		 *
+		 * This function should conform to the following signature:
 		 * <code>f( instance:Object ):Boolean</code>
 		 * where the return value is true if the specified instance should be processed for metadata.
-		 * 
+		 *
 		 * @param injectionMarkerFunction The injection marker function.
 		 * @default null
 		 */
@@ -92,10 +92,10 @@ package org.swizframework.core
 		 */
 		function get viewPackages():Array;
 		function set viewPackages( value:* ):void;
-
+		
 		/**
 		 * Default Fault Handler
-		 * 
+		 *
 		 * @param faultHandler A fault handling Function.
 		 * @default null
 		 */

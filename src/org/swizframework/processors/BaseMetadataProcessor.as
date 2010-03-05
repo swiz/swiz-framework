@@ -5,10 +5,8 @@ package org.swizframework.processors
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwiz;
-	import org.swizframework.reflection.BaseMetadataTag;
-	import org.swizframework.reflection.IMetadataHost;
 	import org.swizframework.reflection.IMetadataTag;
-
+	
 	/**
 	 * Metadata Processor
 	 */
@@ -17,17 +15,17 @@ package org.swizframework.processors
 		// ========================================
 		// protected properties
 		// ========================================
-
+		
 		protected var swiz:ISwiz;
 		protected var beanFactory:IBeanFactory;
 		
 		protected var _metadataNames:Array;
 		protected var _metadataClass:Class;
-
+		
 		// ========================================
 		// public properties
 		// ========================================
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -35,7 +33,7 @@ package org.swizframework.processors
 		{
 			return _metadataNames;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -43,7 +41,7 @@ package org.swizframework.processors
 		{
 			return _metadataClass;
 		}
-
+		
 		/**
 		 *
 		 */
@@ -51,26 +49,26 @@ package org.swizframework.processors
 		{
 			return ProcessorPriority.DEFAULT;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor
 		 */
 		public function BaseMetadataProcessor( metadataNames:Array, metadataClass:Class = null )
 		{
 			super();
-
+			
 			this._metadataNames = metadataNames;
 			this._metadataClass = metadataClass;
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -79,14 +77,14 @@ package org.swizframework.processors
 			this.swiz = swiz;
 			this.beanFactory = swiz.beanFactory;
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
 		public function setUpMetadataTags( metadataTags:Array, bean:Bean ):void
 		{
 			var metadataTag:IMetadataTag;
-
+			
 			if( metadataClass != null )
 			{
 				for( var i:int = 0; i < metadataTags.length; i++ )
@@ -95,25 +93,25 @@ package org.swizframework.processors
 					metadataTags.splice( i, 1, createMetadataTag( metadataTag ) );
 				}
 			}
-
+			
 			for each( metadataTag in metadataTags )
 			{
 				setUpMetadataTag( metadataTag, bean );
 			}
 		}
-
+		
 		public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			// empty, subclasses should override
 		}
-
+		
 		/**
 		 * @inheritDoc
 		 */
 		public function tearDownMetadataTags( metadataTags:Array, bean:Bean ):void
 		{
 			var metadataTag:IMetadataTag;
-
+			
 			if( metadataClass != null )
 			{
 				for( var i:int = 0; i < metadataTags.length; i++ )
@@ -122,18 +120,18 @@ package org.swizframework.processors
 					metadataTags.splice( i, 1, createMetadataTag( metadataTag ) );
 				}
 			}
-
+			
 			for each( metadataTag in metadataTags )
 			{
 				tearDownMetadataTag( metadataTag, bean );
 			}
 		}
-
+		
 		public function tearDownMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			// empty, subclasses should override
 		}
-
+		
 		protected function createMetadataTag( metadataTag:IMetadataTag ):IMetadataTag
 		{
 			var tag:IMetadataTag = new metadataClass();

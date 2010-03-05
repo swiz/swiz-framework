@@ -1,9 +1,8 @@
 package org.swizframework.metadata
 {
 	import org.swizframework.reflection.BaseMetadataTag;
-	import org.swizframework.reflection.IMetadataHost;
 	import org.swizframework.reflection.IMetadataTag;
-
+	
 	/**
 	 * Class to represent <code>[PostConstruct]</code> metadata tags.
 	 */
@@ -12,16 +11,16 @@ package org.swizframework.metadata
 		// ========================================
 		// protected properties
 		// ========================================
-
+		
 		/**
 		 * Backing variable for read-only <code>order</code> property.
 		 */
 		protected var _order:int = 1;
-
+		
 		// ========================================
 		// public properties
 		// ========================================
-
+		
 		/**
 		 * Returns order attribute of [PostConstruct] tag.
 		 * Refers to the order in which the decorated methods will be executed.
@@ -32,11 +31,11 @@ package org.swizframework.metadata
 		{
 			return _order;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor sets <code>defaultArgName</code>.
 		 */
@@ -44,15 +43,15 @@ package org.swizframework.metadata
 		{
 			defaultArgName = "order";
 		}
-
+		
 		// ========================================
 		// public methods
 		// ========================================
-
+		
 		override public function copyFrom( metadataTag:IMetadataTag ):void
 		{
 			super.copyFrom( metadataTag );
-
+			
 			if( hasArg( "order" ) )
 				_order = int( getArg( "order" ).value );
 		}

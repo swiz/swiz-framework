@@ -55,7 +55,7 @@ package org.swizframework.core
 		 * Backing variable for the <code>viewPackages</code> property.
 		 */
 		protected var _viewPackages:Array = [];
-
+		
 		/**
 		 * Backing variable for the <code>defaultFaultHandler</code> property.
 		 */
@@ -163,7 +163,7 @@ package org.swizframework.core
 		{
 			return _defaultFaultHandler;
 		}
-
+		
 		public function set defaultFaultHandler( faultHandler:Function ):void
 		{
 			_defaultFaultHandler = faultHandler;

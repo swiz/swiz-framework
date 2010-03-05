@@ -13,7 +13,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * @return Flag indicating whether or not this property has been made bindable.
-		 */		
+		 */
 		public function get isBindable():Boolean
 		{
 			for each( var tag:IMetadataTag in metadataTags )
@@ -31,9 +31,9 @@ package org.swizframework.reflection
 		
 		/**
 		 * Constructor sets <code>type</code> property based on value found in <code>hostNode</code> XML node.
-		 * 
+		 *
 		 * @param hostNode XML node from <code>describeType</code> output that represents this property.
-		 */		
+		 */
 		public function MetadataHostProperty( hostNode:XML )
 		{
 			super();

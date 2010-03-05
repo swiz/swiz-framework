@@ -9,7 +9,6 @@ package org.swizframework.processors
 	import mx.utils.UIDUtil;
 	
 	import org.swizframework.core.Bean;
-	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.metadata.InjectMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.MetadataHostClass;

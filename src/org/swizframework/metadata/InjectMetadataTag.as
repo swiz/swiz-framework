@@ -1,7 +1,6 @@
 package org.swizframework.metadata
 {
 	import org.swizframework.reflection.BaseMetadataTag;
-	import org.swizframework.reflection.IMetadataHost;
 	import org.swizframework.reflection.IMetadataTag;
 	
 	/**

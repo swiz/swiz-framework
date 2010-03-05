@@ -2,7 +2,7 @@ package org.swizframework.reflection
 {
 	/**
 	 * Simple key/value representation of a metadata tag argument.
-	 */	
+	 */
 	public class MetadataArg
 	{
 		// ========================================
@@ -11,12 +11,12 @@ package org.swizframework.reflection
 		
 		/**
 		 * Name of metadata tag argument, e.g. "source" for [Inject( source="someModel" )]
-		 */		
+		 */
 		public var key:String;
 		
 		/**
 		 * Value of metadata tag argument, e.g. "someModel" for [Inject( source="someModel" )]
-		 */		
+		 */
 		public var value:String;
 		
 		// ========================================
@@ -25,10 +25,10 @@ package org.swizframework.reflection
 		
 		/**
 		 * Constructor sets initial values of required parameters.
-		 * 
+		 *
 		 * @param key
 		 * @param value
-		 */		
+		 */
 		public function MetadataArg( key:String, value:String )
 		{
 			this.key = key;
@@ -41,7 +41,7 @@ package org.swizframework.reflection
 		
 		/**
 		 * @return String representation of this metadata tag argument.
-		 */		
+		 */
 		public function toString():String
 		{
 			var str:String = "MetadataArg: ";

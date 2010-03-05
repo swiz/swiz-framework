@@ -1,7 +1,7 @@
 package org.swizframework.reflection
 {
 	import flash.utils.getDefinitionByName;
-
+	
 	/**
 	 * Representation of a class that has been decorated with class level metadata.
 	 */
@@ -10,7 +10,7 @@ package org.swizframework.reflection
 		// ========================================
 		// public properties
 		// ========================================
-
+		
 		/**
 		 * @return Flag indicating whether or not this whole class has been made bindable.
 		 */
@@ -21,18 +21,18 @@ package org.swizframework.reflection
 				if( tag.name == "Bindable" )
 					return true;
 			}
-
+			
 			return false;
 		}
-
+		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		public function MetadataHostClass( hostNode:XML )
 		{
 			super();
-
+			
 			type = getDefinitionByName( hostNode.@name.toString() ) as Class;
 		}
 	}

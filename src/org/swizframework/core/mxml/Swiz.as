@@ -5,11 +5,9 @@ package org.swizframework.core.mxml
 	import flash.utils.Timer;
 	
 	import mx.core.IMXMLObject;
-	import mx.logging.ILogger;
 	
 	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwizConfig;
-	import org.swizframework.utils.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
 	

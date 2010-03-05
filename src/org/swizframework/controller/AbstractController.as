@@ -8,7 +8,6 @@ package org.swizframework.controller
 	import org.swizframework.core.IDispatcherAware;
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.core.ISwizAware;
-	import org.swizframework.utils.chain.AbstractChain;
 	import org.swizframework.utils.chain.CommandChain;
 	import org.swizframework.utils.chain.SwizCommand;
 	import org.swizframework.utils.services.SwizResponder;
@@ -16,7 +15,6 @@ package org.swizframework.controller
 	
 	public class AbstractController implements ISwizAware, IDispatcherAware
 	{
-		
 		public var _swiz:ISwiz;
 		private var _dispatcher:IEventDispatcher;
 		

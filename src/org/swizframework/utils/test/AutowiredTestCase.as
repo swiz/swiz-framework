@@ -5,9 +5,8 @@ package org.swizframework.utils.test
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.Swiz;
-	import org.swizframework.events.BeanEvent;
 	import org.swizframework.reflection.TypeCache;
-
+	
 	public class AutowiredTestCase extends EventDispatcher
 	{
 		private var _beanProviders:Array;
@@ -29,12 +28,14 @@ package org.swizframework.utils.test
 		}
 		
 		[Before]
-		public function constructSwizContext() : void {
+		public function constructSwizContext():void
+		{
 			
 			trace("constructSwizContext() called");
 			
 			// initialize bean factory with configurec bean provider
-			if (_swiz == null && _beanProviders != null) {
+			if( _swiz == null && _beanProviders != null )
+			{
 				_swiz = new Swiz(null, null, null, _beanProviders);
 				_swiz.init();
 				
@@ -47,6 +48,6 @@ package org.swizframework.utils.test
 				_swiz.beanFactory.initializeBean( bean );
 			}
 		}
-		
+	
 	}
 }

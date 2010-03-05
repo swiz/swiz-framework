@@ -8,10 +8,8 @@ package org.swizframework.core
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.core.UIComponent;
 	import mx.logging.ILogger;
 	
-	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
@@ -90,8 +88,8 @@ package org.swizframework.core
 			logger.debug( "Injection trigger event phase set to {0}", ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
 			logger.debug( "Injection trigger event priority set to {0}", swiz.config.injectionEventPriority );
 			
-			if( "systemManager" in swiz.dispatcher && !( swiz.dispatcher.hasEventListener( swiz.config.injectionEvent ) ) )
-				UIComponent( swiz.dispatcher ).systemManager.addEventListener( swiz.config.injectionEvent, injectionEventHandlerSysMgr, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
+			if( "systemManager" in swiz.dispatcher && !( swiz.dispatcher[ "systemManager" ].hasEventListener( swiz.config.injectionEvent ) ) )
+				swiz.dispatcher[ "systemManager" ].addEventListener( swiz.config.injectionEvent, injectionEventHandlerSysMgr, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
 			
 			swiz.dispatcher.addEventListener( Event.REMOVED_FROM_STAGE, removeEventHandler, true, 50, true );
 			

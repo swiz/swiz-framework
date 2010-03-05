@@ -1,6 +1,5 @@
 package org.swizframework.utils.services
 {
-	import flash.debugger.enterDebugger;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -9,9 +8,6 @@ package org.swizframework.utils.services
 	import mx.rpc.IResponder;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
-	
-	import org.swizframework.core.ISwiz;
-	import org.swizframework.core.ISwizAware;
 	
 	public class MockDelegateUtil
 	{
