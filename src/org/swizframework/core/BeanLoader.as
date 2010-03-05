@@ -24,7 +24,7 @@ package org.swizframework.core
 		 */ 
 		public function BeanLoader( beans:Array = null )
 		{
-			super();
+			super( beans );
 			logger.warn("BeanLoader is deprecated! Please refactor your loaders to BeanProvider as this class will be removed eventually!");
 		}
 	}
