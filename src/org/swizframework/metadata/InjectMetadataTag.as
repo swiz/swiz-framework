@@ -57,6 +57,11 @@ package org.swizframework.metadata
 			return _source;
 		}
 		
+		public function set source( value:String ):void
+		{
+			_source = value;
+		}
+		
 		/**
 		 * Returns destination attribute of [Inject] tag.
 		 * Refers to the injection target.

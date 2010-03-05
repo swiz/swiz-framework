@@ -73,27 +73,66 @@ package org.swizframework.processors
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
+			var beanNotFound:Boolean = false;
 			
 			if( injectTag.name == AUTOWIRE )
 				logger.warn( "[Autowire] has been deprecated in favor of [Inject]. Please update {0} accordingly.", bean );
 			
-			if( injectTag.source != null )
-			{
-				if( injectTag.source.indexOf( "." ) > -1 )
-				{
-					addInjectByProperty( injectTag, bean );
-				}
-				else
-				{
-					addInjectByName( injectTag, bean );
-				}
-			}
-			else
+			
+			if( injectTag.source == null )
 			{
 				addInjectByType( injectTag, bean );
 			}
+			else
+			{
+				// injecting by name/prop
+				
+				// try to obtain the bean by using the first part of the source attribute
+				var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
+				
+				// if propName is set, this is an outjected bean
+				if( namedBean.propName != null )
+				{
+					// build a dot notation source using the outjected bean's containing bean name
+					// and the name of the property within that bean
+					injectTag.source = namedBean.parent + "." + namedBean.propName;
+					// update the namedBean ref to the bean where the outject was defined
+					namedBean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
+					
+					// make sure we've found the source bean so we can bind to its property ( the outjected bean )
+					if( namedBean != null )
+					{
+						addPropertyBinding( bean, namedBean, injectTag );
+					}
+					else
+					{
+						beanNotFound = true;
+					}
+				}
+				else
+				{
+					if( namedBean != null )
+					{
+						setDestinationValue( injectTag, bean, namedBean.source );
+					}
+					else
+					{
+						beanNotFound = true;
+					}
+				}
+			}
 			
-			logger.debug( "InjectProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
+			if( beanNotFound )
+			{
+				if( injectTag.required )
+					throw new Error( "InjectionProcessorError: bean not found: " + injectTag.source );
+				else
+					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
+			}
+			else
+			{
+				logger.debug( "InjectProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
+			}
 		}
 		
 		/**
@@ -157,26 +196,6 @@ package org.swizframework.processors
 		}
 		
 		/**
-		 * Add Inject By Property
-		 */
-		protected function addInjectByProperty( injectTag:InjectMetadataTag, bean:Bean ):void
-		{
-			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
-			
-			if( namedBean != null )
-			{
-				addPropertyBinding( bean, namedBean, injectTag );
-			}
-			else
-			{
-				if( injectTag.required )
-					throw new Error("InjectionProcessorError: bean not found: "+injectTag.source);
-				else
-					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
-			}
-		}
-		
-		/**
 		 * Remove Inject By Property
 		 */
 		protected function removeInjectByProperty( injectTag:InjectMetadataTag, bean:Bean ):void
@@ -191,26 +210,6 @@ package org.swizframework.processors
 			}
 			
 			setDestinationValue( injectTag, bean,  null );
-		}
-		
-		/**
-		 * Add Inject By Name
-		 */
-		protected function addInjectByName( injectTag:InjectMetadataTag, bean:Bean ):void
-		{
-			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
-			
-			if( namedBean != null )
-			{
-				setDestinationValue( injectTag, bean, namedBean.source );
-			}
-			else
-			{
-				if( injectTag.required )
-					throw new Error("InjectionProcessorError: bean not found: "+injectTag.source);
-				else
-					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
-			}
 		}
 		
 		/**

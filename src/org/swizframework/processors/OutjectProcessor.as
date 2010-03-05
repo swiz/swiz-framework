@@ -53,6 +53,10 @@ package org.swizframework.processors
 			if( metadataTag.args.length > 0 )
 				outjectBean.name = metadataTag.args[ 0 ][ "value" ];
 			outjectBean.source = bean.source[ metadataTag.host.name ];
+			
+			outjectBean.parent = bean.name;
+			outjectBean.propName = metadataTag.host.name;
+			
 			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
 			
 			beanFactory.beans.push( outjectBean );
