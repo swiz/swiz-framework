@@ -68,7 +68,7 @@ package org.swizframework.core
 		
 		/**
 		 * Constructor
-		 */ 
+		 */
 		public function BeanProvider( beans:Array = null )
 		{
 			super();
@@ -95,7 +95,7 @@ package org.swizframework.core
 			{
 				beans = [ bean ];
 			}
-			
+		
 			// now initialize the bean...
 		}
 		
@@ -105,7 +105,7 @@ package org.swizframework.core
 			{
 				beans.splice( beans.indexOf( bean ), 1 );
 			}
-			
+		
 			// clean the bean?
 		}
 		
@@ -123,13 +123,13 @@ package org.swizframework.core
 		}
 		
 		/**
-		 * Since the setter for beans should have already created Bean objects for all children, 
+		 * Since the setter for beans should have already created Bean objects for all children,
 		 * we are primarily trying to identify the id to set in the bean's name property.
-		 * 
+		 *
 		 * However, something is really wierd with using ids or not, and wether we will
-		 * actually have an array of beans at this time, so if we don't find a Bean for an 
+		 * actually have an array of beans at this time, so if we don't find a Bean for an
 		 * element we find in describeType, we created it.
-		 */ 
+		 */
 		protected function setBeanIds():void
 		{
 			var xmlDescription:XML = describeType( this );
@@ -149,7 +149,7 @@ package org.swizframework.core
 					// but we want to wrap the intances in Bean classes to set the Bean.name to id
 					child = this[ name ];
 					
-					if ( child != null )
+					if( child != null )
 					{
 						found = false;
 						
@@ -176,7 +176,7 @@ package org.swizframework.core
 		}
 		
 		// both init method and setBeanIds will call this if needed
-		private function constructBean( obj:*, name:String=null ):Bean 
+		private function constructBean( obj:*, name:String = null ):Bean
 		{
 			var bean:Bean = null;
 			
@@ -190,12 +190,12 @@ package org.swizframework.core
 				bean.source = obj;
 			}
 			
-			bean.name = name;
+			bean.name ||= name;
 			bean.provider = this;
 			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
 			
 			return bean;
 		}
-		
+	
 	}
 }
