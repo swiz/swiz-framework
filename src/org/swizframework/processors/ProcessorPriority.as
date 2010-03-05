@@ -30,25 +30,33 @@ package org.swizframework.processors
 		public static const INJECT			:int = 200;
 		
 		/**
-		 * Built-in <code>PostConstructProcessor</code> runs after <code>InjectProcessor</code>
-		 * to allow components to do any necessary initialization once their dependencies have been satisfied.
-		 *
-		 * @see org.swizframework.processors.PostConstructProcessor
-		 */
-		public static const POST_CONSTRUCT	:int = 300;
-		
-		/**
 		 * Built-in <code>MediateProcessor</code> uses this priority.
 		 *
 		 * @see org.swizframework.processors.MediateProcessor
 		 */
-		public static const MEDIATE			:int = 400;
+		public static const MEDIATE			:int = 300;
 		
 		/**
 		 * Default priority used by <code>BaseMetadataProcessor</code>.
 		 *
 		 * @see org.swizframework.processors.BaseMetadataProcessor
 		 */
-		public static const DEFAULT			:int = 500;
+		public static const DEFAULT			:int = 400;
+		
+		/**
+		 * Built-in <code>SwizInterfaceProcessor</code> runs after <code>DefaultProcessors</code>
+		 * to allow components to do any necessary initialization based on internal swiz interfaces.
+		 *
+		 * @see org.swizframework.processors.PostConstructProcessor
+		 */
+		public static const SWIZ_INTERFACE	:int = 500;
+		
+		/**
+		 * Built-in <code>PostConstructProcessor</code> runs after <code>InjectProcessor</code>
+		 * to allow components to do any necessary initialization once their dependencies have been satisfied.
+		 *
+		 * @see org.swizframework.processors.PostConstructProcessor
+		 */
+		public static const POST_CONSTRUCT	:int = 600;
 	}
 }

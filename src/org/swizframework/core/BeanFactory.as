@@ -215,36 +215,23 @@ package org.swizframework.core
 					
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
-			}
-			
-			// if bean inplements ISwizInterface, handle those injections
-			if( bean.type is ISwizInterface )
-				handleSwizInterfaces( ISwizInterface( bean.type ) );
-			
-			// process all bean post-processors				
-			for each( processor in swiz.processors )
-			{
-				// Handle Bean Processors
-				if( processor is IBeanProcessor )
+				else if( processor is IBeanProcessor ) 
 				{
 					IBeanProcessor( processor ).addBean( bean );
 				}
 			}
-		}
-		
-		/**
-		 * Handle internal interfaces, like IDispatcherAware and ISwizAware
-		 */
-		protected function handleSwizInterfaces( obj:ISwizInterface ):void
-		{
-			if( obj is ISwizAware )
-				ISwizAware( obj ).swiz = swiz;
-			if( obj is IBeanFactoryAware )
-				IBeanFactoryAware( obj ).beanFactory = this;
-			if( obj is IDispatcherAware )
-				IDispatcherAware( obj ).dispatcher = swiz.dispatcher;
-			if( obj is IInitializing )
-				IInitializing( obj ).init();
+			
+			/*
+			// process all bean post-processors				
+			for each( processor in swiz.processors )
+			{
+				// Handle Bean Processors
+				if( processor is IBeanPostProcessor )
+				{
+					IBeanPostProcessor( processor ).processBean( bean );
+				}
+			}
+			*/
 		}
 		
 		/**

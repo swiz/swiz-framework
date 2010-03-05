@@ -12,6 +12,7 @@ package org.swizframework.core
 	import org.swizframework.processors.MediateProcessor;
 	import org.swizframework.processors.OutjectProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
+	import org.swizframework.processors.SwizInterfaceProcessor;
 	import org.swizframework.utils.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -35,7 +36,7 @@ package org.swizframework.core
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), 
-			new PostConstructProcessor(), new MediateProcessor() ];
+			new MediateProcessor(), new SwizInterfaceProcessor(), new PostConstructProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
 		
