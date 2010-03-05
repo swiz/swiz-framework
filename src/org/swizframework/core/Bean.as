@@ -32,23 +32,7 @@ package org.swizframework.core
 		/**
 		 * Name
 		 */
-		/**
-		 * Backing variable for <code>name</code> getter/setter.
-		 */
-		protected var _name:String;
-		
-		/**
-		 *
-		 */
-		public function get name():String
-		{
-			return ( _name == null ) ? source.toString() : _name;
-		}
-		
-		public function set name( value:String ):void
-		{
-			_name = value;
-		}
+		public var name:String;
 		
 		/**
 		 * Type Descriptor
@@ -74,9 +58,6 @@ package org.swizframework.core
 		{
 			return source;
 		}
-		
-		public var parent:Object;
-		public var propName:String;
 		
 		// ========================================
 		// constructor
