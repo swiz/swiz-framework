@@ -116,26 +116,9 @@ package org.swizframework.core
 		
 		protected function initializeBeans( beansArray:Array ):void
 		{
-			var bean:Bean;
-			
-			// loop, create separate init method...
 			for each( var beanSource:Object in beansArray )
 			{
-				if( beanSource is Bean )
-				{
-					bean = Bean( beanSource );
-				}
-				else
-				{
-					bean = new Bean();
-					bean.source = beanSource;
-				}
-				
-				bean.provider = this;
-				
-				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
-				
-				_beans.push( bean );
+				_beans.push( constructBean( beanSource ) );
 			}
 		}
 		
@@ -169,6 +152,7 @@ package org.swizframework.core
 					if ( child != null )
 					{
 						found = false;
+						
 						// look for any bean we should already have, and set the name propery of the bean object only
 						for each( var bean:Bean in beans )
 						{
@@ -180,6 +164,7 @@ package org.swizframework.core
 							}
 						}
 						
+						// if we didn't find the bean, we need to construct it
 						if( !found )
 						{
 							beans.push( constructBean( child, name ) );
@@ -190,23 +175,22 @@ package org.swizframework.core
 			}
 		}
 		
-		// really should be init method above
-		private function constructBean(obj:*, name:String):Bean 
+		// both init method and setBeanIds will call this if needed
+		private function constructBean( obj:*, name:String=null ):Bean 
 		{
 			var bean:Bean = null;
 			
 			if( obj is Bean )
 			{
-				bean = Bean(obj);
-				bean.name = name;
+				bean = Bean( obj );
 			}
 			else
 			{
 				bean = new Bean();
-				bean.name = name;
 				bean.source = obj;
 			}
 			
+			bean.name = name;
 			bean.provider = this;
 			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
 			
