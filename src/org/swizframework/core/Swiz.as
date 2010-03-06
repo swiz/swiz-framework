@@ -7,6 +7,7 @@ package org.swizframework.core
 	import mx.logging.ILoggingTarget;
 	
 	import org.swizframework.events.SwizEvent;
+	import org.swizframework.processors.DispatcherProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.MediateProcessor;
@@ -35,7 +36,7 @@ package org.swizframework.core
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
-		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), 
+		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), new DispatcherProcessor(), 
 			new MediateProcessor(), new SwizInterfaceProcessor(), new PostConstructProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
