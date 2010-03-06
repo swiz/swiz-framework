@@ -14,11 +14,6 @@ package org.swizframework.core
 		// ========================================
 		
 		/**
-		 * Backing variable for <code>dispatcher</code> getter/setter.
-		 */
-		protected var _dispatcher:IEventDispatcher;
-		
-		/**
 		 * Backing variable for <code>beans</code> getter.
 		 */
 		protected var _beans:Array = [];
@@ -27,20 +22,6 @@ package org.swizframework.core
 		// ========================================
 		// public properties
 		// ========================================
-		
-		[Bindable]
-		/**
-		 * Dispatcher used for sending app level notifications by classes that will not live on display list.
-		 */
-		public function get dispatcher():IEventDispatcher
-		{
-			return _dispatcher;
-		}
-		
-		public function set dispatcher( value:IEventDispatcher ):void
-		{
-			_dispatcher = value;
-		}
 		
 		[ArrayElementType( "Object" )]
 		/**

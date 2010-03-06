@@ -162,7 +162,6 @@ package org.swizframework.core
 		{
 			for each( var beanProvider:IBeanProvider in beanProviders )
 			{
-				beanProvider.dispatcher = swiz.dispatcher;
 				for each( var bean:Bean in beanProvider.beans )
 				{
 					bean.beanFactory = this;
@@ -215,23 +214,23 @@ package org.swizframework.core
 					
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
-				else if( processor is IBeanProcessor ) 
+				else if( processor is IBeanProcessor )
 				{
 					IBeanProcessor( processor ).addBean( bean );
 				}
 			}
-			
-			/*
-			// process all bean post-processors				
-			for each( processor in swiz.processors )
-			{
-				// Handle Bean Processors
-				if( processor is IBeanPostProcessor )
-				{
-					IBeanPostProcessor( processor ).processBean( bean );
-				}
-			}
-			*/
+		
+		/*
+		   // process all bean post-processors
+		   for each( processor in swiz.processors )
+		   {
+		   // Handle Bean Processors
+		   if( processor is IBeanPostProcessor )
+		   {
+		   IBeanPostProcessor( processor ).processBean( bean );
+		   }
+		   }
+		 */
 		}
 		
 		/**

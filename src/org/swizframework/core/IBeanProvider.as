@@ -9,9 +9,6 @@ package org.swizframework.core
 	{
 		function get beans():Array;
 		
-		function get dispatcher():IEventDispatcher;
-		function set dispatcher( value:IEventDispatcher ):void;
-		
 		function addBean( bean:Bean ):void;
 		function removeBean( bean:Bean ):void;
 	}
