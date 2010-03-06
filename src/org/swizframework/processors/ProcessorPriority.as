@@ -37,11 +37,18 @@ package org.swizframework.processors
 		public static const MEDIATE			:int = 300;
 		
 		/**
+		 * Built-in <code>DispatcherProcessor</code> uses this priority.
+		 *
+		 * @see org.swizframework.processors.DispatcherProcessor
+		 */
+		public static const DISPATCHER		:int = 400;
+		
+		/**
 		 * Default priority used by <code>BaseMetadataProcessor</code>.
 		 *
 		 * @see org.swizframework.processors.BaseMetadataProcessor
 		 */
-		public static const DEFAULT			:int = 400;
+		public static const DEFAULT			:int = 500;
 		
 		/**
 		 * Built-in <code>SwizInterfaceProcessor</code> runs after <code>DefaultProcessors</code>
@@ -49,7 +56,7 @@ package org.swizframework.processors
 		 *
 		 * @see org.swizframework.processors.PostConstructProcessor
 		 */
-		public static const SWIZ_INTERFACE	:int = 500;
+		public static const SWIZ_INTERFACE	:int = 600;
 		
 		/**
 		 * Built-in <code>PostConstructProcessor</code> runs after <code>InjectProcessor</code>
@@ -57,6 +64,6 @@ package org.swizframework.processors
 		 *
 		 * @see org.swizframework.processors.PostConstructProcessor
 		 */
-		public static const POST_CONSTRUCT	:int = 600;
+		public static const POST_CONSTRUCT	:int = 700;
 	}
 }

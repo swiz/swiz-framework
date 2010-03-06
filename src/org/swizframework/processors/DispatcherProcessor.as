@@ -23,7 +23,7 @@ package org.swizframework.processors
 		 */
 		override public function get priority():int
 		{
-			return 350;
+			return ProcessorPriority.DISPATCHER;
 		}
 		
 		// ========================================
