@@ -11,5 +11,6 @@ package org.swizframework.core
 		
 		function addBean( bean:Bean ):void;
 		function removeBean( bean:Bean ):void;
+		function initialize():void;
 	}
 }
