@@ -248,9 +248,13 @@ package org.swizframework.core
 				{
 					providerInst = beanProviders[ i ];
 				}
+				
+				// now all BeanProviders require initialization
+				providerInst.initialize();
+				
 				// now if the current provider is a BeanLoader, it needs to be initialized
-				if( providerInst is BeanLoader )
-					BeanLoader(providerInst).initialize();
+				// if( providerInst is BeanLoader )
+					// BeanLoader(providerInst).initialize();
 			}
 		}
 		
