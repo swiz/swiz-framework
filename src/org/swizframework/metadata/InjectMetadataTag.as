@@ -28,11 +28,6 @@ package org.swizframework.metadata
 		protected var _twoWay:Boolean = false;
 		
 		/**
-		 * Backing variable for read-only <code>view</code> property.
-		 */
-		protected var _view:Boolean = false;
-		
-		/**
 		 * Backing variable for read-only <code>bind</code> property.
 		 */
 		protected var _bind:Boolean = true;
@@ -83,18 +78,6 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns view attribute of [Inject] tag as a <code>Boolean</code> value.
-		 * If true tells Swiz that the injection source is a view component
-		 * that must be injected once it is added to the display list.
-		 *
-		 * @default false
-		 */
-		public function get view():Boolean
-		{
-			return _view;
-		}
-		
-		/**
 		 * Returns bind attribute of [Inject] tag as a <code>Boolean</code> value.
 		 * If true will cause a binding to be established.
 		 *
@@ -113,7 +96,7 @@ package org.swizframework.metadata
 		 */
 		public function get required():Boolean
 		{
-			return _required && view == false;
+			return _required;
 		}
 		
 		// ========================================
@@ -161,9 +144,6 @@ package org.swizframework.metadata
 			
 			if( hasArg( "twoWay" ) )
 				_twoWay = getArg( "twoWay" ).value == "true";
-			
-			if( hasArg( "view" ) )
-				_view = getArg( "view" ).value == "true";
 			
 			if( hasArg( "bind" ) )
 				_bind = getArg( "bind" ).value == "true";
