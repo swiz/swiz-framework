@@ -29,13 +29,13 @@ package org.swizframework.controller
 		
 		
 		
-		/** IDispatcherBean implementation */
+		/** IDispatcherAware implementation */
 		public function set dispatcher( dispatcher:IEventDispatcher ):void
 		{
 			_dispatcher = dispatcher;
 		}
 		
-		protected function get dispatcher():IEventDispatcher
+		public function get dispatcher():IEventDispatcher
 		{
 			return _dispatcher;
 		}
