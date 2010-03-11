@@ -1,10 +1,10 @@
 package org.swizframework.core.mxml
 {
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	
 	import mx.core.IMXMLObject;
+	import mx.events.FlexEvent;
 	
 	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwizConfig;
@@ -41,22 +41,17 @@ package org.swizframework.core.mxml
 			if( document is IEventDispatcher && dispatcher == null )
 			{
 				dispatcher = IEventDispatcher( document );
+				dispatcher.addEventListener( FlexEvent.PREINITIALIZE, handleContainerPreinitialize );
 			}
-			
-			// hack to delay call to init() to the next frame
-			// because Flex sucks
-			// ( complex objects/bound properties that are set as attributes are still null right now )
-			var t:Timer = new Timer( 0, 1 );
-			t.addEventListener( TimerEvent.TIMER,
-				
-				function( e:TimerEvent ):void
-				{
-					e.currentTarget.removeEventListener( e.type, arguments.callee );
-					init();
-				}
-				
-				);
-			t.start();
+		}
+		
+		/**
+		 *
+		 */
+		protected function handleContainerPreinitialize( event:Event ):void
+		{
+			dispatcher.removeEventListener( FlexEvent.PREINITIALIZE, handleContainerPreinitialize );
+			init();
 		}
 	}
 }
