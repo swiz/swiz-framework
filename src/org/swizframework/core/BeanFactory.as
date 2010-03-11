@@ -252,7 +252,7 @@ package org.swizframework.core
 						metadataTags = metadataTags.concat( bean.typeDescriptor.getMetadataTagsByName( metadataName ) );
 					}
 					
-					metadataProcessor.setUpMetadataTags( metadataTags, bean );
+					metadataProcessor.tearDownMetadataTags( metadataTags, bean );
 				}
 				
 				// Handle Bean Processors
