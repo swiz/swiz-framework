@@ -216,21 +216,9 @@ package org.swizframework.core
 				}
 				else if( processor is IBeanProcessor )
 				{
-					IBeanProcessor( processor ).addBean( bean );
+					IBeanProcessor( processor ).setUpBean( bean );
 				}
 			}
-		
-		/*
-		   // process all bean post-processors
-		   for each( processor in swiz.processors )
-		   {
-		   // Handle Bean Processors
-		   if( processor is IBeanPostProcessor )
-		   {
-		   IBeanPostProcessor( processor ).processBean( bean );
-		   }
-		   }
-		 */
 		}
 		
 		/**
@@ -258,7 +246,7 @@ package org.swizframework.core
 				// Handle Bean Processors
 				if( processor is IBeanProcessor )
 				{
-					IBeanProcessor( processor ).removeBean( bean );
+					IBeanProcessor( processor ).tearDownBean( bean );
 				}
 			}
 		}

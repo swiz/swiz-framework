@@ -15,7 +15,7 @@ package org.swizframework.processors
 		{
 		}
 		
-		public function addBean(bean:Bean):void
+		public function setUpBean( bean:Bean ):void
 		{
 			var obj:* = bean.type;
 			
@@ -29,11 +29,11 @@ package org.swizframework.processors
 				IInitializing( obj ).init();
 		}
 		
-		public function removeBean(bean:Bean):void
+		public function tearDownBean( bean:Bean ):void
 		{
 		}
 		
-		public function init(swiz:ISwiz):void
+		public function init( swiz:ISwiz ):void
 		{
 			this.swiz = swiz;
 		}

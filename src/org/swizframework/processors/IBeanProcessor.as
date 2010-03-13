@@ -4,8 +4,8 @@ package org.swizframework.processors
 	
 	public interface IBeanProcessor extends IProcessor
 	{
-		function addBean( bean:Bean ):void;
+		function setUpBean( bean:Bean ):void;
 		
-		function removeBean( bean:Bean ):void;
+		function tearDownBean( bean:Bean ):void;
 	}
 }
