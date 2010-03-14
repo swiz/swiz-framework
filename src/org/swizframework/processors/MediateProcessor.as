@@ -52,9 +52,9 @@ package org.swizframework.processors
 		/**
 		 * Constructor
 		 */
-		public function MediateProcessor()
+		public function MediateProcessor( metadataNames:Array = null )
 		{
-			super( [ MEDIATE ], MediateMetadataTag );
+			super( ( metadataNames == null ) ? [ MEDIATE ] : metadataNames, MediateMetadataTag );
 		}
 		
 		// ========================================

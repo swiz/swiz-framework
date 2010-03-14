@@ -33,9 +33,9 @@ package org.swizframework.processors
 		/**
 		 * Constructor
 		 */
-		public function DispatcherProcessor()
+		public function DispatcherProcessor( metadataNames:Array = null )
 		{
-			super( [ DISPATCHER ] );
+			super( ( metadataNames == null ) ? [ DISPATCHER ] : metadataNames );
 		}
 		
 		// ========================================

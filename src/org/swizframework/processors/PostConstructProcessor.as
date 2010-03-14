@@ -34,9 +34,9 @@ package org.swizframework.processors
 		/**
 		 * Constructor
 		 */
-		public function PostConstructProcessor()
+		public function PostConstructProcessor( metadataNames:Array = null )
 		{
-			super( [ POST_CONSTRUCT ], PostConstructMetadataTag );
+			super( ( metadataNames == null ) ? [ POST_CONSTRUCT ] : metadataNames, PostConstructMetadataTag );
 		}
 		
 		// ========================================

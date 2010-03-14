@@ -36,9 +36,9 @@ package org.swizframework.processors
 		/**
 		 * Constructor
 		 */
-		public function OutjectProcessor()
+		public function OutjectProcessor( metadataNames:Array = null )
 		{
-			super( [ OUTJECT ] );
+			super( ( metadataNames == null ) ? [ OUTJECT ] : metadataNames );
 		}
 		
 		// ========================================

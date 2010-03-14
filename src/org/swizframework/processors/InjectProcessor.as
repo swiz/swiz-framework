@@ -59,9 +59,9 @@ package org.swizframework.processors
 		/**
 		 * Constructor
 		 */
-		public function InjectProcessor()
+		public function InjectProcessor( metadataNames:Array = null )
 		{
-			super( [ INJECT, AUTOWIRE ], InjectMetadataTag );
+			super( ( metadataNames == null ) ? [ INJECT, AUTOWIRE ] : metadataNames, InjectMetadataTag );
 		}
 		
 		// ========================================
