@@ -31,6 +31,14 @@ package org.swizframework.processors
 		
 		public function tearDownBean( bean:Bean ):void
 		{
+			var obj:* = bean.type;
+			
+			if( obj is ISwizAware )
+				ISwizAware( obj ).swiz = null;
+			if( obj is IBeanFactoryAware )
+				IBeanFactoryAware( obj ).beanFactory = null;
+			if( obj is IDispatcherAware )
+				IDispatcherAware( obj ).dispatcher = null;
 		}
 		
 		public function init( swiz:ISwiz ):void
