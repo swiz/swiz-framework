@@ -119,14 +119,8 @@ package org.swizframework.metadata
 		{
 			super.copyFrom( metadataTag );
 			
-			//if( name == "Autowire" )
-			// TODO: log deprecation warning
-			
-			//if( hasArg( "bean" ) && hasArg( "source" ) )
-			// TODO: throw error. use one or the other
-			
-			//if( hasArg( "property" ) )
-			// TODO: throw error. no longer supported.
+			if( hasArg( "bean" ) && hasArg( "source" ) )
+				throw new Error( "Your metadata tag defines both a bean and source attribute. source has replaced bean, please update accordingly." );
 			
 			if( hasArg( "bean" ) )
 			{
@@ -138,6 +132,12 @@ package org.swizframework.metadata
 			// [Inject( "someModel" )] == [Inject( source="someModel" )]
 			if( hasArg( "source" ) )
 				_source = getArg( "source" ).value;
+			
+			if( hasArg( "property" ) )
+			{
+				// TODO: log deprecation message
+				_source += "." + getArg( "property" ).value;
+			}
 			
 			if( hasArg( "destination" ) )
 				_destination = getArg( "destination" ).value;
