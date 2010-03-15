@@ -39,8 +39,8 @@ package org.swizframework.utils.chain
 		// ========================================
 		
 		public function AsyncChainStepCommand( asyncMethod:Function, asyncMethodArgs:Array, 
-			resultHandler:Function, faultHandler:Function = null, 
-			resultHandlerArgs:Array = null )
+											   resultHandler:Function, faultHandler:Function = null, 
+											   resultHandlerArgs:Array = null )
 		{
 			this.asyncMethodArgs = asyncMethodArgs;
 			this.asyncMethod = asyncMethod;
@@ -76,8 +76,7 @@ package org.swizframework.utils.chain
 				resultHandler.apply( this, resultHandlerArgs );
 			}
 			
-			if( chain != null )
-				chain.stepComplete();
+			complete();
 		}
 		
 		/**
@@ -88,8 +87,7 @@ package org.swizframework.utils.chain
 			if( faultHandler != null )
 				faultHandler( info );
 			
-			if( chain != null )
-				chain.stepError();
+			error();
 		}
 	}
 }

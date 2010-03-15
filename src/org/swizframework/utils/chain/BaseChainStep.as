@@ -20,7 +20,7 @@ package org.swizframework.utils.chain
 			_chain = value;
 		}
 		
-		protected var _isComplete:Boolean;
+		protected var _isComplete:Boolean = false;
 		
 		public function get isComplete():Boolean
 		{
