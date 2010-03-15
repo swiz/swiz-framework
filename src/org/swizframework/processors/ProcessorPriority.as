@@ -65,5 +65,13 @@ package org.swizframework.processors
 		 * @see org.swizframework.processors.PostConstructProcessor
 		 */
 		public static const POST_CONSTRUCT	:int = 700;
+		
+		/**
+		 * Built-in <code>PreDestroyProcessor</code> runs during tear down to allow components to do any
+		 * necessary cleanup to ensure proper disposal.
+		 *
+		 * @see org.swizframework.processors.PreDestroyProcessor
+		 */
+		public static const PRE_DESTROY		:int = 800;
 	}
 }

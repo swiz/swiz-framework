@@ -13,6 +13,7 @@ package org.swizframework.core
 	import org.swizframework.processors.MediateProcessor;
 	import org.swizframework.processors.OutjectProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
+	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.SwizInterfaceProcessor;
 	import org.swizframework.utils.SwizLogger;
 	
@@ -37,7 +38,7 @@ package org.swizframework.core
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), new DispatcherProcessor(), 
-			new MediateProcessor(), new SwizInterfaceProcessor(), new PostConstructProcessor() ];
+											new MediateProcessor(), new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
 		
@@ -253,8 +254,8 @@ package org.swizframework.core
 				// now all BeanProviders require initialization
 				providerInst.initialize();
 				
-				// now if the current provider is a BeanLoader, it needs to be initialized
-				// if( providerInst is BeanLoader )
+					// now if the current provider is a BeanLoader, it needs to be initialized
+					// if( providerInst is BeanLoader )
 					// BeanLoader(providerInst).initialize();
 			}
 		}

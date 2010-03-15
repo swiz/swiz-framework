@@ -3,6 +3,7 @@ package org.swizframework.processors
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.IBeanFactoryAware;
 	import org.swizframework.core.IDispatcherAware;
+	import org.swizframework.core.IDisposable;
 	import org.swizframework.core.IInitializing;
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.core.ISwizAware;
@@ -39,6 +40,8 @@ package org.swizframework.processors
 				IBeanFactoryAware( obj ).beanFactory = null;
 			if( obj is IDispatcherAware )
 				IDispatcherAware( obj ).dispatcher = null;
+			if( obj is IDisposable )
+				IDisposable( obj ).destroy();
 		}
 		
 		public function init( swiz:ISwiz ):void
