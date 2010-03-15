@@ -83,15 +83,18 @@ package org.swizframework.core
 			
 			addBeanProviders( swiz.beanProviders );
 			
-			swiz.dispatcher.addEventListener( swiz.config.injectionEvent, injectionEventHandler, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
-			logger.debug( "Injection trigger event type set to {0}", swiz.config.injectionEvent );
-			logger.debug( "Injection trigger event phase set to {0}", ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
-			logger.debug( "Injection trigger event priority set to {0}", swiz.config.injectionEventPriority );
+			swiz.dispatcher.addEventListener( swiz.config.setUpEventType, setUpEventHandler, ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.setUpEventPriority, true );
+			logger.debug( "Set up event type set to {0}", swiz.config.setUpEventType );
+			logger.debug( "Set up event phase set to {0}", ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
+			logger.debug( "Set up event priority set to {0}", swiz.config.setUpEventPriority );
 			
-			if( "systemManager" in swiz.dispatcher && !( swiz.dispatcher[ "systemManager" ].hasEventListener( swiz.config.injectionEvent ) ) )
-				swiz.dispatcher[ "systemManager" ].addEventListener( swiz.config.injectionEvent, injectionEventHandlerSysMgr, ( swiz.config.injectionEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.injectionEventPriority, true );
+			if( "systemManager" in swiz.dispatcher && !( swiz.dispatcher[ "systemManager" ].hasEventListener( swiz.config.setUpEventType ) ) )
+				swiz.dispatcher[ "systemManager" ].addEventListener( swiz.config.setUpEventType, setUpEventHandlerSysMgr, ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.setUpEventPriority, true );
 			
-			swiz.dispatcher.addEventListener( Event.REMOVED_FROM_STAGE, removeEventHandler, true, 50, true );
+			swiz.dispatcher.addEventListener( swiz.config.tearDownEventType, tearDownEventHandler, ( swiz.config.tearDownEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.tearDownEventPriority, true );
+			logger.debug( "Tear down event type set to {0}", swiz.config.tearDownEventType );
+			logger.debug( "Tear down event phase set to {0}", ( swiz.config.tearDownEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
+			logger.debug( "Tear down event priority set to {0}", swiz.config.tearDownEventPriority );
 			
 			logger.info( "BeanFactory initialized" );
 		}
@@ -258,9 +261,9 @@ package org.swizframework.core
 		 */
 		protected function isPotentialInjectionTarget( instance:Object ):Boolean
 		{
-			if( swiz.config.injectionMarkerFunction != null )
+			if( swiz.config.setUpMarkerFunction != null )
 			{
-				return swiz.config.injectionMarkerFunction( instance );
+				return swiz.config.setUpMarkerFunction( instance );
 			}
 			else
 			{
@@ -286,7 +289,7 @@ package org.swizframework.core
 		/**
 		 * Injection Event Handler
 		 */
-		protected function injectionEventHandler( event:Event ):void
+		protected function setUpEventHandler( event:Event ):void
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
@@ -298,21 +301,20 @@ package org.swizframework.core
 		/**
 		 * Injection Event Handler defined on SysMgr
 		 */
-		protected function injectionEventHandlerSysMgr( event:Event ):void
+		protected function setUpEventHandlerSysMgr( event:Event ):void
 		{
 			// make sure the view is not a descendant of the main dispatcher
 			// if its not, it is a popup, so we pass it along for processing
 			if( !Sprite( swiz.dispatcher ).contains( DisplayObject( event.target ) ) )
 			{
-				injectionEventHandler( event );
+				setUpEventHandler( event );
 			}
 		}
 		
 		/**
 		 * Remove Event Handler
 		 */
-		// TODO: this probably needs to be removed or customizable
-		protected function removeEventHandler( event:Event ):void
+		protected function tearDownEventHandler( event:Event ):void
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{

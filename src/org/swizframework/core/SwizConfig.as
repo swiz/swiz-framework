@@ -27,24 +27,39 @@ package org.swizframework.core
 		protected var _strict:Boolean = true;
 		
 		/**
-		 * Backing variable for the <code>injectionEvent</code> property.
+		 * Backing variable for the <code>setUpEvent</code> property.
 		 */
-		protected var _injectionEvent:String = Event.ADDED_TO_STAGE;
+		protected var _setUpEventType:String = Event.ADDED_TO_STAGE;
 		
 		/**
-		 * Backing variable for the <code>injectionEventPriority</code> property.
+		 * Backing variable for the <code>setUpEventPriority</code> property.
 		 */
-		protected var _injectionEventPriority:int = 50;
+		protected var _setUpEventPriority:int = 50;
 		
 		/**
-		 * Backing variable for the <code>injectionEventPhase</code> property.
+		 * Backing variable for the <code>setUpEventPhase</code> property.
 		 */
-		protected var _injectionEventPhase:uint = EventPhase.CAPTURING_PHASE;
+		protected var _setUpEventPhase:uint = EventPhase.CAPTURING_PHASE;
 		
 		/**
-		 * Backing variable for the <code>injectionMarkerFunction</code> property.
+		 * Backing variable for the <code>setUpMarkerFunction</code> property.
 		 */
-		protected var _injectionMarkerFunction:Function = null;
+		protected var _setUpMarkerFunction:Function = null;
+		
+		/**
+		 * Backing variable for the <code>tearDownEvent</code> property.
+		 */
+		protected var _tearDownEventType:String = Event.REMOVED_FROM_STAGE;
+		
+		/**
+		 * Backing variable for the <code>tearDownEventPriority</code> property.
+		 */
+		protected var _tearDownEventPriority:int = 50;
+		
+		/**
+		 * Backing variable for the <code>tearDownEventPhase</code> property.
+		 */
+		protected var _tearDownEventPhase:uint = EventPhase.CAPTURING_PHASE;
 		
 		/**
 		 * Backing variable for the <code>eventPackages</code> property.
@@ -81,53 +96,92 @@ package org.swizframework.core
 		/**
 		 * @inheritDoc
 		 */
-		public function get injectionEvent():String
+		public function get setUpEventType():String
 		{
-			return _injectionEvent;
+			return _setUpEventType;
 		}
 		
-		public function set injectionEvent( value:String ):void
+		public function set setUpEventType( value:String ):void
 		{
-			_injectionEvent = value;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get injectionEventPriority():int
-		{
-			return _injectionEventPriority;
-		}
-		
-		public function set injectionEventPriority( value:int ):void
-		{
-			_injectionEventPriority = value;
+			_setUpEventType = value;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function get injectionEventPhase():uint
+		public function get setUpEventPriority():int
 		{
-			return _injectionEventPhase;
+			return _setUpEventPriority;
 		}
 		
-		public function set injectionEventPhase( value:uint ):void
+		public function set setUpEventPriority( value:int ):void
 		{
-			_injectionEventPhase = value;
+			_setUpEventPriority = value;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function get injectionMarkerFunction():Function
+		public function get setUpEventPhase():uint
 		{
-			return _injectionMarkerFunction;
+			return _setUpEventPhase;
 		}
 		
-		public function set injectionMarkerFunction( value:Function ):void
+		public function set setUpEventPhase( value:uint ):void
 		{
-			_injectionMarkerFunction = value;
+			_setUpEventPhase = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get setUpMarkerFunction():Function
+		{
+			return _setUpMarkerFunction;
+		}
+		
+		public function set setUpMarkerFunction( value:Function ):void
+		{
+			_setUpMarkerFunction = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get tearDownEventType():String
+		{
+			return _tearDownEventType;
+		}
+		
+		public function set tearDownEventType( value:String ):void
+		{
+			_tearDownEventType = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get tearDownEventPriority():int
+		{
+			return _tearDownEventPriority;
+		}
+		
+		public function set tearDownEventPriority( value:int ):void
+		{
+			_tearDownEventPriority = value;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get tearDownEventPhase():uint
+		{
+			return _tearDownEventPhase;
+		}
+		
+		public function set tearDownEventPhase( value:uint ):void
+		{
+			_tearDownEventPhase = value;
 		}
 		
 		/**

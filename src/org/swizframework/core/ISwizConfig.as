@@ -19,42 +19,42 @@ package org.swizframework.core
 		function set strict( value:Boolean ):void;
 		
 		/**
-		 * Swiz will listen for this event and perform injections in response.
+		 * Swiz will listen for this event and process eligible views in response.
 		 * Default value is <code>addedToStage</code>. Potential alternatives are <code>preinitialize</code>,
 		 * <code>initialize</code>, <code>creationComplete</code> and <code>addedToStage</code>.
 		 * Any event can be used, but you should obviously favor events that happen once per component.
 		 *
-		 * @param injectionEvent Event type that will trigger injections.
+		 * @param setUpEvent Event type that will trigger view processing.
 		 * @default flash.events.Event.ADDED_TO_STAGE
 		 */
-		function get injectionEvent():String;
-		function set injectionEvent( value:String ):void;
+		function get setUpEventType():String;
+		function set setUpEventType( value:String ):void;
 		
 		/**
-		 * Swiz will listen for the injection event at the specified priority.
+		 * Swiz will listen for the setUp event at the specified priority.
 		 * Default value is 50.
 		 * The priority level of the event listener. The priority is designated by a signed 32-bit integer.
 		 * The higher the number, the higher the priority.
 		 *
-		 * @param injectionEventPriority The injection event priority.
+		 * @param setUpEventPriority The setUp event priority.
 		 * @default 50
 		 */
-		function get injectionEventPriority():int;
-		function set injectionEventPriority( value:int ):void;
+		function get setUpEventPriority():int;
+		function set setUpEventPriority( value:int ):void;
 		
 		/**
-		 * Swiz will listen for the injection event at this specified injection event phase and perform injections in
+		 * Swiz will listen for the setUp event in this event phase and perform injections in
 		 * response. Default value is <code>flash.events.EventPhase.CAPTURING_PHASE</code>. Valid options are
 		 * <code>flash.events.EventPhase.BUBBLING_PHASE</code> and <code>flash.events.EventPhase.CAPTURE_PHASE</code>.
 		 *
-		 * @param injectionEventPhase The flash.events.EventPhase constant associated with the desired event phase.
+		 * @param setUpEventPhase The flash.events.EventPhase constant associated with the desired event phase.
 		 * @default flash.events.EventPhase.CAPTURING_PHASE
 		 */
-		function get injectionEventPhase():uint;
-		function set injectionEventPhase( value:uint ):void;
+		function get setUpEventPhase():uint;
+		function set setUpEventPhase( value:uint ):void;
 		
 		/**
-		 * The optional <code>injectionMarkerFunction</code> property specifies a function that Swiz will call when
+		 * The optional <code>setUpMarkerFunction</code> property specifies a function that Swiz will call when
 		 * handling an injection event to evaluate whether to process metadata on the associated object instance.
 		 * Advanced developers can use this property to specify a function to detect 'marker' properties or interfaces.
 		 *
@@ -62,11 +62,44 @@ package org.swizframework.core
 		 * <code>f( instance:Object ):Boolean</code>
 		 * where the return value is true if the specified instance should be processed for metadata.
 		 *
-		 * @param injectionMarkerFunction The injection marker function.
+		 * @param setUpMarkerFunction The function that will perform evaluation.
 		 * @default null
 		 */
-		function get injectionMarkerFunction():Function;
-		function set injectionMarkerFunction( value:Function ):void;
+		function get setUpMarkerFunction():Function;
+		function set setUpMarkerFunction( value:Function ):void;
+		
+		/**
+		 * Swiz will listen for this event and tear down views in response.
+		 * Default value is <code>removedFromStage</code>.
+		 *
+		 * @param tearDownEvent Event type that will trigger view tear down.
+		 * @default flash.events.Event.REMOVED_FROM_STAGE
+		 */
+		function get tearDownEventType():String;
+		function set tearDownEventType( value:String ):void;
+		
+		/**
+		 * Swiz will listen for the tearDown event at the specified priority.
+		 * Default value is 50.
+		 * The priority level of the event listener. The priority is designated by a signed 32-bit integer.
+		 * The higher the number, the higher the priority.
+		 *
+		 * @param tearDownEventPriority The injection event priority.
+		 * @default 50
+		 */
+		function get tearDownEventPriority():int;
+		function set tearDownEventPriority( value:int ):void;
+		
+		/**
+		 * Swiz will listen for the injection event at this specified injection event phase and perform injections in
+		 * response. Default value is <code>flash.events.EventPhase.CAPTURING_PHASE</code>. Valid options are
+		 * <code>flash.events.EventPhase.BUBBLING_PHASE</code> and <code>flash.events.EventPhase.CAPTURE_PHASE</code>.
+		 *
+		 * @param tearDownEventPhase The flash.events.EventPhase constant associated with the desired event phase.
+		 * @default flash.events.EventPhase.CAPTURING_PHASE
+		 */
+		function get tearDownEventPhase():uint;
+		function set tearDownEventPhase( value:uint ):void;
 		
 		/**
 		 * When using <code>strict</code> mode, <code>eventPackages</code> allows you to use
