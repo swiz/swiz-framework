@@ -28,6 +28,11 @@ package org.swizframework.reflection
 		function set host( value:IMetadataHost ):void;
 		
 		/**
+		 * String showing what this tag looks like in code. Useful for debugging and log messages.
+		 */
+		function get asTag():String;
+		
+		/**
 		 * @param argName Name of argument whose existence on this tag will be checked.
 		 * @return Flag indicating whether or not this tag contains an argument for the given name.
 		 */

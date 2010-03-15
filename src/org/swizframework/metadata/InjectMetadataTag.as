@@ -1,7 +1,10 @@
 package org.swizframework.metadata
 {
+	import mx.logging.ILogger;
+	
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
+	import org.swizframework.utils.SwizLogger;
 	
 	/**
 	 * Class to represent <code>[Inject]</code> metadata tags.
@@ -11,6 +14,8 @@ package org.swizframework.metadata
 		// ========================================
 		// protected properties
 		// ========================================
+		
+		protected var logger:ILogger = SwizLogger.getLogger( this );
 		
 		/**
 		 * Backing variable for read-only <code>source</code> property.
@@ -124,7 +129,7 @@ package org.swizframework.metadata
 			
 			if( hasArg( "bean" ) )
 			{
-				// TODO: log deprecation message
+				logger.warn( "The bean attribute has been deprecated in favor of the source attribute. Please update your code accordingly. Found in {0}", metadataTag.asTag );
 				_source = getArg( "bean" ).value;
 			}
 			
@@ -135,7 +140,7 @@ package org.swizframework.metadata
 			
 			if( hasArg( "property" ) )
 			{
-				// TODO: log deprecation message
+				logger.warn( "The property attribute has been deprecated. Please use dot notation in your source attribute instead. Found in {0}", metadataTag.asTag );
 				_source += "." + getArg( "property" ).value;
 			}
 			

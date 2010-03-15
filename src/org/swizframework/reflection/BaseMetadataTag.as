@@ -93,7 +93,7 @@ package org.swizframework.reflection
 		}
 		
 		/**
-		 * String showing what this tag looks like in code. Useful for debugging.
+		 * String showing what this tag looks like in code. Useful for debugging and log messages.
 		 */
 		public function get asTag():String
 		{
