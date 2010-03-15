@@ -27,7 +27,7 @@ package org.swizframework.processors
 			if( obj is IDispatcherAware )
 				IDispatcherAware( obj ).dispatcher = swiz.dispatcher;
 			if( obj is IInitializing )
-				IInitializing( obj ).init();
+				IInitializing( obj ).afterPropertiesSet();
 		}
 		
 		public function tearDownBean( bean:Bean ):void
