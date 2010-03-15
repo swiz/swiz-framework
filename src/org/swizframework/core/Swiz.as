@@ -205,7 +205,7 @@ package org.swizframework.core
 			
 			beanFactory.init( this );
 			
-			beanFactory.initializeBeans();
+			beanFactory.setUpBeans();
 			
 			logger.info( "Swiz initialized" );
 		}

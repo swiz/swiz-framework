@@ -110,7 +110,7 @@ package org.swizframework.core
 			}
 			
 			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
-				initializeBean(foundBean);
+				setUpBean(foundBean);
 			else if( foundBean == null && parentBeanFactory != null )
 				foundBean = parentBeanFactory.getBeanByName( name );
 			
@@ -137,7 +137,7 @@ package org.swizframework.core
 			}
 			
 			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
-				initializeBean( foundBean );
+				setUpBean( foundBean );
 			else if( foundBean == null && parentBeanFactory != null )
 				foundBean = parentBeanFactory.getBeanByType( beanType );
 			
@@ -176,25 +176,25 @@ package org.swizframework.core
 		/**
 		 * Initializes all beans in the beans cache.
 		 */
-		public function initializeBeans():void
+		public function setUpBeans():void
 		{
 			for each( var bean:Bean in beans )
 			{
 				if( !( bean is Prototype ) && !bean.initialized )
-					initializeBean( bean );
+					setUpBean( bean );
 			}
 			
 			// add main dispatcher as bean to collection
 			var rootDispatcherBean:Bean = createBean( swiz.dispatcher );
 			beans.push( rootDispatcherBean );
 			// manually trigger processing now that all defined beans are done
-			initializeBean( rootDispatcherBean );
+			setUpBean( rootDispatcherBean );
 		}
 		
 		/**
 		 * Initialze Bean
 		 */
-		public function initializeBean( bean:Bean ):void
+		public function setUpBean( bean:Bean ):void
 		{
 			logger.debug( "BeanFactory::initializeBean( {0} )", bean );
 			bean.initialized = true;
@@ -217,7 +217,8 @@ package org.swizframework.core
 					
 					metadataProcessor.setUpMetadataTags( metadataTags, bean );
 				}
-				else if( processor is IBeanProcessor )
+				
+				if( processor is IBeanProcessor )
 				{
 					IBeanProcessor( processor ).setUpBean( bean );
 				}
@@ -227,7 +228,7 @@ package org.swizframework.core
 		/**
 		 * Remove Bean
 		 */
-		protected function removeBean( bean:Bean ):void
+		protected function tearDownBean( bean:Bean ):void
 		{
 			for each( var processor:IProcessor in swiz.processors )
 			{
@@ -294,7 +295,7 @@ package org.swizframework.core
 			if( isPotentialInjectionTarget( event.target ) )
 			{
 				var bean:Bean = createBean( event.target );
-				initializeBean( bean );
+				setUpBean( bean );
 			}
 		}
 		
@@ -319,7 +320,7 @@ package org.swizframework.core
 			if( isPotentialInjectionTarget( event.target ) )
 			{
 				var bean:Bean = createBean( event.target );
-				removeBean( bean );
+				tearDownBean( bean );
 			}
 		}
 		

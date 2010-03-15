@@ -40,7 +40,7 @@ package org.swizframework.core
 			{
 				// if source is null, create and initialize it (runs all processors)
 				_source = instance = createInstance();
-				beanFactory.initializeBean( new Bean( _source, name, typeDescriptor ) );
+				beanFactory.setUpBean( new Bean( _source, name, typeDescriptor ) );
 				
 				// if this prototype is not a singleton, remove the source
 				if( !singleton )

@@ -45,7 +45,7 @@ package org.swizframework.utils.test
 				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
 				
 				// autowire test case with bean factory
-				_swiz.beanFactory.initializeBean( bean );
+				_swiz.beanFactory.setUpBean( bean );
 			}
 		}
 	
