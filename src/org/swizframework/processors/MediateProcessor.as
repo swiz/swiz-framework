@@ -175,6 +175,11 @@ package org.swizframework.processors
 		 */
 		protected function validateMediateMetadataTag( mediator:MediateMetadataTag ):Boolean
 		{
+			if( mediator.event == null || mediator.event.length == 0 )
+			{
+				throw new Error( "Missing \"event\" property in [Mediate] tag: " + mediator.asTag );
+			}
+			
 			if( ClassConstant.isClassConstant( mediator.event ) )
 			{
 				var eventClass:Class = ClassConstant.getClass( mediator.event, swiz.config.eventPackages );
