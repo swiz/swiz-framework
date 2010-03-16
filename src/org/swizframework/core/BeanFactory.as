@@ -196,7 +196,7 @@ package org.swizframework.core
 		 */
 		public function setUpBean( bean:Bean ):void
 		{
-			logger.debug( "BeanFactory::initializeBean( {0} )", bean );
+			logger.debug( "BeanFactory::setUpBean( {0} )", bean );
 			bean.initialized = true;
 			
 			var processor:IProcessor;
