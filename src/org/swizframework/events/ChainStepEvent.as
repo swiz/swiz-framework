@@ -56,5 +56,11 @@ package org.swizframework.events
 			if( chain != null )
 				chain.stepError();
 		}
+		
+		override public function clone():Event
+		{
+			return new ChainStepEvent( type, bubbles, cancelable );
+		}
+		
 	}
 }
