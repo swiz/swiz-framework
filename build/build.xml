@@ -55,11 +55,13 @@
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
 
-			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Autowire"/>
+			<keep-as3-metadata name="Dispatcher"/>
+			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Mediate"/>
 			<keep-as3-metadata name="Outject"/>
 			<keep-as3-metadata name="PostConstruct"/>
+			<keep-as3-metadata name="PreDestroy"/>
 
 			<verbose-stacktraces>true</verbose-stacktraces>
 			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
