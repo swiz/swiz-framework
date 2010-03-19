@@ -18,7 +18,7 @@ package org.swizframework.utils.services
 		public var fault:Fault;
 		
 		/**
-		 * If <code>true</code>, a busy cursor is displayed while the mock service is 
+		 * If <code>true</code>, a busy cursor is displayed while the mock service is
 		 * executing. The default value is <code>false</code>.
 		 */
 		public var showBusyCursor:Boolean;
@@ -54,7 +54,7 @@ package org.swizframework.utils.services
 			timer.removeEventListener( TimerEvent.TIMER, sendMockResult );
 			timer = null;
 			
-			var re:ResultEvent = new ResultEvent( ResultEvent.RESULT, false, true, mockData );
+			var re:ResultEvent = new ResultEvent( ResultEvent.RESULT, false, true, mockData, token );
 			for each( var r:IResponder in token.responders )
 			{
 				r.result( re );
@@ -87,7 +87,7 @@ package org.swizframework.utils.services
 			timer.removeEventListener( TimerEvent.TIMER, sendMockFault );
 			timer = null;
 			
-			var fe:FaultEvent = new FaultEvent( FaultEvent.FAULT, false, true, fault );
+			var fe:FaultEvent = new FaultEvent( FaultEvent.FAULT, false, true, fault, token );
 			for each( var r:IResponder in token.responders )
 			{
 				r.fault( fe );
