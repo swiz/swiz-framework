@@ -39,7 +39,7 @@ package org.swizframework.factories
 				: ( hostKind == "type" ) ? new MetadataHostClass( hostNode )
 				: new MetadataHostProperty( hostNode );
 			
-			host.name = hostNode.@name.toString();
+			host.name = ( hostNode.@uri == undefined ) ? hostNode.@name : new QName( hostNode.@uri, hostNode.@name );
 			
 			return host;
 		}

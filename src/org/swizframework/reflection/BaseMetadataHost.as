@@ -18,7 +18,7 @@ package org.swizframework.reflection
 		/**
 		 * Backing variable for <code>name</code> getter/setter.
 		 */
-		protected var _name:String;
+		protected var _name:*;
 		
 		/**
 		 * Backing variable for <code>type</code> getter/setter.
@@ -37,12 +37,12 @@ package org.swizframework.reflection
 		/**
 		 * @inheritDoc
 		 */
-		public function get name():String
+		public function get name():*
 		{
 			return _name;
 		}
 		
-		public function set name( value:String ):void
+		public function set name( value:* ):void
 		{
 			_name = value;
 		}

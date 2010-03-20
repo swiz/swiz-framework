@@ -107,7 +107,7 @@ package org.swizframework.processors
 				// this is a view added to the display list or a new bean being processed
 				var destObject:Object = getDestinationObject( injectTag, bean );
 				// name of property that will be bound to a source value
-				var destPropName:String = getDestinationPropertyName( injectTag );
+				var destPropName:* = getDestinationPropertyName( injectTag );
 				
 				// check to see if this is an outjected bean
 				if( namedBean is OutjectBean )
@@ -180,7 +180,7 @@ package org.swizframework.processors
 		/**
 		 *
 		 */
-		protected function getDestinationPropertyName( injectTag:InjectMetadataTag ):String
+		protected function getDestinationPropertyName( injectTag:InjectMetadataTag ):*
 		{
 			if( injectTag.destination == null )
 			{
@@ -257,7 +257,7 @@ package org.swizframework.processors
 			var setterInjection:Boolean = injectTag.host is MetadataHostMethod;
 			
 			var destObject:Object = getDestinationObject( injectTag, bean );
-			var destPropName:String = getDestinationPropertyName( injectTag );
+			var destPropName:* = getDestinationPropertyName( injectTag );
 			
 			if( setterInjection )
 			{

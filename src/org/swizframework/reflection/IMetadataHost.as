@@ -9,8 +9,8 @@ package org.swizframework.reflection
 		/**
 		 * Name of the property/method/class.
 		 */
-		function get name():String;
-		function set name( value:String ):void;
+		function get name():*;
+		function set name( value:* ):void;
 		
 		/**
 		 * Type of the property/method/class.
