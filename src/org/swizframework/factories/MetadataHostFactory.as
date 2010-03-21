@@ -66,7 +66,7 @@ package org.swizframework.factories
 				host.type = hostNode.@type == "*" ? Object : Class( domain.getDefinition( hostNode.@type ) );
 			}
 			
-			host.name = ( hostNode.@uri == undefined ) ? hostNode.@name : new QName( hostNode.@uri, hostNode.@name );
+			host.name = ( hostNode.@uri == undefined ) ? String( hostNode.@name[ 0 ] ) : new QName( hostNode.@uri, hostNode.@name );
 			
 			return host;
 		}

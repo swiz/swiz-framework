@@ -238,9 +238,9 @@ package org.swizframework.processors
 			else
 			{
 				if( injectTag.required )
-					throw new Error("InjectionProcessorError: bean not found: "+injectTag.source);
+					throw new Error("InjectProcessor Error: bean of type " + targetType.toString() + " not found!" );
 				else
-					logger.warn( "InjectProcessor::bean not found( {0} ), injection queues have been removed!", injectTag.source );
+					logger.warn( "Bean of type {0} not found, injection queues have been removed!", targetType.toString() );
 			}
 		}
 		

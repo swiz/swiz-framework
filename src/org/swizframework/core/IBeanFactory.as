@@ -30,6 +30,7 @@ package org.swizframework.core
 		
 		function get beans():Array;
 		
-		function tearDown():void;
+		function tearDownBeans():void;
+		function tearDownBean( bean:Bean ):void;
 	}
 }

@@ -12,6 +12,9 @@ package org.swizframework.core
 		// public properties
 		// ========================================
 		
+		function get catchViews():Boolean;
+		function set catchViews( value:Boolean ):void;
+		
 		/**
 		 * Local Dispatcher
 		 */
