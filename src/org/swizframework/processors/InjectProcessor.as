@@ -121,7 +121,7 @@ package org.swizframework.processors
 				else
 				{
 					var chain:String = injectTag.source.split( "." ).slice( 1 ).toString();
-					var bind:Boolean = injectTag.bind && ChangeWatcher.canWatch( namedBean.source, chain );
+					var bind:Boolean = injectTag.bind && !( injectTag.host is MetadataHostMethod ) && ChangeWatcher.canWatch( namedBean.source, chain );
 					
 					// if injecting by name simply assign the bean's current value
 					// as there is no context to create a binding
