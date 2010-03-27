@@ -124,7 +124,7 @@ package org.swizframework.storage
 		/**
 		 * @inheritDoc
 		 */
-		public function getBoolean( name:String, initValue:Boolean = undefined ):Boolean
+		public function getBoolean( name:String, initValue:Boolean = false ):Boolean
 		{
 			var o:Object = so.data;
 			if( o[name] == null )
@@ -174,7 +174,7 @@ package org.swizframework.storage
 		/**
 		 * @inheritDoc
 		 */
-		public function getInt( name:String, initValue:int = undefined ):int
+		public function getInt( name:String, initValue:int = -1 ):int
 		{
 			var o:Object = so.data;
 			if( o[name] == null )
