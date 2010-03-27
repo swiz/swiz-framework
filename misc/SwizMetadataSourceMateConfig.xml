@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tags>
+<metatag name="Dispatcher" description="Results in injection of Swiz's system dispatcher" classes="false" variables="true" functions="false" getters="false" setters="true" public="true" private="false" protected="false" internal="false" defaultAttribute="" onlyDefaultSyntax="false" since="1.0.0" allowCustomAttributes="false">
+</metatag>
+<metatag name="Inject" description="Marks a dependency that should be injected by Swiz" classes="true" variables="true" functions="true" getters="false" setters="true" public="true" private="false" protected="false" internal="false" defaultAttribute="source" onlyDefaultSyntax="false" since="1.0.0" allowCustomAttributes="false">
+     <attribute name="source" datatype="0" description="" required="false"  defaultValue="" choices="," asType="" insertedByProposal="false" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="false" validForSetters="true"  />
+     <attribute name="destination" datatype="0" description="" required="false"  defaultValue="" choices="," asType="" insertedByProposal="false" validForClasses="true" validForVariables="false" validForFunctions="false" validForGetters="false" validForSetters="false"  />
+     <attribute name="twoWay" datatype="2" description="" required="false"  defaultValue="false" choices="," asType="" insertedByProposal="false" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+     <attribute name="required" datatype="2" description="" required="false"  defaultValue="true" choices="," asType="" insertedByProposal="false" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+     <attribute name="bind" datatype="2" description="" required="false"  defaultValue="true" choices="" asType="" insertedByProposal="false" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+</metatag>
+<metatag name="Mediate" description="Marks a method as a system event handler" classes="false" variables="false" functions="true" getters="false" setters="false" public="true" private="false" protected="false" internal="false" defaultAttribute="event" onlyDefaultSyntax="false" since="1.0.0" allowCustomAttributes="false">
+     <attribute name="event" datatype="5" description="" required="true"  defaultValue="" choices="" asType="" insertedByProposal="true" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+     <attribute name="properties" datatype="0" description="" required="false"  defaultValue="" choices="" asType="" insertedByProposal="false" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+     <attribute name="priority" datatype="1" description="" required="false"  defaultValue="" choices="" asType="" insertedByProposal="true" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+     <attribute name="stopPropagation" datatype="2" description="" required="false"  defaultValue="false" choices="" asType="" insertedByProposal="true" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+     <attribute name="stopImmediatePropagation" datatype="2" description="" required="false"  defaultValue="false" choices="" asType="" insertedByProposal="true" validForClasses="true" validForVariables="true" validForFunctions="true" validForGetters="true" validForSetters="true"  />
+</metatag>
+<metatag name="PostConstruct" description="Decorated method will be called once all injections have been made" classes="false" variables="false" functions="true" getters="false" setters="false" public="true" private="false" protected="false" internal="false" defaultAttribute="" onlyDefaultSyntax="false" since="1.0.0" allowCustomAttributes="false">
+</metatag>
+<metatag name="PreDestroy" description="Decorated method will be called in response to tearDownEvent as specified in SwizConfig" classes="false" variables="false" functions="true" getters="false" setters="false" public="true" private="false" protected="false" internal="false" defaultAttribute="" onlyDefaultSyntax="false" since="1.0.0" allowCustomAttributes="false">
+</metatag>
+</tags>
