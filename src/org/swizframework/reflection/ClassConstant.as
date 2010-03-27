@@ -1,5 +1,6 @@
 package org.swizframework.reflection
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
@@ -78,9 +79,9 @@ package org.swizframework.reflection
 		 * @param constantType The expected constant type.
 		 * @return Returns the associated value for the specified class constant.
 		 */
-		public static function getConstantValue( definition:Class, constantName:String, constantType:String = "String" ):*
+		public static function getConstantValue( domain:ApplicationDomain, definition:Class, constantName:String, constantType:String = "String" ):*
 		{
-			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( definition );
+			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( domain, definition );
 			
 			var node:XMLList = descriptor.description.constant.(@name == constantName );
 			// todo: do we need to check for jackasses who don't make their event types constants?
@@ -108,7 +109,7 @@ package org.swizframework.reflection
 		 * @param packageNames A set of package names to search to for a relative class constant.  (Optional)
 		 * @returns The class referenced by the specified class constant, if found. Otherwise, returns null.
 		 */
-		public static function getClass( constant:String, packageNames:Array = null ):Class
+		public static function getClass( domain:ApplicationDomain, constant:String, packageNames:Array = null ):Class
 		{
 			var match:Object = CLASS_CONSTANT_PATTERN.exec( constant );
 			if( match )
@@ -121,11 +122,11 @@ package org.swizframework.reflection
 				{
 					var packageName:String = packageMatch[ 1 ] as String;
 					
-					return getClassDefinition( packageName + "." + className );
+					return getClassDefinition( domain, packageName + "." + className );
 				}
 				else
 				{
-					return findClassDefinition( className, packageNames );
+					return findClassDefinition( domain, className, packageNames );
 				}
 			}
 			
@@ -143,11 +144,11 @@ package org.swizframework.reflection
 		 * @param packageNames The set of potential package names to search.
 		 * @returns Returns the class definition if found. Otherwise returns null.
 		 */
-		protected static function findClassDefinition( className:String, packageNames:Array ):Class
+		protected static function findClassDefinition( domain:ApplicationDomain, className:String, packageNames:Array ):Class
 		{
 			for each( var packageName:String in packageNames )
 			{
-				var definition:Class = getClassDefinition( packageName + "." + className );
+				var definition:Class = getClassDefinition( domain, packageName + "." + className );
 				if( definition != null )
 					return definition;
 			}
@@ -161,11 +162,12 @@ package org.swizframework.reflection
 		 * @param name The fully qualified name of a class.
 		 * @returns Returns a reference to the class object of the class specified by the name parameter.
 		 */
-		protected static function getClassDefinition( name:String ):Class
+		protected static function getClassDefinition( domain:ApplicationDomain, name:String ):Class
 		{
 			try
 			{
-				return getDefinitionByName( name ) as Class;
+				return domain.getDefinition( name ) as Class;
+				// return getDefinitionByName( name ) as Class;
 			}
 			catch( e:ReferenceError )
 			{

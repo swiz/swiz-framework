@@ -1,6 +1,7 @@
 package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
+	import flash.system.ApplicationDomain;
 	import flash.utils.describeType;
 	
 	import org.swizframework.reflection.TypeCache;
@@ -9,6 +10,13 @@ package org.swizframework.core
 	
 	public class BeanProvider extends EventDispatcher implements IBeanProvider
 	{
+		
+		// ========================================
+		// private properties
+		// ========================================
+		
+		private var _rawBeans:Array = [];
+		
 		// ========================================
 		// protected properties
 		// ========================================
@@ -35,11 +43,17 @@ package org.swizframework.core
 		
 		public function set beans( value:Array ):void
 		{
+			if( value != _beans && value != _rawBeans )
+			{
+				_rawBeans = value;
+			}
+			/* 
 			if( value != _beans )
 			{
 				// got rid of remove beans, it didn't do anything...
 				initializeBeans( value );
 			}
+			*/
 		}
 		
 		
@@ -61,9 +75,11 @@ package org.swizframework.core
 		// public methods
 		// ========================================
 		
-		public function initialize():void
+		public function initialize( domain:ApplicationDomain ):void
 		{
-			setBeanIds();
+			// first initialize, then attempt to set all bean ids
+			initializeBeans( domain );
+			setBeanIds( domain );
 		}
 		
 		public function addBean( bean:Bean ):void
@@ -95,11 +111,11 @@ package org.swizframework.core
 		// protected methods
 		// ========================================
 		
-		protected function initializeBeans( beansArray:Array ):void
+		protected function initializeBeans( domain:ApplicationDomain ):void
 		{
-			for each( var beanSource:Object in beansArray )
+			for each( var beanSource:Object in _rawBeans )
 			{
-				_beans.push( constructBean( beanSource ) );
+				_beans.push( constructBean( domain, beanSource ) );
 			}
 		}
 		
@@ -111,7 +127,7 @@ package org.swizframework.core
 		 * actually have an array of beans at this time, so if we don't find a Bean for an
 		 * element we find in describeType, we created it.
 		 */
-		protected function setBeanIds():void
+		protected function setBeanIds( domain:ApplicationDomain ):void
 		{
 			var xmlDescription:XML = describeType( this );
 			var accessors:XMLList = xmlDescription.accessor.( @access == "readwrite" ).@name;
@@ -148,7 +164,7 @@ package org.swizframework.core
 						// if we didn't find the bean, we need to construct it
 						if( !found )
 						{
-							beans.push( constructBean( child, name ) );
+							beans.push( constructBean( domain, child, name ) );
 						}
 					}
 					
@@ -157,7 +173,7 @@ package org.swizframework.core
 		}
 		
 		// both init method and setBeanIds will call this if needed
-		private function constructBean( obj:*, name:String = null ):Bean
+		private function constructBean( domain:ApplicationDomain, obj:*, name:String = null ):Bean
 		{
 			var bean:Bean = null;
 			
@@ -173,7 +189,7 @@ package org.swizframework.core
 			
 			bean.name ||= name;
 			bean.provider = this;
-			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
+			bean.typeDescriptor = TypeCache.getTypeDescriptor(domain, bean.type );
 			
 			return bean;
 		}

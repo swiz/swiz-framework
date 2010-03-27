@@ -1,5 +1,6 @@
 package org.swizframework.reflection
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	
@@ -14,6 +15,11 @@ package org.swizframework.reflection
 		// ========================================
 		// public properties
 		// ========================================
+		
+		/**
+		 * The Application Domain this TypeDescriptor is associated with
+		 */
+		public var domain:ApplicationDomain;
 		
 		/**
 		 * Output of <code>flash.utils.describeType</code> for this type.
@@ -122,7 +128,7 @@ package org.swizframework.reflection
 				return IMetadataHost( metadataHosts[ metadataHostName ] );
 			
 			// otherwise create, store and return it
-			return metadataHosts[ metadataHostName ] = new MetadataHostFactory().getMetadataHost( hostNode );
+			return metadataHosts[ metadataHostName ] = new MetadataHostFactory( domain ).getMetadataHost( hostNode );
 		}
 		
 		// ========================================
@@ -135,8 +141,10 @@ package org.swizframework.reflection
 		 *
 		 * @see flash.utils.describeType
 		 */
-		public function fromXML( describeTypeXml:XML ):TypeDescriptor
+		public function fromXML( domain:ApplicationDomain, describeTypeXml:XML ):TypeDescriptor
 		{
+			this.domain = domain;
+			
 			description = describeTypeXml;
 			
 			var classDescription:XML = null;
@@ -152,7 +160,8 @@ package org.swizframework.reflection
 				className = classDescription.@type;
 			}
 			
-			type = getDefinitionByName( className ) as Class;
+			// type = getDefinitionByName( className ) as Class;
+			type = domain.getDefinition( className ) as Class;
 			
 			for each( var constNode:XML in description.constant )
 				constants.push( new Constant( constNode.@name, type[ constNode.@name ] ) );

@@ -1,5 +1,6 @@
 package org.swizframework.reflection
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.getDefinitionByName;
 	
 	/**
@@ -29,11 +30,12 @@ package org.swizframework.reflection
 		// constructor
 		// ========================================
 		
-		public function MetadataHostClass( hostNode:XML )
+		public function MetadataHostClass( domain:ApplicationDomain, hostNode:XML )
 		{
 			super();
 			
-			type = getDefinitionByName( hostNode.@name.toString() ) as Class;
+			// type = getDefinitionByName( hostNode.@name.toString() ) as Class;
+			type = domain.getDefinition( hostNode.@name.toString() ) as Class;
 		}
 	}
 }

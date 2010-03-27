@@ -42,7 +42,7 @@ package org.swizframework.utils.test
 				// wrap the unit test in a Bean definition
 				var bean:Bean = new Bean();
 				bean.source = this;
-				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
+				bean.typeDescriptor = TypeCache.getTypeDescriptor( _swiz.domain, bean.type );
 				
 				// autowire test case with bean factory
 				_swiz.beanFactory.setUpBean( bean );

@@ -9,6 +9,7 @@ package org.swizframework.core
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.logging.ILogger;
+	import mx.modules.Module;
 	
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
@@ -262,6 +263,8 @@ package org.swizframework.core
 		 */
 		protected function isPotentialInjectionTarget( instance:Object ):Boolean
 		{
+			// new, for modules. if the current app domain does not have the definition we are 
+			// looking for, we cannot even try to continue.
 			if( swiz.config.setUpMarkerFunction != null )
 			{
 				return swiz.config.setUpMarkerFunction( instance );
@@ -270,7 +273,13 @@ package org.swizframework.core
 			{
 				var className:String = getQualifiedClassName( instance );
 				
-				if( swiz.config.viewPackages.length > 0 )
+				// new, for modules. if the current app domain does not have the definition we are 
+				// looking for, we cannot even try to continue.
+				if( !swiz.domain.hasDefinition( className ) )
+				{
+					return false;	
+				}
+				else if( swiz.config.viewPackages.length > 0 )
 				{
 					for each( var viewPackage:String in swiz.config.viewPackages )
 					{
@@ -340,7 +349,7 @@ package org.swizframework.core
 			if( "id" in bean.source && bean.source.id != null )
 				bean.name = bean.source.id;
 			
-			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type );
+			bean.typeDescriptor = TypeCache.getTypeDescriptor( swiz.domain, bean.type );
 			
 			return bean;
 		}

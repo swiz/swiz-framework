@@ -62,7 +62,7 @@ package org.swizframework.processors
 			// store ref to the actual outjected value
 			outjectBean.source = bean.source[ metadataTag.host.name ];
 			// gotta have a descriptor
-			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( metadataTag.host.type );
+			outjectBean.typeDescriptor = TypeCache.getTypeDescriptor( swiz.domain, metadataTag.host.type );
 			
 			// add new bean to the factory
 			beanFactory.beans.push( outjectBean );

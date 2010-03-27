@@ -1,5 +1,6 @@
 package org.swizframework.reflection
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.getDefinitionByName;
 	
 	/**
@@ -54,17 +55,21 @@ package org.swizframework.reflection
 		 *
 		 * @param hostNode XML node from <code>describeType</code> output that represents this method.
 		 */
-		public function MetadataHostMethod( hostNode:XML )
+		public function MetadataHostMethod( domain:ApplicationDomain, hostNode:XML )
 		{
 			super();
 			
 			if( hostNode.@returnType != "void" && hostNode.@returnType != "*" )
-				_returnType = Class( getDefinitionByName( hostNode.@returnType ) );
+			{
+				// _returnType = Class( getDefinitionByName( hostNode.@returnType ) );
+				_returnType = Class( domain.getDefinition( hostNode.@returnType ) );
+			}
 			
 			for each( var pNode:XML in hostNode.parameter )
 			{
 				// Convert * type to Object class, lookup everything else
-				var pType:Class = pNode.@type != "*" ? Class( getDefinitionByName( pNode.@type ) ) : Object;
+				// var pType:Class = pNode.@type != "*" ? Class( getDefinitionByName( pNode.@type ) ) : Object;
+				var pType:Class = pNode.@type != "*" ? Class( domain.getDefinition( pNode.@type ) ) : Object;
 				_parameters.push( new MethodParameter( int( pNode.@index ), pType, pNode.@optional == "true" ) );
 			}
 		}

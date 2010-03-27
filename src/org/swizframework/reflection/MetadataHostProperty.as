@@ -1,5 +1,6 @@
 package org.swizframework.reflection
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.getDefinitionByName;
 	
 	/**
@@ -34,12 +35,13 @@ package org.swizframework.reflection
 		 *
 		 * @param hostNode XML node from <code>describeType</code> output that represents this property.
 		 */
-		public function MetadataHostProperty( hostNode:XML )
+		public function MetadataHostProperty( domain:ApplicationDomain, hostNode:XML )
 		{
 			super();
 			
 			// Convert * type to Object class, lookup everything else
-			type = hostNode.@type != "*" ? Class( getDefinitionByName( hostNode.@type ) ) : Object;
+			// type = hostNode.@type != "*" ? Class( getDefinitionByName( hostNode.@type ) ) : Object;
+			type = hostNode.@type != "*" ? Class( domain.getDefinition( hostNode.@type ) ) : Object;
 		}
 	}
 }

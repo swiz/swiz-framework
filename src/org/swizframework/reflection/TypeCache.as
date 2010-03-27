@@ -1,5 +1,6 @@
 package org.swizframework.reflection
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
 	import flash.utils.getQualifiedClassName;
@@ -22,7 +23,7 @@ package org.swizframework.reflection
 		 * @param target Object whose type is to be inspected and returned.
 		 * @return TypeDescriptor instance representing the type of the object that was passed in.
 		 */
-		public static function getTypeDescriptor( target:Object ):TypeDescriptor
+		public static function getTypeDescriptor( domain:ApplicationDomain, target:Object ):TypeDescriptor
 		{
 			// make sure our Dictionary has been initialized
 			typeDescriptors ||= new Dictionary();
@@ -33,7 +34,7 @@ package org.swizframework.reflection
 				return typeDescriptors[ className ];
 			
 			// type not found in cache so create, store and return it here
-			return typeDescriptors[ className ] = new TypeDescriptor().fromXML( describeType( target ) );
+			return typeDescriptors[ className ] = new TypeDescriptor().fromXML( domain, describeType( target ) );
 		}
 	}
 }

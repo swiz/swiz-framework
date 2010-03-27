@@ -1,6 +1,7 @@
 package org.swizframework.core
 {
 	import flash.events.IEventDispatcher;
+	import flash.system.ApplicationDomain;
 	
 	/**
 	 * Swiz Interface
@@ -16,6 +17,12 @@ package org.swizframework.core
 		 */
 		function get dispatcher():IEventDispatcher;
 		function set dispatcher( value:IEventDispatcher ):void;
+		
+		/**
+		 * Domain
+		 */
+		function get domain():ApplicationDomain;
+		function set domain( value:ApplicationDomain ):void;
 		
 		/**
 		 * Config

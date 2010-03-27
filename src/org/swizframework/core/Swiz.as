@@ -2,9 +2,13 @@ package org.swizframework.core
 {
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.system.ApplicationDomain;
 	
+	import mx.core.IFlexModuleFactory;
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
+	import mx.modules.Module;
+	import mx.modules.ModuleManager;
 	
 	import org.swizframework.events.SwizEvent;
 	import org.swizframework.processors.DispatcherProcessor;
@@ -33,6 +37,8 @@ package org.swizframework.core
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 		
 		protected var _dispatcher:IEventDispatcher;
+		protected var _domain:ApplicationDomain;
+		
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
@@ -59,6 +65,21 @@ package org.swizframework.core
 			_dispatcher = value;
 			
 			logger.info( "Swiz dispatcher set to {0}", value );
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get domain():ApplicationDomain
+		{
+			return _domain;
+		}
+		
+		public function set domain( value:ApplicationDomain ):void
+		{
+			_domain = value;
+			
+			logger.info( "Swiz domain set to {0}", value );
 		}
 		
 		/**
@@ -200,6 +221,8 @@ package org.swizframework.core
 			// dispatch a swiz created event before fully initializing
 			dispatchSwizCreatedEvent();
 			
+			findDomain();
+			
 			constructProviders();
 			
 			initializeProcessors();
@@ -227,6 +250,21 @@ package org.swizframework.core
 			logger.debug( "Processors initialized" );
 		}
 		
+		private function findDomain():void
+		{
+			// if the parent dispatcher is a module, get the application domain from the module manager
+			// if not, we'll try to trust current domain
+			if( dispatcher is Module ) 
+			{
+				var moduleInfo : Object = ModuleManager.getAssociatedFactory( dispatcher ).info();
+				domain = moduleInfo.currentDomain;
+			}
+			else
+			{
+				domain = ApplicationDomain.currentDomain;
+			}
+		}
+		
 		/**
 		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders
 		 * ensures that provider is created and initialized before the bean factory accesses them.
@@ -252,11 +290,7 @@ package org.swizframework.core
 				}
 				
 				// now all BeanProviders require initialization
-				providerInst.initialize();
-				
-					// now if the current provider is a BeanLoader, it needs to be initialized
-					// if( providerInst is BeanLoader )
-					// BeanLoader(providerInst).initialize();
+				providerInst.initialize( domain );
 			}
 		}
 		
