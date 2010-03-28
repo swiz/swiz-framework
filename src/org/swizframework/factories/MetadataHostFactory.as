@@ -6,6 +6,7 @@ package org.swizframework.factories
 	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MetadataHostProperty;
+	import org.swizframework.reflection.MethodParameter;
 	
 	/**
 	 * Simple factory to create the different kinds of metadata
@@ -39,10 +40,31 @@ package org.swizframework.factories
 			// property, method or class?
 			var hostKind:String = hostNode.name();
 			
-			// actual type is determined by metadata's parent tag
-			host = ( hostKind == "method" ) ? new MetadataHostMethod( domain, hostNode )
-				: ( hostKind == "type" ) ? new MetadataHostClass( domain, hostNode )
-				: new MetadataHostProperty( domain, hostNode );
+			if( hostKind == "type" )
+			{
+				host = new MetadataHostClass();
+				host.type = domain.getDefinition( hostNode.@name.toString() ) as Class;
+			}
+			else if( hostKind == "method" )
+			{
+				host = new MetadataHostMethod();
+				
+				if( hostNode.@returnType != "void" && hostNode.@returnType != "*" )
+				{
+					MetadataHostMethod( host ).returnType = Class( domain.getDefinition( hostNode.@returnType ) );
+				}
+				
+				for each( var pNode:XML in hostNode.parameter )
+				{
+					var pType:Class = pNode.@type == "*" ? Object : Class( domain.getDefinition( pNode.@type ) );
+					MetadataHostMethod( host ).parameters.push( new MethodParameter( int( pNode.@index ), pType, pNode.@optional == "true" ) );
+				}
+			}
+			else
+			{
+				host = new MetadataHostProperty();
+				host.type = hostNode.@type == "*" ? Object : Class( domain.getDefinition( hostNode.@type ) );
+			}
 			
 			host.name = ( hostNode.@uri == undefined ) ? hostNode.@name : new QName( hostNode.@uri, hostNode.@name );
 			
