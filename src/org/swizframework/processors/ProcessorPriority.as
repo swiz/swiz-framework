@@ -14,14 +14,6 @@ package org.swizframework.processors
 	public final class ProcessorPriority
 	{
 		/**
-		 * Built-in <code>OutjectProcessor</code> is the first native processor run to ensure
-		 * items decorated with <code>[Outject]</code> are made available for injection.
-		 *
-		 * @see org.swizframework.processors.ComponentProcessor
-		 */
-		public static const OUTJECT			:int = 100;
-		
-		/**
 		 * Built-in <code>InjectProcessor</code> is the second native processor run to
 		 * satisfy declared dependencies in any beans/components provided to Swiz.
 		 *

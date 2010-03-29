@@ -4,7 +4,6 @@ package org.swizframework.core
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
 	
-	import mx.core.IFlexModuleFactory;
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
 	import mx.modules.Module;
@@ -15,7 +14,6 @@ package org.swizframework.core
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
 	import org.swizframework.processors.MediateProcessor;
-	import org.swizframework.processors.OutjectProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.SwizInterfaceProcessor;
@@ -43,8 +41,8 @@ package org.swizframework.core
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
-		protected var _processors:Array = [ new OutjectProcessor(), new InjectProcessor(), new DispatcherProcessor(), 
-											new MediateProcessor(), new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor() ];
+		protected var _processors:Array = [ new InjectProcessor(), new DispatcherProcessor(), new MediateProcessor(), 
+											new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
 		

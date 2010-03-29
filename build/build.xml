@@ -67,7 +67,6 @@
 			<keep-as3-metadata name="Dispatcher"/>
 			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Mediate"/>
-			<keep-as3-metadata name="Outject"/>
 			<keep-as3-metadata name="PostConstruct"/>
 			<keep-as3-metadata name="PreDestroy"/>
 

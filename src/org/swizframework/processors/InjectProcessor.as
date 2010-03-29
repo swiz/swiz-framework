@@ -1,7 +1,6 @@
 package org.swizframework.processors
 {
 	import flash.utils.Dictionary;
-	import flash.utils.getDefinitionByName;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
@@ -9,7 +8,6 @@ package org.swizframework.processors
 	import mx.utils.UIDUtil;
 	
 	import org.swizframework.core.Bean;
-	import org.swizframework.core.OutjectBean;
 	import org.swizframework.metadata.InjectMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.MetadataHostClass;
@@ -109,37 +107,25 @@ package org.swizframework.processors
 				// name of property that will be bound to a source value
 				var destPropName:* = getDestinationPropertyName( injectTag );
 				
-				// check to see if this is an outjected bean
-				if( namedBean is OutjectBean )
+				var chain:String = injectTag.source.split( "." ).slice( 1 ).toString();
+				var bind:Boolean = injectTag.bind && !( injectTag.host is MetadataHostMethod ) && ChangeWatcher.canWatch( namedBean.source, chain );
+				
+				// if injecting by name simply assign the bean's current value
+				// as there is no context to create a binding
+				if( injectTag.source.indexOf( "." ) < 0 )
 				{
-					var ob:OutjectBean = namedBean as OutjectBean;
-					if( injectTag.bind && ChangeWatcher.canWatch( ob.parentBean.source, ob.outjectedPropName ) )
-						addPropertyBinding( destObject, destPropName, ob.parentBean.source, [ ob.outjectedPropName ], injectTag.twoWay );
-					else
-						destObject[ destPropName ] = ob.parentBean.source[ ob.outjectedPropName ];
+					setDestinationValue( injectTag, bean, namedBean.source );
+				}
+				else if( !bind )
+				{
+					// if tag specified no binding or property is not bindable, do simple assignment
+					var sourceObject:Object = getDestinationObject( namedBean.source, injectTag.source.split( "." ).slice( 1 ).toString() );
+					setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
 				}
 				else
 				{
-					var chain:String = injectTag.source.split( "." ).slice( 1 ).toString();
-					var bind:Boolean = injectTag.bind && !( injectTag.host is MetadataHostMethod ) && ChangeWatcher.canWatch( namedBean.source, chain );
-					
-					// if injecting by name simply assign the bean's current value
-					// as there is no context to create a binding
-					if( injectTag.source.indexOf( "." ) < 0 )
-					{
-						setDestinationValue( injectTag, bean, namedBean.source );
-					}
-					else if( !bind )
-					{
-						// if tag specified no binding or property is not bindable, do simple assignment
-						var sourceObject:Object = getDestinationObject( namedBean.source, injectTag.source.split( "." ).slice( 1 ).toString() );
-						setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
-					}
-					else
-					{
-						// bind to bean property
-						addPropertyBinding( destObject, destPropName, namedBean.source, injectTag.source.split( "." ).slice( 1 ), injectTag.twoWay );
-					}
+					// bind to bean property
+					addPropertyBinding( destObject, destPropName, namedBean.source, injectTag.source.split( "." ).slice( 1 ), injectTag.twoWay );
 				}
 			}
 			
