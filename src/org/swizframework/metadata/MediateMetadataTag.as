@@ -23,11 +23,6 @@ package org.swizframework.metadata
 		protected var _properties:Array;
 		
 		/**
-		 * Backing variable for read-only <code>view</code> property.
-		 */
-		protected var _view:Boolean = false;
-		
-		/**
 		 * Backing variable for read-only <code>priority</code> property.
 		 */
 		protected var _priority:int = 0;
@@ -65,18 +60,6 @@ package org.swizframework.metadata
 		public function get properties():Array
 		{
 			return _properties;
-		}
-		
-		/**
-		 * Returns view attribute of [Mediate] tag as a <code>Boolean</code>.
-		 * If true instructs Swiz to create a listener on the specified view
-		 * type whenever one is added to the display list.
-		 *
-		 * @default false
-		 */
-		public function get view():Boolean
-		{
-			return _view;
 		}
 		
 		/**
@@ -141,9 +124,6 @@ package org.swizframework.metadata
 			
 			if( hasArg( "properties" ) )
 				_properties = getArg( "properties" ).value.replace( /\ /g, "" ).split( "," );
-			
-			if( hasArg( "view" ) )
-				_view = getArg( "view" ).value == "true";
 			
 			if( hasArg( "priority" ) )
 				_priority = int( getArg( "priority" ).value );
