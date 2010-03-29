@@ -47,13 +47,13 @@ package org.swizframework.core
 			{
 				_rawBeans = value;
 			}
-			/* 
-			if( value != _beans )
-			{
-				// got rid of remove beans, it didn't do anything...
-				initializeBeans( value );
-			}
-			*/
+		/*
+		   if( value != _beans )
+		   {
+		   // got rid of remove beans, it didn't do anything...
+		   initializeBeans( value );
+		   }
+		 */
 		}
 		
 		
@@ -153,7 +153,7 @@ package org.swizframework.core
 						// look for any bean we should already have, and set the name propery of the bean object only
 						for each( var bean:Bean in beans )
 						{
-							if( ( bean == child ) || ( bean.source == child ) )
+							if( ( bean == child ) || ( bean.type == child ) )
 							{
 								bean.name = name;
 								found = true;
