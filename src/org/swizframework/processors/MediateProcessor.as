@@ -130,7 +130,7 @@ package org.swizframework.processors
 				{
 					if( mediator.method == method )
 					{
-						swiz.dispatcher.removeEventListener( eventType, mediator.mediate, false );
+						swiz.dispatcher.removeEventListener( eventType, mediator.mediate, mediateTag.useCapture );
 						
 						mediatorsByEventType[ eventType ].splice( mediatorIndex, 1 );
 						break;
