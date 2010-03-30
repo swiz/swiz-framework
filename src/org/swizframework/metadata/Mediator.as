@@ -7,9 +7,9 @@ package org.swizframework.metadata
 	import org.swizframework.reflection.MethodParameter;
 	
 	/**
-	 * Represents a queued request for mediation.
+	 * Represents a deferred request for mediation.
 	 */
-	public class MediateQueue
+	public class Mediator
 	{
 		// ========================================
 		// protected properties
@@ -52,7 +52,7 @@ package org.swizframework.metadata
 		/**
 		 * Constructor
 		 */
-		public function MediateQueue( metadataTag:MediateMetadataTag, method:Function )
+		public function Mediator( metadataTag:MediateMetadataTag, method:Function )
 		{
 			_metadataTag = metadataTag;
 			_method = method;
