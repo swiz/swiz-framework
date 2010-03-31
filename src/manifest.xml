@@ -19,8 +19,8 @@
 	
 	<!-- utils package -->
 	<component class="org.swizframework.utils.SwizLogger" />
-	<component class="org.swizframework.utils.services.ServiceRequestUtil" />
-	<component class="org.swizframework.utils.services.MockDelegateUtil" />
-	<component class="org.swizframework.utils.services.URLRequestUtil" />
+	<component class="org.swizframework.utils.services.ServiceHelper" />
+	<component class="org.swizframework.utils.services.MockDelegateHelper" />
+	<component class="org.swizframework.utils.services.URLRequestHelper" />
 	
 </componentPackage>
