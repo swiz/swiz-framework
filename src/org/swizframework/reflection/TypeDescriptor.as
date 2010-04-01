@@ -190,7 +190,7 @@ package org.swizframework.reflection
 			{
 				for each( var metadataTag:IMetadataTag in metadataHost.metadataTags )
 				{
-					if( metadataTag.name == metadataTagName )
+					if( metadataTag.name.toLowerCase() == metadataTagName.toLowerCase() )
 						return true;
 				}
 			}
@@ -212,7 +212,7 @@ package org.swizframework.reflection
 			{
 				for each( var metadataTag:IMetadataTag in metadataHost.metadataTags )
 				{
-					if( metadataTag.name == metadataTagName )
+					if( metadataTag.name.toLowerCase() == metadataTagName.toLowerCase() )
 					{
 						hosts.push( metadataHost );
 						continue;
@@ -237,7 +237,7 @@ package org.swizframework.reflection
 			{
 				for each( var metadataTag:IMetadataTag in metadataHost.metadataTags )
 				{
-					if( metadataTag.name == tagName )
+					if( metadataTag.name.toLowerCase() == tagName.toLowerCase() )
 					{
 						tags.push( metadataTag );
 					}
