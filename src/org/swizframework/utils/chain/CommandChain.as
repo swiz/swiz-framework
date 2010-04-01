@@ -1,8 +1,8 @@
 package org.swizframework.utils.chain
 {
-	public class CommandChain extends AbstractChain
+	public class CommandChain extends AbstractChain implements IChain
 	{
-		public function CommandChain( stopOnError:Boolean = true, mode:String = AbstractChain.SEQUENCE )
+		public function CommandChain( stopOnError:Boolean = true, mode:String = ChainType.SEQUENCE )
 		{
 			super( null, stopOnError, mode );
 		}
@@ -10,7 +10,7 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		override public function doProceed():void
+		public function doProceed():void
 		{
 			ChainStepCommand( members[ position ] ).execute();
 		}

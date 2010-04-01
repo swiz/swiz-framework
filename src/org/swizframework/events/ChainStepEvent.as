@@ -61,6 +61,5 @@ package org.swizframework.events
 		{
 			return new ChainStepEvent( type, bubbles, cancelable );
 		}
-		
 	}
 }

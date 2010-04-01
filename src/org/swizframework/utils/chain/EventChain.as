@@ -3,7 +3,7 @@ package org.swizframework.utils.chain
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
-	public class EventChain extends AbstractChain
+	public class EventChain extends AbstractChain implements IChain
 	{
 		public function EventChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true )
 		{
@@ -13,7 +13,7 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		override public function doProceed():void
+		public function doProceed():void
 		{
 			dispatcher.dispatchEvent( Event( members[ position ] ) );
 		}

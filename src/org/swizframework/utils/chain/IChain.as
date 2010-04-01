@@ -20,5 +20,6 @@ package org.swizframework.utils.chain
 		function stepError():void;
 		
 		function addMember( member:IChainMember ):IChain;
+		function doProceed():void;
 	}
 }

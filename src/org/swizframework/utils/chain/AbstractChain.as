@@ -4,18 +4,17 @@ package org.swizframework.utils.chain
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
-	[Event( name="chainStarted",type="flash.events.Event" )]
-	[Event( name="chainStepComplete",type="flash.events.Event" )]
-	[Event( name="chainStepError",type="flash.events.Event" )]
-	[Event( name="chainComplete",type="flash.events.Event" )]
-	[Event( name="chainFailure",type="flash.events.Event" )]
+	import org.swizframework.events.ChainEvent;
 	
-	public class AbstractChain extends EventDispatcher implements IChain, IChainMember
+	[Event( name="chainStart",			type="org.swizframework.events.ChainEvent" )]
+	[Event( name="chainStepComplete",	type="org.swizframework.events.ChainEvent" )]
+	[Event( name="chainStepError",		type="org.swizframework.events.ChainEvent" )]
+	[Event( name="chainComplete",		type="org.swizframework.events.ChainEvent" )]
+	[Event( name="chainFail",			type="org.swizframework.events.ChainEvent" )]
+	
+	public class AbstractChain extends EventDispatcher implements IChainMember
 	{
-		public static const SEQUENCE:String = "sequence";
-		public static const PARALLEL:String = "parallel";
-		
-		public var mode:String = SEQUENCE;
+		public var mode:String = ChainType.SEQUENCE;
 		
 		public var members:Array = [];
 		
@@ -98,7 +97,7 @@ package org.swizframework.utils.chain
 			_stopOnError = value;
 		}
 		
-		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:String = SEQUENCE )
+		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:String = ChainType.SEQUENCE )
 		{
 			this.dispatcher = dispatcher;
 			this.stopOnError = stopOnError;
@@ -110,9 +109,9 @@ package org.swizframework.utils.chain
 		 */
 		public function addMember( member:IChainMember ):IChain
 		{
-			member.chain = this;
+			member.chain = IChain( this );
 			members.push( member );
-			return this;
+			return IChain( this );
 		}
 		
 		/**
@@ -128,15 +127,15 @@ package org.swizframework.utils.chain
 		 */
 		public function start():void
 		{
-			dispatchEvent( new Event( "chainStarted" ) );
+			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_START ) );
 			position = -1;
 			proceed();
 		}
 		
 		public function stepComplete():void
 		{
-			dispatchEvent( new Event( "chainStepComplete" ) );
-			if( mode == SEQUENCE )
+			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_STEP_COMPLETE ) );
+			if( mode == ChainType.SEQUENCE )
 			{
 				proceed();
 			}
@@ -156,12 +155,12 @@ package org.swizframework.utils.chain
 		 */
 		public function proceed():void
 		{
-			if( mode == SEQUENCE )
+			if( mode == ChainType.SEQUENCE )
 			{
 				if( hasNext() )
 				{
 					position++;
-					doProceed();
+					IChain( this ).doProceed();
 				}
 				else
 				{
@@ -173,7 +172,7 @@ package org.swizframework.utils.chain
 				for( var i:int = 0; i < members.length; i++ )
 				{
 					position = i;
-					doProceed();
+					IChain( this ).doProceed();
 				}
 			}
 		}
@@ -181,18 +180,9 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		public function doProceed():void
-		{
-			// TODO: write error msg
-			throw new Error();
-		}
-		
-		/**
-		 *
-		 */
 		public function stepError():void
 		{
-			dispatchEvent( new Event( "chainStepError" ) );
+			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_STEP_ERROR ) );
 			if( !stopOnError )
 				proceed();
 			else
@@ -204,7 +194,7 @@ package org.swizframework.utils.chain
 		 */
 		protected function complete():void
 		{
-			dispatchEvent( new Event( "chainComplete" ) );
+			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_COMPLETE ) );
 			_isComplete = true;
 			if( chain != null )
 				chain.stepComplete();
@@ -215,7 +205,7 @@ package org.swizframework.utils.chain
 		 */
 		protected function fail():void
 		{
-			dispatchEvent( new Event( "chainFailure" ) );
+			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_FAIL ) );
 			_isComplete = true;
 			if( chain != null )
 				chain.stepError();
