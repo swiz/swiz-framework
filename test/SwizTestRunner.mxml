@@ -31,7 +31,7 @@
 				core.addListener( new UIListener( uiListener ) );
 				
 				// Listener to support continuous integration servers
-				//core.addListener( new CIListener() );
+				core.addListener( new CIListener() );
 				
 				// If you would like to see text output in verbose mode, 
 				// uncomment either of the follow listeners

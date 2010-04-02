@@ -62,6 +62,12 @@
 			
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
+			
+			<!-- Configure the flex framework libraries as external link dependencies -->
+			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
+				<include name="libs" />
+				<include name="locale/{locale}" />
+			</external-library-path>
 
 			<keep-as3-metadata name="Autowire"/>
 			<keep-as3-metadata name="Dispatcher"/>
@@ -97,17 +103,21 @@
 				<include name="${swiz.name}.swc" />
 			</zipfileset>
 			
-			<!-- Include README -->
+			<!-- Include README.markdown -->
 			<zipfileset dir="${basedir}" prefix="${swiz.name}">
-				<include name="README" />
+				<include name="README.markdown" />
 			</zipfileset>
 							
-			<!--
-				TODO: Include LICENSE file
-			-->
+			<!-- Include LICENSE -->
+			<zipfileset dir="${basedir}" prefix="${swiz.name}">
+				<include name="LICENSE" />
+			</zipfileset>
 			
 			<!-- Include the ASDocs in the asdocs folder of the zip -->
 			<zipfileset dir="${docs.loc}" prefix="${swiz.name}/asdocs" />
+			
+			<!-- Include the source code in the source folder of the zip -->
+			<zipfileset dir="${src.loc}" prefix="${swiz.name}/source" />
 		</zip>
 		
 		<echo message="The ${swiz.name}.zip distribution package has been created in ${dist.loc}" />
