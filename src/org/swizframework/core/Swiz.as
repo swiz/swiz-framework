@@ -299,7 +299,7 @@ package org.swizframework.core
 		private function dispatchSwizCreatedEvent():void
 		{
 			// dispatch a creation event to find parents
-			dispatcher.dispatchEvent( new SwizEvent(SwizEvent.CREATED, this) );
+			dispatcher.dispatchEvent( new SwizEvent( SwizEvent.CREATED, this ) );
 			// and attach a listener for children
 			dispatcher.addEventListener( SwizEvent.CREATED, handleSwizCreatedEvent );
 			
