@@ -40,11 +40,6 @@ package org.swizframework.core
 		public var typeDescriptor:TypeDescriptor;
 		
 		/**
-		 * Provider
-		 */
-		public var provider:IBeanProvider;
-		
-		/**
 		 * BeanFactory
 		 */
 		public var beanFactory:IBeanFactory;
@@ -63,12 +58,11 @@ package org.swizframework.core
 		// constructor
 		// ========================================
 		
-		public function Bean( source:* = null, name:String = null, typeDescriptor:TypeDescriptor = null, provider:IBeanProvider = null )
+		public function Bean( source:* = null, name:String = null, typeDescriptor:TypeDescriptor = null )
 		{
 			this.source = source;
 			this.name = name;
 			this.typeDescriptor = typeDescriptor;
-			this.provider = provider;
 		}
 		
 		// ========================================

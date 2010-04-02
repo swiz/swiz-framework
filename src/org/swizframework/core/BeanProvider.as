@@ -4,8 +4,6 @@ package org.swizframework.core
 	import flash.system.ApplicationDomain;
 	import flash.utils.describeType;
 	
-	import org.swizframework.reflection.TypeCache;
-	
 	[DefaultProperty( "beans" )]
 	
 	public class BeanProvider extends EventDispatcher implements IBeanProvider
@@ -115,7 +113,7 @@ package org.swizframework.core
 		{
 			for each( var beanSource:Object in _rawBeans )
 			{
-				_beans.push( constructBean( domain, beanSource ) );
+				_beans.push( BeanFactory.constructBean( beanSource, null, domain ) );
 			}
 		}
 		
@@ -136,7 +134,7 @@ package org.swizframework.core
 			var name:String;
 			var found:Boolean;
 			
-			for( var i:uint = 0; i<accessors.length(); i++ )
+			for( var i:uint = 0; i < accessors.length(); i++ )
 			{
 				name = accessors[ i ];
 				if( name != "beans" )
@@ -164,35 +162,11 @@ package org.swizframework.core
 						// if we didn't find the bean, we need to construct it
 						if( !found )
 						{
-							beans.push( constructBean( domain, child, name ) );
+							beans.push( BeanFactory.constructBean( child, name, domain ) );
 						}
 					}
-					
 				}
 			}
 		}
-		
-		// both init method and setBeanIds will call this if needed
-		private function constructBean( domain:ApplicationDomain, obj:*, name:String = null ):Bean
-		{
-			var bean:Bean = null;
-			
-			if( obj is Bean )
-			{
-				bean = Bean( obj );
-			}
-			else
-			{
-				bean = new Bean();
-				bean.source = obj;
-			}
-			
-			bean.name ||= name;
-			bean.provider = this;
-			bean.typeDescriptor = TypeCache.getTypeDescriptor(domain, bean.type );
-			
-			return bean;
-		}
-	
 	}
 }

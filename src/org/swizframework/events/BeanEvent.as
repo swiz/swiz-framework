@@ -16,17 +16,9 @@ package org.swizframework.events
 		// public static const
 		// ========================================
 		
-		/**
-		 * The BeanEvent.ADDED constant defines the value of the type property
-		 * of a beanAdded event object.
-		 */
-		public static const ADDED:String = "beanAdded";
+		public static const SET_UP_BEAN:String = "setUpBean";
 		
-		/**
-		 * The BeanEvent.REMOVED constant defines the value of the type property
-		 * of a beanRemoved event object.
-		 */
-		public static const REMOVED:String = "beanRemoved";
+		public static const TEAR_DOWN_BEAN:String = "tearDownBean";
 		
 		// ========================================
 		// public properties
@@ -35,7 +27,9 @@ package org.swizframework.events
 		/**
 		 * The <code>Bean</code> instance that was added or removed.
 		 */
-		public var bean:Bean;
+		public var bean:*;
+		
+		public var beanName:String;
 		
 		// ========================================
 		// constructor
@@ -44,11 +38,12 @@ package org.swizframework.events
 		/**
 		 * Constructor
 		 */
-		public function BeanEvent( type:String, bean:Bean = null )
+		public function BeanEvent( type:String, bean:* = null, beanName:String = null )
 		{
 			super( type, true, true );
 			
 			this.bean = bean;
+			this.beanName = beanName;
 		}
 		
 		// ========================================

@@ -5,12 +5,13 @@ package org.swizframework.core
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.EventPhase;
+	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.logging.ILogger;
-	import mx.modules.Module;
 	
+	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
@@ -97,7 +98,35 @@ package org.swizframework.core
 			logger.debug( "Tear down event phase set to {0}", ( swiz.config.tearDownEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
 			logger.debug( "Tear down event priority set to {0}", swiz.config.tearDownEventPriority );
 			
+			swiz.dispatcher.addEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
+			swiz.dispatcher.addEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
+			
 			logger.info( "BeanFactory initialized" );
+		}
+		
+		/**
+		 *
+		 */
+		protected function handleBeanEvent( event:BeanEvent ):void
+		{
+			var bean:Bean;
+			
+			if( event.type == BeanEvent.SET_UP_BEAN )
+			{
+				bean = constructBean( event.bean, event.beanName );
+				beans.push( bean );
+				setUpBean( bean );
+			}
+			else
+			{
+				// get the right bean object
+				for each( bean in beans )
+				{
+					if( event.bean == bean || event.bean == bean.source )
+						tearDownBean( constructBean( event.bean ) );
+				}
+					// TODO: log warning bean was not found
+			}
 		}
 		
 		public function getBeanByName( name:String ):Bean
@@ -186,7 +215,7 @@ package org.swizframework.core
 			}
 			
 			// add main dispatcher as bean to collection
-			var rootDispatcherBean:Bean = createBean( swiz.dispatcher );
+			var rootDispatcherBean:Bean = constructBean( swiz.dispatcher );
 			beans.push( rootDispatcherBean );
 			// manually trigger processing now that all defined beans are done
 			setUpBean( rootDispatcherBean );
@@ -277,7 +306,7 @@ package org.swizframework.core
 				// looking for, we cannot even try to continue.
 				if( !swiz.domain.hasDefinition( className ) )
 				{
-					return false;	
+					return false;
 				}
 				else if( swiz.config.viewPackages.length > 0 )
 				{
@@ -303,8 +332,7 @@ package org.swizframework.core
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
-				var bean:Bean = createBean( event.target );
-				setUpBean( bean );
+				setUpBean( constructBean( event.target ) );
 			}
 		}
 		
@@ -328,28 +356,28 @@ package org.swizframework.core
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
-				var bean:Bean = createBean( event.target );
-				tearDownBean( bean );
+				tearDownBean( constructBean( event.target ) );
 			}
 		}
 		
-		/**
-		 * Create Bean
-		 *
-		 * @param instance An Object instance to introspect and wrap in a Bean.
-		 * @returns The Bean representation of the Object instance.
-		 */
-		protected function createBean( instance:Object ):Bean
+		// both init method and setBeanIds will call this if needed
+		public static function constructBean( obj:*, name:String = null, domain:ApplicationDomain = null ):Bean
 		{
-			var bean:Bean = new Bean();
+			var bean:Bean;
+			domain ||= ApplicationDomain.currentDomain;
 			
-			bean.source = instance;
+			if( obj is Bean )
+			{
+				bean = Bean( obj );
+			}
+			else
+			{
+				bean = new Bean();
+				bean.source = obj;
+			}
 			
-			// TODO: Is this necessary?
-			if( "id" in bean.source && bean.source.id != null )
-				bean.name = bean.source.id;
-			
-			bean.typeDescriptor = TypeCache.getTypeDescriptor( swiz.domain, bean.type );
+			bean.name ||= name;
+			bean.typeDescriptor = TypeCache.getTypeDescriptor( domain, bean.type );
 			
 			return bean;
 		}

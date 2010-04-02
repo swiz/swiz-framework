@@ -252,7 +252,7 @@ package org.swizframework.core
 		{
 			// if the parent dispatcher is a module, get the application domain from the module manager
 			// if not, we'll try to trust current domain
-			if( dispatcher is Module ) 
+			if( dispatcher is Module )
 			{
 				var moduleInfo : Object = ModuleManager.getAssociatedFactory( dispatcher ).info();
 				domain = moduleInfo.currentDomain;
