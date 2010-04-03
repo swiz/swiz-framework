@@ -292,36 +292,27 @@ package org.swizframework.core
 		 */
 		protected function isPotentialInjectionTarget( instance:Object ):Boolean
 		{
+			var className:String = getQualifiedClassName( instance );
+			
 			// new, for modules. if the current app domain does not have the definition we are 
 			// looking for, we cannot even try to continue.
-			if( swiz.config.setUpMarkerFunction != null )
+			if( !swiz.domain.hasDefinition( className ) )
 			{
-				return swiz.config.setUpMarkerFunction( instance );
+				return false;
+			}
+			else if( swiz.config.viewPackages.length > 0 )
+			{
+				for each( var viewPackage:String in swiz.config.viewPackages )
+				{
+					if( className.indexOf( viewPackage ) == 0 )
+						return true;
+				}
+				
+				return false;
 			}
 			else
 			{
-				var className:String = getQualifiedClassName( instance );
-				
-				// new, for modules. if the current app domain does not have the definition we are 
-				// looking for, we cannot even try to continue.
-				if( !swiz.domain.hasDefinition( className ) )
-				{
-					return false;
-				}
-				else if( swiz.config.viewPackages.length > 0 )
-				{
-					for each( var viewPackage:String in swiz.config.viewPackages )
-					{
-						if( className.indexOf( viewPackage ) == 0 )
-							return true;
-					}
-					
-					return false;
-				}
-				else
-				{
-					return !( ignoredClasses.test( className ) );
-				}
+				return !( ignoredClasses.test( className ) );
 			}
 		}
 		
