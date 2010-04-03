@@ -44,7 +44,11 @@ package org.swizframework.reflection
 		 */
 		public static function flushDomain( domain:ApplicationDomain ) :void
 		{
-			
+			for( var key:Object in typeDescriptors )
+			{
+				if( TypeDescriptor( typeDescriptors[ key ] ).domain == domain )
+					delete typeDescriptors[ key ];
+			}
 		}
 	}
 }
