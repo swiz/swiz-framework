@@ -81,7 +81,7 @@ package org.swizframework.reflection
 		 */
 		public static function getConstantValue( domain:ApplicationDomain, definition:Class, constantName:String, constantType:String = "String" ):*
 		{
-			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( domain, definition );
+			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( definition, domain );
 			
 			var node:XMLList = descriptor.description.constant.(@name == constantName );
 			// todo: do we need to check for jackasses who don't make their event types constants?

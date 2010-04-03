@@ -8,6 +8,7 @@ package org.swizframework.core.mxml
 	
 	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwizConfig;
+	import org.swizframework.utils.DomainUtil;
 	
 	[DefaultProperty( "beanProviders" )]
 	
@@ -51,6 +52,10 @@ package org.swizframework.core.mxml
 		protected function handleContainerPreinitialize( event:Event ):void
 		{
 			dispatcher.removeEventListener( FlexEvent.PREINITIALIZE, handleContainerPreinitialize );
+			// set the current domain with DomainUtils, only if the dispatcher is a module. Will give a parent swiz instance a chance to set 
+			// in case of swiz instances nested down in the display list of a module.
+			domain = DomainUtil.getModuleDomain( dispatcher );
+			// initialize
 			init();
 		}
 	}

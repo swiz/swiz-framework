@@ -73,7 +73,7 @@ package org.swizframework.processors
 				if( mediateTag.event.substr( -2 ) == ".*" )
 				{
 					var clazz:Class = ClassConstant.getClass( swiz.domain, mediateTag.event, swiz.config.eventPackages );
-					var td:TypeDescriptor = TypeCache.getTypeDescriptor( swiz.domain, clazz );
+					var td:TypeDescriptor = TypeCache.getTypeDescriptor( clazz, swiz.domain );
 					for each( var constant:Constant in td.constants )
 						addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], constant.value );
 				}
@@ -187,7 +187,7 @@ package org.swizframework.processors
 				if( eventClass == null )
 					throw new Error( "Could not get a reference to class for " + mediator.event + ". Did you specify its package in SwizConfig::eventPackages?" );
 				
-				var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( swiz.domain, eventClass );
+				var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( eventClass, swiz.domain );
 				
 				// TODO: Support DynamicEvent (skip validation) and Event subclasses (enforce validation).
 				// TODO: flash.events.Event is returning 'true' for isDynamic - figure out workaround?

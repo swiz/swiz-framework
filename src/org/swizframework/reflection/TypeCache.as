@@ -21,9 +21,11 @@ package org.swizframework.reflection
 		 * constructed from <code>describeType</code> call.
 		 *
 		 * @param target Object whose type is to be inspected and returned.
+		 * @param domain to associate the typeDescriptors with
+		 * 
 		 * @return TypeDescriptor instance representing the type of the object that was passed in.
 		 */
-		public static function getTypeDescriptor( domain:ApplicationDomain, target:Object ):TypeDescriptor
+		public static function getTypeDescriptor( target:Object, domain:ApplicationDomain ):TypeDescriptor
 		{
 			// make sure our Dictionary has been initialized
 			typeDescriptors ||= new Dictionary();
@@ -34,7 +36,15 @@ package org.swizframework.reflection
 				return typeDescriptors[ className ];
 			
 			// type not found in cache so create, store and return it here
-			return typeDescriptors[ className ] = new TypeDescriptor().fromXML( domain, describeType( target ) );
+			return typeDescriptors[ className ] = new TypeDescriptor().fromXML( describeType( target ), domain );
+		}
+		
+		/**
+		 * Flushes all TypeDescriptors associated to a Domain
+		 */
+		public static function flushDomain( domain:ApplicationDomain ) :void
+		{
+			
 		}
 	}
 }

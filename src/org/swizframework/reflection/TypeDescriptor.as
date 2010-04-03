@@ -141,11 +141,10 @@ package org.swizframework.reflection
 		 *
 		 * @see flash.utils.describeType
 		 */
-		public function fromXML( domain:ApplicationDomain, describeTypeXml:XML ):TypeDescriptor
+		public function fromXML( describeTypeXml:XML, domain:ApplicationDomain ):TypeDescriptor
 		{
+			this.description = describeTypeXml;
 			this.domain = domain;
-			
-			description = describeTypeXml;
 			
 			var classDescription:XML = null;
 			

@@ -1,13 +1,12 @@
 package org.swizframework.core
 {
+	import flash.display.LoaderInfo;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
 	
 	import mx.logging.ILogger;
 	import mx.logging.ILoggingTarget;
-	import mx.modules.Module;
-	import mx.modules.ModuleManager;
 	
 	import org.swizframework.events.SwizEvent;
 	import org.swizframework.processors.DispatcherProcessor;
@@ -150,6 +149,9 @@ package org.swizframework.core
 			_parentSwiz = parentSwiz;
 			_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
 			
+			if( domain == null )
+				domain = parentSwiz.domain;
+			
 			config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
 			config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
 		}
@@ -219,7 +221,11 @@ package org.swizframework.core
 			// dispatch a swiz created event before fully initializing
 			dispatchSwizCreatedEvent();
 			
-			findDomain();
+			// set domain if it has not been set
+			if( domain == null )
+			{
+				domain = ApplicationDomain.currentDomain;
+			}
 			
 			constructProviders();
 			
@@ -246,21 +252,6 @@ package org.swizframework.core
 			}
 			
 			logger.debug( "Processors initialized" );
-		}
-		
-		private function findDomain():void
-		{
-			// if the parent dispatcher is a module, get the application domain from the module manager
-			// if not, we'll try to trust current domain
-			if( dispatcher is Module )
-			{
-				var moduleInfo : Object = ModuleManager.getAssociatedFactory( dispatcher ).info();
-				domain = moduleInfo.currentDomain;
-			}
-			else
-			{
-				domain = ApplicationDomain.currentDomain;
-			}
 		}
 		
 		/**

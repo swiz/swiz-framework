@@ -113,7 +113,7 @@ package org.swizframework.core
 			
 			if( event.type == BeanEvent.SET_UP_BEAN )
 			{
-				bean = constructBean( event.bean, event.beanName );
+				bean = constructBean( event.bean, event.beanName, swiz.domain );
 				beans.push( bean );
 				setUpBean( bean );
 			}
@@ -123,7 +123,7 @@ package org.swizframework.core
 				for each( bean in beans )
 				{
 					if( event.bean == bean || event.bean == bean.source )
-						tearDownBean( constructBean( event.bean ) );
+						tearDownBean( constructBean( event.bean, null, swiz.domain ) );
 				}
 					// TODO: log warning bean was not found
 			}
@@ -215,7 +215,7 @@ package org.swizframework.core
 			}
 			
 			// add main dispatcher as bean to collection
-			var rootDispatcherBean:Bean = constructBean( swiz.dispatcher );
+			var rootDispatcherBean:Bean = constructBean( swiz.dispatcher, null, swiz.domain );
 			beans.push( rootDispatcherBean );
 			// manually trigger processing now that all defined beans are done
 			setUpBean( rootDispatcherBean );
@@ -332,7 +332,7 @@ package org.swizframework.core
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
-				setUpBean( constructBean( event.target ) );
+				setUpBean( constructBean( event.target, null, swiz.domain ) );
 			}
 		}
 		
@@ -356,15 +356,14 @@ package org.swizframework.core
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
-				tearDownBean( constructBean( event.target ) );
+				tearDownBean( constructBean( event.target, null, swiz.domain ) );
 			}
 		}
 		
 		// both init method and setBeanIds will call this if needed
-		public static function constructBean( obj:*, name:String = null, domain:ApplicationDomain = null ):Bean
+		public static function constructBean( obj:*, name:String, domain:ApplicationDomain ):Bean
 		{
 			var bean:Bean;
-			domain ||= ApplicationDomain.currentDomain;
 			
 			if( obj is Bean )
 			{
@@ -377,7 +376,7 @@ package org.swizframework.core
 			}
 			
 			bean.name ||= name;
-			bean.typeDescriptor = TypeCache.getTypeDescriptor( domain, bean.type );
+			bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type, domain );
 			
 			return bean;
 		}
