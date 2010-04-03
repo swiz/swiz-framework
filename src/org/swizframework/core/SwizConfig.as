@@ -42,11 +42,6 @@ package org.swizframework.core
 		protected var _setUpEventPhase:uint = EventPhase.CAPTURING_PHASE;
 		
 		/**
-		 * Backing variable for the <code>setUpMarkerFunction</code> property.
-		 */
-		protected var _setUpMarkerFunction:Function = null;
-		
-		/**
 		 * Backing variable for the <code>tearDownEvent</code> property.
 		 */
 		protected var _tearDownEventType:String = Event.REMOVED_FROM_STAGE;
@@ -130,19 +125,6 @@ package org.swizframework.core
 		public function set setUpEventPhase( value:uint ):void
 		{
 			_setUpEventPhase = value;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get setUpMarkerFunction():Function
-		{
-			return _setUpMarkerFunction;
-		}
-		
-		public function set setUpMarkerFunction( value:Function ):void
-		{
-			_setUpMarkerFunction = value;
 		}
 		
 		/**
