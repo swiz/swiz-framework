@@ -108,7 +108,7 @@ package org.swizframework.processors
 				var destPropName:* = getDestinationPropertyName( injectTag );
 				
 				var chain:String = injectTag.source.split( "." ).slice( 1 ).toString();
-				var bind:Boolean = injectTag.bind && ChangeWatcher.canWatch( namedBean.source, chain );
+				var bind:Boolean = injectTag.bind && ChangeWatcher.canWatch( namedBean.source, chain ) && !( destPropName is QName );
 				
 				// if injecting by name simply assign the bean's current value
 				// as there is no context to create a binding
@@ -121,6 +121,9 @@ package org.swizframework.processors
 					// if tag specified no binding or property is not bindable, do simple assignment
 					var sourceObject:Object = getDestinationObject( namedBean.source, injectTag.source.split( "." ).slice( 1 ).toString() );
 					setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
+					
+					if( destPropName is QName && injectTag.bind == true )
+						logger.debug( "Cannot create a binding for {0} on {1}. BindingUtils does not support binding non-public members.", metadataTag.toString(), bean.toString() );
 				}
 				else
 				{
