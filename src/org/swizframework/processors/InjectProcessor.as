@@ -299,11 +299,26 @@ package org.swizframework.processors
 			uid = UIDUtil.getUID( destObject );
 			// create an array to store bindings for this object if one does not already exist
 			injectByProperty[ uid ] ||= [];
-			// create and store this binding
-			if( destObject[ destPropName ] is Function )
-				injectByProperty[ uid ].push( BindingUtils.bindSetter( destObject[ destPropName ], sourceObject, sourcePropertyChain ) );
-			else
+			
+			// if destObject[ destPropName ] is a write-only property, checking if its a function will throw an error
+			try
+			{
+				// create and store this binding
+				if( destObject[ destPropName ] is Function )
+					injectByProperty[ uid ].push( BindingUtils.bindSetter( destObject[ destPropName ], sourceObject, sourcePropertyChain ) );
+				else
+					injectByProperty[ uid ].push( BindingUtils.bindProperty( destObject, destPropName, sourceObject, sourcePropertyChain ) );
+			}
+			catch( error:ReferenceError )
+			{
 				injectByProperty[ uid ].push( BindingUtils.bindProperty( destObject, destPropName, sourceObject, sourcePropertyChain ) );
+				
+				if( twoWay )
+				{
+					logger.error( "Cannot create twoWay binding for {0} property on {1} because it is write-only.", destPropName, destObject );
+					return;
+				}
+			}
 			
 			// if twoWay binding was requested we have to do things in reverse
 			// meaning the existing bean's property will also be bound to the view/new bean's property
