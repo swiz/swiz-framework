@@ -119,5 +119,15 @@ package org.swizframework.core
 		 */
 		function get defaultFaultHandler():Function;
 		function set defaultFaultHandler( faultHandler:Function ):void;
+		
+		/**
+		 * Default Dispatcher to use for all Mediators and Dispatcher injections. Can be overriden 
+		 * with dispatcher property on those metadata tags.
+		 *
+		 * @param dispatcher (global|local) 
+		 * @default null
+		 */
+		function get defaultDispatcher():String;
+		function set defaultDispatcher( dispatcher:String ):void;
 	}
 }

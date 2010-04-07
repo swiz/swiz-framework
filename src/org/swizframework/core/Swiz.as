@@ -176,8 +176,6 @@ package org.swizframework.core
 				domain = parentSwiz.domain;
 			
 			globalDispatcher = parentSwiz.globalDispatcher;
-			// todo: I killed the local dispatcher untill we add a global vs local dispather paradigm!
-			dispatcher = parentSwiz.dispatcher;
 			
 			config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
 			config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );

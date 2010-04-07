@@ -1,6 +1,9 @@
 package org.swizframework.processors
 {
+	import flash.events.IEventDispatcher;
+	
 	import org.swizframework.core.Bean;
+	import org.swizframework.core.SwizConfig;
 	import org.swizframework.reflection.IMetadataTag;
 	
 	/**
@@ -47,7 +50,9 @@ package org.swizframework.processors
 		 */
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
-			bean.source[ metadataTag.host.name ] = swiz.dispatcher;
+			var dispatcher:IEventDispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
+			
+			bean.source[ metadataTag.host.name ] = dispatcher;
 		}
 		
 		/**

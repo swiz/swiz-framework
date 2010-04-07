@@ -1,11 +1,13 @@
 package org.swizframework.processors
 {
+	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.logging.ILogger;
 	
 	import org.swizframework.core.Bean;
+	import org.swizframework.core.SwizConfig;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.Mediator;
 	import org.swizframework.reflection.ClassConstant;
@@ -114,7 +116,9 @@ package org.swizframework.processors
 			mediatorsByEventType[ eventType ] ||= [];
 			mediatorsByEventType[ eventType ].push( mediator );
 			
-			swiz.dispatcher.addEventListener( eventType, mediator.mediate, mediateTag.useCapture, mediateTag.priority, true );
+			var dispatcher:IEventDispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
+			
+			dispatcher.addEventListener( eventType, mediator.mediate, mediateTag.useCapture, mediateTag.priority, true );
 			logger.debug( "MediateProcessor added listener to dispatcher for {0}, {1}", eventType, String( mediator.method ) );
 		}
 		
@@ -122,7 +126,9 @@ package org.swizframework.processors
 		 * Remove Mediator By Event Type
 		 */
 		protected function removeMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
-		{
+		{	
+			var dispatcher:IEventDispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
+			
 			if( mediatorsByEventType[ eventType ] is Array )
 			{
 				var mediatorIndex:int = 0;
@@ -130,7 +136,7 @@ package org.swizframework.processors
 				{
 					if( mediator.method == method )
 					{
-						swiz.dispatcher.removeEventListener( eventType, mediator.mediate, mediateTag.useCapture );
+						dispatcher.removeEventListener( eventType, mediator.mediate, mediateTag.useCapture );
 						
 						mediatorsByEventType[ eventType ].splice( mediatorIndex, 1 );
 						break;
