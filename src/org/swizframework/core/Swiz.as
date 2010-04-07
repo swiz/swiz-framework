@@ -34,6 +34,7 @@ package org.swizframework.core
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 		
 		protected var _dispatcher:IEventDispatcher;
+		protected var _globalDispatcher:IEventDispatcher;
 		protected var _domain:ApplicationDomain;
 		
 		protected var _config:ISwizConfig;
@@ -62,6 +63,21 @@ package org.swizframework.core
 			_dispatcher = value;
 			
 			logger.info( "Swiz dispatcher set to {0}", value );
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get globalDispatcher():IEventDispatcher
+		{
+			return _globalDispatcher;
+		}
+		
+		public function set globalDispatcher( value:IEventDispatcher ):void
+		{
+			_globalDispatcher = value;
+			
+			logger.info( "Swiz global dispatcher set to {0}", value );
 		}
 		
 		/**
@@ -159,6 +175,7 @@ package org.swizframework.core
 			if( domain == null )
 				domain = parentSwiz.domain;
 			
+			globalDispatcher = parentSwiz.globalDispatcher;
 			// todo: I killed the local dispatcher untill we add a global vs local dispather paradigm!
 			dispatcher = parentSwiz.dispatcher;
 			
@@ -216,6 +233,11 @@ package org.swizframework.core
 			if( dispatcher == null )
 			{
 				dispatcher = this;
+			}
+			
+			if( globalDispatcher == null )
+			{
+				globalDispatcher = dispatcher;
 			}
 			
 			if( config == null )
