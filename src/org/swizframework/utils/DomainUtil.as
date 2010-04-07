@@ -24,7 +24,9 @@ package org.swizframework.utils
 		}
 		
 		/**
-		 * Returns the domain used to load an a module, only if the object supplied is in fact a module.
+		 * Returns the domain used to load an a module, only if the object supplied is a module. 
+		 * Uses the ModuleManager to find the ApplicationDomain in the associated factory, which is a loader.
+		 * Unfortunately this appears to be the only trustable method for finding a module's domain.
 		 */
 		public static function getModuleDomain( object:Object ):ApplicationDomain
 		{
