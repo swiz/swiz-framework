@@ -116,7 +116,15 @@ package org.swizframework.processors
 			mediatorsByEventType[ eventType ] ||= [];
 			mediatorsByEventType[ eventType ].push( mediator );
 			
-			var dispatcher:IEventDispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
+			var dispatcher:IEventDispatcher = null;
+			
+			// if the mediate tag defines a scope, set proper dispatcher, else use defaults
+			if( mediateTag.scope == SwizConfig.GLOBAL_DISPATCHER )
+				dispatcher = swiz.globalDispatcher;
+			else if( mediateTag.scope == SwizConfig.LOCAL_DISPATCHER )
+				dispatcher = swiz.dispatcher;
+			else
+				dispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
 			
 			dispatcher.addEventListener( eventType, mediator.mediate, mediateTag.useCapture, mediateTag.priority, true );
 			logger.debug( "MediateProcessor added listener to dispatcher for {0}, {1}", eventType, String( mediator.method ) );
@@ -127,7 +135,15 @@ package org.swizframework.processors
 		 */
 		protected function removeMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
 		{	
-			var dispatcher:IEventDispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
+			var dispatcher:IEventDispatcher = null;
+			
+			// if the mediate tag defines a scope, set proper dispatcher, else use defaults
+			if( mediateTag.scope == SwizConfig.GLOBAL_DISPATCHER )
+				dispatcher = swiz.globalDispatcher;
+			else if( mediateTag.scope == SwizConfig.LOCAL_DISPATCHER )
+				dispatcher = swiz.dispatcher;
+			else
+				dispatcher = swiz.config.defaultDispatcher == SwizConfig.LOCAL_DISPATCHER ? swiz.dispatcher : swiz.globalDispatcher;
 			
 			if( mediatorsByEventType[ eventType ] is Array )
 			{

@@ -23,6 +23,11 @@ package org.swizframework.metadata
 		protected var _properties:Array;
 		
 		/**
+		 * Backing variable for read-only <code>scope</code> property.
+		 */
+		protected var _scope:String;
+		
+		/**
 		 * Backing variable for read-only <code>priority</code> property.
 		 */
 		protected var _priority:int = 0;
@@ -65,6 +70,16 @@ package org.swizframework.metadata
 		public function get properties():Array
 		{
 			return _properties;
+		}
+		
+		/**
+		 * Returns scope attribute of [Mediate] tag as a <code>String</code>.
+		 * Defines which dispatcher to attach this mediator to on the owning Swiz instance.
+		 * Acceptable values are local, global and [parent], defined as constants on SwizConfig
+		 */
+		public function get scope():String
+		{
+			return _scope;
 		}
 		
 		/**
@@ -140,6 +155,9 @@ package org.swizframework.metadata
 			
 			if( hasArg( "properties" ) )
 				_properties = getArg( "properties" ).value.replace( /\ /g, "" ).split( "," );
+			
+			if( hasArg( "scope" ) )
+				_event = getArg( "scope" ).value;
 			
 			if( hasArg( "priority" ) )
 				_priority = int( getArg( "priority" ).value );
