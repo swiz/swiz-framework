@@ -108,7 +108,7 @@ package org.swizframework.processors
 				var destPropName:* = getDestinationPropertyName( injectTag );
 				
 				var chain:String = injectTag.source.split( "." ).slice( 1 ).toString();
-				var bind:Boolean = injectTag.bind && !( injectTag.host is MetadataHostMethod ) && ChangeWatcher.canWatch( namedBean.source, chain );
+				var bind:Boolean = injectTag.bind && ChangeWatcher.canWatch( namedBean.source, chain ) && !( destPropName is QName );
 				
 				// if injecting by name simply assign the bean's current value
 				// as there is no context to create a binding
@@ -121,6 +121,9 @@ package org.swizframework.processors
 					// if tag specified no binding or property is not bindable, do simple assignment
 					var sourceObject:Object = getDestinationObject( namedBean.source, injectTag.source.split( "." ).slice( 1 ).toString() );
 					setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
+					
+					if( destPropName is QName && injectTag.bind == true )
+						logger.debug( "Cannot create a binding for {0} on {1}. BindingUtils does not support binding non-public members.", metadataTag.toString(), bean.toString() );
 				}
 				else
 				{
@@ -296,13 +299,38 @@ package org.swizframework.processors
 			uid = UIDUtil.getUID( destObject );
 			// create an array to store bindings for this object if one does not already exist
 			injectByProperty[ uid ] ||= [];
-			// create and store this binding
-			injectByProperty[ uid ].push( BindingUtils.bindProperty( destObject, destPropName, sourceObject, sourcePropertyChain ) );
+			
+			// if destObject[ destPropName ] is a write-only property, checking if its a function will throw an error
+			try
+			{
+				// create and store this binding
+				if( destObject[ destPropName ] is Function )
+					injectByProperty[ uid ].push( BindingUtils.bindSetter( destObject[ destPropName ], sourceObject, sourcePropertyChain ) );
+				else
+					injectByProperty[ uid ].push( BindingUtils.bindProperty( destObject, destPropName, sourceObject, sourcePropertyChain ) );
+			}
+			catch( error:ReferenceError )
+			{
+				injectByProperty[ uid ].push( BindingUtils.bindProperty( destObject, destPropName, sourceObject, sourcePropertyChain ) );
+				
+				if( twoWay )
+				{
+					logger.error( "Cannot create twoWay binding for {0} property on {1} because it is write-only.", destPropName, destObject );
+					return;
+				}
+			}
 			
 			// if twoWay binding was requested we have to do things in reverse
 			// meaning the existing bean's property will also be bound to the view/new bean's property
 			if( twoWay )
 			{
+				// can't use twoWay with a setter
+				if( destObject[ destPropName ] is Function )
+				{
+					logger.error( "Cannot create twoWay binding for {0} method on {1} because methods cannot be binding sources.", destPropName, destObject );
+					return;
+				}
+				
 				// walk the object chain to reach the actual destination object
 				while( sourcePropertyChain.length > 1 )
 					sourceObject = sourceObject[ sourcePropertyChain.shift() ];

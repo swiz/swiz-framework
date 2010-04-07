@@ -1,20 +1,19 @@
 package org.swizframework.utils.services
 {
 	import flash.events.TimerEvent;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
+	import mx.managers.CursorManager;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.Fault;
 	import mx.rpc.IResponder;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
-	import mx.managers.CursorManager;
 	
 	public class MockDelegateHelper
 	{
-		public var token:AsyncToken;
-		public var timer:Timer;
-		public var mockData:Object;
+		public var calls:Dictionary;
 		public var fault:Fault;
 		
 		/**
@@ -26,22 +25,26 @@ package org.swizframework.utils.services
 		public function MockDelegateHelper( showBusyCursor:Boolean = false )
 		{
 			this.showBusyCursor = showBusyCursor;
+			calls = new Dictionary();
 		}
 		
 		public function createMockResult( mockData:Object, delay:int = 10 ):AsyncToken
 		{
-			this.mockData = mockData;
+			var token:AsyncToken = new AsyncToken();
+			token.data = mockData;
 			
-			timer = new Timer( delay, 1 );
+			var timer:Timer = new Timer( delay, 1 );
 			timer.addEventListener( TimerEvent.TIMER, sendMockResult );
 			timer.start();
+			
+			calls[ timer ] = token;
 			
 			if( showBusyCursor )
 			{
 				CursorManager.setBusyCursor();
 			}
 			
-			return token = new AsyncToken();
+			return token;
 		}
 		
 		protected function sendMockResult( event:TimerEvent ):void
@@ -51,30 +54,43 @@ package org.swizframework.utils.services
 				CursorManager.removeBusyCursor();
 			}
 			
+			var timer:Timer = Timer( event.target );
 			timer.removeEventListener( TimerEvent.TIMER, sendMockResult );
-			timer = null;
 			
-			var re:ResultEvent = new ResultEvent( ResultEvent.RESULT, false, true, mockData, token );
-			for each( var r:IResponder in token.responders )
+			if( calls[ timer ] is AsyncToken )
 			{
-				r.result( re );
+				var token:AsyncToken = AsyncToken( calls[ timer ] );
+				delete calls[ timer ];
+				
+				var mockData:Object = ( token.data ) ? token.data : new Object();
+				
+				var re:ResultEvent = new ResultEvent( ResultEvent.RESULT, false, true, mockData, token );
+				for each( var r:IResponder in token.responders )
+				{
+					r.result( re );
+				}
 			}
+			
+			timer = null;
 		}
 		
 		public function createMockFault( fault:Fault = null, delay:int = 10 ):AsyncToken
 		{
-			this.fault = fault;
+			var token:AsyncToken = new AsyncToken();
+			token.data = fault;
 			
-			timer = new Timer( delay, 1 );
+			var timer:Timer = new Timer( delay, 1 );
 			timer.addEventListener( TimerEvent.TIMER, sendMockFault );
 			timer.start();
+			
+			calls[ timer ] = token;
 			
 			if( showBusyCursor )
 			{
 				CursorManager.setBusyCursor();
 			}
 			
-			return token = new AsyncToken();
+			return token;
 		}
 		
 		protected function sendMockFault( event:TimerEvent ):void
@@ -84,14 +100,23 @@ package org.swizframework.utils.services
 				CursorManager.removeBusyCursor();
 			}
 			
+			var timer:Timer = Timer( event.target );
 			timer.removeEventListener( TimerEvent.TIMER, sendMockFault );
-			timer = null;
 			
-			var fe:FaultEvent = new FaultEvent( FaultEvent.FAULT, false, true, fault, token );
-			for each( var r:IResponder in token.responders )
+			if( calls[ timer ] is AsyncToken )
 			{
-				r.fault( fe );
+				var token:AsyncToken = calls[ timer ];
+				delete calls[ timer ];
+				
+				var fault:Fault = ( token.data ) ? token.data : null;
+				var fe:FaultEvent = new FaultEvent( FaultEvent.FAULT, false, true, fault, token );
+				for each( var r:IResponder in token.responders )
+				{
+					r.fault( fe );
+				}
 			}
+			
+			timer = null;
 		}
 	}
 }

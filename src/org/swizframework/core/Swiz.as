@@ -130,6 +130,13 @@ package org.swizframework.core
 			return _processors;
 		}
 		
+		public function setProcessors( value:Array ):void
+		{
+			_processors = value;
+			logger.warn( "You are overriding the default set of Swiz processors. Please ensure this is what you intended." );
+			logger.warn( "If your intention is to add custom processors you should use the customProcessors property." );
+		}
+		
 		public function set customProcessors( value:Array ):void
 		{
 			if( value != null )
@@ -239,10 +246,10 @@ package org.swizframework.core
 		}
 		
 		// ========================================
-		// private methods
+		// protected methods
 		// ========================================
 		
-		private function initializeProcessors():void
+		protected function initializeProcessors():void
 		{
 			processors.sortOn( "priority" );
 			
@@ -258,7 +265,7 @@ package org.swizframework.core
 		 * SwizConfig can accept bean providers as Classes as well as instances. ContructProviders
 		 * ensures that provider is created and initialized before the bean factory accesses them.
 		 */
-		private function constructProviders():void
+		protected function constructProviders():void
 		{
 			var providerClass:Class;
 			var providerInst:IBeanProvider;
@@ -287,7 +294,7 @@ package org.swizframework.core
 		 * Dispatches a Swiz creation event to find parents and attaches a listener to
 		 * find potential children.
 		 */
-		private function dispatchSwizCreatedEvent():void
+		protected function dispatchSwizCreatedEvent():void
 		{
 			// dispatch a creation event to find parents
 			dispatcher.dispatchEvent( new SwizEvent( SwizEvent.CREATED, this ) );
@@ -302,7 +309,7 @@ package org.swizframework.core
 		 * as the parent. Relies on display list ordering as a means of conveying parent / child
 		 * relationships. Pure AS projects will need to call setParent explicitly.
 		 */
-		private function handleSwizCreatedEvent(event:SwizEvent):void
+		protected function handleSwizCreatedEvent(event:SwizEvent):void
 		{
 			if( event.swiz != null )
 			{
