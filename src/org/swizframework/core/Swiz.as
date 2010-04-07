@@ -233,11 +233,6 @@ package org.swizframework.core
 				dispatcher = this;
 			}
 			
-			if( globalDispatcher == null )
-			{
-				globalDispatcher = dispatcher;
-			}
-			
 			if( config == null )
 			{
 				config = new SwizConfig();
@@ -255,6 +250,12 @@ package org.swizframework.core
 			if( domain == null )
 			{
 				domain = ApplicationDomain.currentDomain;
+			}
+			
+			// set global dispatcher if a parent wasn't able to set it
+			if( globalDispatcher == null )
+			{
+				globalDispatcher = dispatcher;
 			}
 			
 			constructProviders();
