@@ -34,6 +34,7 @@ package org.swizframework.core
 		protected var logger:ILogger = SwizLogger.getLogger( this );
 		
 		protected var _dispatcher:IEventDispatcher;
+		protected var _globalDispatcher:IEventDispatcher;
 		protected var _domain:ApplicationDomain;
 		
 		protected var _config:ISwizConfig;
@@ -62,6 +63,21 @@ package org.swizframework.core
 			_dispatcher = value;
 			
 			logger.info( "Swiz dispatcher set to {0}", value );
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get globalDispatcher():IEventDispatcher
+		{
+			return _globalDispatcher;
+		}
+		
+		public function set globalDispatcher( value:IEventDispatcher ):void
+		{
+			_globalDispatcher = value;
+			
+			logger.info( "Swiz global dispatcher set to {0}", value );
 		}
 		
 		/**
@@ -159,6 +175,8 @@ package org.swizframework.core
 			if( domain == null )
 				domain = parentSwiz.domain;
 			
+			globalDispatcher = parentSwiz.globalDispatcher;
+			
 			config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
 			config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
 		}
@@ -232,6 +250,12 @@ package org.swizframework.core
 			if( domain == null )
 			{
 				domain = ApplicationDomain.currentDomain;
+			}
+			
+			// set global dispatcher if a parent wasn't able to set it
+			if( globalDispatcher == null )
+			{
+				globalDispatcher = dispatcher;
 			}
 			
 			constructProviders();

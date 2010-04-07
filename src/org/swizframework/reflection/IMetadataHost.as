@@ -24,5 +24,15 @@ package org.swizframework.reflection
 		 */
 		function get metadataTags():Array;
 		function set metadataTags( value:Array ):void;
+		
+		/**
+		 * Get metadata tag by name
+		 */
+		function getMetadataTagByName( name:String ):IMetadataTag;
+		  
+		/**
+		 * Has metadata tag by name
+		 */
+		function hasMetadataTagByName( name:String ):Boolean;
 	}
 }

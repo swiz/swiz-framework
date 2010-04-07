@@ -75,6 +75,23 @@ package org.swizframework.reflection
 			_metadataTags = value;
 		}
 		
+		public function getMetadataTagByName( name:String ):IMetadataTag
+		{
+			for each ( var metadataTag:IMetadataTag in metadataTags )
+			{
+				if ( metadataTag.name == name )
+					{
+						return metadataTag;
+					}
+				}
+			return null;
+		}
+		
+		public function hasMetadataTagByName( name:String ):Boolean
+		{
+			return getMetadataTagByName( name ) != null;
+		}
+		
 		// ========================================
 		// constructor
 		// ========================================
