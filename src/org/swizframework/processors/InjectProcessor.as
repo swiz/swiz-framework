@@ -123,7 +123,11 @@ package org.swizframework.processors
 					setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
 					
 					if( destPropName is QName && injectTag.bind == true )
-						logger.debug( "Cannot create a binding for {0} on {1}. BindingUtils does not support binding non-public members.", metadataTag.toString(), bean.toString() );
+					{
+						var errorStr:String = "Cannot create a binding for " + metadataTag.asTag + " because " + injectTag.source.split( "." ).pop() + " is not public. ";
+						errorStr += "Add bind=false to your Inject tag or make the property public.";
+						throw new Error( errorStr );
+					}
 				}
 				else
 				{
