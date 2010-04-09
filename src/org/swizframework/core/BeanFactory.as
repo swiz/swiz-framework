@@ -255,6 +255,14 @@ package org.swizframework.core
 			}
 		}
 		
+		public function tearDown():void
+		{
+			for each( var bean:Bean in beans )
+			{
+				tearDownBean( bean );
+			}
+		}
+		
 		/**
 		 * Remove Bean
 		 */

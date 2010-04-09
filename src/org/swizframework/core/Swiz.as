@@ -16,6 +16,7 @@ package org.swizframework.core
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.SwizInterfaceProcessor;
+	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.utils.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -267,6 +268,15 @@ package org.swizframework.core
 			beanFactory.setUpBeans();
 			
 			logger.info( "Swiz initialized" );
+		}
+		
+		/**
+		 * Clean up this Swiz instance
+		 */
+		public function tearDown():void
+		{
+			beanFactory.tearDown();
+			TypeCache.flushDomain( domain );
 		}
 		
 		// ========================================
