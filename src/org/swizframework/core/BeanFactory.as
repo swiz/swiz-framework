@@ -85,23 +85,26 @@ package org.swizframework.core
 			
 			addBeanProviders( swiz.beanProviders );
 			
+			swiz.dispatcher.addEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
+			swiz.dispatcher.addEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
+			
+			logger.info( "BeanFactory initialized" );
+			
+			if( swiz.catchViews == false )
+				return;
+			
 			swiz.dispatcher.addEventListener( swiz.config.setUpEventType, setUpEventHandler, ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.setUpEventPriority, true );
 			logger.debug( "Set up event type set to {0}", swiz.config.setUpEventType );
 			logger.debug( "Set up event phase set to {0}", ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
 			logger.debug( "Set up event priority set to {0}", swiz.config.setUpEventPriority );
 			
-			if( "systemManager" in swiz.dispatcher && !( swiz.dispatcher[ "systemManager" ].hasEventListener( swiz.config.setUpEventType ) ) )
+			if( "systemManager" in swiz.dispatcher && swiz.dispatcher[ "systemManager" ] != null && !( swiz.dispatcher[ "systemManager" ].hasEventListener( swiz.config.setUpEventType ) ) )
 				swiz.dispatcher[ "systemManager" ].addEventListener( swiz.config.setUpEventType, setUpEventHandlerSysMgr, ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.setUpEventPriority, true );
 			
 			swiz.dispatcher.addEventListener( swiz.config.tearDownEventType, tearDownEventHandler, ( swiz.config.tearDownEventPhase == EventPhase.CAPTURING_PHASE ), swiz.config.tearDownEventPriority, true );
 			logger.debug( "Tear down event type set to {0}", swiz.config.tearDownEventType );
 			logger.debug( "Tear down event phase set to {0}", ( swiz.config.tearDownEventPhase == EventPhase.CAPTURING_PHASE ) ? "capture phase" : "bubbling phase" );
 			logger.debug( "Tear down event priority set to {0}", swiz.config.tearDownEventPriority );
-			
-			swiz.dispatcher.addEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
-			swiz.dispatcher.addEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
-			
-			logger.info( "BeanFactory initialized" );
 		}
 		
 		/**
@@ -255,10 +258,18 @@ package org.swizframework.core
 			}
 		}
 		
+		public function tearDownBeans():void
+		{
+			for each( var bean:Bean in beans )
+			{
+				tearDownBean( bean );
+			}
+		}
+		
 		/**
 		 * Remove Bean
 		 */
-		protected function tearDownBean( bean:Bean ):void
+		public function tearDownBean( bean:Bean ):void
 		{
 			for each( var processor:IProcessor in swiz.processors )
 			{
@@ -323,7 +334,7 @@ package org.swizframework.core
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
-				setUpBean( constructBean( event.target, null, swiz.domain ) );
+				SwizManager.setUp( DisplayObject( event.target ) );
 			}
 		}
 		
@@ -347,7 +358,7 @@ package org.swizframework.core
 		{
 			if( isPotentialInjectionTarget( event.target ) )
 			{
-				tearDownBean( constructBean( event.target, null, swiz.domain ) );
+				SwizManager.tearDown( DisplayObject( event.target ) );
 			}
 		}
 		

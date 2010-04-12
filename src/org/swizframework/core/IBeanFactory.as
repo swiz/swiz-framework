@@ -29,5 +29,8 @@ package org.swizframework.core
 		function getBeanByType( type:Class ):Bean;
 		
 		function get beans():Array;
+		
+		function tearDownBeans():void;
+		function tearDownBean( bean:Bean ):void;
 	}
 }

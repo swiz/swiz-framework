@@ -12,6 +12,9 @@ package org.swizframework.core
 		// public properties
 		// ========================================
 		
+		function get catchViews():Boolean;
+		function set catchViews( value:Boolean ):void;
+		
 		/**
 		 * Local Dispatcher
 		 */
@@ -67,7 +70,7 @@ package org.swizframework.core
 		 * Parent Swiz instance, for nesting and modules
 		 */
 		function get parentSwiz():ISwiz;
-		function set parentSwiz(parentSwiz:ISwiz):void;
+		function set parentSwiz( parentSwiz:ISwiz ):void;
 		
 		[ArrayElementType( "mx.logging.ILoggingTarget" )]
 		
@@ -85,11 +88,10 @@ package org.swizframework.core
 		 * Called once in initialize Swiz
 		 */
 		function init():void;
-	
-	/**
-	 * Maybe better to extend bean provider interface
-	 *
-	   function getBeanByName( name:String ):Bean;
-	 function getBeanByType( type:Class ):Bean; */
+		
+		/**
+		 * Clean up this Swiz instance
+		 */
+		function tearDown():void;
 	}
 }

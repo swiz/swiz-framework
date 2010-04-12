@@ -16,6 +16,7 @@ package org.swizframework.core
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.SwizInterfaceProcessor;
+	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.utils.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -170,15 +171,6 @@ package org.swizframework.core
 		public function set parentSwiz( parentSwiz:ISwiz ):void
 		{
 			_parentSwiz = parentSwiz;
-			_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
-			
-			if( domain == null )
-				domain = parentSwiz.domain;
-			
-			globalDispatcher = parentSwiz.globalDispatcher;
-			
-			config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
-			config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
 		}
 		
 		[ArrayElementType( "mx.logging.ILoggingTarget" )]
@@ -223,11 +215,38 @@ package org.swizframework.core
 		// public methods
 		// ========================================
 		
+		public function registerWindow( window:IEventDispatcher ):void
+		{
+			var windowSwiz:Swiz = new Swiz( window );
+			windowSwiz.parentSwiz = this;
+			windowSwiz.init();
+		}
+		
+		/**
+		 * Backing variable for <code>catchViews</code> getter/setter.
+		 */
+		protected var _catchViews:Boolean = true;
+		
+		/**
+		 *
+		 */
+		public function get catchViews():Boolean
+		{
+			return _catchViews;
+		}
+		
+		public function set catchViews( value:Boolean ):void
+		{
+			_catchViews = value;
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
 		public function init():void
 		{
+			SwizManager.addSwiz( this );
+			
 			if( dispatcher == null )
 			{
 				dispatcher = this;
@@ -258,6 +277,19 @@ package org.swizframework.core
 				globalDispatcher = dispatcher;
 			}
 			
+			if( parentSwiz != null )
+			{
+				_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
+				
+				if( domain == null )
+					domain = parentSwiz.domain;
+				
+				globalDispatcher = parentSwiz.globalDispatcher;
+				
+				config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
+				config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
+			}
+			
 			constructProviders();
 			
 			initializeProcessors();
@@ -267,6 +299,15 @@ package org.swizframework.core
 			beanFactory.setUpBeans();
 			
 			logger.info( "Swiz initialized" );
+		}
+		
+		/**
+		 * Clean up this Swiz instance
+		 */
+		public function tearDown():void
+		{
+			beanFactory.tearDownBeans();
+			TypeCache.flushDomain( domain );
 		}
 		
 		// ========================================
@@ -294,6 +335,9 @@ package org.swizframework.core
 			var providerClass:Class;
 			var providerInst:IBeanProvider;
 			
+			if( beanProviders == null )
+				return;
+			
 			for( var i:int = 0; i < beanProviders.length; i++ )
 			{
 				// if the provider is a class, intantiate it, if a beanLoader, initialize
@@ -309,7 +353,6 @@ package org.swizframework.core
 					providerInst = beanProviders[ i ];
 				}
 				
-				// now all BeanProviders require initialization
 				providerInst.initialize( domain );
 			}
 		}

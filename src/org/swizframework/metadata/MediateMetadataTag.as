@@ -46,7 +46,7 @@ package org.swizframework.metadata
 		 * Backing variable for read-only <code>useCapture</code> property.
 		 */
 		protected var _useCapture:Boolean = false;
-
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -112,7 +112,7 @@ package org.swizframework.metadata
 		{
 			return _stopImmediatePropagation;
 		}
-
+		
 		/**
 		 * Returns useCapture attribute of [Mediate] tag as a <code>Boolean</code>.
 		 * Synonymous to the useCapture argument of <code>flash.events.IEventDispatcher.addEventListener()</code>.
@@ -167,7 +167,7 @@ package org.swizframework.metadata
 			
 			if( hasArg( "stopImmediatePropagation" ) )
 				_stopImmediatePropagation = getArg( "stopImmediatePropagation" ).value == "true";
-
+			
 			if( hasArg( "useCapture" ) )
 				_useCapture = getArg( "useCapture" ).value == "true";
 		}
