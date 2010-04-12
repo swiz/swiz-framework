@@ -157,7 +157,7 @@ package org.swizframework.metadata
 				_properties = getArg( "properties" ).value.replace( /\ /g, "" ).split( "," );
 			
 			if( hasArg( "scope" ) )
-				_event = getArg( "scope" ).value;
+				_scope = getArg( "scope" ).value;
 			
 			if( hasArg( "priority" ) )
 				_priority = int( getArg( "priority" ).value );
