@@ -43,7 +43,7 @@ package org.swizframework.events
 		 */
 		public function SwizEvent( type:String, swiz:ISwiz = null )
 		{
-			super(type, true, true);
+			super( type, true, true );
 			this.swiz = swiz;
 		}
 		
