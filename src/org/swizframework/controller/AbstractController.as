@@ -8,8 +8,8 @@ package org.swizframework.controller
 	import org.swizframework.core.IDispatcherAware;
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.core.ISwizAware;
+	import org.swizframework.utils.chain.AsyncChainStepCommand;
 	import org.swizframework.utils.chain.CommandChain;
-	import org.swizframework.utils.chain.SwizCommand;
 	import org.swizframework.utils.services.SwizResponder;
 	import org.swizframework.utils.services.SwizURLRequest;
 	
@@ -66,9 +66,9 @@ package org.swizframework.controller
 		
 		/** Delegates create command to Swiz */
 		protected function createCommand( delayedCall:Function, args:Array, resultHandler:Function,
-			faultHandler:Function = null, eventArgs:Array = null ):SwizCommand
+			faultHandler:Function = null, resultHandlerArgs:Array = null ):AsyncChainStepCommand
 		{
-			return new SwizCommand( delayedCall, args, resultHandler, faultHandler, eventArgs );
+			return new AsyncChainStepCommand( delayedCall, args, resultHandler, faultHandler, resultHandlerArgs );
 		}
 		
 		/** Constructs a dynamic command */
