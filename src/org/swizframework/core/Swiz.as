@@ -215,11 +215,13 @@ package org.swizframework.core
 		// public methods
 		// ========================================
 		
-		public function registerWindow( window:IEventDispatcher ):void
+		public function registerWindow( window:IEventDispatcher, windowSwiz:ISwiz = null ):void
 		{
-			var windowSwiz:Swiz = new Swiz( window );
-			windowSwiz.parentSwiz = this;
-			windowSwiz.init();
+			var newSwiz:ISwiz = ( windowSwiz != null ) ? windowSwiz : new Swiz( window );
+			newSwiz.parentSwiz = this;
+			
+			if( windowSwiz == null )
+				newSwiz.init();
 		}
 		
 		/**
