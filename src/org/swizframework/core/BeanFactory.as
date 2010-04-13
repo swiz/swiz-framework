@@ -217,11 +217,7 @@ package org.swizframework.core
 					setUpBean( bean );
 			}
 			
-			// add main dispatcher as bean to collection
-			var rootDispatcherBean:Bean = constructBean( swiz.dispatcher, null, swiz.domain );
-			beans.push( rootDispatcherBean );
-			// manually trigger processing now that all defined beans are done
-			setUpBean( rootDispatcherBean );
+			SwizManager.setUp( DisplayObject( swiz.dispatcher ) );
 		}
 		
 		/**
@@ -231,6 +227,8 @@ package org.swizframework.core
 		{
 			logger.debug( "BeanFactory::setUpBean( {0} )", bean );
 			bean.initialized = true;
+			if( beans.indexOf( bean ) < 0 )
+				beans.push( bean );
 			
 			var processor:IProcessor;
 			

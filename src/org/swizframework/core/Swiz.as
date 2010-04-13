@@ -1,6 +1,5 @@
 package org.swizframework.core
 {
-	import flash.display.LoaderInfo;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
@@ -16,7 +15,6 @@ package org.swizframework.core
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.SwizInterfaceProcessor;
-	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.utils.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
@@ -267,18 +265,6 @@ package org.swizframework.core
 			// dispatch a swiz created event before fully initializing
 			dispatchSwizCreatedEvent();
 			
-			// set domain if it has not been set
-			if( domain == null )
-			{
-				domain = ApplicationDomain.currentDomain;
-			}
-			
-			// set global dispatcher if a parent wasn't able to set it
-			if( globalDispatcher == null )
-			{
-				globalDispatcher = dispatcher;
-			}
-			
 			if( parentSwiz != null )
 			{
 				_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
@@ -290,6 +276,18 @@ package org.swizframework.core
 				
 				config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
 				config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
+			}
+			
+			// set domain if it has not been set
+			if( domain == null )
+			{
+				domain = ApplicationDomain.currentDomain;
+			}
+			
+			// set global dispatcher if a parent wasn't able to set it
+			if( globalDispatcher == null )
+			{
+				globalDispatcher = dispatcher;
 			}
 			
 			constructProviders();
@@ -308,8 +306,10 @@ package org.swizframework.core
 		 */
 		public function tearDown():void
 		{
+			parentSwiz = null;
 			beanFactory.tearDownBeans();
-			TypeCache.flushDomain( domain );
+			//TypeCache.flushDomain( domain );
+			SwizManager.removeSwiz( this );
 		}
 		
 		// ========================================
@@ -370,7 +370,7 @@ package org.swizframework.core
 			// and attach a listener for children
 			dispatcher.addEventListener( SwizEvent.CREATED, handleSwizCreatedEvent );
 			
-			logger.info( "Dispatched Swiz Created Event to find parents" );
+			logger.info( "Dispatched Swiz Created Event to find parent" );
 		}
 		
 		/**
@@ -378,9 +378,9 @@ package org.swizframework.core
 		 * as the parent. Relies on display list ordering as a means of conveying parent / child
 		 * relationships. Pure AS projects will need to call setParent explicitly.
 		 */
-		protected function handleSwizCreatedEvent(event:SwizEvent):void
+		protected function handleSwizCreatedEvent( event:SwizEvent ):void
 		{
-			if( event.swiz != null )
+			if( event.swiz != null  && event.swiz.parentSwiz == null )
 			{
 				event.swiz.parentSwiz = this;
 			}
