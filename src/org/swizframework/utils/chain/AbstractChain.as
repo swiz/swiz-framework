@@ -1,3 +1,19 @@
+/*
+ * Copyright 2010 Swiz Framework Contributors
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package org.swizframework.utils.chain
 {
 	import flash.events.Event;
@@ -12,7 +28,7 @@ package org.swizframework.utils.chain
 	[Event( name="chainComplete",		type="org.swizframework.events.ChainEvent" )]
 	[Event( name="chainFail",			type="org.swizframework.events.ChainEvent" )]
 	
-	public class AbstractChain extends EventDispatcher implements IChainMember
+	public class AbstractChain extends EventDispatcher implements IChainStep
 	{
 		public var mode:String = ChainType.SEQUENCE;
 		
@@ -183,6 +199,7 @@ package org.swizframework.utils.chain
 		public function stepError():void
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_STEP_ERROR ) );
+			
 			if( !stopOnError )
 				proceed();
 			else
@@ -192,12 +209,22 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		protected function complete():void
+		public function complete():void
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_COMPLETE ) );
+			
 			_isComplete = true;
+			
 			if( chain != null )
 				chain.stepComplete();
+		}
+		
+		/**
+		 *
+		 */
+		public function error():void
+		{
+			fail();
 		}
 		
 		/**
@@ -206,7 +233,9 @@ package org.swizframework.utils.chain
 		protected function fail():void
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_FAIL ) );
+			
 			_isComplete = true;
+			
 			if( chain != null )
 				chain.stepError();
 		}
