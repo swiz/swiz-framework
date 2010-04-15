@@ -12,7 +12,7 @@ package org.swizframework.utils.chain
 	[Event( name="chainComplete",		type="org.swizframework.events.ChainEvent" )]
 	[Event( name="chainFail",			type="org.swizframework.events.ChainEvent" )]
 	
-	public class AbstractChain extends EventDispatcher implements IChainMember
+	public class AbstractChain extends EventDispatcher implements IChainStep
 	{
 		public var mode:String = ChainType.SEQUENCE;
 		
@@ -183,6 +183,7 @@ package org.swizframework.utils.chain
 		public function stepError():void
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_STEP_ERROR ) );
+			
 			if( !stopOnError )
 				proceed();
 			else
@@ -192,12 +193,22 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		protected function complete():void
+		public function complete():void
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_COMPLETE ) );
+			
 			_isComplete = true;
+			
 			if( chain != null )
 				chain.stepComplete();
+		}
+		
+		/**
+		 *
+		 */
+		public function error():void
+		{
+			fail();
 		}
 		
 		/**
@@ -206,7 +217,9 @@ package org.swizframework.utils.chain
 		protected function fail():void
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_FAIL ) );
+			
 			_isComplete = true;
+			
 			if( chain != null )
 				chain.stepError();
 		}

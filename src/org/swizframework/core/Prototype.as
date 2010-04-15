@@ -85,7 +85,7 @@ package org.swizframework.core
 						instance = new type( args[ 0 ], args[ 1 ], args[ 2 ], args[ 3 ], args[ 4 ], args[ 5 ], args[ 6 ] );
 						break;
 					case 8:
-						instance = new type( args[ 0 ], args[ 1 ], args[ 2 ], args[ 3 ], args[ 4 ], args[ 5 ], args[ 7 ], args[ 8 ] );
+						instance = new type( args[ 0 ], args[ 1 ], args[ 2 ], args[ 3 ], args[ 4 ], args[ 5 ], args[ 6 ], args[ 7 ] );
 						break;
 					default:
 						throw new Error( "No more than 8 constructor arguments are support by Prototype." );

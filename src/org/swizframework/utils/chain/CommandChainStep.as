@@ -1,6 +1,6 @@
 package org.swizframework.utils.chain
 {
-	public class ChainStepCommand extends BaseChainStep
+	public class CommandChainStep extends BaseChainStep
 	{
 		/**
 		 *

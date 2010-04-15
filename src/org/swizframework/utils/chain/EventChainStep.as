@@ -1,11 +1,8 @@
-package org.swizframework.events
+package org.swizframework.utils.chain
 {
 	import flash.events.Event;
 	
-	import org.swizframework.utils.chain.IChain;
-	import org.swizframework.utils.chain.IChainStep;
-	
-	public class ChainStepEvent extends Event implements IChainStep
+	public class EventChainStep extends Event implements IChainStep
 	{
 		/**
 		 * Backing variable for <code>chain</code> getter/setter.
@@ -32,7 +29,7 @@ package org.swizframework.events
 			return _isComplete;
 		}
 		
-		public function ChainStepEvent( type:String, bubbles:Boolean = false, cancelable:Boolean = false )
+		public function EventChainStep( type:String, bubbles:Boolean = false, cancelable:Boolean = false )
 		{
 			super( type, bubbles, cancelable );
 		}
@@ -59,7 +56,7 @@ package org.swizframework.events
 		
 		override public function clone():Event
 		{
-			return new ChainStepEvent( type, bubbles, cancelable );
+			return new EventChainStep( type, bubbles, cancelable );
 		}
 	}
 }

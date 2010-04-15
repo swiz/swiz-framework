@@ -12,7 +12,7 @@ package org.swizframework.utils.chain
 		 */
 		public function doProceed():void
 		{
-			ChainStepCommand( members[ position ] ).execute();
+			CommandChainStep( members[ position ] ).execute();
 		}
 	}
 }
