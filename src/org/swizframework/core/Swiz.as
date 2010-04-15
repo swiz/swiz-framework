@@ -265,18 +265,6 @@ package org.swizframework.core
 			// dispatch a swiz created event before fully initializing
 			dispatchSwizCreatedEvent();
 			
-			// set domain if it has not been set
-			if( domain == null )
-			{
-				domain = ApplicationDomain.currentDomain;
-			}
-			
-			// set global dispatcher if a parent wasn't able to set it
-			if( globalDispatcher == null )
-			{
-				globalDispatcher = dispatcher;
-			}
-			
 			if( parentSwiz != null )
 			{
 				_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
@@ -288,6 +276,18 @@ package org.swizframework.core
 				
 				config.eventPackages = config.eventPackages.concat( _parentSwiz.config.eventPackages );
 				config.viewPackages = config.viewPackages.concat( _parentSwiz.config.viewPackages );
+			}
+			
+			// set domain if it has not been set
+			if( domain == null )
+			{
+				domain = ApplicationDomain.currentDomain;
+			}
+			
+			// set global dispatcher if a parent wasn't able to set it
+			if( globalDispatcher == null )
+			{
+				globalDispatcher = dispatcher;
 			}
 			
 			constructProviders();
