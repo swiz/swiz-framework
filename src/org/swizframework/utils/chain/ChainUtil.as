@@ -36,9 +36,9 @@ package org.swizframework.utils.chain
 		
 		/** Constructs a dynamic command */
 		public function createCommand( delayedCall:Function, args:Array, resultHandler:Function,
-			faultHandler:Function = null, resultHandlerArgs:Array = null ):AsyncChainStepCommand
+			faultHandler:Function = null, resultHandlerArgs:Array = null ):AsyncCommandChainStep
 		{
-			return new AsyncChainStepCommand( delayedCall, args, resultHandler, faultHandler, resultHandlerArgs );
+			return new AsyncCommandChainStep( delayedCall, args, resultHandler, faultHandler, resultHandlerArgs );
 		}
 		
 		/** Constructs a dynamic command */
