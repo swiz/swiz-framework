@@ -28,7 +28,7 @@ package org.swizframework.utils.chain
 		 */
 		public function doProceed():void
 		{
-			CommandChainStep( members[ position ] ).execute();
+			CommandChainStep( steps[ position ] ).execute();
 		}
 	}
 }

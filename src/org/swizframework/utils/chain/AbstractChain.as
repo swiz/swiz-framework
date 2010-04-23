@@ -16,9 +16,7 @@
 
 package org.swizframework.utils.chain
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	
 	import org.swizframework.events.ChainEvent;
 	
@@ -32,7 +30,7 @@ package org.swizframework.utils.chain
 	{
 		public var mode:String = ChainType.SEQUENCE;
 		
-		public var members:Array = [];
+		public var steps:Array = [];
 		
 		/**
 		 * Backing variable for <code>chain</code> getter/setter.
@@ -104,10 +102,10 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		public function addMember( member:IChainMember ):IChain
+		public function addStep( step:IChainStep ):IChain
 		{
-			member.chain = IChain( this );
-			members.push( member );
+			step.chain = IChain( this );
+			steps.push( step );
 			return IChain( this );
 		}
 		
@@ -116,7 +114,7 @@ package org.swizframework.utils.chain
 		 */
 		public function hasNext():Boolean
 		{
-			return position + 1 < members.length;
+			return position + 1 < steps.length;
 		}
 		
 		/**
@@ -138,9 +136,9 @@ package org.swizframework.utils.chain
 			}
 			else
 			{
-				for( var i:int = 0; i < members.length; i++ )
+				for( var i:int = 0; i < steps.length; i++ )
 				{
-					if( !IChainMember( members[ i ] ).isComplete )
+					if( !IChainStep( steps[ i ] ).isComplete )
 						return;
 				}
 				complete();
@@ -166,7 +164,7 @@ package org.swizframework.utils.chain
 			}
 			else
 			{
-				for( var i:int = 0; i < members.length; i++ )
+				for( var i:int = 0; i < steps.length; i++ )
 				{
 					position = i;
 					IChain( this ).doProceed();

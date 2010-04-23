@@ -32,7 +32,7 @@ package org.swizframework.utils.chain
 		function stepComplete():void;
 		function stepError():void;
 		
-		function addMember( member:IChainMember ):IChain;
+		function addStep( step:IChainStep ):IChain;
 		function doProceed():void;
 	}
 }

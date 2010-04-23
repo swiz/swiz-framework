@@ -51,7 +51,7 @@ package org.swizframework.utils.chain
 		 */
 		public function doProceed():void
 		{
-			dispatcher.dispatchEvent( Event( members[ position ] ) );
+			dispatcher.dispatchEvent( Event( steps[ position ] ) );
 		}
 	}
 }
