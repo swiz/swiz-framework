@@ -243,6 +243,8 @@ package org.swizframework.core
 		{
 			logger.debug( "BeanFactory::setUpBean( {0} )", bean );
 			bean.initialized = true;
+			
+			// todo: this was so beans can be torn down, but breaks prototypes. they should not add their instances
 			if( beans.indexOf( bean ) < 0 )
 				beans.push( bean );
 			

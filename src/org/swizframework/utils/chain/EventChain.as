@@ -21,9 +21,9 @@ package org.swizframework.utils.chain
 	
 	public class EventChain extends AbstractChain implements IChain
 	{
-		public function EventChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true )
+		public function EventChain( dispatcher:IEventDispatcher, stopOnError:Boolean = true, mode:String = ChainType.SEQUENCE )
 		{
-			super( dispatcher, stopOnError );
+			super( dispatcher, stopOnError, mode );
 		}
 		
 		/**
