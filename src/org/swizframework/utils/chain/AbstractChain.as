@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Swiz Framework Contributors
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -16,9 +16,7 @@
 
 package org.swizframework.utils.chain
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	
 	import org.swizframework.events.ChainEvent;
 	
@@ -32,25 +30,7 @@ package org.swizframework.utils.chain
 	{
 		public var mode:String = ChainType.SEQUENCE;
 		
-		public var members:Array = [];
-		
-		/**
-		 * Backing variable for <code>dispatcher</code> getter/setter.
-		 */
-		protected var _dispatcher:IEventDispatcher;
-		
-		/**
-		 *
-		 */
-		public function get dispatcher():IEventDispatcher
-		{
-			return _dispatcher;
-		}
-		
-		public function set dispatcher( value:IEventDispatcher ):void
-		{
-			_dispatcher = value;
-		}
+		public var steps:Array = [];
 		
 		/**
 		 * Backing variable for <code>chain</code> getter/setter.
@@ -113,20 +93,19 @@ package org.swizframework.utils.chain
 			_stopOnError = value;
 		}
 		
-		public function AbstractChain( dispatcher:IEventDispatcher = null, stopOnError:Boolean = true, mode:String = ChainType.SEQUENCE )
+		public function AbstractChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
 		{
-			this.dispatcher = dispatcher;
-			this.stopOnError = stopOnError;
 			this.mode = mode;
+			this.stopOnError = stopOnError;
 		}
 		
 		/**
 		 *
 		 */
-		public function addMember( member:IChainMember ):IChain
+		public function addStep( step:IChainStep ):IChain
 		{
-			member.chain = IChain( this );
-			members.push( member );
+			step.chain = IChain( this );
+			steps.push( step );
 			return IChain( this );
 		}
 		
@@ -135,7 +114,7 @@ package org.swizframework.utils.chain
 		 */
 		public function hasNext():Boolean
 		{
-			return position + 1 < members.length;
+			return position + 1 < steps.length;
 		}
 		
 		/**
@@ -157,9 +136,9 @@ package org.swizframework.utils.chain
 			}
 			else
 			{
-				for( var i:int = 0; i < members.length; i++ )
+				for( var i:int = 0; i < steps.length; i++ )
 				{
-					if( !IChainMember( members[ i ] ).isComplete )
+					if( !IChainStep( steps[ i ] ).isComplete )
 						return;
 				}
 				complete();
@@ -185,7 +164,7 @@ package org.swizframework.utils.chain
 			}
 			else
 			{
-				for( var i:int = 0; i < members.length; i++ )
+				for( var i:int = 0; i < steps.length; i++ )
 				{
 					position = i;
 					IChain( this ).doProceed();

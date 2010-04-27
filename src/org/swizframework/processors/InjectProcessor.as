@@ -123,7 +123,7 @@ package org.swizframework.processors
 				// name of property that will be bound to a source value
 				var destPropName:* = getDestinationPropertyName( injectTag );
 				
-				var chain:String = injectTag.source.split( "." ).slice( 1 ).toString();
+				var chain:String = injectTag.source.substr( injectTag.source.indexOf( "." ) + 1 );
 				var bind:Boolean = injectTag.bind && ChangeWatcher.canWatch( namedBean.source, chain ) && !( destPropName is QName );
 				
 				// if injecting by name simply assign the bean's current value
@@ -135,7 +135,7 @@ package org.swizframework.processors
 				else if( !bind )
 				{
 					// if tag specified no binding or property is not bindable, do simple assignment
-					var sourceObject:Object = getDestinationObject( namedBean.source, injectTag.source.split( "." ).slice( 1 ).toString() );
+					var sourceObject:Object = getDestinationObject( namedBean.source, chain );
 					setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
 					
 					if( destPropName is QName && injectTag.bind == true )
