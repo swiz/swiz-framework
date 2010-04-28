@@ -55,6 +55,13 @@ package org.swizframework.core
 					return;
 				}
 			}
+			
+			// this is stupid, if we got here, no swiz had a dispatcher 
+			// containing the view (like, it's a freaking popup). make the first swiz do it
+			var rootSwiz:ISwiz = swizzes[ 0 ];
+			wiredViews.push( uid );
+			rootSwiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
+			
 		}
 		
 		public static function tearDown( dObj:DisplayObject ):void
@@ -76,6 +83,14 @@ package org.swizframework.core
 					return;
 				}
 			}
+			
+			
+			
+			// this is stupid, if we got here, no swiz had a dispatcher 
+			// containing the view (like, it's a freaking popup). make the first swiz do it
+			var rootSwiz:ISwiz = swizzes[ 0 ];
+			wiredViews.splice( wiredViews.indexOf( uid ), 1 );
+			rootSwiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 		}
 	}
 }
