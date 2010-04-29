@@ -68,6 +68,16 @@ package org.swizframework.core
 		 */
 		protected var _beans:Array = [];
 		
+		// ========================================
+		// private properties
+		// ========================================
+		
+		/**
+		 * Cache of instances created by prototypes, so we can pass them to processors 
+		 * for tearDown.
+		 */
+		protected var transients:Array = [];
+		
 		/**
 		 * BeanFactories will pull all beans from BeanProviders into a local cache.
 		 */
@@ -140,6 +150,12 @@ package org.swizframework.core
 			{
 				// get the right bean object
 				for each( bean in beans )
+				{
+					if( event.bean == bean || event.bean == bean.source )
+						tearDownBean( constructBean( event.bean, null, swiz.domain ) );
+				}
+				// could be in the transients too
+				for each( bean in transients )
 				{
 					if( event.bean == bean || event.bean == bean.source )
 						tearDownBean( constructBean( event.bean, null, swiz.domain ) );
@@ -247,9 +263,9 @@ package org.swizframework.core
 			logger.debug( "BeanFactory::setUpBean( {0} )", bean );
 			bean.initialized = true;
 			
-			// todo: this was so beans can be torn down, but breaks prototypes. they should not add their instances
+			// if the bean to setup is not in the bean cache, it's a transient, so add it to that array
 			if( beans.indexOf( bean ) < 0 )
-				beans.push( bean );
+				transients.push( bean );
 			
 			var processor:IProcessor;
 			
@@ -279,7 +295,14 @@ package org.swizframework.core
 		
 		public function tearDownBeans():void
 		{
-			for each( var bean:Bean in beans )
+			var bean:Bean;
+			// tear down all beans
+			for each( bean in beans )
+			{
+				tearDownBean( bean );
+			}
+			// and all transients
+			for each( bean in transients )
 			{
 				tearDownBean( bean );
 			}
