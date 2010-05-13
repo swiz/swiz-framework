@@ -246,7 +246,9 @@ package org.swizframework.core
 					setUpBean( bean );
 			}
 			
-			SwizManager.setUp( DisplayObject( swiz.dispatcher ) );
+			// if the core dispatcher is a display object, set it up as well
+			if ( swiz.dispatcher is DisplayObject )
+				SwizManager.setUp( DisplayObject( swiz.dispatcher ) );
 		}
 		
 		/**
