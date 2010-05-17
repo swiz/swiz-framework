@@ -18,7 +18,7 @@
 	<component class="org.swizframework.factories.MetadataHostFactory" />
 	
 	<!-- utils package -->
-	<component class="org.swizframework.utils.SwizLogger" />
+	<component class="org.swizframework.utils.logging.SwizLogger" />
 	<component class="org.swizframework.utils.services.ServiceHelper" />
 	<component class="org.swizframework.utils.services.ChannelSetHelper" />
 	<component class="org.swizframework.utils.services.MockDelegateHelper" />

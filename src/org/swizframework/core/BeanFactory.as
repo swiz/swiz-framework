@@ -25,14 +25,12 @@ package org.swizframework.core
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.logging.ILogger;
-	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.TypeCache;
-	import org.swizframework.utils.SwizLogger;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * Bean Factory
@@ -43,7 +41,7 @@ package org.swizframework.core
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		

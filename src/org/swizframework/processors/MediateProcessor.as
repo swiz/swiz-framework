@@ -20,8 +20,6 @@ package org.swizframework.processors
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.logging.ILogger;
-	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.SwizConfig;
 	import org.swizframework.metadata.MediateMetadataTag;
@@ -31,7 +29,7 @@ package org.swizframework.processors
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.reflection.TypeDescriptor;
-	import org.swizframework.utils.SwizLogger;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * Mediate Processor
@@ -48,7 +46,7 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		protected var mediatorsByEventType:Dictionary = new Dictionary();
 		
 		// ========================================

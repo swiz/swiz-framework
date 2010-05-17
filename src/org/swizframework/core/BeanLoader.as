@@ -15,10 +15,8 @@
  */
 
 package org.swizframework.core
-{
-	import mx.logging.ILogger;
-	
-	import org.swizframework.utils.SwizLogger;
+{	
+	import org.swizframework.utils.logging.SwizLogger;
 
 	/**
 	 * @deprecated 
@@ -29,7 +27,7 @@ package org.swizframework.core
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		// ========================================
 		// Constructor

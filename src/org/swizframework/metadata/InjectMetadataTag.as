@@ -16,11 +16,10 @@
 
 package org.swizframework.metadata
 {
-	import mx.logging.ILogger;
 	
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
-	import org.swizframework.utils.SwizLogger;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * Class to represent <code>[Inject]</code> metadata tags.
@@ -31,7 +30,7 @@ package org.swizframework.metadata
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		/**
 		 * Backing variable for read-only <code>source</code> property.

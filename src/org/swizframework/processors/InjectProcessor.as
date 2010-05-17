@@ -20,7 +20,6 @@ package org.swizframework.processors
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
-	import mx.logging.ILogger;
 	import mx.utils.UIDUtil;
 	
 	import org.swizframework.core.Bean;
@@ -29,7 +28,7 @@ package org.swizframework.processors
 	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
-	import org.swizframework.utils.SwizLogger;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * Inject Processor
@@ -47,7 +46,7 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		protected var injectByProperty:Dictionary = new Dictionary();
 		protected var injectByName:Object = {};
 		protected var injectByType:Object = {};
