@@ -57,7 +57,24 @@
 	<!-- ======================================= -->
 	
 	<target name="compile" depends="init" description="Compile the library .swc file">
-		<compc output="${bin.loc}/${swiz.name}.swc">
+
+		<!-- set up list of classes to include in library -->
+		<fileset id="src.include.fileset" dir="${src.loc}">
+			<include name="**/*.as" />
+		</fileset>
+		<property name="src.include.fileset" refid="src.include.fileset" />
+
+		<!-- Convert the test files into a compiler friendly format. -->
+		<pathconvert property="src.include.classes" pathsep=" " refid="src.include.fileset">
+		        <compositemapper>
+		                <chainedmapper>
+		                        <globmapper from="${src.loc}/*" to="*" handledirsep="true" />
+		                        <mapper type="package" from="*.as" to="*" />
+		                </chainedmapper>
+		        </compositemapper>
+		</pathconvert>
+		
+		<compc output="${bin.loc}/${swiz.name}.swc" include-classes="${src.include.classes}">
 			<source-path path-element="${src.loc}" />
 			
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
