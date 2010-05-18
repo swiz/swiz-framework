@@ -12,6 +12,7 @@
 .project
 .sourceMate
 .sourceMateMetadataSettings
+setEnv.sh
 
 Icon
 Thumbs.db

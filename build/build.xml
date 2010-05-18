@@ -7,11 +7,15 @@
 	<!--  Configuration -->
 	<!-- ============================== -->
 	
+	
+	<property environment="env" />
+	
 	<!-- Configuration -->
 	<property file="${basedir}/build/build.properties" />
 	
 	<!-- Setup Flex Ant Resources -->
-	<property name="FLEX_HOME" location="${flex.sdk}" />
+	<!-- <property name="FLEX_HOME" location="${flex.sdk}" /> -->
+	<property name="FLEX_HOME" location="${env.FLEX_HOME}" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
 	
 	<!-- ============================== -->
@@ -100,9 +104,11 @@
 	
 	<target name="asdoc" depends="init" description="Generate ASDoc documentation">
 		<java jar="${FLEX_HOME}/lib/asdoc.jar" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
-			<!--<arg line="-doc-sources ${src.loc}"/>-->
-			<arg line="-namespace ${swiz.namespace} ${src.loc}/manifest.xml " />
-			<arg line="-doc-namespaces ${swiz.namespace}" />
+			<arg line="-doc-sources ${src.loc}"/>
+			
+			<!-- <arg line="-namespace ${swiz.namespace} ${src.loc}/manifest.xml " />
+			<arg line="-doc-namespaces ${swiz.namespace}" /> -->
+			
 			<arg line="-source-path ${src.loc}"/>
 			<arg line="-output ${docs.loc}"/>
 			<arg line="-window-title 'Swiz ${swiz.version}'"/>
