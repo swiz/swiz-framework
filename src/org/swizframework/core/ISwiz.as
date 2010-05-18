@@ -88,7 +88,7 @@ package org.swizframework.core
 		function get parentSwiz():ISwiz;
 		function set parentSwiz( parentSwiz:ISwiz ):void;
 		
-		[ArrayElementType( "mx.logging.ILoggingTarget" )]
+		[ArrayElementType( "org.swizframework.utils.logging.AbstractSwizLoggingTarget" )]
 		
 		/**
 		 * Logging targets

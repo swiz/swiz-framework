@@ -29,7 +29,7 @@ package org.swizframework.core
 		// private properties
 		// ========================================
 		
-		private var _rawBeans:Array = [];
+		protected var _rawBeans:Array = [];
 		
 		// ========================================
 		// protected properties
@@ -57,7 +57,7 @@ package org.swizframework.core
 		
 		public function set beans( value:Array ):void
 		{
-			if( value != _beans && value != _rawBeans )
+			if( value != null && value != _beans && value != _rawBeans )
 			{
 				_rawBeans = value;
 			}
@@ -144,18 +144,23 @@ package org.swizframework.core
 		protected function setBeanIds( domain:ApplicationDomain ):void
 		{
 			var xmlDescription:XML = describeType( this );
-			var accessors:XMLList = xmlDescription.accessor.( @access == "readwrite" ).@name;
+			
+			// all child objects
+			var beanList:XMLList = xmlDescription.*.( ( localName() == "variable" || ( localName() == "accessor" && @access == "readwrite" ) ) && attribute("uri") == undefined );
 			
 			var child:*;
 			var name:String;
+			var beanId:String;
+			
 			var found:Boolean;
 			
-			for( var i:uint = 0; i < accessors.length(); i++ )
-			{
-				name = accessors[ i ];
+			for each( var node:XML in beanList ) 
+			{	
+				name = node.@name;
+				beanId = node.localName() == "accessor" ? name : null;
+				
 				if( name != "beans" )
 				{
-					
 					// BeanProvider will take care of setting the type descriptor, 
 					// but we want to wrap the intances in Bean classes to set the Bean.name to id
 					child = this[ name ];
@@ -164,12 +169,12 @@ package org.swizframework.core
 					{
 						found = false;
 						
-						// look for any bean we should already have, and set the name propery of the bean object only
+						// look for any bean we may already have, and set the name propery of the bean object only
 						for each( var bean:Bean in beans )
 						{
 							if( ( bean == child ) || ( bean.type == child ) )
 							{
-								bean.name = name;
+								bean.name = beanId;
 								found = true;
 								break;
 							}
@@ -178,7 +183,7 @@ package org.swizframework.core
 						// if we didn't find the bean, we need to construct it
 						if( !found )
 						{
-							beans.push( BeanFactory.constructBean( child, name, domain ) );
+							beans.push( BeanFactory.constructBean( child, beanId, domain ) );
 						}
 					}
 				}

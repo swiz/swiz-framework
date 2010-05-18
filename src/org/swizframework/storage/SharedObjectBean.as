@@ -20,12 +20,11 @@ package org.swizframework.storage
 	import flash.events.EventDispatcher;
 	import flash.net.SharedObject;
 	
-	import mx.logging.ILogger;
-	import mx.logging.Log;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	public class SharedObjectBean extends EventDispatcher implements ISharedObjectBean
 	{
-		private static const logger:ILogger = Log.getLogger( "org.swizframework.storage.SharedObjectBean" );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		private var so:SharedObject;
 		

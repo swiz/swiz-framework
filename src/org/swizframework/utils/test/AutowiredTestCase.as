@@ -21,11 +21,12 @@ package org.swizframework.utils.test
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.Swiz;
+	import org.swizframework.core.SwizConfig;
 	import org.swizframework.reflection.TypeCache;
 	
 	/**
 	 * AutowiredTestCase provides a base class for unit testing that provides autowiring.
-	 * A child test case should set the beanProvider property in it's constructor. A new 
+	 * A child test case should set the beanProvider and swizConfig properties in it's constructor. A new 
 	 * Swiz Context will be created in the test's [Before] method.
 	 */
 	public class AutowiredTestCase extends EventDispatcher
@@ -34,6 +35,11 @@ package org.swizframework.utils.test
 		 * Backing variable for <code>beanProvider</code> getter/setter.
 		 */
 		private var _beanProviders:Array;
+		
+		/**
+		 * Backing variable for <code>swizConfig</code> getter/setter.
+		 */
+		private var _swizConfig:SwizConfig;
 		
 		/**
 		 * Backing variable for <code>swiz</code> getter/setter.
@@ -63,6 +69,23 @@ package org.swizframework.utils.test
 		}
 		
 		/**
+		 * Setter for swizConfig property.
+		 */
+		public function set swizConfig(swizConfig:SwizConfig):void
+		{
+			_swizConfig = swizConfig;
+		}
+		
+		
+		/**
+		 * Getter for swizConfig property.
+		 */
+		public function get swizConfig():SwizConfig
+		{
+			return _swizConfig;
+		}
+		
+		/**
 		 * Getter for local Swiz instance.
 		 */
 		public function get swiz():Swiz
@@ -82,7 +105,7 @@ package org.swizframework.utils.test
 			// initialize bean factory with configurec bean provider
 			if( _swiz == null && _beanProviders != null )
 			{
-				_swiz = new Swiz(null, null, null, _beanProviders);
+				_swiz = new Swiz(null, _swizConfig, null, _beanProviders);
 				_swiz.init();
 				
 				// wrap the unit test in a Bean definition

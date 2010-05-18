@@ -20,9 +20,6 @@ package org.swizframework.core
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
 	
-	import mx.logging.ILogger;
-	import mx.logging.ILoggingTarget;
-	
 	import org.swizframework.events.SwizEvent;
 	import org.swizframework.processors.DispatcherProcessor;
 	import org.swizframework.processors.IProcessor;
@@ -31,7 +28,8 @@ package org.swizframework.core
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.SwizInterfaceProcessor;
-	import org.swizframework.utils.SwizLogger;
+	import org.swizframework.utils.logging.AbstractSwizLoggingTarget;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
 	[ExcludeClass]
@@ -46,7 +44,7 @@ package org.swizframework.core
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		protected var _dispatcher:IEventDispatcher;
 		protected var _globalDispatcher:IEventDispatcher;
@@ -187,7 +185,7 @@ package org.swizframework.core
 			_parentSwiz = parentSwiz;
 		}
 		
-		[ArrayElementType( "mx.logging.ILoggingTarget" )]
+		[ArrayElementType( "org.swizframework.utils.logging.AbstractSwizLoggingTarget" )]
 		
 		/**
 		 * @inheritDoc
@@ -201,7 +199,7 @@ package org.swizframework.core
 		{
 			_loggingTargets = value;
 			
-			for each( var loggingTarget:ILoggingTarget in value )
+			for each( var loggingTarget:AbstractSwizLoggingTarget in value )
 			{
 				SwizLogger.addLoggingTarget( loggingTarget );
 			}
@@ -278,9 +276,6 @@ package org.swizframework.core
 				beanFactory = new BeanFactory();
 			}
 			
-			// dispatch a swiz created event before fully initializing
-			dispatchSwizCreatedEvent();
-			
 			if( parentSwiz != null )
 			{
 				_beanFactory.parentBeanFactory = _parentSwiz.beanFactory;
@@ -315,6 +310,9 @@ package org.swizframework.core
 			beanFactory.setUpBeans();
 			
 			logger.info( "Swiz initialized" );
+			
+			// dispatch a swiz created event before fully initializing
+			dispatchSwizCreatedEvent();
 		}
 		
 		/**

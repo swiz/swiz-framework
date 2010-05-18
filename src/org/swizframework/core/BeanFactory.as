@@ -25,14 +25,12 @@ package org.swizframework.core
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.logging.ILogger;
-	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.TypeCache;
-	import org.swizframework.utils.SwizLogger;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * Bean Factory
@@ -43,7 +41,7 @@ package org.swizframework.core
 		// protected properties
 		// ========================================
 		
-		protected var logger:ILogger = SwizLogger.getLogger( this );
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
 		
@@ -75,8 +73,8 @@ package org.swizframework.core
 		/**
 		 * Cache of instances created by prototypes, so we can pass them to processors 
 		 * for tearDown.
-		 */
-		protected var transients:Array = [];
+		 *
+		protected var transients:Array = []; */
 		
 		/**
 		 * BeanFactories will pull all beans from BeanProviders into a local cache.
@@ -150,12 +148,6 @@ package org.swizframework.core
 			{
 				// get the right bean object
 				for each( bean in beans )
-				{
-					if( event.bean == bean || event.bean == bean.source )
-						tearDownBean( constructBean( event.bean, null, swiz.domain ) );
-				}
-				// could be in the transients too
-				for each( bean in transients )
 				{
 					if( event.bean == bean || event.bean == bean.source )
 						tearDownBean( constructBean( event.bean, null, swiz.domain ) );
@@ -252,7 +244,9 @@ package org.swizframework.core
 					setUpBean( bean );
 			}
 			
-			SwizManager.setUp( DisplayObject( swiz.dispatcher ) );
+			// if the core dispatcher is a display object, set it up as well
+			if ( swiz.dispatcher is DisplayObject )
+				SwizManager.setUp( DisplayObject( swiz.dispatcher ) );
 		}
 		
 		/**
@@ -262,10 +256,6 @@ package org.swizframework.core
 		{
 			logger.debug( "BeanFactory::setUpBean( {0} )", bean );
 			bean.initialized = true;
-			
-			// if the bean to setup is not in the bean cache, it's a transient, so add it to that array
-			if( beans.indexOf( bean ) < 0 )
-				transients.push( bean );
 			
 			var processor:IProcessor;
 			
@@ -298,11 +288,6 @@ package org.swizframework.core
 			var bean:Bean;
 			// tear down all beans
 			for each( bean in beans )
-			{
-				tearDownBean( bean );
-			}
-			// and all transients
-			for each( bean in transients )
 			{
 				tearDownBean( bean );
 			}

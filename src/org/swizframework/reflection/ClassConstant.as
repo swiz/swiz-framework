@@ -32,7 +32,7 @@ package org.swizframework.reflection
 		 * Matches: Class.CONSTANT or package.Class.CONSTANT
 		 * Captures: class, constant name
 		 */
-		protected static const CLASS_CONSTANT_PATTERN:RegExp = /([^.]+)\.([a-zA-Z0-9_*]+)$/;
+		protected static const CLASS_CONSTANT_PATTERN:RegExp = /([^.]+)\.([A-Z0-9_*]+)$/;
 		
 		/**
 		 * Class package constant regular expression.
@@ -40,7 +40,7 @@ package org.swizframework.reflection
 		 * Matches: package.Class.CONSTANT
 		 * Captures: package, class, constant name
 		 */
-		protected static const CLASS_PACKAGE_CONSTANT_PATTERN:RegExp = /^(.*)\.([^.]+)\.([a-zA-Z0-9_*]+)$/;
+		protected static const CLASS_PACKAGE_CONSTANT_PATTERN:RegExp = /^(.*)\.([^.]+)\.([A-Z0-9_*]+)$/;
 		
 		// ========================================
 		// public static methods
@@ -90,6 +90,7 @@ package org.swizframework.reflection
 		/**
 		 * Gets the associated value for the specified class and class constant name.
 		 *
+		 * @param domain The ApplicationDomain.
 		 * @param definition The class definition.
 		 * @param constantName The constant name.
 		 * @param constantType The expected constant type.

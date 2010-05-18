@@ -14,23 +14,22 @@
  * the License.
  */
 
-package org.swizframework.utils
+package org.swizframework.utils.logging
 {
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.logging.ILogger;
-	import mx.logging.ILoggingTarget;
-	import mx.logging.LogEvent;
-	import mx.logging.LogEventLevel;
+	import org.swizframework.utils.logging.AbstractSwizLoggingTarget;
+	import org.swizframework.utils.logging.SwizLogEvent;
+	import org.swizframework.utils.logging.SwizLogEventLevel;
 	
-	public class SwizLogger extends EventDispatcher implements ILogger
+	public class SwizLogger extends EventDispatcher
 	{
 		protected static var loggers:Dictionary;
 		protected static var loggingTargets:Array;
 		
-		public static function getLogger( target:Object ):ILogger
+		public static function getLogger( target:Object ):SwizLogger
 		{
 			loggers ||= new Dictionary();
 			
@@ -47,7 +46,7 @@ package org.swizframework.utils
 			// check for existing targets interested in this logger
 			if( loggingTargets != null )
 			{
-				for each( var logTarget:ILoggingTarget in loggingTargets )
+				for each( var logTarget:AbstractSwizLoggingTarget in loggingTargets )
 				{
 					if( categoryMatchInFilterList( logger.category, logTarget.filters ) )
 						logTarget.addLogger( logger );
@@ -90,7 +89,7 @@ package org.swizframework.utils
 			return false;
 		}
 		
-		public static function addLoggingTarget( loggingTarget:ILoggingTarget ):void
+		public static function addLoggingTarget( loggingTarget:AbstractSwizLoggingTarget ):void
 		{
 			loggingTargets ||= [];
 			if( loggingTargets.indexOf( loggingTarget ) < 0 )
@@ -98,7 +97,7 @@ package org.swizframework.utils
 			
 			if( loggers != null )
 			{
-				for each( var logger:ILogger in loggers )
+				for each( var logger:SwizLogger in loggers )
 				{
 					if( categoryMatchInFilterList( logger.category, loggingTarget.filters ) )
 						loggingTarget.addLogger( logger );
@@ -149,9 +148,9 @@ package org.swizframework.utils
 		 */
 		public function log( level:int, msg:String, ... rest ):void
 		{
-			if( hasEventListener( LogEvent.LOG ) )
+			if( hasEventListener( SwizLogEvent.LOG_EVENT ) )
 			{
-				dispatchEvent( new LogEvent( constructMessage( msg, rest ), level ) );
+				dispatchEvent( new SwizLogEvent( constructMessage( msg, rest ), level ) );
 			}
 		}
 		
@@ -160,9 +159,9 @@ package org.swizframework.utils
 		 */
 		public function debug( msg:String, ... rest ):void
 		{
-			if( hasEventListener( LogEvent.LOG ) )
+			if( hasEventListener( SwizLogEvent.LOG_EVENT ) )
 			{
-				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.DEBUG ) );
+				dispatchEvent( new SwizLogEvent( constructMessage( msg, rest ), SwizLogEventLevel.DEBUG ) );
 			}
 		}
 		
@@ -171,9 +170,9 @@ package org.swizframework.utils
 		 */
 		public function info( msg:String, ... rest ):void
 		{
-			if( hasEventListener( LogEvent.LOG ) )
+			if( hasEventListener( SwizLogEvent.LOG_EVENT ) )
 			{
-				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.INFO ) );
+				dispatchEvent( new SwizLogEvent( constructMessage( msg, rest ), SwizLogEventLevel.INFO ) );
 			}
 		}
 		
@@ -182,9 +181,9 @@ package org.swizframework.utils
 		 */
 		public function warn( msg:String, ... rest ):void
 		{
-			if( hasEventListener( LogEvent.LOG ) )
+			if( hasEventListener( SwizLogEvent.LOG_EVENT ) )
 			{
-				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.WARN ) );
+				dispatchEvent( new SwizLogEvent( constructMessage( msg, rest ), SwizLogEventLevel.WARN ) );
 			}
 		}
 		
@@ -193,9 +192,9 @@ package org.swizframework.utils
 		 */
 		public function error( msg:String, ... rest ):void
 		{
-			if( hasEventListener( LogEvent.LOG ) )
+			if( hasEventListener( SwizLogEvent.LOG_EVENT ) )
 			{
-				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.ERROR ) );
+				dispatchEvent( new SwizLogEvent( constructMessage( msg, rest ), SwizLogEventLevel.ERROR ) );
 			}
 		}
 		
@@ -204,9 +203,9 @@ package org.swizframework.utils
 		 */
 		public function fatal( msg:String, ... rest ):void
 		{
-			if( hasEventListener( LogEvent.LOG ) )
+			if( hasEventListener( SwizLogEvent.LOG_EVENT ) )
 			{
-				dispatchEvent( new LogEvent( constructMessage( msg, rest ), LogEventLevel.FATAL ) );
+				dispatchEvent( new SwizLogEvent( constructMessage( msg, rest ), SwizLogEventLevel.FATAL ) );
 			}
 		}
 	}
