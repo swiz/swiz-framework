@@ -46,12 +46,21 @@ package org.swizframework.utils.chain
 			this.dispatcher = dispatcher;
 		}
 		
+		public function addEvent( event:EventChainStep ):EventChain
+		{
+			addStep( event );
+			return this;
+		}
+		
 		/**
 		 *
 		 */
 		public function doProceed():void
 		{
-			dispatcher.dispatchEvent( Event( steps[ position ] ) );
+			if( steps[ position ] is IAutonomousChainStep )
+				IAutonomousChainStep( steps[ position ] ).doProceed();
+			else
+				dispatcher.dispatchEvent( Event( steps[ position ] ) );
 		}
 	}
 }

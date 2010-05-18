@@ -23,12 +23,21 @@ package org.swizframework.utils.chain
 			super( mode, stopOnError );
 		}
 		
+		public function addCommand( command:CommandChainStep ):CommandChain
+		{
+			addStep( command );
+			return this;
+		}
+		
 		/**
 		 *
 		 */
 		public function doProceed():void
 		{
-			CommandChainStep( steps[ position ] ).execute();
+			if( steps[ position ] is IAutonomousChainStep )
+				IAutonomousChainStep( steps[ position ] ).doProceed();
+			else
+				CommandChainStep( steps[ position ] ).execute();
 		}
 	}
 }
