@@ -21,14 +21,22 @@ package org.swizframework.core
 	
 	import mx.utils.UIDUtil;
 	
+	import org.swizframework.processors.IMetadataProcessor;
+	import org.swizframework.processors.IProcessor;
+	
 	public class SwizManager
 	{
 		public static var swizzes:Array = [];
 		public static var wiredViews:Array = [];
+		public static var metadataNames:Array = [];
 		
 		public static function addSwiz( swiz:ISwiz ):void
 		{
 			swizzes.push( swiz );
+			
+			for each( var p:IProcessor in swiz.processors )
+				if( p is IMetadataProcessor )
+					metadataNames = metadataNames.concat( IMetadataProcessor( p ).metadataNames )
 		}
 		
 		public static function removeSwiz( swiz:ISwiz ):void

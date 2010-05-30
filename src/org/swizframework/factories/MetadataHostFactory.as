@@ -31,11 +31,9 @@ package org.swizframework.factories
 	 */
 	public class MetadataHostFactory
 	{
-		private var domain:ApplicationDomain;
-		
-		public function MetadataHostFactory( domain:ApplicationDomain )
+		public function MetadataHostFactory()
 		{
-			this.domain = domain;
+			
 		}
 		
 		/**
@@ -49,7 +47,7 @@ package org.swizframework.factories
 		 * @see org.swizframework.reflection.MetadataHostMethod
 		 * @see org.swizframework.reflection.MetadataHostProperty
 		 */
-		public function getMetadataHost( hostNode:XML ):IMetadataHost
+		public function getMetadataHost( hostNode:XML, domain:ApplicationDomain ):IMetadataHost
 		{
 			var host:IMetadataHost;
 			
