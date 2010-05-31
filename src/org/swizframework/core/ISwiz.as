@@ -113,6 +113,6 @@ package org.swizframework.core
 		/**
 		 * Register a new window with Swiz so that its metadata can be processed.
 		 */ 
-		function registerWindow( window:IEventDispatcher, windowSwiz:ISwiz = null ):void
+		function registerWindow( window:IEventDispatcher, windowSwiz:ISwiz = null ):void;
 	}
 }
