@@ -1,5 +1,9 @@
 Swiz is a brutally simple micro-architecture for creating Rich Internet Applications with ActionScript 3 and Adobe Flex
 
+## Reporting Issues
+
+DO NOT report issues here on GitHub. Bugs and feature requests should be entered in the Swiz JIRA instance at http://swizframework.jira.com/browse/SWIZ.
+
 ## Building
 
 You can compile the library .swc file using:
