@@ -24,34 +24,42 @@ package org.swizframework.utils.services
 	{
 		private var resultHandler:Function;
 		private var faultHandler:Function;
-		private var resultHandlerArgs:Array;
+		private var handlerArgs:Array;
 		
-		public function SwizResponder( resultHandler:Function, faultHandler:Function = null, resultHandlerArgs:Array = null )
+		public function SwizResponder( resultHandler:Function, faultHandler:Function = null, handlerArgs:Array = null )
 		{
 			this.resultHandler = resultHandler;
 			this.faultHandler = faultHandler;
-			this.resultHandlerArgs = resultHandlerArgs;
+			this.handlerArgs = handlerArgs;
 		}
 		
 		public function result( data:Object ):void
 		{
-			if( resultHandlerArgs == null )
+			if( handlerArgs == null )
 			{
 				resultHandler( data );
 			}
 			else
 			{
-				resultHandlerArgs.unshift( data );
-				resultHandler.apply( null, resultHandlerArgs );
+				handlerArgs.unshift( data );
+				resultHandler.apply( null, handlerArgs );
 			}
 		}
 		
 		public function fault( info:Object ):void
 		{
 			if( faultHandler != null )
-				faultHandler( info );
-			// we could try / catch the call to the fault handler, if people wanted custom handlers
-			// to recieve args in the same way as result handler
+			{
+				try
+				{
+					faultHandler( info );
+				}
+				catch( error:Error )
+				{
+					handlerArgs.unshift( info );
+					faultHandler.apply( null, handlerArgs );
+				}
+			}
 			else
 			{
 				// todo: what if there is no fault handler applied to dynamic responder
