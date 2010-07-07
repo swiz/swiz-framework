@@ -32,6 +32,8 @@ package org.swizframework.utils.chain
 		public function doProceed():void
 		{
 			functionRef.apply( functionThisArg, functionArgArray );
+			
+			complete();
 		}
 	}
 }
