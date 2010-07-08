@@ -16,25 +16,22 @@
 
 package org.swizframework.utils.chain
 {
-	import flash.events.IEventDispatcher;
-	
-	public interface IChain
+	public class BaseCompositeChain extends AbstractChain implements IChain
 	{
-		function get position():int;
-		function set position( value:int ):void;
+		public function BaseCompositeChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
+		{
+			super( mode, stopOnError );
+		}
 		
-		function get isComplete():Boolean;
-		
-		function get stopOnError():Boolean;
-		function set stopOnError( value:Boolean ):void;
-		
-		function hasNext():Boolean;
-		function stepComplete():void;
-		function stepError():void;
-		
-		function addStep( step:IChainStep ):IChain;
-		
-		function start():void;
-		function doProceed():void;
+		/**
+		 *
+		 */
+		public function doProceed():void
+		{
+			if( currentStep is IAutonomousChainStep )
+				IAutonomousChainStep( currentStep ).doProceed();
+			else if( currentStep is IChain )
+				IChain( currentStep ).start();
+		}
 	}
 }

@@ -77,6 +77,11 @@ package org.swizframework.utils.chain
 			token.addResponder( this );
 		}
 		
+		override public function doProceed():void
+		{
+			execute();
+		}
+		
 		/**
 		 *
 		 */
