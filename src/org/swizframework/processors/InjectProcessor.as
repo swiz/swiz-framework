@@ -216,11 +216,6 @@ package org.swizframework.processors
 			
 			removePropertyBinding( bean, namedBean, injectTag );
 			
-			if( injectTag.twoWay )
-			{
-				removePropertyBinding( namedBean, bean, injectTag );
-			}
-			
 			setDestinationValue( injectTag, bean,  null );
 		}
 		
@@ -357,11 +352,10 @@ package org.swizframework.processors
 				var sourcePropName:String = sourcePropertyChain[ 0 ];
 				
 				// create the reverse binding where the view/new bean is the source
-				// TODO: store this binding too
 				if( ChangeWatcher.canWatch( destObject, destPropName ) )
 				{
 					// if a destination was provided we can use it as the host chain value
-					BindingUtils.bindProperty( sourceObject, sourcePropName, destObject, destPropName );
+					injectByProperty[ uid ].push( BindingUtils.bindProperty( sourceObject, sourcePropName, destObject, destPropName ) );
 				}
 				else
 				{
@@ -375,7 +369,8 @@ package org.swizframework.processors
 		 */
 		protected function removePropertyBinding( destination:Bean, source:Bean, injectTag:InjectMetadataTag ):void
 		{
-			var uid:String = UIDUtil.getUID( destination.source );
+			var destObject:Object = ( injectTag.destination == null ) ? destination.source : getDestinationObject( destination.source, injectTag.destination );
+			var uid:String = UIDUtil.getUID( destObject );
 			for each( var cw:ChangeWatcher in injectByProperty[ uid ] )
 			{
 				cw.unwatch();
