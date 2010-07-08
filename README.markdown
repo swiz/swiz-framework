@@ -2,7 +2,7 @@ Swiz is a brutally simple micro-architecture for creating Rich Internet Applicat
 
 ## Reporting Issues
 
-DO NOT report issues here on GitHub. Bugs and feature requests should be entered in the Swiz JIRA instance at "http://bugs.swizframework.org/":http://bugs.swizframework.org/.
+DO NOT report issues here on GitHub. Bugs and feature requests should be entered in the "Swiz JIRA instance":http://bugs.swizframework.org/
 
 ## Building
 
