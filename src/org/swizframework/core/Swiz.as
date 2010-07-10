@@ -337,7 +337,6 @@ package org.swizframework.core
 			for each( var processor:IProcessor in processors )
 			{
 				processor.init( this );
-				trace( processor );
 			}
 			
 			logger.debug( "Processors initialized" );
