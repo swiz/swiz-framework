@@ -29,50 +29,6 @@ package org.swizframework.processors
 	 */
 	public final class ProcessorPriority
 	{
-		/**
-		 * Built-in <code>InjectProcessor</code> is the second native processor run to
-		 * satisfy declared dependencies in any beans/components provided to Swiz.
-		 *
-		 * @see org.swizframework.processors.InjectProcessor
-		 */
-		public static const INJECT			:int = 200;
-		
-		/**
-		 * Built-in <code>MediateProcessor</code> uses this priority.
-		 *
-		 * @see org.swizframework.processors.MediateProcessor
-		 */
-		public static const MEDIATE			:int = 300;
-		
-		/**
-		 * Built-in <code>DispatcherProcessor</code> uses this priority.
-		 *
-		 * @see org.swizframework.processors.DispatcherProcessor
-		 */
-		public static const DISPATCHER		:int = 400;
-		
-		/**
-		 * Default priority used by <code>BaseMetadataProcessor</code>.
-		 *
-		 * @see org.swizframework.processors.BaseMetadataProcessor
-		 */
-		public static const DEFAULT			:int = 500;
-		
-		/**
-		 * Built-in <code>SwizInterfaceProcessor</code> runs after <code>DefaultProcessors</code>
-		 * to allow components to do any necessary initialization based on internal swiz interfaces.
-		 *
-		 * @see org.swizframework.processors.PostConstructProcessor
-		 */
-		public static const SWIZ_INTERFACE	:int = 600;
-		
-		/**
-		 * Built-in <code>PostConstructProcessor</code> runs after <code>InjectProcessor</code>
-		 * to allow components to do any necessary initialization once their dependencies have been satisfied.
-		 *
-		 * @see org.swizframework.processors.PostConstructProcessor
-		 */
-		public static const POST_CONSTRUCT	:int = 700;
 		
 		/**
 		 * Built-in <code>PreDestroyProcessor</code> runs during tear down to allow components to do any
@@ -81,5 +37,51 @@ package org.swizframework.processors
 		 * @see org.swizframework.processors.PreDestroyProcessor
 		 */
 		public static const PRE_DESTROY		:int = 800;
+		
+		/**
+		 * Built-in <code>InjectProcessor</code> is the second native processor run to
+		 * satisfy declared dependencies in any beans/components provided to Swiz.
+		 *
+		 * @see org.swizframework.processors.InjectProcessor
+		 */
+		public static const INJECT			:int = 700;
+		
+		/**
+		 * Built-in <code>MediateProcessor</code> uses this priority.
+		 *
+		 * @see org.swizframework.processors.MediateProcessor
+		 */
+		public static const MEDIATE			:int = 600;
+		
+		/**
+		 * Built-in <code>DispatcherProcessor</code> uses this priority.
+		 *
+		 * @see org.swizframework.processors.DispatcherProcessor
+		 */
+		public static const DISPATCHER		:int = 500;
+		
+		/**
+		 * Default priority used by <code>BaseMetadataProcessor</code>.
+		 *
+		 * @see org.swizframework.processors.BaseMetadataProcessor
+		 */
+		public static const DEFAULT			:int = 400;
+		
+		/**
+		 * Built-in <code>SwizInterfaceProcessor</code> runs after <code>DefaultProcessors</code>
+		 * to allow components to do any necessary initialization based on internal swiz interfaces.
+		 *
+		 * @see org.swizframework.processors.PostConstructProcessor
+		 */
+		public static const SWIZ_INTERFACE	:int = 300;
+		
+		/**
+		 * Built-in <code>PostConstructProcessor</code> runs after <code>InjectProcessor</code>
+		 * to allow components to do any necessary initialization once their dependencies have been satisfied.
+		 *
+		 * @see org.swizframework.processors.PostConstructProcessor
+		 */
+		public static const POST_CONSTRUCT	:int = 200;
+		
 	}
 }
