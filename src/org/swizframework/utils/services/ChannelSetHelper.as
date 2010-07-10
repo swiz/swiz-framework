@@ -19,6 +19,7 @@ package org.swizframework.utils.services
 	import mx.messaging.Channel;
 	import mx.messaging.ChannelSet;
 	import mx.messaging.channels.AMFChannel;
+	import mx.messaging.channels.SecureAMFChannel;
 	
 	import org.swizframework.core.IInitializing;
 
@@ -69,8 +70,13 @@ package org.swizframework.utils.services
 		private function createChannel():void
 		{
 			if (!channelCreated) {
+				
+				var amfChannel:Channel;
 				// create a new AMF Channel with our configuration
-				var amfChannel:Channel = new AMFChannel(CHANNEL_ID, AMF_ENDPOINT);
+				if( PROTOCOL == "https" || AMF_ENDPOINT.indexOf("https") > -1 )
+					amfChannel = new SecureAMFChannel(CHANNEL_ID, AMF_ENDPOINT);
+				else
+					amfChannel = new AMFChannel(CHANNEL_ID, AMF_ENDPOINT);
 				addChannel(amfChannel);
 				channelCreated = true;
 			}
