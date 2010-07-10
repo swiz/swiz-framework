@@ -82,6 +82,5 @@ package org.swizframework.processors
 		 * @see org.swizframework.processors.PostConstructProcessor
 		 */
 		public static const POST_CONSTRUCT	:int = 200;
-		
 	}
 }
