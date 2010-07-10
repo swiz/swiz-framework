@@ -333,7 +333,7 @@ package org.swizframework.core
 		protected function initializeProcessors():void
 		{
 			processors.sortOn( "priority", Array.DESCENDING | Array.NUMERIC );
-			
+				
 			for each( var processor:IProcessor in processors )
 			{
 				processor.init( this );

@@ -66,7 +66,7 @@ package org.swizframework.processors
 		{
 			super.tearDownMetadataTags( metadataTags, bean );
 			
-			metadataTags.sortOn( "order" );
+			metadataTags.sortOn( "order", Array.NUMERIC );
 			
 			for each( var metadataTag:IMetadataTag in metadataTags )
 			{

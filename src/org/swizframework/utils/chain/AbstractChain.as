@@ -32,6 +32,11 @@ package org.swizframework.utils.chain
 		
 		public var steps:Array = [];
 		
+		public function get currentStep():IChainStep
+		{
+			return IChainStep( steps[ position ] );
+		}
+		
 		/**
 		 * Backing variable for <code>chain</code> getter/setter.
 		 */

@@ -16,7 +16,7 @@
 
 package org.swizframework.utils.chain
 {
-	public class CommandChainStep extends BaseChainStep
+	public class CommandChainStep extends BaseChainStep implements IAutonomousChainStep
 	{
 		/**
 		 *
@@ -24,6 +24,13 @@ package org.swizframework.utils.chain
 		public function execute():void
 		{
 		
+		}
+		
+		public function doProceed():void
+		{
+			execute();
+			
+			complete();
 		}
 	}
 }
