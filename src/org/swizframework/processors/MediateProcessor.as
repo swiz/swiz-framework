@@ -109,9 +109,19 @@ package org.swizframework.processors
 		override public function tearDownMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var mediateTag:MediateMetadataTag = metadataTag as MediateMetadataTag;
-			var eventType:String = parseEventTypeExpression( mediateTag.event );
 			
-			removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+			if( mediateTag.event.substr( -2 ) == ".*" )
+			{
+				var clazz:Class = ClassConstant.getClass( swiz.domain, mediateTag.event, swiz.config.eventPackages );
+				var td:TypeDescriptor = TypeCache.getTypeDescriptor( clazz, swiz.domain );
+				for each( var constant:Constant in td.constants )
+				removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], constant.value );
+			}
+			else
+			{
+				var eventType:String = parseEventTypeExpression( mediateTag.event );
+				removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+			}
 			
 			logger.debug( "MediateProcessor tore down {0} on {1}", metadataTag.toString(), bean.toString() );
 		}

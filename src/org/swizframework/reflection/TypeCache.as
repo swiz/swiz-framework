@@ -52,7 +52,7 @@ package org.swizframework.reflection
 				return typeDescriptors[ className ];
 			
 			// type not found in cache so create, store and return it here
-			return typeDescriptors[ className ] = new TypeDescriptor().fromXML( describeType( target ), domain );
+			return typeDescriptors[ className ] = new TypeDescriptor().fromXML( describeType( domain.getDefinition( className ) ), domain );
 		}
 		
 		/**
