@@ -87,7 +87,6 @@ package org.swizframework.processors
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
-			var beanNotFound:Boolean = false;
 			
 			if( injectTag.name == AUTOWIRE )
 				logger.warn( "[Autowire] has been deprecated in favor of [Inject]. Please update {0} accordingly.", bean );
