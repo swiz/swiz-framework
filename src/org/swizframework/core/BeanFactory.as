@@ -57,32 +57,32 @@ package org.swizframework.core
 		 */
 		protected var _parentBeanFactory:IBeanFactory;
 		
+		/**
+		 * Backing dictionary for the cached bean instances.
+		 */ 
+		protected var _beanCache : Dictionary = new Dictionary();
+		
 		// ========================================
 		// public properties
 		// ========================================
-		
-		/**
-		 * Backing variable for <code>beans</code> getter/setter.
-		 */
-		protected var _beans:Array = [];
-		
-		// ========================================
-		// private properties
-		// ========================================
-		
-		/**
-		 * Cache of instances created by prototypes, so we can pass them to processors 
-		 * for tearDown.
-		 *
-		protected var transients:Array = []; */
 		
 		/**
 		 * BeanFactories will pull all beans from BeanProviders into a local cache.
 		 */
 		public function get beans():Array
 		{
-			return _beans;
+			var result : Array = [];
+			for each( var thisBean : Bean in _beanCache ) 
+			{
+				result.push( thisBean );
+			}
+			return result;
 		}
+		
+		// ========================================
+		// private properties
+		// ========================================
+		
 		
 		// ========================================
 		// constructor
@@ -134,36 +134,11 @@ package org.swizframework.core
 			logger.debug( "Tear down event priority set to {0}", swiz.config.tearDownEventPriority );
 		}
 		
-		/**
-		 *
-		 */
-		protected function handleBeanEvent( event:BeanEvent ):void
-		{
-			var bean:Bean;
-			
-			if( event.type == BeanEvent.SET_UP_BEAN )
-			{
-				bean = constructBean( event.bean, event.beanName, swiz.domain );
-				beans.push( bean );
-				setUpBean( bean );
-			}
-			else
-			{
-				// get the right bean object
-				for each( bean in beans )
-				{
-					if( event.bean == bean || event.bean == bean.source )
-						tearDownBean( constructBean( event.bean, null, swiz.domain ) );
-				}
-					// TODO: log warning bean was not found
-			}
-		}
-		
 		public function getBeanByName( name:String ):Bean
 		{
 			var foundBean:Bean = null;
 			
-			for each( var bean:Bean in beans )
+			for each( var bean:Bean in _beanCache )
 			{
 				if( bean.name == name )
 				{
@@ -186,7 +161,7 @@ package org.swizframework.core
 			// should we just have sent in the className for beanType instead??
 			var beanTypeName:String = getQualifiedClassName( beanType );
 			
-			for each( var bean:Bean in beans )
+			for each( var bean:Bean in _beanCache )
 			{
 				if( bean.typeDescriptor.satisfiesType( beanTypeName ) )
 				{
@@ -217,31 +192,12 @@ package org.swizframework.core
 			return _parentBeanFactory;
 		}
 		
-		// ========================================
-		// protected methods
-		// ========================================
-		
-		/**
-		 * Add Bean Providers
-		 */
-		protected function addBeanProviders( beanProviders:Array ):void
-		{
-			for each( var beanProvider:IBeanProvider in beanProviders )
-			{
-				for each( var bean:Bean in beanProvider.beans )
-				{
-					bean.beanFactory = this;
-					_beans.push( bean );
-				}
-			}
-		}
-		
 		/**
 		 * Initializes all beans in the beans cache.
 		 */
 		public function setUpBeans():void
 		{
-			for each( var bean:Bean in beans )
+			for each( var bean:Bean in _beanCache )
 			{
 				if( !( bean is Prototype ) && !bean.initialized )
 					setUpBean( bean );
@@ -286,18 +242,20 @@ package org.swizframework.core
 			}
 		}
 		
+		/**
+		 * Tear down all beans and clear the bean cache
+		 */ 
 		public function tearDownBeans():void
 		{
-			var bean:Bean;
-			// tear down all beans
-			for each( bean in beans )
+			for each( var bean:Bean in _beanCache )
 			{
 				tearDownBean( bean );
 			}
+			_beanCache = new Dictionary();
 		}
 		
 		/**
-		 * Remove Bean
+		 * Tear down the specified Bean, or any bean with the same source, and remove it from the cache.
 		 */
 		public function tearDownBean( bean:Bean ):void
 		{
@@ -324,9 +282,81 @@ package org.swizframework.core
 					IBeanProcessor( processor ).tearDownBean( bean );
 				}
 			}
+			
+			// remove the bean from the cache
+			removeBean( bean );
 		}
 		
-		// TODO: Move to SwizConfig?
+		
+		// ========================================
+		// protected methods
+		// ========================================
+		
+		/**
+		 * Add Bean Providers
+		 */
+		protected function addBeanProviders( beanProviders:Array ):void
+		{
+			for each( var beanProvider:IBeanProvider in beanProviders )
+			{
+				for each( var bean:Bean in beanProvider.beans )
+				{
+					bean.beanFactory = this;
+					if( bean is Prototype )
+						_beanCache[ bean ] = bean;
+					else
+						_beanCache[ bean.source ] = bean;
+				}
+			}
+		}
+		
+		
+		/**
+		 * Handle bean set up and tear down events.
+		 */
+		protected function handleBeanEvent( event:BeanEvent ):void
+		{
+			var bean:Bean;
+			
+			if( event.type == BeanEvent.SET_UP_BEAN )
+			{
+				// should we loop over the beans to see if we have this bean? 
+				// ben says before the event type check
+				if( !_beanCache[ event.bean ] ) 
+				{
+					bean = constructBean( event.bean, event.beanName, swiz.domain );
+					_beanCache[ event.bean ] = bean;
+					setUpBean( bean );
+				}
+				else
+				{
+					logger.warn( "Attempted to set up a bean with the same source as an existing bean: {0}", event.bean.toString() );	
+				}
+			}
+			else
+			{
+				// get the right bean object
+				if( _beanCache[ event.bean ] )
+				{
+					tearDownBean( event.bean );
+				}
+				else
+				{
+					logger.warn( "Attempted to tear down undefined bean: {0}", event.bean.toString() );					
+				}
+			}
+		}
+		
+		/**
+		 * Remove matching bean from the cache
+		 */ 
+		protected function removeBean( bean : Bean ) : void
+		{
+			if( bean is Prototype )
+				delete _beanCache[ bean ];
+			else
+				delete _beanCache[ bean.source ];
+		}
 		
 		/**
 		 * Evaluate whether Swiz is configured such that the specified class is a potential injection target.
@@ -391,6 +421,12 @@ package org.swizframework.core
 				SwizManager.tearDown( DisplayObject( event.target ) );
 			}
 		}
+
+		
+		// ========================================
+		// static methods
+		// ========================================
+
 		
 		// both init method and setBeanIds will call this if needed
 		public static function constructBean( obj:*, name:String, domain:ApplicationDomain ):Bean

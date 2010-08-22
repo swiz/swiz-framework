@@ -18,8 +18,7 @@ package org.swizframework.core
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	
-	import mx.utils.UIDUtil;
+	import flash.utils.Dictionary;
 	
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
@@ -27,7 +26,7 @@ package org.swizframework.core
 	public class SwizManager
 	{
 		public static var swizzes:Array = [];
-		public static var wiredViews:Array = [];
+		public static var wiredViews:Dictionary = new Dictionary( true );
 		public static var metadataNames:Array = [];
 		
 		public static function addSwiz( swiz:ISwiz ):void
@@ -46,10 +45,8 @@ package org.swizframework.core
 		
 		public static function setUp( dObj:DisplayObject ):void
 		{
-			var uid:String = UIDUtil.getUID( dObj );
-			
 			// already wired
-			if( wiredViews.indexOf( uid ) > -1 )
+			if( wiredViews[dObj] )
 				return;
 			
 			for( var i:int = swizzes.length - 1; i > -1; i-- )
@@ -58,7 +55,7 @@ package org.swizframework.core
 				
 				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
 				{
-					wiredViews.push( uid );
+					wiredViews[dObj] = true;
 					swiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 					return;
 				}
@@ -67,16 +64,14 @@ package org.swizframework.core
 			// this is stupid, if we got here, no swiz had a dispatcher 
 			// containing the view (like, it's a freaking popup). make the first swiz do it
 			var rootSwiz:ISwiz = swizzes[ 0 ];
-			wiredViews.push( uid );
+			wiredViews[dObj] = true;
 			rootSwiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 		}
 		
 		public static function tearDown( dObj:DisplayObject ):void
 		{
-			var uid:String = UIDUtil.getUID( dObj );
-			
 			// wasn't wired
-			if( wiredViews.indexOf( uid ) == -1 )
+			if( !wiredViews[dObj] )
 				return;
 			
 			for( var i:int = swizzes.length - 1; i > -1; i-- )
@@ -90,7 +85,7 @@ package org.swizframework.core
 				// if the passed in object is a child of swiz's dispatcher, use that instance for tearDown
 				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
 				{
-					wiredViews.splice( wiredViews.indexOf( uid ), 1 );
+					delete wiredViews[dObj];
 					swiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 					return;
 				}
@@ -99,7 +94,7 @@ package org.swizframework.core
 			// this is stupid, if we got here, no swiz had a dispatcher 
 			// containing the view (like, it's a freaking popup). make the first swiz do it
 			var rootSwiz:ISwiz = swizzes[ 0 ];
-			wiredViews.splice( wiredViews.indexOf( uid ), 1 );
+			delete wiredViews[dObj];
 			rootSwiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 		}
 	}
