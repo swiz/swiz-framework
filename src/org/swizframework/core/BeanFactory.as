@@ -67,16 +67,11 @@ package org.swizframework.core
 		// ========================================
 		
 		/**
-		 * BeanFactories will pull all beans from BeanProviders into a local cache.
+		 * Returns the bean cache dictionary
 		 */
-		public function get beans():Array
+		public function get beans():Dictionary
 		{
-			var result : Array = [];
-			for each( var thisBean : Bean in _beanCache ) 
-			{
-				result.push( thisBean );
-			}
-			return result;
+			return _beanCache;
 		}
 		
 		// ========================================
