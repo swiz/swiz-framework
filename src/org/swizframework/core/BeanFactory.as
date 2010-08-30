@@ -129,6 +129,24 @@ package org.swizframework.core
 			logger.debug( "Tear down event priority set to {0}", swiz.config.tearDownEventPriority );
 		}
 		
+		public function createBean( target:Object, beanName:String = null ):Bean
+		{
+			var bean:Bean = constructBean( target, beanName, swiz.domain );
+			return addBean( bean );
+		}
+		
+		public function addBean( bean:Bean ):Bean
+		{
+			// make sure bean is fully constructed
+			if( bean.typeDescriptor == null )
+				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type, swiz.domain );
+			
+			bean.beanFactory = this;
+			_beanCache[ bean ] = bean;
+			setUpBean( bean );
+			return bean;
+		}
+		
 		public function getBeanByName( name:String ):Bean
 		{
 			var foundBean:Bean = null;
@@ -319,9 +337,7 @@ package org.swizframework.core
 				// ben says before the event type check
 				if( !_beanCache[ event.bean ] ) 
 				{
-					bean = constructBean( event.bean, event.beanName, swiz.domain );
-					_beanCache[ event.bean ] = bean;
-					setUpBean( bean );
+					createBean( event.bean, event.beanName );
 				}
 				else
 				{

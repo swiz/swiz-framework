@@ -34,6 +34,9 @@ package org.swizframework.core
 		function setUpBeans():void;
 		function setUpBean( bean:Bean ):void;
 		
+		function createBean( target:Object, beanName:String = null ):Bean;
+		function addBean( bean:Bean ):Bean;
+		
 		/**
 		 * Parent Swiz instance, for nesting and modules
 		 */
