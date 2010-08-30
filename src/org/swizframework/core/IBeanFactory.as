@@ -16,6 +16,8 @@
 
 package org.swizframework.core
 {
+	import flash.utils.Dictionary;
+
 	/**
 	 * Bean Factory Interface
 	 */
@@ -44,7 +46,7 @@ package org.swizframework.core
 		function getBeanByName( name:String ):Bean;
 		function getBeanByType( type:Class ):Bean;
 		
-		function get beans():Array;
+		function get beans():Dictionary;
 		
 		function tearDownBeans():void;
 		function tearDownBean( bean:Bean ):void;
