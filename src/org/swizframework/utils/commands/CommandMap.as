@@ -73,6 +73,9 @@ package org.swizframework.utils.commands
 					// get a new instance of the command class
 					var command:Object = Prototype( commandPrototype ).source;
 					
+					if( !( command is ICommand ) )
+						throw new Error( "Commands must implement org.swizframework.utils.commands.ICommand." );
+					
 					// provide event reference if command is IEventAwareCommand
 					if( command is IEventAwareCommand )
 						IEventAwareCommand( command ).event = event;
@@ -104,9 +107,6 @@ package org.swizframework.utils.commands
 		 */
 		protected function mapCommand( eventType:String, commandClass:Class, eventClass:Class = null, oneTime:Boolean = false ):void
 		{
-			if( !( commandClass is ICommand ) )
-				throw new Error( "Commands must implement org.swizframework.utils.commands.ICommand." );
-			
 			if( map[ eventType ] != null )
 				throw new Error( "Duplicate mappings are not allowed." );
 			
