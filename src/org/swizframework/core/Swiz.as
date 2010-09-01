@@ -308,9 +308,7 @@ package org.swizframework.core
 			
 			initializeProcessors();
 			
-			beanFactory.init( this );
-			
-			beanFactory.setUpBeans();
+			beanFactory.setUp( this );
 			
 			logger.info( "Swiz initialized" );
 		}
@@ -321,7 +319,7 @@ package org.swizframework.core
 		public function tearDown():void
 		{
 			parentSwiz = null;
-			beanFactory.tearDownBeans();
+			beanFactory.tearDown();
 			//TypeCache.flushDomain( domain );
 			SwizManager.removeSwiz( this );
 		}
