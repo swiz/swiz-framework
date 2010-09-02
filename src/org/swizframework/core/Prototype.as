@@ -52,7 +52,7 @@ package org.swizframework.core
 		{
 			var instance:* = _source;
 			
-			if( _source == null )
+			if( instance == null )
 			{
 				// if source is null, create and initialize it (runs all processors)
 				_source = instance = createInstance();
@@ -61,6 +61,8 @@ package org.swizframework.core
 				// if this prototype is not a singleton, remove the source
 				if( !singleton )
 					_source = null;
+				else
+					initialized = true;
 			}
 			
 			return instance;

@@ -137,9 +137,9 @@ package org.swizframework.core
 		 * Since the setter for beans should have already created Bean objects for all children,
 		 * we are primarily trying to identify the id to set in the bean's name property.
 		 *
-		 * However, something is really wierd with using ids or not, and wether we will
+		 * However, something is really wierd with using ids or not, and whether we will
 		 * actually have an array of beans at this time, so if we don't find a Bean for an
-		 * element we find in describeType, we created it.
+		 * element we find in describeType, we create it.
 		 */
 		protected function setBeanIds( domain:ApplicationDomain ):void
 		{

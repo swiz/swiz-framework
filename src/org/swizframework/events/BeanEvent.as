@@ -40,10 +40,7 @@ package org.swizframework.events
 		// public properties
 		// ========================================
 		
-		/**
-		 * The <code>Bean</code> instance that was added or removed.
-		 */
-		public var bean:*;
+		public var source:*;
 		
 		public var beanName:String;
 		
@@ -54,11 +51,11 @@ package org.swizframework.events
 		/**
 		 * Constructor
 		 */
-		public function BeanEvent( type:String, bean:* = null, beanName:String = null )
+		public function BeanEvent( type:String, source:* = null, beanName:String = null )
 		{
 			super( type, true, true );
 			
-			this.bean = bean;
+			this.source = source;
 			this.beanName = beanName;
 		}
 		
@@ -71,7 +68,7 @@ package org.swizframework.events
 		 */
 		override public function clone():Event
 		{
-			return new BeanEvent( type, bean );
+			return new BeanEvent( type, source );
 		}
 	}
 }

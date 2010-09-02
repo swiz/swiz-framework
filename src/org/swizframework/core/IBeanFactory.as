@@ -23,35 +23,27 @@ package org.swizframework.core
 	 */
 	public interface IBeanFactory
 	{
-		// ========================================
-		// public methods
-		// ========================================
+		function setUp( swiz:ISwiz ):void;
+		function tearDown():void;
 		
-		/**
-		 * Called by Swiz
-		 */
-		function init( swiz:ISwiz ):void;
-		function setUpBeans():void;
+		function createBeanFromSource( source:Object, beanName:String = null ):Bean;
 		function setUpBean( bean:Bean ):void;
-		
-		function createBean( target:Object, beanName:String = null ):Bean;
 		function addBean( bean:Bean ):Bean;
+		function addBeanProvider( beanProvider:IBeanProvider ):void;
+		
+		function getBeanForSource( source:Object ):Bean;
+		function tearDownBean( bean:Bean ):void;
+		function removeBean( bean:Bean ):void;
+		function removeBeanProvider( beanProvider:IBeanProvider ):void;
+		
+		function get beans():Array;
+		function getBeanByName( name:String ):Bean;
+		function getBeanByType( type:Class ):Bean;
 		
 		/**
 		 * Parent Swiz instance, for nesting and modules
 		 */
 		function get parentBeanFactory():IBeanFactory;
 		function set parentBeanFactory( parentBeanFactory:IBeanFactory ):void;
-		
-		/**
-		 * Maybe better to extend bean provider interface
-		 */
-		function getBeanByName( name:String ):Bean;
-		function getBeanByType( type:Class ):Bean;
-		
-		function get beans():Dictionary;
-		
-		function tearDownBeans():void;
-		function tearDownBean( bean:Bean ):void;
 	}
 }
