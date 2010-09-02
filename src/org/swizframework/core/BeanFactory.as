@@ -122,7 +122,14 @@ package org.swizframework.core
 			logger.debug( "Tear down event priority set to {0}", swiz.config.tearDownEventPriority );
 			
 			if( swiz.dispatcher )
-				setUpBean( createBeanFromSource( swiz.dispatcher ) );
+			{
+				// as long as the dispatcher is a view, set it up like any other view
+				// this allows it to be automatically torn down if caught by tearDownEventHandler()
+				if( swiz.dispatcher is DisplayObject )
+					SwizManager.setUp( DisplayObject( swiz.dispatcher ) );
+				else
+					setUpBean( createBeanFromSource( swiz.dispatcher ) );
+			}
 		}
 		
 		public function tearDown():void
@@ -430,10 +437,7 @@ package org.swizframework.core
 		 */
 		protected function tearDownEventHandler( event:Event ):void
 		{
-			if( isPotentialInjectionTarget( event.target ) )
-			{
-				SwizManager.tearDown( DisplayObject( event.target ) );
-			}
+			SwizManager.tearDown( DisplayObject( event.target ) );
 		}
 
 		
