@@ -50,14 +50,20 @@ package org.swizframework.utils.services
 		{
 			if( faultHandler != null )
 			{
-				try
+				if( handlerArgs == null )
 				{
 					faultHandler( info );
 				}
-				catch( error:Error )
+				else
 				{
-					handlerArgs.unshift( info );
-					faultHandler.apply( null, handlerArgs );
+					try
+					{
+						faultHandler( info );
+					}
+					catch( e:Error )
+					{
+						faultHandler.apply( null, handlerArgs.unshift( info ) );
+					}
 				}
 			}
 			else

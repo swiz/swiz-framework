@@ -48,21 +48,21 @@ package org.swizframework.utils.chain
 		/**
 		 *
 		 */
-		protected var resultHandlerArgs:Array;
+		protected var handlerArgs:Array;
 		
 		// ========================================
 		// constructor
 		// ========================================
 		
-		public function AsyncCommandChainStep( asyncMethod:Function, asyncMethodArgs:Array, 
-											   resultHandler:Function, faultHandler:Function = null, 
-											   resultHandlerArgs:Array = null )
+		public function AsyncCommandChainStep( asyncMethod:Function, asyncMethodArgs:Array = null, 
+											   resultHandler:Function = null, faultHandler:Function = null, 
+											   handlerArgs:Array = null )
 		{
 			this.asyncMethodArgs = asyncMethodArgs;
 			this.asyncMethod = asyncMethod;
 			this.resultHandler = resultHandler;
 			this.faultHandler = faultHandler;
-			this.resultHandlerArgs = resultHandlerArgs;
+			this.handlerArgs = handlerArgs;
 		}
 		
 		override public function execute():void
@@ -87,14 +87,16 @@ package org.swizframework.utils.chain
 		 */
 		public function result( data:Object ):void
 		{
-			if( resultHandlerArgs == null )
+			if( resultHandler != null )
 			{
-				resultHandler( data );
-			}
-			else
-			{
-				resultHandlerArgs.unshift( data );
-				resultHandler.apply( this, resultHandlerArgs );
+				if( handlerArgs == null )
+				{
+					resultHandler( data );
+				}
+				else
+				{
+					resultHandler.apply( this, handlerArgs.unshift( data ) );
+				}
 			}
 			
 			complete();
@@ -106,7 +108,23 @@ package org.swizframework.utils.chain
 		public function fault( info:Object ):void
 		{
 			if( faultHandler != null )
-				faultHandler( info );
+			{
+				if( handlerArgs == null )
+				{
+					faultHandler( info );
+				}
+				else
+				{
+					try
+					{
+						faultHandler( info );
+					}
+					catch( e:Error )
+					{
+						faultHandler.apply( null, handlerArgs.unshift( info ) );
+					}
+				}
+			}
 			
 			error();
 		}
