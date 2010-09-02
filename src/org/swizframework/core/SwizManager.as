@@ -46,7 +46,7 @@ package org.swizframework.core
 		public static function setUp( dObj:DisplayObject ):void
 		{
 			// already wired
-			if( wiredViews[dObj] )
+			if( wiredViews[ dObj ] )
 				return;
 			
 			for( var i:int = swizzes.length - 1; i > -1; i-- )
@@ -55,7 +55,7 @@ package org.swizframework.core
 				
 				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
 				{
-					wiredViews[dObj] = true;
+					wiredViews[ dObj ] = true;
 					swiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 					return;
 				}
@@ -64,14 +64,14 @@ package org.swizframework.core
 			// this is stupid, if we got here, no swiz had a dispatcher 
 			// containing the view (like, it's a freaking popup). make the first swiz do it
 			var rootSwiz:ISwiz = swizzes[ 0 ];
-			wiredViews[dObj] = true;
+			wiredViews[ dObj ] = true;
 			rootSwiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 		}
 		
 		public static function tearDown( dObj:DisplayObject ):void
 		{
 			// wasn't wired
-			if( !wiredViews[dObj] )
+			if( !wiredViews[ dObj ] )
 				return;
 			
 			for( var i:int = swizzes.length - 1; i > -1; i-- )
@@ -85,7 +85,7 @@ package org.swizframework.core
 				// if the passed in object is a child of swiz's dispatcher, use that instance for tearDown
 				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
 				{
-					delete wiredViews[dObj];
+					delete wiredViews[ dObj ];
 					swiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 					return;
 				}
@@ -94,7 +94,7 @@ package org.swizframework.core
 			// this is stupid, if we got here, no swiz had a dispatcher 
 			// containing the view (like, it's a freaking popup). make the first swiz do it
 			var rootSwiz:ISwiz = swizzes[ 0 ];
-			delete wiredViews[dObj];
+			delete wiredViews[ dObj ];
 			rootSwiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
 		}
 	}
