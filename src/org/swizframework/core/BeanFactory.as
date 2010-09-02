@@ -157,7 +157,12 @@ package org.swizframework.core
 		
 		public function createBeanFromSource( source:Object, beanName:String = null ):Bean
 		{
-			return constructBean( source, beanName, swiz.domain );
+			var bean:Bean = getBeanForSource( source );
+			
+			if( bean == null )
+				bean = constructBean( source, beanName, swiz.domain );
+			
+			return bean;
 		}
 		
 		public function getBeanForSource( source:Object ):Bean
@@ -181,7 +186,7 @@ package org.swizframework.core
 			}
 		}
 		
-		public function addBean( bean:Bean, autoSetUpBeans:Boolean = true ):Bean
+		public function addBean( bean:Bean, autoSetUpBean:Boolean = true ):Bean
 		{
 			// make sure bean is fully constructed
 			if( bean.typeDescriptor == null )
@@ -190,7 +195,7 @@ package org.swizframework.core
 			bean.beanFactory = this;
 			beans.push( bean );
 			
-			if( autoSetUpBeans )
+			if( autoSetUpBean )
 				setUpBean( bean );
 			
 			return bean;
@@ -342,6 +347,8 @@ package org.swizframework.core
 					IBeanProcessor( processor ).tearDownBean( bean );
 				}
 			}
+			
+			bean.initialized = false;
 		}
 		
 		
@@ -354,32 +361,40 @@ package org.swizframework.core
 		 */
 		protected function handleBeanEvent( event:BeanEvent ):void
 		{
-			for each( var bean:Bean in beans )
-			{
-				if( !( bean is Prototype ) || ( Prototype( bean ).singleton && bean.initialized ) )
-				{
-					if( bean.source === event.source )
-					{
-						if( event.type == BeanEvent.SET_UP_BEAN )
-						{
-							logger.warn( "{0} already exists as a bean. Ignoring setUp request.", event.source.toString() );
-						}
-						else
-						{
-							tearDownBean( bean );
-						}
-						return;
-					}
-				}
-			}
+			var existingBean:Bean = getBeanForSource( event.source );
 			
-			if( event.type == BeanEvent.SET_UP_BEAN )
+			switch( event.type )
 			{
-				setUpBean( createBeanFromSource( event.source, event.beanName ) );
-			}
-			else
-			{
-				logger.warn( "Could not find bean with {0} as its source. Ignoring tearDown request.", event.source.toString() );
+				case BeanEvent.ADD_BEAN:
+					if( existingBean )
+						logger.warn( "{0} already exists as a bean. Ignoring ADD_BEAN request.", event.source.toString() );
+					else
+						addBean( createBeanFromSource( event.source, event.beanName ) );
+					break;
+				
+				case BeanEvent.SET_UP_BEAN:
+					if( existingBean )
+						if( existingBean.initialized )
+							logger.warn( "{0} is already set up as a bean. Ignoring SET_UP_BEAN request.", event.source.toString() );
+						else
+							setUpBean( existingBean );
+					else
+						setUpBean( createBeanFromSource( event.source, event.beanName ) );
+					break;
+				
+				case BeanEvent.TEAR_DOWN_BEAN:
+					if( existingBean )
+						tearDownBean( existingBean );
+					else
+						logger.warn( "Could not find bean with {0} as its source. Ignoring TEAR_DOWN_BEAN request.", event.source.toString() );
+					break;
+				
+				case BeanEvent.REMOVE_BEAN:
+					if( existingBean )
+						removeBean( existingBean );
+					else
+						logger.warn( "Could not find bean with {0} as its source. Ignoring REMOVE_BEAN request.", event.source.toString() );
+					break;
 			}
 		}
 		

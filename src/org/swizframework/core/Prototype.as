@@ -116,5 +116,10 @@ package org.swizframework.core
 			
 			return instance;
 		}
+		
+		override public function toString():String
+		{
+			return "Prototype{ type: " + type + ", name: " + name + " }";
+		}
 	}
 }

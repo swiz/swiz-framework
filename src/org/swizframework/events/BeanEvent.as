@@ -32,9 +32,13 @@ package org.swizframework.events
 		// public static const
 		// ========================================
 		
+		public static const ADD_BEAN:String = "addBean";
+		
 		public static const SET_UP_BEAN:String = "setUpBean";
 		
 		public static const TEAR_DOWN_BEAN:String = "tearDownBean";
+		
+		public static const REMOVE_BEAN:String = "removeBean";
 		
 		// ========================================
 		// public properties
