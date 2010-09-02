@@ -28,8 +28,8 @@ package org.swizframework.core
 		
 		function createBeanFromSource( source:Object, beanName:String = null ):Bean;
 		function setUpBean( bean:Bean ):void;
-		function addBean( bean:Bean ):Bean;
-		function addBeanProvider( beanProvider:IBeanProvider ):void;
+		function addBean( bean:Bean, autoSetUpBeans:Boolean = true ):Bean;
+		function addBeanProvider( beanProvider:IBeanProvider, autoSetUpBeans:Boolean = true ):void;
 		
 		function getBeanForSource( source:Object ):Bean;
 		function tearDownBean( bean:Bean ):void;

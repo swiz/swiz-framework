@@ -89,9 +89,10 @@ package org.swizframework.core
 			
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
-				addBeanProvider( beanProvider );
+				addBeanProvider( beanProvider, false );
 			}
 			
+			// bean setup has to be delayed until after all startup beans have been added
 			for each( var bean:Bean in beans )
 			{
 				setUpBean( bean );
@@ -172,15 +173,15 @@ package org.swizframework.core
 			return null;
 		}
 		
-		public function addBeanProvider( beanProvider:IBeanProvider ):void
+		public function addBeanProvider( beanProvider:IBeanProvider, autoSetUpBeans:Boolean = true ):void
 		{
 			for each( var bean:Bean in beanProvider.beans )
 			{
-				addBean( bean );
+				addBean( bean, autoSetUpBeans );
 			}
 		}
 		
-		public function addBean( bean:Bean ):Bean
+		public function addBean( bean:Bean, autoSetUpBeans:Boolean = true ):Bean
 		{
 			// make sure bean is fully constructed
 			if( bean.typeDescriptor == null )
@@ -188,6 +189,9 @@ package org.swizframework.core
 			
 			bean.beanFactory = this;
 			beans.push( bean );
+			
+			if( autoSetUpBeans )
+				setUpBean( bean );
 			
 			return bean;
 		}
