@@ -98,8 +98,10 @@ package org.swizframework.core
 				setUpBean( bean );
 			}
 			
+			swiz.dispatcher.addEventListener( BeanEvent.ADD_BEAN, handleBeanEvent );
 			swiz.dispatcher.addEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
 			swiz.dispatcher.addEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
+			swiz.dispatcher.addEventListener( BeanEvent.REMOVE_BEAN, handleBeanEvent );
 			
 			logger.info( "BeanFactory initialized" );
 			
@@ -188,10 +190,6 @@ package org.swizframework.core
 		
 		public function addBean( bean:Bean, autoSetUpBean:Boolean = true ):Bean
 		{
-			// make sure bean is fully constructed
-			if( bean.typeDescriptor == null )
-				bean.typeDescriptor = TypeCache.getTypeDescriptor( bean.type, swiz.domain );
-			
 			bean.beanFactory = this;
 			beans.push( bean );
 			
