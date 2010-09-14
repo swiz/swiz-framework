@@ -215,7 +215,7 @@ package org.swizframework.processors
 			
 			removePropertyBinding( bean, namedBean, injectTag );
 			
-			setDestinationValue( injectTag, bean,  null );
+			setDestinationValue( injectTag, bean, null );
 		}
 		
 		/**
