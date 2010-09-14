@@ -95,7 +95,8 @@ package org.swizframework.core
 			// bean setup has to be delayed until after all startup beans have been added
 			for each( var bean:Bean in beans )
 			{
-				setUpBean( bean );
+				if( !( bean is Prototype ) )
+					setUpBean( bean );
 			}
 			
 			swiz.dispatcher.addEventListener( BeanEvent.ADD_BEAN, handleBeanEvent );
