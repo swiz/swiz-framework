@@ -87,6 +87,11 @@ package org.swizframework.core
 		{
 			this.swiz = swiz;
 			
+			swiz.dispatcher.addEventListener( BeanEvent.ADD_BEAN, handleBeanEvent );
+			swiz.dispatcher.addEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
+			swiz.dispatcher.addEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
+			swiz.dispatcher.addEventListener( BeanEvent.REMOVE_BEAN, handleBeanEvent );
+			
 			for each( var beanProvider:IBeanProvider in swiz.beanProviders )
 			{
 				addBeanProvider( beanProvider, false );
@@ -98,11 +103,6 @@ package org.swizframework.core
 				if( !( bean is Prototype ) )
 					setUpBean( bean );
 			}
-			
-			swiz.dispatcher.addEventListener( BeanEvent.ADD_BEAN, handleBeanEvent );
-			swiz.dispatcher.addEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
-			swiz.dispatcher.addEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
-			swiz.dispatcher.addEventListener( BeanEvent.REMOVE_BEAN, handleBeanEvent );
 			
 			logger.info( "BeanFactory initialized" );
 			
