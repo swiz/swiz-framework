@@ -30,14 +30,14 @@ package org.swizframework.utils.services
 			_swiz = swiz;
 		}
 
-		public function executeServiceCall( call:AsyncToken, resultHandler:Function, faultHandler:Function = null, resultHandlerArgs:Array = null ):AsyncToken
+		public function executeServiceCall( call:AsyncToken, resultHandler:Function, faultHandler:Function = null, handlerArgs:Array = null ):AsyncToken
 		{
 			// use default fault handler defined for swiz instance if not provided
 			// check if swiz is set which is not the case if ServiceHelper is used in a testing environment
 			if( faultHandler == null && _swiz != null && _swiz.config.defaultFaultHandler != null )
 				faultHandler = _swiz.config.defaultFaultHandler;
 
-			call.addResponder( new SwizResponder( resultHandler, faultHandler, resultHandlerArgs ) );
+			call.addResponder( new SwizResponder( resultHandler, faultHandler, handlerArgs ) );
 			
 			return call;
 		}
