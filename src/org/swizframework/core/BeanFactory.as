@@ -143,8 +143,10 @@ package org.swizframework.core
 				removeBeanProvider( beanProvider );
 			}
 			
+			swiz.dispatcher.removeEventListener( BeanEvent.ADD_BEAN, handleBeanEvent );
 			swiz.dispatcher.removeEventListener( BeanEvent.SET_UP_BEAN, handleBeanEvent );
 			swiz.dispatcher.removeEventListener( BeanEvent.TEAR_DOWN_BEAN, handleBeanEvent );
+			swiz.dispatcher.removeEventListener( BeanEvent.REMOVE_BEAN, handleBeanEvent );
 			
 			swiz.dispatcher.removeEventListener( swiz.config.setUpEventType, setUpEventHandler, ( swiz.config.setUpEventPhase == EventPhase.CAPTURING_PHASE ) );
 			swiz.dispatcher.removeEventListener( swiz.config.tearDownEventType, tearDownEventHandler, ( swiz.config.tearDownEventPhase == EventPhase.CAPTURING_PHASE ) );
@@ -462,9 +464,7 @@ package org.swizframework.core
 		// ========================================
 		// static methods
 		// ========================================
-
 		
-		// both init method and setBeanIds will call this if needed
 		public static function constructBean( obj:*, name:String, domain:ApplicationDomain ):Bean
 		{
 			var bean:Bean;
