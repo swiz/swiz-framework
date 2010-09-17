@@ -43,34 +43,37 @@ package org.swizframework.core
 			swizzes.splice( swizzes.indexOf( swiz ), 1 );
 		}
 		
-		public static function setUp( dObj:DisplayObject ):void
+		public static function setUp( view:DisplayObject ):void
 		{
 			// already wired
-			if( wiredViews[ dObj ] )
+			if( wiredViews[ view ] != null )
 				return;
 			
 			for( var i:int = swizzes.length - 1; i > -1; i-- )
 			{
 				var swiz:ISwiz = ISwiz( swizzes[ i ] );
 				
-				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
+				if( DisplayObjectContainer( swiz.dispatcher ).contains( view ) )
 				{
-					setUpWiredView( dObj, swiz );
+					setUpView( view, swiz );
 					return;
 				}
 			}
+			
+			// pop ups not registered to a particular Swiz instance must be handled by the root instance
+			setUpView( view, ISwiz( swizzes[ 0 ] ) );
 		}
 		
-		private static function setUpWiredView( wiredView:DisplayObject, swizInstance:ISwiz ):void
+		private static function setUpView( viewToWire:DisplayObject, swizInstance:ISwiz ):void
 		{
-			wiredViews[ wiredView ] = wiredView;
-			swizInstance.beanFactory.setUpBean( BeanFactory.constructBean( wiredView, null, swizInstance.domain ) );
+			wiredViews[ viewToWire ] = viewToWire;
+			swizInstance.beanFactory.setUpBean( BeanFactory.constructBean( viewToWire, null, swizInstance.domain ) );
 		}
 		
-		public static function tearDown( dObj:DisplayObject ):void
+		public static function tearDown( wiredView:DisplayObject ):void
 		{
 			// wasn't wired
-			if( !wiredViews[ dObj ] )
+			if( wiredViews[ wiredView ] == null )
 				return;
 			
 			for( var i:int = swizzes.length - 1; i > -1; i-- )
@@ -78,19 +81,22 @@ package org.swizframework.core
 				var swiz:ISwiz = ISwiz( swizzes[ i ] );
 				
 				// if this is the dispatcher for a swiz instance tear down swiz 
-				if( swiz.dispatcher == dObj )
+				if( swiz.dispatcher == wiredView )
 				{
 					swiz.tearDown();
 					return;
 				}
 				
 				// if the passed in object is a child of swiz's dispatcher, use that instance for tearDown
-				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
+				if( DisplayObjectContainer( swiz.dispatcher ).contains( wiredView ) )
 				{
-					tearDownWiredView( dObj, swiz );
+					tearDownWiredView( wiredView, swiz );
 					return;
 				}
 			}
+			
+			// pop ups not registered to a particular Swiz instance must be handled by the root instance
+			tearDownWiredView( wiredView, ISwiz( swizzes[ 0 ] ) );
 		}
 		
 		public static function tearDownWiredView( wiredView:DisplayObject, swizInstance:ISwiz ):void
