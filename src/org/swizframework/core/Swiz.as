@@ -16,6 +16,7 @@
 
 package org.swizframework.core
 {
+	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
@@ -318,9 +319,18 @@ package org.swizframework.core
 		 */
 		public function tearDown():void
 		{
-			parentSwiz = null;
+			// tear down any child views that have been wired
+			SwizManager.tearDownAllWiredViewsForSwizInstance( this );
+			
+			// tear down our dispatcher in the context of our parent if we have one
+			if( parentSwiz != null )
+				SwizManager.tearDownWiredView( DisplayObject( dispatcher ), parentSwiz );
+			
+			// tear down beans defined in bean providers or added with BeanEvents
 			beanFactory.tearDown();
-			//TypeCache.flushDomain( domain );
+			
+			// clear out refs
+			parentSwiz = null;
 			SwizManager.removeSwiz( this );
 		}
 		

@@ -55,17 +55,16 @@ package org.swizframework.core
 				
 				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
 				{
-					wiredViews[ dObj ] = true;
-					swiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
+					setUpWiredView( dObj, swiz );
 					return;
 				}
 			}
-			
-			// this is stupid, if we got here, no swiz had a dispatcher 
-			// containing the view (like, it's a freaking popup). make the first swiz do it
-			var rootSwiz:ISwiz = swizzes[ 0 ];
-			wiredViews[ dObj ] = true;
-			rootSwiz.beanFactory.setUpBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
+		}
+		
+		private static function setUpWiredView( wiredView:DisplayObject, swizInstance:ISwiz ):void
+		{
+			wiredViews[ wiredView ] = wiredView;
+			swizInstance.beanFactory.setUpBean( BeanFactory.constructBean( wiredView, null, swizInstance.domain ) );
 		}
 		
 		public static function tearDown( dObj:DisplayObject ):void
@@ -80,22 +79,35 @@ package org.swizframework.core
 				
 				// if this is the dispatcher for a swiz instance tear down swiz 
 				if( swiz.dispatcher == dObj )
+				{
 					swiz.tearDown();
+					return;
+				}
 				
 				// if the passed in object is a child of swiz's dispatcher, use that instance for tearDown
 				if( DisplayObjectContainer( swiz.dispatcher ).contains( dObj ) )
 				{
-					delete wiredViews[ dObj ];
-					swiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
+					tearDownWiredView( dObj, swiz );
 					return;
 				}
 			}
-			
-			// this is stupid, if we got here, no swiz had a dispatcher 
-			// containing the view (like, it's a freaking popup). make the first swiz do it
-			var rootSwiz:ISwiz = swizzes[ 0 ];
-			delete wiredViews[ dObj ];
-			rootSwiz.beanFactory.tearDownBean( BeanFactory.constructBean( dObj, null, swiz.domain ) );
+		}
+		
+		public static function tearDownWiredView( wiredView:DisplayObject, swizInstance:ISwiz ):void
+		{
+			delete wiredViews[ wiredView ];
+			swizInstance.beanFactory.tearDownBean( BeanFactory.constructBean( wiredView, null, swizInstance.domain ) );
+		}
+		
+		public static function tearDownAllWiredViewsForSwizInstance( swizInstance:ISwiz ):void
+		{
+			for each( var wiredView:DisplayObject in wiredViews )
+			{
+				if( DisplayObjectContainer( swizInstance.dispatcher ).contains( wiredView ) && swizInstance.dispatcher !== wiredView )
+				{
+					tearDownWiredView( wiredView, swizInstance );
+				}
+			}
 		}
 	}
 }
