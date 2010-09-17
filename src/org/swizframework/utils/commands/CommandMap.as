@@ -7,6 +7,7 @@ package org.swizframework.utils.commands
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.core.ISwizAware;
 	import org.swizframework.core.Prototype;
+	import org.swizframework.reflection.TypeCache;
 	
 	/**
 	 * Class used to map events to the commands they should trigger.
@@ -118,6 +119,7 @@ package org.swizframework.utils.commands
 			{
 				// create a Prototype for adding to the BeanFactory
 				var commandPrototype:Prototype = new Prototype( commandClass );
+				commandPrototype.typeDescriptor = TypeCache.getTypeDescriptor( commandClass, _swiz.domain );
 				// add command bean for later instantiation
 				_swiz.beanFactory.addBean( commandPrototype );
 			}
