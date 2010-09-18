@@ -109,7 +109,8 @@ package org.swizframework.core
 		{
 			for each( var wiredView:DisplayObject in wiredViews )
 			{
-				if( DisplayObjectContainer( swizInstance.dispatcher ).contains( wiredView ) && swizInstance.dispatcher !== wiredView )
+				// this will also tear down the swiz dispatcher itself
+				if( DisplayObjectContainer( swizInstance.dispatcher ).contains( wiredView ) )
 				{
 					tearDownWiredView( wiredView, swizInstance );
 				}

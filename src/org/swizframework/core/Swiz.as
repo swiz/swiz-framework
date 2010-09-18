@@ -322,10 +322,6 @@ package org.swizframework.core
 			// tear down any child views that have been wired
 			SwizManager.tearDownAllWiredViewsForSwizInstance( this );
 			
-			// tear down our dispatcher in the context of our parent if we have one
-			if( parentSwiz != null )
-				SwizManager.tearDownWiredView( DisplayObject( dispatcher ), parentSwiz );
-			
 			// tear down beans defined in bean providers or added with BeanEvents
 			beanFactory.tearDown();
 			
