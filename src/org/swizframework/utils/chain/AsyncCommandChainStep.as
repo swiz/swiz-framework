@@ -87,14 +87,17 @@ package org.swizframework.utils.chain
 		 */
 		public function result( data:Object ):void
 		{
-			if( resultHandlerArgs == null )
+			if ( resultHandler != null )
 			{
-				resultHandler( data );
-			}
-			else
-			{
-				resultHandlerArgs.unshift( data );
-				resultHandler.apply( this, resultHandlerArgs );
+				if( resultHandlerArgs == null )
+				{
+					resultHandler( data );
+				}
+				else
+				{
+					resultHandlerArgs.unshift( data );
+					resultHandler.apply( this, resultHandlerArgs );
+				}
 			}
 			
 			complete();
