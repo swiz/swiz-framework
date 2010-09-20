@@ -22,6 +22,7 @@ package org.swizframework.processors
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.SwizConfig;
+	import org.swizframework.metadata.EventTypeExpression;
 	import org.swizframework.metadata.MediateMetadataTag;
 	import org.swizframework.metadata.Mediator;
 	import org.swizframework.reflection.ClassConstant;
@@ -86,17 +87,10 @@ package org.swizframework.processors
 			
 			if( validateMediateMetadataTag( mediateTag ) )
 			{
-				if( mediateTag.event.substr( -2 ) == ".*" )
+				var expression:EventTypeExpression = new EventTypeExpression( mediateTag.event, swiz );
+				for each( var eventType:String in expression.eventTypes )
 				{
-					var clazz:Class = ClassConstant.getClass( swiz.domain, mediateTag.event, swiz.config.eventPackages );
-					var td:TypeDescriptor = TypeCache.getTypeDescriptor( clazz, swiz.domain );
-					for each( var constant:Constant in td.constants )
-						addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], constant.value );
-				}
-				else
-				{
-					var eventType:String = parseEventTypeExpression( mediateTag.event );
-					addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+					addMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], expression.eventClass, eventType );
 				}
 			}
 			
@@ -110,17 +104,10 @@ package org.swizframework.processors
 		{
 			var mediateTag:MediateMetadataTag = metadataTag as MediateMetadataTag;
 			
-			if( mediateTag.event.substr( -2 ) == ".*" )
+			var expression:EventTypeExpression = new EventTypeExpression( mediateTag.event, swiz );
+			for each( var eventType:String in expression.eventTypes )
 			{
-				var clazz:Class = ClassConstant.getClass( swiz.domain, mediateTag.event, swiz.config.eventPackages );
-				var td:TypeDescriptor = TypeCache.getTypeDescriptor( clazz, swiz.domain );
-				for each( var constant:Constant in td.constants )
-				removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], constant.value );
-			}
-			else
-			{
-				var eventType:String = parseEventTypeExpression( mediateTag.event );
-				removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], eventType );
+				removeMediatorByEventType( mediateTag, bean.source[ mediateTag.host.name ], expression.eventClass, eventType );
 			}
 			
 			logger.debug( "MediateProcessor tore down {0} on {1}", metadataTag.toString(), bean.toString() );
@@ -133,9 +120,9 @@ package org.swizframework.processors
 		/**
 		 * Add Mediator By Event Type
 		 */
-		protected function addMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
+		protected function addMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventClass:Class, eventType:String ):void
 		{
-			var mediator:Mediator = new Mediator( mediateTag, method );
+			var mediator:Mediator = new Mediator( mediateTag, method, eventClass );
 			
 			mediatorsByEventType[ eventType ] ||= [];
 			mediatorsByEventType[ eventType ].push( mediator );
@@ -157,7 +144,7 @@ package org.swizframework.processors
 		/**
 		 * Remove Mediator By Event Type
 		 */
-		protected function removeMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventType:String ):void
+		protected function removeMediatorByEventType( mediateTag:MediateMetadataTag, method:Function, eventClass:Class, eventType:String ):void
 		{	
 			var dispatcher:IEventDispatcher = null;
 			
@@ -174,7 +161,7 @@ package org.swizframework.processors
 				var mediatorIndex:int = 0;
 				for each( var mediator:Mediator in mediatorsByEventType[ eventType ] )
 				{
-					if( mediator.method == method )
+					if( ( mediator.method == method ) && ( mediator.eventClass == eventClass ) )
 					{
 						dispatcher.removeEventListener( eventType, mediator.mediate, mediateTag.useCapture );
 						
