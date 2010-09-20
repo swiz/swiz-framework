@@ -14,34 +14,32 @@
  * the License.
  */
 
-package org.swizframework.utils.services {
+package org.swizframework.utils.services
+{
 	import mx.rpc.AsyncToken;
-
+	
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.core.ISwizAware;
 
-	public class ServiceHelper implements ISwizAware {
-		private var _swiz : ISwiz;
+	public class ServiceHelper implements IServiceHelper, ISwizAware
+	{
+		protected var _swiz:ISwiz;
 
-		public function ServiceHelper() {
-		}
-
-		public function set swiz( swiz : ISwiz ) : void {
+		public function set swiz( swiz:ISwiz ):void
+		{
 			_swiz = swiz;
 		}
 
-		public function get swiz() : ISwiz {
-			return _swiz;
-		}
-
-		/** Delegates execute service call to Swiz */
-		public function executeServiceCall( call : AsyncToken, resultHandler : Function, faultHandler : Function = null, resultHandlerArgs : Array = null ) : void {
+		public function executeServiceCall( call:AsyncToken, resultHandler:Function, faultHandler:Function = null, handlerArgs:Array = null ):AsyncToken
+		{
 			// use default fault handler defined for swiz instance if not provided
 			// check if swiz is set which is not the case if ServiceHelper is used in a testing environment
-			if ( faultHandler == null && swiz != null && swiz.config.defaultFaultHandler != null )
-				faultHandler = swiz.config.defaultFaultHandler;
+			if( faultHandler == null && _swiz != null && _swiz.config.defaultFaultHandler != null )
+				faultHandler = _swiz.config.defaultFaultHandler;
 
-			call.addResponder( new SwizResponder( resultHandler, faultHandler, resultHandlerArgs ));
+			call.addResponder( new SwizResponder( resultHandler, faultHandler, handlerArgs ) );
+			
+			return call;
 		}
 	}
 }

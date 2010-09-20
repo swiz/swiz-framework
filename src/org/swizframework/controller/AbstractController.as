@@ -44,8 +44,6 @@ package org.swizframework.controller
 			_swiz = swiz;
 		}
 		
-		
-		
 		/** IDispatcherAware implementation */
 		public function set dispatcher( dispatcher:IEventDispatcher ):void
 		{
@@ -59,13 +57,13 @@ package org.swizframework.controller
 		
 		/** Delegates execute service call to Swiz */
 		protected function executeServiceCall( call:AsyncToken, resultHandler:Function,
-											   faultHandler:Function = null, eventArgs:Array = null ):void
+											   faultHandler:Function = null, handlerArgs:Array = null ):void
 		{
 			
 			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
 				faultHandler = _swiz.config.defaultFaultHandler;
 			
-			call.addResponder( new SwizResponder( resultHandler, faultHandler, eventArgs ) );
+			call.addResponder( new SwizResponder( resultHandler, faultHandler, handlerArgs ) );
 		}
 		
 		/** Delegates execute url request call to Swiz */
@@ -83,9 +81,9 @@ package org.swizframework.controller
 		
 		/** Delegates create command to Swiz */
 		protected function createCommand( delayedCall:Function, args:Array, resultHandler:Function,
-										  faultHandler:Function = null, resultHandlerArgs:Array = null ):AsyncCommandChainStep
+										  faultHandler:Function = null, handlerArgs:Array = null ):AsyncCommandChainStep
 		{
-			return new AsyncCommandChainStep( delayedCall, args, resultHandler, faultHandler, resultHandlerArgs );
+			return new AsyncCommandChainStep( delayedCall, args, resultHandler, faultHandler, handlerArgs );
 		}
 		
 		/** Constructs a dynamic command */

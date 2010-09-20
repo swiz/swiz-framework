@@ -85,9 +85,6 @@ package org.swizframework.core
 		// public methods
 		// ========================================
 		
-		/**
-		 *
-		 */
 		public function toString():String
 		{
 			return "Bean{ source: " + source + ", name: " + name + " }";
