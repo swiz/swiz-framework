@@ -54,10 +54,13 @@ package org.swizframework.factories
 			// property, method or class?
 			var hostKind:String = hostNode.name();
 			
-			if( hostKind == "type" )
+			if( hostKind == "type" || hostKind == "factory" )
 			{
 				host = new MetadataHostClass();
-				host.type = domain.getDefinition( hostNode.@name.toString() ) as Class;
+				if( hostKind == "type" )
+					host.type = domain.getDefinition( hostNode.@name.toString() ) as Class;
+				else
+					host.type = domain.getDefinition( hostNode.@type.toString() ) as Class;
 			}
 			else if( hostKind == "method" )
 			{
