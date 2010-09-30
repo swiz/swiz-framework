@@ -41,6 +41,11 @@ package org.swizframework.metadata
 		 */
 		protected var _method:Function;
 		
+		/**
+		 * Backing variable for <code>eventClass</code> property.
+		 */
+		protected var _eventClass:Class;
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -61,6 +66,14 @@ package org.swizframework.metadata
 			return _method;
 		}
 		
+		/**
+		 * The Event class associated with the [Mediate] tag's event type expression (if applicable).
+		 */
+		public function get eventClass():Class
+		{
+			return _eventClass;
+		}
+		
 		// ========================================
 		// constructor
 		// ========================================
@@ -68,10 +81,11 @@ package org.swizframework.metadata
 		/**
 		 * Constructor
 		 */
-		public function Mediator( metadataTag:MediateMetadataTag, method:Function )
+		public function Mediator( metadataTag:MediateMetadataTag, method:Function, eventClass:Class )
 		{
 			_metadataTag = metadataTag;
 			_method = method;
+			_eventClass = eventClass;
 		}
 		
 		// ========================================
@@ -85,6 +99,10 @@ package org.swizframework.metadata
 		 */
 		public function mediate( event:Event ):void
 		{
+			// ignore if the event types do not match
+			if( ( eventClass != null ) && ! ( event is eventClass ) )
+				return;
+			
 			if( metadataTag.properties != null )
 			{
 				if( validateEvent( event, metadataTag.properties ) )
