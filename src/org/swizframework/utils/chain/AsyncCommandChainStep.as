@@ -95,7 +95,7 @@ package org.swizframework.utils.chain
 				}
 				else
 				{
-					resultHandler.apply( this, handlerArgs.unshift( data ) );
+					resultHandler.apply( this, [ data ].concat( handlerArgs ) );
 				}
 			}
 			
@@ -121,7 +121,7 @@ package org.swizframework.utils.chain
 					}
 					catch( e:Error )
 					{
-						faultHandler.apply( null, handlerArgs.unshift( info ) );
+						faultHandler.apply( null, [ info ].concat( handlerArgs ) );
 					}
 				}
 			}

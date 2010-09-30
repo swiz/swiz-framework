@@ -62,11 +62,13 @@ package org.swizframework.utils.services
 					// we could apply the result directly but from the current knowledge applying the event itself
 					// seems more flexible. This may change in the future if we don't see any necessarity for this.
 					
-					if ( eventArgs == null ) {
+					if( eventArgs == null )
+					{
 						resultHandler( e );
-					} else {
-						eventArgs.unshift( e );
-						resultHandler.apply( null, eventArgs );
+					}
+					else
+					{
+						resultHandler.apply( null, [ e ].concat( eventArgs ) );
 					}
 				} );
 			

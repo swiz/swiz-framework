@@ -41,8 +41,7 @@ package org.swizframework.utils.services
 			}
 			else
 			{
-				handlerArgs.unshift( data );
-				resultHandler.apply( null, handlerArgs );
+				resultHandler.apply( null, [ data ].concat( handlerArgs ) );
 			}
 		}
 		
@@ -62,7 +61,7 @@ package org.swizframework.utils.services
 					}
 					catch( e:Error )
 					{
-						faultHandler.apply( null, handlerArgs.unshift( info ) );
+						faultHandler.apply( null, [ info ].concat( handlerArgs ) );
 					}
 				}
 			}
