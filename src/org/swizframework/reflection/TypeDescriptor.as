@@ -183,7 +183,6 @@ package org.swizframework.reflection
 				className = classDescription.@type;
 			}
 			
-			// type = getDefinitionByName( className ) as Class;
 			type = domain.getDefinition( className ) as Class;
 			
 			for each( var constNode:XML in description.constant )
