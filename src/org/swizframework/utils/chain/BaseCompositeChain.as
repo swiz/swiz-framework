@@ -18,13 +18,24 @@ package org.swizframework.utils.chain
 {
 	public class BaseCompositeChain extends AbstractChain implements IChain
 	{
+		// ========================================
+		// constructor
+		// ========================================
+		
+		/**
+		 * Constructor.
+		 */
 		public function BaseCompositeChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
 		{
 			super( mode, stopOnError );
 		}
 		
+		// ========================================
+		// public methods
+		// ========================================
+		
 		/**
-		 *
+		 * @inheritDoc
 		 */
 		public function doProceed():void
 		{

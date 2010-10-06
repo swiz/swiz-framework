@@ -1,78 +1,188 @@
 /*
- * Copyright 2010 Swiz Framework Contributors
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
+* Copyright 2010 Swiz Framework Contributors
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you may not
+* use this file except in compliance with the License. You may obtain a copy of
+* the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+* License for the specific language governing permissions and limitations under
+* the License.
+*/
 
 package org.swizframework.utils.chain
 {
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	
-	public class EventChainStep extends Event implements IChainStep
+	import mx.rpc.AsyncToken;
+	
+	import org.swizframework.utils.services.SwizResponder;
+	
+	public class EventChainStep extends BaseChainStep implements IAutonomousChainStep, IAsyncChainStep
 	{
-		/**
-		 * Backing variable for <code>chain</code> getter/setter.
-		 */
-		protected var _chain:IChain;
+		// ========================================
+		// protected properties
+		// ========================================
 		
 		/**
-		 *
+		 * Backing variable for <code>dispatcher</code> getter/setter.
 		 */
-		public function get chain():IChain
+		protected var _dispatcher:IEventDispatcher;
+		
+		/**
+		 * Backing variable for <code>event</code> property.
+		 */
+		protected var _event:Event;
+
+		/**
+		 * Backing variable for <code>failed</code> property.
+		 */
+		protected var _failed:Boolean = false;
+		
+		/**
+		 * Backing variable for <code>pendingCount</code> property.
+		 */
+		protected var _pendingCount:int = 0;
+		
+		// ========================================
+		// public properties
+		// ========================================
+		
+		/**
+		 * Target Event dispatcher.
+		 */
+		public function get dispatcher():IEventDispatcher
 		{
-			return _chain;
+			return _dispatcher;
 		}
 		
-		public function set chain( value:IChain ):void
+		public function set dispatcher( value:IEventDispatcher ):void
 		{
-			_chain = value;
-		}
-		
-		protected var _isComplete:Boolean;
-		
-		public function get isComplete():Boolean
-		{
-			return _isComplete;
-		}
-		
-		public function EventChainStep( type:String, bubbles:Boolean = false, cancelable:Boolean = false )
-		{
-			super( type, bubbles, cancelable );
+			_dispatcher = value;
 		}
 		
 		/**
-		 *
+		 * Event dispatched for this EventChainStep.
 		 */
-		public function complete():void
+		public function get event():Event
 		{
-			_isComplete = true;
+			return _event;
+		}
+		
+		/**
+		 * Indicates whether this step failed.
+		 */
+		public function get failed():Boolean
+		{
+			return _failed;
+		}
+		
+		/**
+		 * Count of pending asynchronous operations for this step.
+		 */
+		public function get pendingCount():int
+		{
+			return _pendingCount;
+		}
+		
+		// ========================================
+		// constructor
+		// ========================================
+		
+		/**
+		 * Constructor.
+		 */
+		public function EventChainStep( event:Event, dispatcher:IEventDispatcher = null )
+		{
+			super();
 			
-			if( chain != null )
-				chain.stepComplete();
+			_dispatcher = dispatcher;
+			_event = event;
+			if ( _event is IChainableEvent )
+				IChainableEvent( _event ).step = this;
+		}
+		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function doProceed():void
+		{
+			_failed = false;
+			_pendingCount = 0;
+			
+			dispatcher.dispatchEvent( event );
+			
+			if ( ( pendingCount == 0 ) && ( ! isComplete ) )
+				complete();
 		}
 		
 		/**
-		 *
+		 * @inheritDoc
 		 */
-		public function error():void
+		override public function complete():void
 		{
-			if( chain != null )
-				chain.stepError();
+			_pendingCount = 0;
+			
+			super.complete();
 		}
 		
-		override public function clone():Event
+		/**
+		 * @inheritDoc
+		 */
+		override public function error():void
 		{
-			return new EventChainStep( type, bubbles, cancelable );
+			_failed = true;
+			
+			super.error();
 		}
+
+		/**
+		 * Add a pending asynchronous operation to this step.
+		 */
+		public function addAsyncToken( token:AsyncToken ):void
+		{
+			token.addResponder( new SwizResponder( resultHandler, faultHandler ) );
+			
+			_pendingCount++;
+		}
+		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		/**
+		 * Result handler for an associated pending asynchronous operation.
+		 */
+		protected function resultHandler( data:Object ):void
+		{
+			if ( _pendingCount > 0 )
+				_pendingCount--;
+		
+			if ( !_failed )
+			{
+				if ( _pendingCount == 0 )
+					complete();
+			}
+		}
+		
+		/**
+		 * Fault handler for an associated pending asynchronous operation.
+		 */
+		protected function faultHandler( info:Object ):void
+		{
+			if ( _pendingCount > 0 )
+				_pendingCount--;
+			
+			error();
+		}	
 	}
 }

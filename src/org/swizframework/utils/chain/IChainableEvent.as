@@ -16,11 +16,12 @@
 
 package org.swizframework.utils.chain
 {
-	public interface IAutonomousChainStep extends IChainStep
+	public interface IChainableEvent
 	{
 		/**
-		 * Proceed with execution of this chain step. 
+		 * Corresponding asynchronous chain step.
 		 */
-		function doProceed():void;
+		function get step():IAsyncChainStep;
+		function set step( value:IAsyncChainStep ):void;
 	}
 }

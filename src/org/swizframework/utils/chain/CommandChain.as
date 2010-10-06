@@ -18,17 +18,34 @@ package org.swizframework.utils.chain
 {
 	public class CommandChain extends BaseCompositeChain
 	{
+		// ========================================
+		// constructor
+		// ========================================
+
+		/**
+		 * Constructor.
+		 */
 		public function CommandChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
 		{
 			super( mode, stopOnError );
 		}
 		
+		// ========================================
+		// public methods
+		// ========================================
+		
+		/**
+		 * Add an CommandChainStep to this EventChain.
+		 */
 		public function addCommand( command:CommandChainStep ):CommandChain
 		{
 			addStep( command );
 			return this;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		override public function doProceed():void
 		{
 			if( currentStep is CommandChainStep )

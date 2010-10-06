@@ -19,8 +19,11 @@ package org.swizframework.metadata
 	import flash.events.Event;
 	import flash.utils.getQualifiedClassName;
 	
+	import mx.rpc.AsyncToken;
+	
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
+	import org.swizframework.utils.chain.IChainableEvent;
 	
 	/**
 	 * Represents a deferred request for mediation.
@@ -103,22 +106,27 @@ package org.swizframework.metadata
 			if( ( eventClass != null ) && ! ( event is eventClass ) )
 				return;
 			
+			var result:* = null;
+			
 			if( metadataTag.properties != null )
 			{
 				if( validateEvent( event, metadataTag.properties ) )
-					method.apply( null, getEventArgs( event, metadataTag.properties ) );
+					result = method.apply( null, getEventArgs( event, metadataTag.properties ) );
 			}
 			else if( getRequiredParameterCount() <= 1 )
 			{
 				if( ( getParameterCount() > 0 ) && ( event is getParameterType( 0 ) ) )
-					method.apply( null, [ event ] );
+					result = method.apply( null, [ event ] );
 				else
-					method.apply();
+					result = method.apply();
 			}
 			else
 			{
 				throw new Error( "Unable to mediate event: " + metadataTag.host.name + "() requires " + getRequiredParameterCount() + " parameters, and no properties were specified." );
 			}
+			
+			if( ( event is IChainableEvent ) && ( result is AsyncToken ) )
+				IChainableEvent( event ).step.addAsyncToken( result as AsyncToken );
 			
 			if( metadataTag.stopPropagation )
 				event.stopPropagation();

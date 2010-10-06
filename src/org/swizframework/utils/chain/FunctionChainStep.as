@@ -21,6 +21,7 @@ package org.swizframework.utils.chain
 		public var functionRef:Function;
 		public var functionArgArray:Array;
 		public var functionThisArg:*;
+		public var returnValue:*;
 		
 		public function FunctionChainStep( functionRef:Function, functionArgArray:Array = null, functionThisArg:* = null )
 		{
@@ -31,7 +32,7 @@ package org.swizframework.utils.chain
 		
 		public function doProceed():void
 		{
-			functionRef.apply( functionThisArg, functionArgArray );
+			returnValue = functionRef.apply( functionThisArg, functionArgArray );
 			
 			complete();
 		}

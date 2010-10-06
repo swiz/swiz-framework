@@ -16,11 +16,13 @@
 
 package org.swizframework.utils.chain
 {
-	public interface IAutonomousChainStep extends IChainStep
+	import mx.rpc.AsyncToken;
+
+	public interface IAsyncChainStep extends IChainStep
 	{
 		/**
-		 * Proceed with execution of this chain step. 
+		 * Add a pending asynchronous operation to this chain step.
 		 */
-		function doProceed():void;
+		function addAsyncToken( token:AsyncToken ):void;
 	}
 }
