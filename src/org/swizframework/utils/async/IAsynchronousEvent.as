@@ -14,9 +14,11 @@
 * the License.
 */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
-	public interface IChainableEvent
+	import org.swizframework.utils.chain.IAsyncChainStep;
+
+	public interface IAsynchronousEvent
 	{
 		/**
 		 * Corresponding asynchronous chain step.

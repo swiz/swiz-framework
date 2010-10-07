@@ -23,7 +23,9 @@ package org.swizframework.metadata
 	
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
-	import org.swizframework.utils.chain.IChainableEvent;
+	import org.swizframework.utils.async.AsyncTokenOperation;
+	import org.swizframework.utils.async.IAsynchronousEvent;
+	import org.swizframework.utils.async.IAsynchronousOperation;
 	
 	/**
 	 * Represents a deferred request for mediation.
@@ -125,8 +127,13 @@ package org.swizframework.metadata
 				throw new Error( "Unable to mediate event: " + metadataTag.host.name + "() requires " + getRequiredParameterCount() + " parameters, and no properties were specified." );
 			}
 			
-			if( ( event is IChainableEvent ) && ( result is AsyncToken ) )
-				IChainableEvent( event ).step.addAsyncToken( result as AsyncToken );
+			if ( event is IAsynchronousEvent )
+			{
+				if( result is IAsynchronousOperation )
+					IAsynchronousEvent( event ).step.addAsynchronousOperation( result as IAsynchronousOperation );
+				else if( result is AsyncToken )
+					IAsynchronousEvent( event ).step.addAsynchronousOperation( new AsyncTokenOperation( result as AsyncToken ) );
+			}
 			
 			if( metadataTag.stopPropagation )
 				event.stopPropagation();
@@ -134,10 +141,6 @@ package org.swizframework.metadata
 			if( metadataTag.stopImmediatePropagation )
 				event.stopImmediatePropagation();
 		}
-		
-		// ========================================
-		// protected methods
-		// ========================================
 		
 		/**
 		 * Validate Event

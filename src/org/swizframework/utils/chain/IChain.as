@@ -18,7 +18,13 @@ package org.swizframework.utils.chain
 {
 	import flash.events.IEventDispatcher;
 	
-	public interface IChain
+	[Event(name="chainStart", type="org.swizframework.events.ChainEvent")]
+	[Event(name="chainStepComplete", type="org.swizframework.events.ChainEvent")]
+	[Event(name="chainStepError", type="org.swizframework.events.ChainEvent")]
+	[Event(name="chainComplete", type="org.swizframework.events.ChainEvent")]
+	[Event(name="chainFail", type="org.swizframework.events.ChainEvent")]
+	
+	public interface IChain extends IEventDispatcher
 	{
 		function get position():int;
 		function set position( value:int ):void;

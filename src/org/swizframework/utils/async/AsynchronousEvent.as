@@ -14,11 +14,12 @@
 * the License.
 */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
 	import flash.events.Event;
+	import org.swizframework.utils.chain.IAsyncChainStep;
 
-	public class ChainableEvent extends Event implements IChainableEvent
+	public class AsynchronousEvent extends Event implements IAsynchronousEvent
 	{
 		// ========================================
 		// protected properties
@@ -53,7 +54,7 @@ package org.swizframework.utils.chain
 		/**
 		 * Constructor.
 		 */
-		public function ChainableEvent( type:String, bubbles:Boolean = false, cancelable:Boolean = false )
+		public function AsynchronousEvent( type:String, bubbles:Boolean = false, cancelable:Boolean = false )
 		{
 			super( type, bubbles, cancelable );
 		}
@@ -67,7 +68,7 @@ package org.swizframework.utils.chain
 		 */
 		override public function clone():Event
 		{
-			var clone:ChainableEvent = new ChainableEvent( type, bubbles, cancelable );
+			var clone:AsynchronousEvent = new AsynchronousEvent( type, bubbles, cancelable );
 			
 			clone.step = step;
 			

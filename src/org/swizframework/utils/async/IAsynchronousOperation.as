@@ -14,15 +14,25 @@
  * the License.
  */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
-	import org.swizframework.utils.async.IAsynchronousOperation;
+	import mx.rpc.IResponder;
 
-	public interface IAsyncChainStep extends IChainStep
+	public interface IAsynchronousOperation
 	{
 		/**
-		 * Add a pending asynchronous operation to this chain step.
+		 * Add a responder to be notified of operation completion or failure.
 		 */
-		function addAsynchronousOperation( operation:IAsynchronousOperation ):void;
+		function addResponder( responder:IResponder ):void;
+		
+		/**
+		 * Notify registered responders that this operation is complete.
+		 */
+		function complete( data:Object ):void;
+		
+		/**
+		 * Notify registered responders that this operation has failed.
+		 */
+		function fail( info:Object ):void;
 	}
 }
