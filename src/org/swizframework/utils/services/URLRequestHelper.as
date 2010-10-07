@@ -33,7 +33,7 @@ package org.swizframework.utils.services
 		/** Delegates execute url request call to Swiz */
 		public function executeURLRequest( request:URLRequest, resultHandler:Function, faultHandler:Function = null,
 										   progressHandler:Function = null, httpStatusHandler:Function = null,
-										   eventArgs:Array = null ):void
+										   eventArgs:Array = null ):URLRequest
 		{
 			
 			// use default fault handler defined for swiz instance if not provided									  	
@@ -41,6 +41,8 @@ package org.swizframework.utils.services
 				faultHandler = _swiz.config.defaultFaultHandler;
 			
 			var dynamicURLRequest:SwizURLRequest = new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs );
+			
+			return request;
 		}
 	}
 }

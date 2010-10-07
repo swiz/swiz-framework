@@ -6,6 +6,6 @@ package org.swizframework.utils.services
 	{
 		function executeURLRequest( request:URLRequest, resultHandler:Function, faultHandler:Function = null,
 									progressHandler:Function = null, httpStatusHandler:Function = null,
-									eventArgs:Array = null ):void
+									eventArgs:Array = null ):URLRequest
 	}
 }
