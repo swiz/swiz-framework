@@ -433,6 +433,9 @@ package org.swizframework.core
 		 */
 		protected function setUpEventHandler( event:Event ):void
 		{
+			if( event.target is ISetUpValidator && !( ISetUpValidator( event.target ).allowSetUp() ) )
+				return;
+			
 			if( isPotentialInjectionTarget( event.target ) )
 			{
 				SwizManager.setUp( DisplayObject( event.target ) );
@@ -457,6 +460,9 @@ package org.swizframework.core
 		 */
 		protected function tearDownEventHandler( event:Event ):void
 		{
+			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
+				return;
+			
 			SwizManager.tearDown( DisplayObject( event.target ) );
 		}
 
