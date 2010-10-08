@@ -14,44 +14,46 @@
  * the License.
  */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
-	public class CommandChain extends BaseCompositeChain
+	import mx.rpc.AsyncToken;
+	
+	import org.swizframework.utils.services.SwizResponder;
+	
+	public class AsyncTokenOperation extends AbstractAsynchronousOperation implements IAsynchronousOperation
 	{
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor.
 		 */
-		public function CommandChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
+		public function AsyncTokenOperation( token:AsyncToken )
 		{
-			super( mode, stopOnError );
+			super();
+			
+			token.addResponder( new SwizResponder( resultHandler, faultHandler ) );
 		}
 		
 		// ========================================
-		// public methods
+		// protected methods
 		// ========================================
 		
 		/**
-		 * Add an CommandChainStep to this EventChain.
+		 * AsyncToken result handler.
 		 */
-		public function addCommand( command:CommandChainStep ):CommandChain
+		protected function resultHandler( data:Object ):void
 		{
-			addStep( command );
-			return this;
+			complete( data );
 		}
 		
 		/**
-		 * @inheritDoc
+		 * AsyncToken fault handler.
 		 */
-		override public function doProceed():void
+		protected function faultHandler( info:Object ):void
 		{
-			if( currentStep is CommandChainStep )
-				CommandChainStep( currentStep ).doProceed();
-			else
-				super.doProceed();
+			fail( info );		
 		}
 	}
 }

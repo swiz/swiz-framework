@@ -14,27 +14,25 @@
  * the License.
  */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
-	public class FunctionChainStep extends BaseChainStep implements IAutonomousChainStep
+	import mx.rpc.IResponder;
+
+	public interface IAsynchronousOperation
 	{
-		public var functionRef:Function;
-		public var functionArgArray:Array;
-		public var functionThisArg:*;
-		public var returnValue:*;
+		/**
+		 * Add a responder to be notified of operation completion or failure.
+		 */
+		function addResponder( responder:IResponder ):void;
 		
-		public function FunctionChainStep( functionRef:Function, functionArgArray:Array = null, functionThisArg:* = null )
-		{
-			this.functionRef = functionRef;
-			this.functionArgArray = functionArgArray;
-			this.functionThisArg = functionThisArg;
-		}
+		/**
+		 * Notify registered responders that this operation is complete.
+		 */
+		function complete( data:Object ):void;
 		
-		public function doProceed():void
-		{
-			returnValue = functionRef.apply( functionThisArg, functionArgArray );
-			
-			complete();
-		}
+		/**
+		 * Notify registered responders that this operation has failed.
+		 */
+		function fail( info:Object ):void;
 	}
 }

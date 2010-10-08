@@ -16,33 +16,13 @@
 
 package org.swizframework.utils.chain
 {
-	public class BaseCompositeChain extends AbstractChain implements IChain
+	import org.swizframework.utils.async.IAsynchronousOperation;
+
+	public interface IAsyncChainStep extends IChainStep
 	{
-		// ========================================
-		// constructor
-		// ========================================
-		
 		/**
-		 * Constructor.
+		 * Add a pending asynchronous operation to this chain step.
 		 */
-		public function BaseCompositeChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
-		{
-			super( mode, stopOnError );
-		}
-		
-		// ========================================
-		// public methods
-		// ========================================
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function doProceed():void
-		{
-			if( currentStep is IAutonomousChainStep )
-				IAutonomousChainStep( currentStep ).doProceed();
-			else if( currentStep is IChain )
-				IChain( currentStep ).start();
-		}
+		function addAsynchronousOperation( operation:IAsynchronousOperation ):void;
 	}
 }

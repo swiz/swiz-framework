@@ -14,50 +14,37 @@
  * the License.
  */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
-	import flash.events.IEventDispatcher;
-	
-	public class EventChain extends BaseCompositeChain
+	import mx.rpc.IResponder;
+
+	public class AbstractAsynchronousOperation
 	{
 		// ========================================
 		// protected properties
 		// ========================================
-
-		/**
-		 * Backing variable for <code>dispatcher</code> getter/setter.
-		 */
-		protected var _dispatcher:IEventDispatcher;
 		
-		// ========================================
-		// public properties
-		// ========================================
-
 		/**
-		 * Target Event dispatcher.
+		 * Indicates whether this operation has concluded.
 		 */
-		public function get dispatcher():IEventDispatcher
-		{
-			return _dispatcher;
-		}
+		protected var concluded:Boolean = false;
 		
-		public function set dispatcher( value:IEventDispatcher ):void
-		{
-			_dispatcher = value;
-		}
+		[ArrayElementType("mx.rpc.IResponder")]
+		/**
+		 * Subscribed responders.
+		 */
+		protected var responders:Array = [];
 		
 		// ========================================
 		// constructor
 		// ========================================
-
+		
 		/**
 		 * Constructor.
 		 */
-		public function EventChain( dispatcher:IEventDispatcher, mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
+		public function AbstractAsynchronousOperation()
 		{
-			super( mode, stopOnError );
-			
-			this.dispatcher = dispatcher;
+			super();
 		}
 		
 		// ========================================
@@ -65,23 +52,51 @@ package org.swizframework.utils.chain
 		// ========================================
 		
 		/**
-		 * Add an EventChainStep to this EventChain.
+		 * @inheritDoc
 		 */
-		public function addEvent( event:EventChainStep ):EventChain
+		public function addResponder( responder:IResponder ):void
 		{
-			addStep( event );
-			return this;
+			responders.push( responder );
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override public function doProceed():void
+		public function complete( data:Object ):void
 		{
-			if( currentStep is EventChainStep )
-				EventChainStep( currentStep ).dispatcher ||= dispatcher;
-			
-			super.doProceed();
+			if ( ! concluded )
+			{
+				for each ( var responder:IResponder in responders )
+				{
+					responder.result( data );
+				}
+				
+				concluded = true;
+			}
+			else
+			{
+				// TODO: Issue warning.
+			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function fail( info:Object ):void
+		{
+			if ( ! concluded )
+			{
+				for each ( var responder:IResponder in responders )
+				{
+					responder.fault( info );
+				}
+				
+				concluded = true;
+			}
+			else
+			{
+				// TODO: Issue warning.
+			}
 		}
 	}
 }

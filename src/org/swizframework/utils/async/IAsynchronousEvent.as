@@ -14,13 +14,16 @@
 * the License.
 */
 
-package org.swizframework.utils.chain
+package org.swizframework.utils.async
 {
-	public interface IAutonomousChainStep extends IChainStep
+	import org.swizframework.utils.chain.IAsyncChainStep;
+
+	public interface IAsynchronousEvent
 	{
 		/**
-		 * Proceed with execution of this chain step. 
+		 * Corresponding asynchronous chain step.
 		 */
-		function doProceed():void;
+		function get step():IAsyncChainStep;
+		function set step( value:IAsyncChainStep ):void;
 	}
 }

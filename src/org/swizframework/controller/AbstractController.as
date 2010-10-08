@@ -57,19 +57,21 @@ package org.swizframework.controller
 		
 		/** Delegates execute service call to Swiz */
 		protected function executeServiceCall( call:AsyncToken, resultHandler:Function,
-											   faultHandler:Function = null, handlerArgs:Array = null ):void
+											   faultHandler:Function = null, handlerArgs:Array = null ):AsyncToken
 		{
 			
 			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
 				faultHandler = _swiz.config.defaultFaultHandler;
 			
 			call.addResponder( new SwizResponder( resultHandler, faultHandler, handlerArgs ) );
+			
+			return call;
 		}
 		
 		/** Delegates execute url request call to Swiz */
 		protected function executeURLRequest( request:URLRequest, resultHandler:Function, faultHandler:Function = null,
 											  progressHandler:Function = null, httpStatusHandler:Function = null,
-											  eventArgs:Array = null ):void
+											  eventArgs:Array = null ):URLRequest
 		{
 			
 			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
@@ -77,6 +79,8 @@ package org.swizframework.controller
 			
 			var swizURLRequest:SwizURLRequest = 
 				new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs );
+			
+			return request;
 		}
 		
 		/** Delegates create command to Swiz */
