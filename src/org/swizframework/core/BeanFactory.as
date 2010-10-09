@@ -43,7 +43,7 @@ package org.swizframework.core
 		
 		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
-		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
+		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\.|__/;
 		
 		protected var swiz:ISwiz;
 		
@@ -416,7 +416,7 @@ package org.swizframework.core
 			{
 				for each( var viewPackage:String in swiz.config.viewPackages )
 				{
-					if( className.indexOf( viewPackage ) == 0 )
+					if( className.indexOf( viewPackage ) == 0 && className.indexOf( "__" ) < 0 )
 						return true;
 				}
 				
