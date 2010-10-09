@@ -95,7 +95,7 @@ package org.swizframework.core
 		public static function tearDownWiredView( wiredView:DisplayObject, swizInstance:ISwiz ):void
 		{
 			delete wiredViews[ wiredView ];
-			swizInstance.beanFactory.tearDownBean( swizInstance.beanFactory.getBeanForSource( wiredView ) );
+			swizInstance.beanFactory.tearDownBean( BeanFactory.constructBean( wiredView, null, swizInstance.domain ) );
 		}
 		
 		public static function tearDownAllWiredViewsForSwizInstance( swizInstance:ISwiz ):void
