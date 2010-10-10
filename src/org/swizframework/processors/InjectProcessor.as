@@ -235,7 +235,6 @@ package org.swizframework.processors
 			var targetType:Class = ( setterInjection ) ? MethodParameter( MetadataHostMethod( injectTag.host ).parameters[ 0 ] ).type : injectTag.host.type;
 			if( targetType == null && injectTag.host is MetadataHostClass )
 			{
-				// targetType = getDefinitionByName( injectTag.host.name ) as Class;
 				targetType = swiz.domain.getDefinition( injectTag.host.name ) as Class;
 			}
 			var typedBean:Bean = getBeanByType( targetType );

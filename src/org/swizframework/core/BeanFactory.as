@@ -249,7 +249,7 @@ package org.swizframework.core
 		public function getBeanByType( beanType:Class ):Bean
 		{
 			var foundBean:Bean;
-			// should we just have sent in the className for beanType instead??
+			
 			var beanTypeName:String = getQualifiedClassName( beanType );
 			
 			for each( var bean:Bean in beans )
