@@ -185,9 +185,21 @@ package org.swizframework.core
 		
 		public function addBeanProvider( beanProvider:IBeanProvider, autoSetUpBeans:Boolean = true ):void
 		{
-			for each( var bean:Bean in beanProvider.beans )
+			var bean:Bean;
+			
+			// add all beans before setting them up, in case they rely on each other
+			for each( bean in beanProvider.beans )
 			{
-				addBean( bean, autoSetUpBeans );
+				addBean( bean, false );
+			}
+			
+			if( autoSetUpBeans )
+			{
+				for each( bean in beanProvider.beans )
+				{
+					if( !( bean is Prototype ) )
+						setUpBean( bean );
+				}
 			}
 		}
 		
