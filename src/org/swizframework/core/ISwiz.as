@@ -75,7 +75,7 @@ package org.swizframework.core
 		 * Processors
 		 */
 		function get processors():Array;
-		function setProcessors( value:Array ):void;
+		// function set processors( value:Array ):void;
 		
 		/**
 		 * Custom Processors

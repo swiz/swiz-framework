@@ -20,9 +20,9 @@ package org.swizframework.metadata
 	import org.swizframework.reflection.IMetadataTag;
 	
 	/**
-	 * Class to represent <code>[Mediate]</code> metadata tags.
+	 * Class to represent <code>[EventHandler]</code> (and deprecated [Mediate]) metadata tags.
 	 */
-	public class MediateMetadataTag extends BaseMetadataTag
+	public class EventHandlerMetadataTag extends BaseMetadataTag
 	{
 		// ========================================
 		// protected properties
@@ -68,10 +68,10 @@ package org.swizframework.metadata
 		// ========================================
 		
 		/**
-		 * Returns event attribute of [Mediate] tag.
+		 * Returns event attribute of [EventHandler] tag.
 		 * Refers to the event type that will trigger the decorated method.
-		 * Is the default attribute, meaning [Mediate( "someEvent" )] is
-		 * equivalent to [Mediate( event="someEvent" )].
+		 * Is the default attribute, meaning [EventHandler( "someEvent" )] is
+		 * equivalent to [EventHandler( event="someEvent" )].
 		 */
 		public function get event():String
 		{
@@ -79,7 +79,7 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns properties attribute of [Mediate] tag as an <code>Array</code>.
+		 * Returns properties attribute of [EventHandler] tag as an <code>Array</code>.
 		 * Lists properties that will be pulled off of the event object and passed
 		 * to the decorated method.
 		 */
@@ -89,7 +89,7 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns scope attribute of [Mediate] tag as a <code>String</code>.
+		 * Returns scope attribute of [EventHandler] tag as a <code>String</code>.
 		 * Defines which dispatcher to attach this mediator to on the owning Swiz instance.
 		 * Acceptable values are local, global and [parent], defined as constants on SwizConfig
 		 */
@@ -99,7 +99,7 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns priority attribute of [Mediate] tag.
+		 * Returns priority attribute of [EventHandler] tag.
 		 * Synonymous to the priority argument of <code>flash.events.IEventDispatcher.addEventListener()</code>.
 		 */
 		public function get priority():int
@@ -108,7 +108,7 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns stopPropagation attribute of [Mediate] tag as a <code>Boolean</code>.
+		 * Returns stopPropagation attribute of [EventHandler] tag as a <code>Boolean</code>.
 		 * Synonymous to the stopPropagation method of <code>flash.events.Event</code>.
 		 *
 		 * @default false
@@ -119,7 +119,7 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns stopImmediatePropagation attribute of [Mediate] tag as a <code>Boolean</code>.
+		 * Returns stopImmediatePropagation attribute of [EventHandler] tag as a <code>Boolean</code>.
 		 * Synonymous to the stopImmediatePropagation method of <code>flash.events.Event</code>.
 		 *
 		 * @default false
@@ -130,7 +130,7 @@ package org.swizframework.metadata
 		}
 		
 		/**
-		 * Returns useCapture attribute of [Mediate] tag as a <code>Boolean</code>.
+		 * Returns useCapture attribute of [EventHandler] tag as a <code>Boolean</code>.
 		 * Synonymous to the useCapture argument of <code>flash.events.IEventDispatcher.addEventListener()</code>.
 		 *
 		 * @default false
@@ -147,7 +147,7 @@ package org.swizframework.metadata
 		/**
 		 * Constructor sets <code>defaultArgName</code>.
 		 */
-		public function MediateMetadataTag()
+		public function EventHandlerMetadataTag()
 		{
 			defaultArgName = "event";
 		}
@@ -157,7 +157,7 @@ package org.swizframework.metadata
 		// ========================================
 		
 		/**
-		 * Initialize properties based on values provided in [Mediate] tag.
+		 * Initialize properties based on values provided in [EventHandler] tag.
 		 */
 		override public function copyFrom( metadataTag:IMetadataTag ):void
 		{
@@ -165,7 +165,7 @@ package org.swizframework.metadata
 			super.copyFrom( metadataTag );
 			
 			// event is the default attribute
-			// [Mediate( "someEvent" )] == [Mediate( event="someEvent" )]
+			// [EventHandler( "someEvent" )] == [EventHandler( event="someEvent" )]
 			if( hasArg( "event" ) )
 				_event = getArg( "event" ).value;
 			

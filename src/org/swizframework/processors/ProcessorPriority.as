@@ -47,11 +47,11 @@ package org.swizframework.processors
 		public static const INJECT			:int = 700;
 		
 		/**
-		 * Built-in <code>MediateProcessor</code> uses this priority.
+		 * Built-in <code>EventHandlerProcessor</code> uses this priority.
 		 *
-		 * @see org.swizframework.processors.MediateProcessor
+		 * @see org.swizframework.processors.EventHandlerProcessor
 		 */
-		public static const MEDIATE			:int = 600;
+		public static const EVENT_HANDLER			:int = 600;
 		
 		/**
 		 * Built-in <code>DispatcherProcessor</code> uses this priority.

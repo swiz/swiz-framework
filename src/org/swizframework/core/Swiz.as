@@ -22,12 +22,14 @@ package org.swizframework.core
 	import flash.system.ApplicationDomain;
 	
 	import org.swizframework.events.SwizEvent;
+	import org.swizframework.processors.BaseMetadataProcessor;
 	import org.swizframework.processors.DispatcherProcessor;
+	import org.swizframework.processors.EventHandlerProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
-	import org.swizframework.processors.MediateProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
+	import org.swizframework.processors.ProcessorPriority;
 	import org.swizframework.processors.SwizInterfaceProcessor;
 	import org.swizframework.utils.logging.AbstractSwizLoggingTarget;
 	import org.swizframework.utils.logging.SwizLogger;
@@ -55,7 +57,7 @@ package org.swizframework.core
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
-		protected var _processors:Array = [ new InjectProcessor(), new DispatcherProcessor(), new MediateProcessor(), 
+		protected var _processors:Array = [ new InjectProcessor(), new DispatcherProcessor(), new EventHandlerProcessor(), 
 											new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
@@ -160,17 +162,51 @@ package org.swizframework.core
 			return _processors;
 		}
 		
-		public function setProcessors( value:Array ):void
+		/*
+		public function set processors( value:Array ):void
 		{
 			_processors = value;
 			logger.warn( "You are overriding the default set of Swiz processors. Please ensure this is what you intended." );
 			logger.warn( "If your intention is to add custom processors you should use the customProcessors property." );
 		}
+		*/
 		
 		public function set customProcessors( value:Array ):void
 		{
 			if( value != null )
-				_processors = _processors.concat( value );
+			{
+				/*
+				 iterate over the incoming processors. if a new processor has the same
+				 priority as a default processor, replace the built in one with the new one.
+				 if the priority is default or anything else, simply add the processor.
+				*/
+				var processor:IProcessor;
+				for ( var i:int = 0; i<value.length; i++ )
+				{
+					processor = IProcessor( value[ i] );
+					if( processor.priority == ProcessorPriority.DEFAULT )
+					{
+						_processors.push( processor );
+					}
+					else
+					{
+						var found:Boolean = false;
+						for( var j:int = 0; j<_processors.length; j++ )
+						{
+							if( IProcessor( _processors[ j ] ).priority == processor.priority )
+							{
+								_processors[ j ] = processor;
+								found = true;
+								break;
+							}
+						}
+						
+						if( !found ) _processors.push( processor );
+					}
+				}
+				
+				// _processors = _processors.concat( value );
+			}
 		}
 		
 		/**
