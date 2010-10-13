@@ -16,7 +16,6 @@
 
 package org.swizframework.metadata
 {
-	
 	import org.swizframework.reflection.BaseMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.utils.logging.SwizLogger;
