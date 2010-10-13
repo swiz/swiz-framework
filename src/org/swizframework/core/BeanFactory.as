@@ -43,7 +43,7 @@ package org.swizframework.core
 		
 		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
-		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\./;
+		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\.|__/;
 		
 		protected var swiz:ISwiz;
 		
@@ -185,9 +185,21 @@ package org.swizframework.core
 		
 		public function addBeanProvider( beanProvider:IBeanProvider, autoSetUpBeans:Boolean = true ):void
 		{
-			for each( var bean:Bean in beanProvider.beans )
+			var bean:Bean;
+			
+			// add all beans before setting them up, in case they rely on each other
+			for each( bean in beanProvider.beans )
 			{
-				addBean( bean, autoSetUpBeans );
+				addBean( bean, false );
+			}
+			
+			if( autoSetUpBeans )
+			{
+				for each( bean in beanProvider.beans )
+				{
+					if( !( bean is Prototype ) )
+						setUpBean( bean );
+				}
 			}
 		}
 		
@@ -249,7 +261,7 @@ package org.swizframework.core
 		public function getBeanByType( beanType:Class ):Bean
 		{
 			var foundBean:Bean;
-			// should we just have sent in the className for beanType instead??
+			
 			var beanTypeName:String = getQualifiedClassName( beanType );
 			
 			for each( var bean:Bean in beans )
@@ -416,7 +428,7 @@ package org.swizframework.core
 			{
 				for each( var viewPackage:String in swiz.config.viewPackages )
 				{
-					if( className.indexOf( viewPackage ) == 0 )
+					if( className.indexOf( viewPackage ) == 0 && className.indexOf( "__" ) < 0 )
 						return true;
 				}
 				
@@ -433,6 +445,9 @@ package org.swizframework.core
 		 */
 		protected function setUpEventHandler( event:Event ):void
 		{
+			if( event.target is ISetUpValidator && !( ISetUpValidator( event.target ).allowSetUp() ) )
+				return;
+			
 			if( isPotentialInjectionTarget( event.target ) )
 			{
 				SwizManager.setUp( DisplayObject( event.target ) );
@@ -457,6 +472,9 @@ package org.swizframework.core
 		 */
 		protected function tearDownEventHandler( event:Event ):void
 		{
+			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
+				return;
+			
 			SwizManager.tearDown( DisplayObject( event.target ) );
 		}
 

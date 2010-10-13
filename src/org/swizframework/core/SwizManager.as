@@ -66,7 +66,7 @@ package org.swizframework.core
 		
 		private static function setUpView( viewToWire:DisplayObject, swizInstance:ISwiz ):void
 		{
-			wiredViews[ viewToWire ] = viewToWire;
+			wiredViews[ viewToWire ] = swizInstance;
 			swizInstance.beanFactory.setUpBean( BeanFactory.constructBean( viewToWire, null, swizInstance.domain ) );
 		}
 		
@@ -86,17 +86,10 @@ package org.swizframework.core
 					swiz.tearDown();
 					return;
 				}
-				
-				// if the passed in object is a child of swiz's dispatcher, use that instance for tearDown
-				if( DisplayObjectContainer( swiz.dispatcher ).contains( wiredView ) )
-				{
-					tearDownWiredView( wiredView, swiz );
-					return;
-				}
 			}
 			
-			// pop ups not registered to a particular Swiz instance must be handled by the root instance
-			tearDownWiredView( wiredView, ISwiz( swizzes[ 0 ] ) );
+			// for tear down use the swiz instance that was associated at set up time 
+			tearDownWiredView( wiredView, wiredViews[ wiredView ] );
 		}
 		
 		public static function tearDownWiredView( wiredView:DisplayObject, swizInstance:ISwiz ):void
@@ -110,7 +103,7 @@ package org.swizframework.core
 			for each( var wiredView:DisplayObject in wiredViews )
 			{
 				// this will also tear down the swiz dispatcher itself
-				if( DisplayObjectContainer( swizInstance.dispatcher ).contains( wiredView ) )
+				if( wiredViews[ wiredView ] == swizInstance )
 				{
 					tearDownWiredView( wiredView, swizInstance );
 				}
