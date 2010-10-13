@@ -162,15 +162,6 @@ package org.swizframework.core
 			return _processors;
 		}
 		
-		/*
-		public function set processors( value:Array ):void
-		{
-			_processors = value;
-			logger.warn( "You are overriding the default set of Swiz processors. Please ensure this is what you intended." );
-			logger.warn( "If your intention is to add custom processors you should use the customProcessors property." );
-		}
-		*/
-		
 		public function set customProcessors( value:Array ):void
 		{
 			if( value != null )
@@ -204,8 +195,6 @@ package org.swizframework.core
 						if( !found ) _processors.push( processor );
 					}
 				}
-				
-				// _processors = _processors.concat( value );
 			}
 		}
 		
