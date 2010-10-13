@@ -16,13 +16,11 @@
 
 package org.swizframework.core
 {
-	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
 	
 	import org.swizframework.events.SwizEvent;
-	import org.swizframework.processors.BaseMetadataProcessor;
 	import org.swizframework.processors.DispatcherProcessor;
 	import org.swizframework.processors.EventHandlerProcessor;
 	import org.swizframework.processors.IProcessor;
@@ -162,15 +160,6 @@ package org.swizframework.core
 			return _processors;
 		}
 		
-		/*
-		public function set processors( value:Array ):void
-		{
-			_processors = value;
-			logger.warn( "You are overriding the default set of Swiz processors. Please ensure this is what you intended." );
-			logger.warn( "If your intention is to add custom processors you should use the customProcessors property." );
-		}
-		*/
-		
 		public function set customProcessors( value:Array ):void
 		{
 			if( value != null )
@@ -181,9 +170,9 @@ package org.swizframework.core
 				 if the priority is default or anything else, simply add the processor.
 				*/
 				var processor:IProcessor;
-				for ( var i:int = 0; i<value.length; i++ )
+				for( var i:int = 0; i < value.length; i++ )
 				{
-					processor = IProcessor( value[ i] );
+					processor = IProcessor( value[ i ] );
 					if( processor.priority == ProcessorPriority.DEFAULT )
 					{
 						_processors.push( processor );
@@ -191,7 +180,7 @@ package org.swizframework.core
 					else
 					{
 						var found:Boolean = false;
-						for( var j:int = 0; j<_processors.length; j++ )
+						for( var j:int = 0; j < _processors.length; j++ )
 						{
 							if( IProcessor( _processors[ j ] ).priority == processor.priority )
 							{
@@ -204,8 +193,6 @@ package org.swizframework.core
 						if( !found ) _processors.push( processor );
 					}
 				}
-				
-				// _processors = _processors.concat( value );
 			}
 		}
 		
