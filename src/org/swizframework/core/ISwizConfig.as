@@ -24,7 +24,7 @@ package org.swizframework.core
 		
 		/**
 		 * Flag to enable runtime validation of mediated events.
-		 * If set to true, <code>[Mediate( event="FooEvent.FOO", properties="username, password" )]</code>
+		 * If set to true, <code>[EventHandler( event="FooEvent.FOO", properties="username, password" )]</code>
 		 * will cause Swiz to validate that <code>FooEvent</code> exists, has a constant named <code>FOO</code>
 		 * and has member variables named <code>username</code> and <code>password</code>.
 		 *
@@ -104,9 +104,9 @@ package org.swizframework.core
 		
 		/**
 		 * When using <code>strict</code> mode, <code>eventPackages</code> allows you to use
-		 * unqualified class/event names in your <code>[Mediate]</code> metadata. For example,
-		 * <code>[Mediate( event="com.foo.events.MyEvent.FOO" )]</code> can be shortened to
-		 * <code>[Mediate( event="MyEvent.FOO" )]</code> if <code>com.foo.events</code> is
+		 * unqualified class/event names in your <code>[EventHandler]</code> metadata. For example,
+		 * <code>[EventHandler( event="com.foo.events.MyEvent.FOO" )]</code> can be shortened to
+		 * <code>[EventHandler( event="MyEvent.FOO" )]</code> if <code>com.foo.events</code> is
 		 * provided as an eventPackage.
 		 *
 		 * @param eventPackages An Array of Strings or a single String that will be split on ","
