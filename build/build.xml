@@ -90,6 +90,7 @@
 
 			<keep-as3-metadata name="Autowire"/>
 			<keep-as3-metadata name="Dispatcher"/>
+			<keep-as3-metadata name="EventHandler"/>
 			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Mediate"/>
 			<keep-as3-metadata name="PostConstruct"/>

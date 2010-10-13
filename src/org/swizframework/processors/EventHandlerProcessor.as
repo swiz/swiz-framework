@@ -22,15 +22,14 @@ package org.swizframework.processors
 	
 	import org.swizframework.core.Bean;
 	import org.swizframework.core.SwizConfig;
-	import org.swizframework.metadata.EventTypeExpression;
 	import org.swizframework.metadata.EventHandlerMetadataTag;
+	import org.swizframework.metadata.EventTypeExpression;
 	import org.swizframework.reflection.ClassConstant;
-	import org.swizframework.reflection.Constant;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.TypeCache;
 	import org.swizframework.reflection.TypeDescriptor;
-	import org.swizframework.utils.logging.SwizLogger;
 	import org.swizframework.utils.event.EventHandler;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * EventHandler Processor
