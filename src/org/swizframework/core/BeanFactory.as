@@ -382,7 +382,7 @@ package org.swizframework.core
 					if( existingBean )
 						logger.warn( "{0} already exists as a bean. Ignoring ADD_BEAN request.", event.source.toString() );
 					else
-						addBean( createBeanFromSource( event.source, event.beanName ) );
+						addBean( constructBean( event.source, event.beanName, swiz.domain ) );
 					break;
 				
 				case BeanEvent.SET_UP_BEAN:
@@ -392,7 +392,7 @@ package org.swizframework.core
 						else
 							setUpBean( existingBean );
 					else
-						setUpBean( createBeanFromSource( event.source, event.beanName ) );
+						setUpBean( constructBean( event.source, event.beanName, swiz.domain ) );
 					break;
 				
 				case BeanEvent.TEAR_DOWN_BEAN:
