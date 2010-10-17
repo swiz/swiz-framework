@@ -20,6 +20,6 @@ package org.swizframework.utils.services
 
 	public interface IServiceHelper
 	{
-		function executeServiceCall( call:AsyncToken, resultHandler:Function, faultHandler:Function = null, resultHandlerArgs:Array = null ):AsyncToken;
+		function executeServiceCall( call:AsyncToken, resultHandler:Function, faultHandler:Function = null, handlerArgs:Array = null ):AsyncToken;
 	}
 }
