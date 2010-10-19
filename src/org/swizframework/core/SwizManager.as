@@ -100,7 +100,7 @@ package org.swizframework.core
 		
 		public static function tearDownAllWiredViewsForSwizInstance( swizInstance:ISwiz ):void
 		{
-			for each( var wiredView:DisplayObject in wiredViews )
+			for( var wiredView:* in wiredViews )
 			{
 				// this will also tear down the swiz dispatcher itself
 				if( wiredViews[ wiredView ] == swizInstance )
