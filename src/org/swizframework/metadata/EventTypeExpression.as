@@ -106,7 +106,7 @@ package org.swizframework.metadata
 				
 				if( expression.substr( -2 ) == ".*" )
 				{
-					var td:TypeDescriptor = TypeCache.getTypeDescriptor( Constant, swiz.domain );
+					var td:TypeDescriptor = TypeCache.getTypeDescriptor( _eventClass, swiz.domain );
 					_eventTypes = new Array();
 					for each( var constant:Constant in td.constants )
 						_eventTypes.push( constant.value );
