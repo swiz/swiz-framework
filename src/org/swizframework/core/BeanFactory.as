@@ -54,6 +54,10 @@ package org.swizframework.core
 		
 		protected var _beans:Array = [];
 		
+		protected var removedDisplayObjects:Array = [];
+		
+		protected var isListeningForEnterFrame:Boolean = false;
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -449,7 +453,22 @@ package org.swizframework.core
 				return;
 			
 			if( isPotentialInjectionTarget( event.target ) )
-			{
+			{				
+				var i:int = removedDisplayObjects.indexOf( event.target );
+				
+				if ( i != -1 )
+				{
+					removedDisplayObjects.splice( i, 1 );
+					
+					if ( removedDisplayObjects.length == 0 )
+					{
+						swiz.dispatcher.removeEventListener( Event.ENTER_FRAME, enterFrameHandler );
+						isListeningForEnterFrame = false;
+					}
+					
+					return;
+				}
+				
 				SwizManager.setUp( DisplayObject( event.target ) );
 			}
 		}
@@ -475,9 +494,39 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			SwizManager.tearDown( DisplayObject( event.target ) );
+			if( isPotentialInjectionTarget( event.target ) )
+			{
+				addRemovedDisplayObject( DisplayObject( event.target ) );
+			}
+			
+			//SwizManager.tearDown( DisplayObject( event.target ) );
 		}
-
+		
+		protected function addRemovedDisplayObject( displayObject:DisplayObject ):void
+		{
+			if ( removedDisplayObjects.indexOf( displayObject ) == -1 )
+				removedDisplayObjects.push( displayObject );
+			
+			if ( ! isListeningForEnterFrame )
+			{
+				swiz.dispatcher.addEventListener( Event.ENTER_FRAME, enterFrameHandler, false, 0, true );
+				isListeningForEnterFrame = true;
+			}
+		}
+		
+		protected function enterFrameHandler( event:Event ):void
+		{
+			swiz.dispatcher.removeEventListener( Event.ENTER_FRAME, enterFrameHandler );
+			isListeningForEnterFrame = false;
+			
+			var displayObject:DisplayObject = DisplayObject( removedDisplayObjects.shift() );
+			
+			while ( displayObject )
+			{
+				SwizManager.tearDown( displayObject );
+				displayObject = DisplayObject( removedDisplayObjects.shift() );
+			}
+		}
 		
 		// ========================================
 		// static methods
