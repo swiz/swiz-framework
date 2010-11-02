@@ -121,7 +121,7 @@ package org.swizframework.utils.services
 				delete calls[ timer ];
 				
 				var fault:Fault = ( token.data ) ? token.data : null;
-				token.mx_internal::applyFault(FaultEvent.createEvent(fault, token));
+				token.mx_internal::applyFault( FaultEvent.createEvent( fault, token ) );
 			}
 			
 			timer = null;
