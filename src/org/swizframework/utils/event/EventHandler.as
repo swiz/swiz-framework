@@ -128,7 +128,7 @@ package org.swizframework.utils.event
 				throw new Error( "Unable to handle event: " + metadataTag.host.name + "() requires " + getRequiredParameterCount() + " parameters, and no properties were specified." );
 			}
 			
-			if( event is IAsynchronousEvent )
+			if( event is IAsynchronousEvent && IAsynchronousEvent( event ).step != null )
 			{
 				if( result is IAsynchronousOperation )
 					IAsynchronousEvent( event ).step.addAsynchronousOperation( result as IAsynchronousOperation );
