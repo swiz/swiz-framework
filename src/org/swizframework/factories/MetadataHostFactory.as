@@ -47,7 +47,7 @@ package org.swizframework.factories
 		 * @see org.swizframework.reflection.MetadataHostMethod
 		 * @see org.swizframework.reflection.MetadataHostProperty
 		 */
-		public function getMetadataHost( hostNode:XML, domain:ApplicationDomain ):IMetadataHost
+		public static function getMetadataHost( hostNode:XML, domain:ApplicationDomain ):IMetadataHost
 		{
 			var host:IMetadataHost;
 			

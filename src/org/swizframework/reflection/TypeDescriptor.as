@@ -18,7 +18,6 @@ package org.swizframework.reflection
 {
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-	import flash.utils.getDefinitionByName;
 	
 	import org.swizframework.core.SwizManager;
 	import org.swizframework.factories.MetadataHostFactory;
@@ -74,12 +73,6 @@ package org.swizframework.reflection
 		 * @see org.swizframework.reflection.IMetadataHost
 		 */
 		public var metadataHosts:Dictionary;
-		
-		// ========================================
-		// protected properties
-		// ========================================
-		
-		protected var metadataHostFactory:MetadataHostFactory = new MetadataHostFactory();
 		
 		// ========================================
 		// constructor
@@ -152,7 +145,7 @@ package org.swizframework.reflection
 				return IMetadataHost( metadataHosts[ metadataHostName ] );
 			
 			// otherwise create, store and return it
-			return metadataHosts[ metadataHostName ] = metadataHostFactory.getMetadataHost( hostNode, domain );
+			return metadataHosts[ metadataHostName ] = MetadataHostFactory.getMetadataHost( hostNode, domain );
 		}
 		
 		// ========================================
