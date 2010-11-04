@@ -456,11 +456,11 @@ package org.swizframework.core
 			{				
 				var i:int = removedDisplayObjects.indexOf( event.target );
 				
-				if ( i != -1 )
+				if( i != -1 )
 				{
 					removedDisplayObjects.splice( i, 1 );
 					
-					if ( removedDisplayObjects.length == 0 )
+					if( removedDisplayObjects.length == 0 )
 					{
 						swiz.dispatcher.removeEventListener( Event.ENTER_FRAME, enterFrameHandler );
 						isListeningForEnterFrame = false;
@@ -479,7 +479,7 @@ package org.swizframework.core
 		protected function setUpEventHandlerSysMgr( event:Event ):void
 		{
 			// make sure the view is not a descendant of the main dispatcher
-			// if its not, it is a popup, so we pass it along for processing
+			// if it's not, it is a popup, so we pass it along for processing
 			if( !Sprite( swiz.dispatcher ).contains( DisplayObject( event.target ) ) )
 			{
 				setUpEventHandler( event );
@@ -498,16 +498,14 @@ package org.swizframework.core
 			{
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 			}
-			
-			//SwizManager.tearDown( DisplayObject( event.target ) );
 		}
 		
 		protected function addRemovedDisplayObject( displayObject:DisplayObject ):void
 		{
-			if ( removedDisplayObjects.indexOf( displayObject ) == -1 )
+			if( removedDisplayObjects.indexOf( displayObject ) == -1 )
 				removedDisplayObjects.push( displayObject );
 			
-			if ( ! isListeningForEnterFrame )
+			if( ! isListeningForEnterFrame )
 			{
 				swiz.dispatcher.addEventListener( Event.ENTER_FRAME, enterFrameHandler, false, 0, true );
 				isListeningForEnterFrame = true;
