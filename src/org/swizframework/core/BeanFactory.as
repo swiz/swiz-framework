@@ -22,8 +22,9 @@ package org.swizframework.core
 	import flash.events.EventDispatcher;
 	import flash.events.EventPhase;
 	import flash.system.ApplicationDomain;
-	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
+	
+	import mx.modules.Module;
 	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.processors.IBeanProcessor;
@@ -494,7 +495,7 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if( isPotentialInjectionTarget( event.target ) )
+			if( isPotentialInjectionTarget( event.target ) || event.target is Module )
 			{
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 			}
