@@ -495,7 +495,7 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if( isPotentialInjectionTarget( event.target ) || event.target is Module )
+			if( SwizManager.wiredViews[event.target] || isPotentialInjectionTarget( event.target ) || event.target is Module )
 			{
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 			}
