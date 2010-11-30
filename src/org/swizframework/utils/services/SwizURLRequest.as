@@ -73,28 +73,45 @@ package org.swizframework.utils.services
 					}
 				} );
 			
-			loader.addEventListener( IOErrorEvent.IO_ERROR, function( e:IOErrorEvent ):void
-				{
-					if ( faultHandler != null )
-						faultHandler( e );
-					else {
-						// todo: what if there is no fault handler applied to dynamic url request
-					}
-				} );
-			loader.addEventListener( SecurityErrorEvent.SECURITY_ERROR, function( e:SecurityErrorEvent ):void
-				{
-					if ( faultHandler != null )
-						faultHandler( e );
-					else {
-						// todo: what if there is no fault handler applied to dynamic url request
-					}
-				} );
+			if( faultHandler != null )
+			{
+				loader.addEventListener( IOErrorEvent.IO_ERROR, function( e:IOErrorEvent ):void
+					{
+						if( handlerArgs == null )
+						{
+							faultHandler( e );
+						}
+						else
+						{
+							faultHandler.apply( null, [ e ].concat( handlerArgs ) );
+						}
+					} );
+				
+				loader.addEventListener( SecurityErrorEvent.SECURITY_ERROR, function( e:SecurityErrorEvent ):void
+					{
+						if( handlerArgs == null )
+						{
+							faultHandler( e );
+						}
+						else
+						{
+							faultHandler.apply( null, [ e ].concat( handlerArgs ) );
+						}
+					} );
+			}
 			
 			if( progressHandler != null )
 			{
 				loader.addEventListener( ProgressEvent.PROGRESS, function( e:ProgressEvent ):void
 					{
-						progressHandler( e );
+						if( handlerArgs == null )
+						{
+							progressHandler( e );
+						}
+						else
+						{
+							progressHandler.apply( null, [ e ].concat( handlerArgs ) );
+						}
 					} );
 			}
 			
@@ -102,7 +119,14 @@ package org.swizframework.utils.services
 			{
 				loader.addEventListener( HTTPStatusEvent.HTTP_STATUS, function( e:HTTPStatusEvent ):void
 					{
-						httpStatusHandler( e );
+						if( handlerArgs == null )
+						{
+							httpStatusHandler( e );
+						}
+						else
+						{
+							httpStatusHandler.apply( null, [ e ].concat( handlerArgs ) );
+						}
 					} );
 			}
 			
