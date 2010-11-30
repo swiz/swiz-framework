@@ -40,8 +40,6 @@ package org.swizframework.utils.services
 			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
 				faultHandler = _swiz.config.defaultFaultHandler;
 			
-			var dynamicURLRequest:SwizURLRequest = new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, handlerArgs );
-			
 			return new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, handlerArgs ).loader;
 		}
 	}
