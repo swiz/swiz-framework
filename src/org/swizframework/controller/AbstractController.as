@@ -17,6 +17,7 @@
 package org.swizframework.controller
 {
 	import flash.events.IEventDispatcher;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
 	import mx.rpc.AsyncToken;
@@ -71,16 +72,13 @@ package org.swizframework.controller
 		/** Delegates execute url request call to Swiz */
 		protected function executeURLRequest( request:URLRequest, resultHandler:Function, faultHandler:Function = null,
 											  progressHandler:Function = null, httpStatusHandler:Function = null,
-											  eventArgs:Array = null ):URLRequest
+											  handlerArgs:Array = null ):URLLoader
 		{
 			
 			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
 				faultHandler = _swiz.config.defaultFaultHandler;
 			
-			var swizURLRequest:SwizURLRequest = 
-				new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs );
-			
-			return request;
+			return new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, handlerArgs ).loader;
 		}
 		
 		/** Delegates create command to Swiz */

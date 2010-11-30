@@ -45,16 +45,16 @@ package org.swizframework.utils.services
 		/**
 		 *
 		 * @param request
-		 * @param resultHandler The resultHandler function must expect the an event. event.currentTarget.data should contain the result. Signature can be extended with additional eventArgs
+		 * @param resultHandler The resultHandler function must expect the an event. event.currentTarget.data should contain the result. Signature can be extended with additional handlerArgs
 		 * @param faultHandler The faultHandler function will be called for IOErrors and SecurityErrors with the specific error event.
 		 * @param progressHandler
 		 * @param httpStatusHandler
-		 * @param eventArgs The eventArgs will be applied to the signature of the resultHandler function.
+		 * @param handlerArgs The handlerArgs will be applied to the signature of the resultHandler function.
 		 *
 		 */
 		public function SwizURLRequest( request:URLRequest, resultHandler:Function, 
 			faultHandler:Function = null, progressHandler:Function = null, 
-			httpStatusHandler:Function = null, eventArgs:Array = null )
+			httpStatusHandler:Function = null, handlerArgs:Array = null )
 		{
 			loader = new URLLoader();
 			
@@ -63,13 +63,13 @@ package org.swizframework.utils.services
 					// we could apply the result directly but from the current knowledge applying the event itself
 					// seems more flexible. This may change in the future if we don't see any necessity for this.
 					
-					if( eventArgs == null )
+					if( handlerArgs == null )
 					{
 						resultHandler( e );
 					}
 					else
 					{
-						resultHandler.apply( null, [ e ].concat( eventArgs ) );
+						resultHandler.apply( null, [ e ].concat( handlerArgs ) );
 					}
 				} );
 			
