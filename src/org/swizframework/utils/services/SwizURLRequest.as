@@ -40,6 +40,8 @@ package org.swizframework.utils.services
 	 */
 	public class SwizURLRequest
 	{
+		public var loader:URLLoader;
+		
 		/**
 		 *
 		 * @param request
@@ -54,13 +56,12 @@ package org.swizframework.utils.services
 			faultHandler:Function = null, progressHandler:Function = null, 
 			httpStatusHandler:Function = null, eventArgs:Array = null )
 		{
-			
-			var loader:URLLoader = new URLLoader();
+			loader = new URLLoader();
 			
 			loader.addEventListener( Event.COMPLETE, function( e:Event ):void
 				{
 					// we could apply the result directly but from the current knowledge applying the event itself
-					// seems more flexible. This may change in the future if we don't see any necessarity for this.
+					// seems more flexible. This may change in the future if we don't see any necessity for this.
 					
 					if( eventArgs == null )
 					{

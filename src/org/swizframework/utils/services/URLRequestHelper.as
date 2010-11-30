@@ -16,6 +16,7 @@
 
 package org.swizframework.utils.services
 {
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
 	import org.swizframework.core.ISwiz;
@@ -33,16 +34,15 @@ package org.swizframework.utils.services
 		/** Delegates execute url request call to Swiz */
 		public function executeURLRequest( request:URLRequest, resultHandler:Function, faultHandler:Function = null,
 										   progressHandler:Function = null, httpStatusHandler:Function = null,
-										   eventArgs:Array = null ):URLRequest
+										   eventArgs:Array = null ):URLLoader
 		{
-			
 			// use default fault handler defined for swiz instance if not provided									  	
 			if( faultHandler == null && _swiz.config.defaultFaultHandler != null )
 				faultHandler = _swiz.config.defaultFaultHandler;
 			
 			var dynamicURLRequest:SwizURLRequest = new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs );
 			
-			return request;
+			return new SwizURLRequest( request, resultHandler, faultHandler, progressHandler, httpStatusHandler, eventArgs ).loader;
 		}
 	}
 }
