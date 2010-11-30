@@ -23,6 +23,7 @@ package org.swizframework.processors
 	import mx.utils.UIDUtil;
 	
 	import org.swizframework.core.Bean;
+	import org.swizframework.core.ISwizAware;
 	import org.swizframework.metadata.InjectMetadataTag;
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.MetadataHostClass;
@@ -255,7 +256,10 @@ package org.swizframework.processors
 					case ServiceHelper:
 					case IServiceHelper:
 						if( sharedServiceHelper == null )
+						{
 							sharedServiceHelper = new ServiceHelper();
+							ISwizAware( sharedServiceHelper ).swiz = swiz;
+						}
 						
 						setDestinationValue( injectTag, bean, sharedServiceHelper );
 						return;
@@ -263,7 +267,10 @@ package org.swizframework.processors
 					case URLRequestHelper:
 					case IURLRequestHelper:
 						if( sharedURLRequestHelper == null )
+						{
 							sharedURLRequestHelper = new URLRequestHelper();
+							ISwizAware( sharedURLRequestHelper ).swiz = swiz;
+						}
 						
 						setDestinationValue( injectTag, bean, sharedURLRequestHelper );
 						return;
