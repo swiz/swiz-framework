@@ -37,6 +37,7 @@ package org.swizframework.utils.chain
 		}
 		
 		protected var _isComplete:Boolean = false;
+		protected var _isError:Boolean = false;
 		
 		public function get isComplete():Boolean
 		{
@@ -53,10 +54,14 @@ package org.swizframework.utils.chain
 		 */
 		public function complete():void
 		{
-			_isComplete = true;
-			
-			if( chain != null )
-				chain.stepComplete();
+			// before calling complete(), check if the chain step has been marked as error
+			if( !_isError)
+			{
+				_isComplete = true;
+				
+				if( chain != null )
+					chain.stepComplete();
+			}
 		}
 		
 		/**
@@ -64,6 +69,9 @@ package org.swizframework.utils.chain
 		 */
 		public function error():void
 		{
+			_isError = true;
+			_isComplete = true;
+			
 			if( chain != null )
 				chain.stepError();
 		}
