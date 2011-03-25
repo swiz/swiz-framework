@@ -36,8 +36,23 @@ package org.swizframework.utils.chain
 			_chain = value;
 		}
 		
+		/**
+		 * Backing variable for <code>failed</code> property.
+		 */
+		protected var _failed:Boolean = false;
+		
+		/**
+		 * Indicates whether this step failed.
+		 */
+		public function get failed():Boolean
+		{
+			return _failed;
+		}
+		
+		/**
+		 * Backing variable for <code>isComplete</code> property.
+		 */
 		protected var _isComplete:Boolean = false;
-		protected var _isError:Boolean = false;
 		
 		public function get isComplete():Boolean
 		{
@@ -55,7 +70,7 @@ package org.swizframework.utils.chain
 		public function complete():void
 		{
 			// before calling complete(), check if the chain step has been marked as error
-			if( !_isError)
+			if( !_failed)
 			{
 				_isComplete = true;
 				
@@ -69,7 +84,7 @@ package org.swizframework.utils.chain
 		 */
 		public function error():void
 		{
-			_isError = true;
+			_failed = true;
 			_isComplete = true;
 			
 			if( chain != null )
