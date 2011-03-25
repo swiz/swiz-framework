@@ -18,8 +18,11 @@ package org.swizframework.utils
 {
 	import flash.system.ApplicationDomain;
 	
-	import mx.modules.Module;
-	import mx.modules.ModuleManager;
+	CONFIG::webDesktop
+	{
+		import mx.modules.Module;
+		import mx.modules.ModuleManager;
+	}
 
 	public class DomainUtil
 	{
@@ -46,14 +49,21 @@ package org.swizframework.utils
 		 */
 		public static function getModuleDomain( object:Object ):ApplicationDomain
 		{
-			if( object is Module )
-			{
-				var moduleInfo:Object = ModuleManager.getAssociatedFactory( object ).info();
-				return moduleInfo.currentDomain;
-			}
-			else
+			CONFIG::mobile
 			{
 				return null;
+			}
+			CONFIG::webDesktop
+			{
+				if( object is Module )
+				{
+					var moduleInfo:Object = ModuleManager.getAssociatedFactory( object ).info();
+					return moduleInfo.currentDomain;
+				}
+				else
+				{
+					return null;
+				}
 			}
 		}
 	}
