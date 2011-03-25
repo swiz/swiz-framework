@@ -198,7 +198,7 @@ package org.swizframework.core
 		{
 			for each( var bean:Bean in beans )
 			{
-				if( bean is Prototype && Prototype( bean ).singleton == false )
+				if( bean is Prototype && ( Prototype( bean ).singleton == false || Prototype( bean ).initialized == false ) )
 					continue;
 				else if( bean.source === source )
 					return bean;
