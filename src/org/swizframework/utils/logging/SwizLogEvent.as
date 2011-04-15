@@ -46,7 +46,7 @@ package org.swizframework.utils.logging
 
 		override public function clone():Event
 		{
-			return new SwizLogEvent(message, level);
+			return new SwizLogEvent( message, level );
 		}
 	}
 }

@@ -50,17 +50,17 @@ package org.swizframework.utils.logging
 		
 		public function addLogger( logger:SwizLogger ):void
 		{
-			if (logger)
+			if( logger )
 			{
-				logger.addEventListener(SwizLogEvent.LOG_EVENT, logHandler);
+				logger.addEventListener( SwizLogEvent.LOG_EVENT, logHandler );
 			}
 		}
 
-		public function removeLogger(logger:SwizLogger):void
+		public function removeLogger( logger:SwizLogger ):void
 		{
-			if (logger)
+			if( logger )
 			{
-				logger.removeEventListener(SwizLogEvent.LOG_EVENT, logHandler);
+				logger.removeEventListener( SwizLogEvent.LOG_EVENT, logHandler );
 			}
 		}
 		
@@ -72,8 +72,8 @@ package org.swizframework.utils.logging
 		
 		protected function logHandler( event:SwizLogEvent ):void
 		{
-			if (event.level >= level)
-				logEvent(event);
+			if( event.level >= level )
+				logEvent( event );
 		}
 	}
 }
