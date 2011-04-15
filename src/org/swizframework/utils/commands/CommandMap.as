@@ -56,40 +56,57 @@ package org.swizframework.utils.commands
 			// make sure we have a mapping
 			if( map[ event.type ] != null )
 			{
-				// retrieve mapping
-				var commandMapping:CommandMapping = CommandMapping( map[ event.type ] );
+				var indexesToClear:Array = [];
+				var mappings:Array = map[ event.type ] as Array;
 				
-				// validate event class
-				if( !( event is commandMapping.eventClass ) )
-					return;
-				
-				// get our command bean
-				var commandPrototype:Bean = _swiz.beanFactory.getBeanByType( commandMapping.commandClass );
-				
-				if( commandPrototype == null )
-					throw new Error( "Command bean not found for mapped event type." );
-				
-				if( commandPrototype is Prototype )
+				for( var i:int = 0; i < mappings.length; i++ ) 
 				{
-					// get a new instance of the command class
-					var command:Object = Prototype( commandPrototype ).source;
+					// retrieve mapping
+					var commandMapping:CommandMapping = CommandMapping( mappings[ i ] );
 					
-					if( !( command is ICommand ) )
-						throw new Error( "Commands must implement org.swizframework.utils.commands.ICommand." );
+					// validate event class
+					if( !( event is commandMapping.eventClass ) )
+						return;
 					
-					// provide event reference if command is IEventAwareCommand
-					if( command is IEventAwareCommand )
-						IEventAwareCommand( command ).event = event;
+					// get our command bean
+					var commandPrototype:Bean = _swiz.beanFactory.getBeanByType( commandMapping.commandClass );
 					
-					ICommand( command ).execute();
-				}
-				else
-				{
-					throw new Error( "Commands must be provided as Prototype beans." );
+					if( commandPrototype == null )
+						throw new Error( "Command bean not found for mapped event type." );
+					
+					if( commandPrototype is Prototype )
+					{
+						// get a new instance of the command class
+						var command:Object = Prototype( commandPrototype ).source;
+						
+						if( !( command is ICommand ) )
+							throw new Error( "Commands must implement org.swizframework.utils.commands.ICommand." );
+						
+						// provide event reference if command is IEventAwareCommand
+						if( command is IEventAwareCommand )
+							IEventAwareCommand( command ).event = event;
+						
+						ICommand( command ).execute();
+					}
+					else
+					{
+						throw new Error( "Commands must be provided as Prototype beans." );
+					}
+					
+					if( commandMapping.oneTime )
+						indexesToClear.push( i );
 				}
 				
-				if( commandMapping.oneTime )
-					delete map[ commandMapping.eventType ];
+				if( indexesToClear.length > 0 )
+				{
+					for( var j:int = indexesToClear.length - 1; j > -1; j-- )
+					{
+						mappings.splice( indexesToClear[ j ], 1 );
+					}
+					
+					if( indexesToClear.length == 0 )
+						delete map[ event.type ];
+				}
 			}
 		}
 		
@@ -108,13 +125,24 @@ package org.swizframework.utils.commands
 		 */
 		protected function mapCommand( eventType:String, commandClass:Class, eventClass:Class = null, oneTime:Boolean = false ):void
 		{
-			if( map[ eventType ] != null )
-				throw new Error( "Duplicate mappings are not allowed." );
+			if( map[ eventType ] == null )
+			{
+				map[ eventType ] = [ new CommandMapping( eventType, commandClass, eventClass, oneTime ) ];
+			}
+			else
+			{
+				var mappings:Array = map[ eventType ] as Array;
+				
+				for each( var cm:CommandMapping in mappings )
+				{
+					if( cm.commandClass == commandClass )
+						throw new Error( cm.commandClass + " already mapped to " + eventType );
+				}
+				
+				mappings.push( new CommandMapping( eventType, commandClass, eventClass, oneTime ) );
+			}
 			
-			// store mapping in dictionary
-			map[ eventType ] = new CommandMapping( eventType, commandClass, eventClass, oneTime );
-			
-			// this should always evaluate to true, but checking for prior mapping just in case
+			// create Prototype bean for commandClass if it hasn't been created already
 			if( _swiz.beanFactory.getBeanByType( commandClass ) == null )
 			{
 				// create a Prototype for adding to the BeanFactory
