@@ -31,6 +31,13 @@ package org.swizframework.processors
 	{
 		
 		/**
+		 * Built-in <code>AutoProxyProcessor</code> runs before any bean setup (as an IFactoryProcessor).
+		 *
+		 * @see org.swizframework.processors.AutoProxyProcessor
+		 */
+		public static const AUTO_PROXY		:int = 900;
+		
+		/**
 		 * Built-in <code>PreDestroyProcessor</code> runs during tear down to allow components to do any
 		 * necessary cleanup to ensure proper disposal.
 		 *

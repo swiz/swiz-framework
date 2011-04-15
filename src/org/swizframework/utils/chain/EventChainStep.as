@@ -38,11 +38,6 @@ package org.swizframework.utils.chain
 		 * Backing variable for <code>event</code> property.
 		 */
 		protected var _event:Event;
-
-		/**
-		 * Backing variable for <code>failed</code> property.
-		 */
-		protected var _failed:Boolean = false;
 		
 		/**
 		 * Backing variable for <code>pendingCount</code> property.
@@ -72,14 +67,6 @@ package org.swizframework.utils.chain
 		public function get event():Event
 		{
 			return _event;
-		}
-		
-		/**
-		 * Indicates whether this step failed.
-		 */
-		public function get failed():Boolean
-		{
-			return _failed;
 		}
 		
 		/**

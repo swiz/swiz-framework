@@ -55,11 +55,17 @@ package org.swizframework.utils.chain
 			_chain = value;
 		}
 		
-		protected var _isComplete:Boolean;
+		protected var _isComplete:Boolean = true;
+		protected var _isError:Boolean = false;
 		
 		public function get isComplete():Boolean
 		{
 			return _isComplete;
+		}
+		
+		public function get isError():Boolean
+		{
+			return _isError;
 		}
 		
 		/**
@@ -127,8 +133,13 @@ package org.swizframework.utils.chain
 		 */
 		public function start():void
 		{
-			position = -1;
-			proceed();
+			if( _isComplete )
+			{
+				_isComplete = false;
+				_isError = false;
+				position = -1;
+				proceed();
+			}
 		}
 		
 		public function stepComplete():void
@@ -157,24 +168,27 @@ package org.swizframework.utils.chain
 			if( position == -1 )
 				dispatchEvent( new ChainEvent( ChainEvent.CHAIN_START ) );
 			
-			if( mode == ChainType.SEQUENCE )
+			if( !_isError )
 			{
-				if( hasNext() )
+				if( mode == ChainType.SEQUENCE )
 				{
-					position++;
-					IChain( this ).doProceed();
+					if( hasNext() )
+					{
+						position++;
+						IChain( this ).doProceed();
+					}
+					else
+					{
+						complete();
+					}
 				}
 				else
 				{
-					complete();
-				}
-			}
-			else
-			{
-				for( var i:int = 0; i < steps.length; i++ )
-				{
-					position = i;
-					IChain( this ).doProceed();
+					for( var i:int = 0; i < steps.length; i++ )
+					{
+						position = i;
+						IChain( this ).doProceed();
+					}
 				}
 			}
 		}
@@ -220,6 +234,7 @@ package org.swizframework.utils.chain
 		{
 			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_FAIL ) );
 			
+			_isError = true;
 			_isComplete = true;
 			
 			if( chain != null )

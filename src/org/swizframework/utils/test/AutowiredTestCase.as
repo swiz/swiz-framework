@@ -96,6 +96,7 @@ package org.swizframework.utils.test
 		/**
 		 * 
 		 */ 
+		// [Before("order=1"]
 		[Before]
 		public function constructSwizContext():void
 		{

@@ -36,6 +36,12 @@ package org.swizframework.events
 		public static const CREATED:String = "swizCreated";
 		
 		/**
+		 * The BeanEvent.LOAD_COMPLETE constant defines the value of the type property
+		 * of an initial load complete event object.
+		 */
+		public static const LOAD_COMPLETE:String = "loadComplete";
+		
+		/**
 		 * The BeanEvent.REMOVED constant defines the value of the type property
 		 * of a beanRemoved event object.
 		 */
