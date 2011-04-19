@@ -235,7 +235,7 @@ package org.swizframework.core
 			bean.beanFactory = this;
 			beans.push( bean );
 			
-			if( autoSetUpBean )
+			if( autoSetUpBean && !( bean is Prototype ) )
 				setUpBean( bean );
 			
 			return bean;
