@@ -558,7 +558,7 @@ package org.swizframework.core
 			if( removedDisplayObjects.indexOf( displayObject ) == -1 )
 				removedDisplayObjects.push( displayObject );
 			
-			if( ! isListeningForEnterFrame )
+			if( !isListeningForEnterFrame )
 			{
 				swiz.dispatcher.addEventListener( Event.ENTER_FRAME, enterFrameHandler, false, 0, true );
 				isListeningForEnterFrame = true;
@@ -572,7 +572,7 @@ package org.swizframework.core
 			
 			var displayObject:DisplayObject = DisplayObject( removedDisplayObjects.shift() );
 			
-			while ( displayObject )
+			while( displayObject )
 			{
 				SwizManager.tearDown( displayObject );
 				displayObject = DisplayObject( removedDisplayObjects.shift() );
