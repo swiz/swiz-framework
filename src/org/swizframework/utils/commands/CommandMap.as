@@ -149,7 +149,7 @@ package org.swizframework.utils.commands
 				var commandPrototype:Prototype = new Prototype( commandClass );
 				commandPrototype.typeDescriptor = TypeCache.getTypeDescriptor( commandClass, _swiz.domain );
 				// add command bean for later instantiation
-				_swiz.beanFactory.addBean( commandPrototype );
+				_swiz.beanFactory.addBean( commandPrototype, false );
 			}
 			
 			// listen for event that will trigger this command
