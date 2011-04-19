@@ -24,7 +24,10 @@ package org.swizframework.core
 	import flash.system.ApplicationDomain;
 	import flash.utils.getQualifiedClassName;
 	
-	import mx.modules.Module;
+	CONFIG::webDesktop
+	{
+		import mx.modules.Module;
+	}
 	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.events.SwizEvent;
@@ -538,9 +541,15 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if( SwizManager.wiredViews[event.target] || isPotentialInjectionTarget( event.target ) || event.target is Module )
+			if( SwizManager.wiredViews[ event.target ] || isPotentialInjectionTarget( event.target ) )
 			{
 				addRemovedDisplayObject( DisplayObject( event.target ) );
+			}
+			
+			CONFIG::webDesktop
+			{
+				if( event.target is Module )
+					addRemovedDisplayObject( DisplayObject( event.target ) );
 			}
 		}
 		
