@@ -57,7 +57,7 @@
 		
 		<attribute name="event"
 				   type="String" 
-				   required="true" 
+				   required="false" 
 				   description="The system event this method should handle. MyEvent.TYPE format is recommended but string value also supported." />
 		
 		<attribute name="scope" 
