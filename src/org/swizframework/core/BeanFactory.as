@@ -538,10 +538,11 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if( SwizManager.wiredViews[ event.target ] || isPotentialInjectionTarget( event.target ) )
-			{
+			if( !isPotentialInjectionTarget( event.target ) )
+				return;
+			
+			if( SwizManager.wiredViews[ event.target ] )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
-			}
 			
 			CONFIG::webDesktop
 			{
