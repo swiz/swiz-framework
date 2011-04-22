@@ -187,7 +187,7 @@ package org.swizframework.core
 			logger.info( "BeanFactory torn down" );
 		}
 		
-		public function createBeanFromSource( source:Object, beanName:String = null ):Bean
+		protected function createBeanFromSource( source:Object, beanName:String = null ):Bean
 		{
 			var bean:Bean = getBeanForSource( source );
 			
@@ -197,7 +197,7 @@ package org.swizframework.core
 			return bean;
 		}
 		
-		public function getBeanForSource( source:Object ):Bean
+		protected function getBeanForSource( source:Object ):Bean
 		{
 			for each( var bean:Bean in beans )
 			{
