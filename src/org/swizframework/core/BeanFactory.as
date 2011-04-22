@@ -251,16 +251,13 @@ package org.swizframework.core
 		
 		public function removeBean( bean:Bean ):void
 		{
-			if( beans.indexOf( bean ) < 0 )
-			{
-				logger.warn( "{0} not found in beans list. Cannot remove." );
-			}
+			if( beans.indexOf( bean ) > -1 )
+				beans.splice( beans.indexOf( bean ), 1 );
 				
 			tearDownBean( bean );
 			bean.beanFactory = null;
 			bean.typeDescriptor = null;
 			bean.source = null;
-			beans.splice( beans.indexOf( bean ), 1 );
 			bean = null;
 		}
 		
