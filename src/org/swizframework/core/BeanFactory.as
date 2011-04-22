@@ -497,7 +497,7 @@ package org.swizframework.core
 				return;
 			
 			if( isPotentialInjectionTarget( event.target ) )
-			{				
+			{
 				var i:int = removedDisplayObjects.indexOf( event.target );
 				
 				if( i != -1 )
@@ -538,10 +538,8 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if( SwizManager.wiredViews[event.target] || isPotentialInjectionTarget( event.target ) || event.target is Module )
-			{
+			if ( isPotentialInjectionTarget( event.target ) && ( SwizManager.wiredViews[event.target] || event.target is Module ) )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
-			}
 		}
 		
 		protected function addRemovedDisplayObject( displayObject:DisplayObject ):void
