@@ -447,7 +447,7 @@ package org.swizframework.core
 					if( existingBean )
 						tearDownBean( existingBean );
 					else
-						tearDownBean( constructBean( event.source, null, swiz.domain ) );
+						logger.warn( "Could not find bean with {0} as its source. Ignoring TEAR_DOWN_BEAN request.", event.source.toString() );
 					break;
 				
 				case BeanEvent.REMOVE_BEAN:
