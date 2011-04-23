@@ -103,9 +103,21 @@
 	
 	<metadata name="PostConstruct" description="Marks this method to be called after all injections are fulfilled">
 		<context name="method" />
+		
+		<attribute name="order"
+				   type="Number" 
+				   defaultValue="0" 
+				   required="false"
+				   description="Position in which to call the decorated method if there are multiple [PostConstruct] methods. Called in ascending order." />
 	</metadata>
 	
 	<metadata name="PreDestroy" description="Marks this method to be called before all injections are nullified">
 		<context name="method" />
+		
+		<attribute name="order"
+				   type="Number" 
+				   defaultValue="0" 
+				   required="false"
+				   description="Position in which to call the decorated method if there are multiple [PreDestroy] methods. Called in ascending order." />
 	</metadata>
 </annotations>
