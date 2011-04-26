@@ -9,16 +9,11 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.logging.LogEventLevel;
-			
-			import org.flexunit.internals.TextListener;
-			import org.flexunit.internals.TraceListener;
 			import org.flexunit.listeners.CIListener;
 			import org.flexunit.listeners.UIListener;
 			import org.flexunit.runner.FlexUnitCore;
 			
-			import testSuites.ReflectionTestsSuite;
-			import testSuites.StorageTestSuite;
+			import testSuites.AllTestsSuite;
 			
 			private var core:FlexUnitCore;
 			
@@ -38,8 +33,7 @@
 				//core.addListener( new TraceListener() ); // For AS3 Projects
 				//core.addListener( TextListener.getDefaultTextListener( LogEventLevel.DEBUG ) ); // For Flex Projects
 				
-				core.run( ReflectionTestsSuite );
-				core.run( StorageTestSuite );
+				core.run( AllTestsSuite );
 			}
 		]]>
 	</fx:Script>

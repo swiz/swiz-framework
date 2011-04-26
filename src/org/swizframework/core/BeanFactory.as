@@ -1,18 +1,18 @@
 /*
- * Copyright 2010 Swiz Framework Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
+* Copyright 2010 Swiz Framework Contributors
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you may not
+* use this file except in compliance with the License. You may obtain a copy of
+* the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+* License for the specific language governing permissions and limitations under
+* the License.
+*/
 
 package org.swizframework.core
 {
@@ -252,7 +252,7 @@ package org.swizframework.core
 			{
 				logger.warn( "{0} not found in beans list. Cannot remove." );
 			}
-				
+			
 			tearDownBean( bean );
 			bean.beanFactory = null;
 			bean.typeDescriptor = null;
@@ -439,8 +439,8 @@ package org.swizframework.core
 							logger.warn( "{0} is already set up as a bean. Ignoring SET_UP_BEAN request.", event.source.toString() );
 						else
 							setUpBean( existingBean );
-					else
-						setUpBean( constructBean( event.source, event.beanName, swiz.domain ) );
+						else
+							setUpBean( constructBean( event.source, event.beanName, swiz.domain ) );
 					break;
 				
 				case BeanEvent.TEAR_DOWN_BEAN:
@@ -497,7 +497,7 @@ package org.swizframework.core
 				return;
 			
 			if( isPotentialInjectionTarget( event.target ) )
-			{
+			{				
 				var i:int = removedDisplayObjects.indexOf( event.target );
 				
 				if( i != -1 )
@@ -538,8 +538,10 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if ( isPotentialInjectionTarget( event.target ) && ( SwizManager.wiredViews[event.target] || event.target is Module ) )
+			if( SwizManager.wiredViews[event.target] || isPotentialInjectionTarget( event.target ) || event.target is Module )
+			{
 				addRemovedDisplayObject( DisplayObject( event.target ) );
+			}
 		}
 		
 		protected function addRemovedDisplayObject( displayObject:DisplayObject ):void
