@@ -381,6 +381,12 @@ package org.swizframework.core
 		 */
 		public function tearDownBean( bean:Bean ):void
 		{
+			if( bean is Prototype && ( Prototype( bean ).singleton == false || Prototype( bean ).initialized == false ) )
+			{
+				logger.debug( 'BeanFactory skipped uninitialized singleton prototype bean {0}', bean.toString() );
+				return;
+			}
+
 			for each( var processor:IProcessor in swiz.processors )
 			{
 				// skip factory processors
