@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations version="1.0">
+	<metadata name="Dispatcher" description="Injects the Swiz shared event bus">
+		<context name="variable" />
+		<context name="setter" />
+		<context name="method" />
+		
+		<attribute name="scope" 
+				   type="String"
+				   values="global,local"
+				   defaultValue="global"
+				   required="false" 
+				   description="Instructs Swiz to inject the global (root) event bus or the one local to the containing Swiz instance (if there are multiple instances)" />
+	</metadata>
+	
+	<metadata name="Inject" description="Marks a dependency for injection by Swiz">
+		<context name="variable" />
+		<context name="setter" />
+		<context name="method" />
+		<context name="class">
+			<attribute name="destination" 
+					   type="String" 
+					   required="false"
+					   description="Name of the property to inject into" />
+		</context>
+		
+		<attribute name="source" 
+				   type="String" 
+				   required="false"
+				   description="Id of the named bean to inject" />
+				   
+		<attribute name="required" 
+				   type="Boolean" 
+				   hint="boolean"
+				   defaultValue="true" 
+				   required="false"
+				   description="Denotes whether or not Swiz should throw an error if the dependency cannot be found" />
+				   
+		<attribute name="bind" 
+				   type="Boolean" 
+				   hint="boolean"
+				   defaultValue="false" 
+				   required="false"
+				   description="Denotes whether or not Swiz should create a binding (requires that all necessary pieces are marked [Bindable])" />
+				   
+		<attribute name="twoWay" 
+				   type="Boolean" 
+				   hint="boolean"
+				   defaultValue="false" 
+				   required="false"
+				   description="Denotes whether or not Swiz should create a twoWay binding (requires that all necessary pieces are marked [Bindable])" />
+				   
+	</metadata>
+	
+	<metadata name="EventHandler" description="Marks this method as a system event handler">
+		<context name="method" />
+		
+		<attribute name="event"
+				   type="String" 
+				   required="false" 
+				   description="The system event this method should handle. MyEvent.TYPE format is recommended but string value also supported." />
+		
+		<attribute name="scope" 
+				   type="String"
+				   values="global,local"
+				   defaultValue="global"
+				   required="false" 
+				   description="Instructs Swiz to create an event listener on the global (root) event bus or the one local to the containing Swiz instance (if there are multiple instances)" />
+		
+		<attribute name="properties"
+				   type="String" 
+				   required="false" 
+				   description="Comma separated list of public properties that should be pulled off of the event and passed to the decorated method." />
+		
+		<attribute name="priority"
+				   type="Number" 
+				   defaultValue="0" 
+				   required="false"
+				   description="Priority to use in the addEventListener call Swiz makes behind the scenes." />
+		
+		<attribute name="useCapture"
+				   type="Boolean"
+				   hint="boolean" 
+				   defaultValue="false" 
+				   required="false"
+				   description="Determines useCapture flag in the addEventListener call Swiz makes behind the scenes." />
+		
+		<attribute name="stopPropagation"
+				   type="Boolean"
+				   hint="boolean" 
+				   defaultValue="false" 
+				   required="false"
+				   description="If true, Swiz will call event.stopPropagation() after running the decorated method" />
+		
+		<attribute name="stopImmediatePropagation"
+				   type="Boolean"
+				   hint="boolean" 
+				   defaultValue="false" 
+				   required="false"
+				   description="If true, Swiz will call event.stopImmediatePropagation() after running the decorated method" />
+   
+	</metadata>
+	
+	<metadata name="PostConstruct" description="Marks this method to be called after all injections are fulfilled">
+		<context name="method" />
+		
+		<attribute name="order"
+				   type="Number" 
+				   defaultValue="0" 
+				   required="false"
+				   description="Position in which to call the decorated method if there are multiple [PostConstruct] methods. Called in ascending order." />
+	</metadata>
+	
+	<metadata name="PreDestroy" description="Marks this method to be called before all injections are nullified">
+		<context name="method" />
+		
+		<attribute name="order"
+				   type="Number" 
+				   defaultValue="0" 
+				   required="false"
+				   description="Position in which to call the decorated method if there are multiple [PreDestroy] methods. Called in ascending order." />
+	</metadata>
+</annotations>
