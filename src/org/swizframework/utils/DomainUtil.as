@@ -49,10 +49,6 @@ package org.swizframework.utils
 		 */
 		public static function getModuleDomain( object:Object ):ApplicationDomain
 		{
-			CONFIG::mobile
-			{
-				return null;
-			}
 			CONFIG::webDesktop
 			{
 				if( object is Module )
@@ -60,11 +56,9 @@ package org.swizframework.utils
 					var moduleInfo:Object = ModuleManager.getAssociatedFactory( object ).info();
 					return moduleInfo.currentDomain;
 				}
-				else
-				{
-					return null;
-				}
 			}
+			
+			return null;
 		}
 	}
 }
