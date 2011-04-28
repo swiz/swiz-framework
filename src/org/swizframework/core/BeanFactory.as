@@ -24,7 +24,7 @@ package org.swizframework.core
 	import flash.system.ApplicationDomain;
 	import flash.utils.getQualifiedClassName;
 	
-	CONFIG::webDesktop
+	CONFIG::standard
 	{
 		import mx.modules.Module;
 	}
@@ -544,7 +544,7 @@ package org.swizframework.core
 			if( SwizManager.wiredViews[ event.target ] )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 			
-			CONFIG::webDesktop
+			CONFIG::standard
 			{
 				if( event.target is Module )
 					addRemovedDisplayObject( DisplayObject( event.target ) );

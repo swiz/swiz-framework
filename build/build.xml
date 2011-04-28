@@ -81,9 +81,8 @@
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
 			
-			<!-- add mobile / web compiler args -->
-			<compiler.define name="CONFIG::mobile" value="false" />
-			<compiler.define name="CONFIG::webDesktop" value="true" />
+			<!-- add standard/mobile compiler arg -->
+			<compiler.define name="CONFIG::standard" value="true" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
 			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
@@ -111,9 +110,8 @@
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
 			
-			<!-- add mobile / web compiler args -->
-			<compiler.define name="CONFIG::mobile" value="true" />
-			<compiler.define name="CONFIG::webDesktop" value="false" />
+			<!-- add standard/mobile compiler arg -->
+			<compiler.define name="CONFIG::standard" value="false" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
 			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
@@ -146,8 +144,7 @@
 			<arg line="-source-path ${src.loc}"/>
 			<arg line="-output ${docs.loc}"/>
 			<arg line="-window-title 'Swiz ${swiz.version}'"/>
-			<arg line="-define+=CONFIG::webDesktop,true" />
-			<arg line="-define+=CONFIG::mobile,false" />
+			<arg line="-define+=CONFIG::standard,true" />
 		</java>
 		
 		<echo message="${swiz.name} documentation has been created in ${docs.loc}" />
