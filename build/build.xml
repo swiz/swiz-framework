@@ -81,6 +81,8 @@
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
 			
+			<include-file name="metadata.xml" path="${src.loc}/metadata.xml" />
+			
 			<!-- add standard/mobile compiler arg -->
 			<compiler.define name="CONFIG::standard" value="true" />
 			
@@ -109,6 +111,8 @@
 			
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
+			
+			<include-file name="metadata.xml" path="${src.loc}/metadata.xml" />
 			
 			<!-- add standard/mobile compiler arg -->
 			<compiler.define name="CONFIG::standard" value="false" />
