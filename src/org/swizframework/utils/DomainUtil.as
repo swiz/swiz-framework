@@ -18,7 +18,7 @@ package org.swizframework.utils
 {
 	import flash.system.ApplicationDomain;
 	
-	CONFIG::webDesktop
+	CONFIG::standard
 	{
 		import mx.modules.Module;
 		import mx.modules.ModuleManager;
@@ -49,22 +49,16 @@ package org.swizframework.utils
 		 */
 		public static function getModuleDomain( object:Object ):ApplicationDomain
 		{
-			CONFIG::mobile
-			{
-				return null;
-			}
-			CONFIG::webDesktop
+			CONFIG::standard
 			{
 				if( object is Module )
 				{
 					var moduleInfo:Object = ModuleManager.getAssociatedFactory( object ).info();
 					return moduleInfo.currentDomain;
 				}
-				else
-				{
-					return null;
-				}
 			}
+			
+			return null;
 		}
 	}
 }

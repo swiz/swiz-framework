@@ -7,7 +7,6 @@
 	<!--  Configuration -->
 	<!-- ============================== -->
 	
-	
 	<property environment="env" />
 	
 	<!-- Configuration -->
@@ -54,35 +53,11 @@
 		<mkdir dir="${report.loc}" />
 	</target>
 	
-	<target name="setDefaults">
-		<echo>setting compiler defautls</echo>
-		
-		<!-- set defaults for mobile -->
-        <condition property="mobile" value="false">
-            <not>
-                <isset property="${mobile}"/>
-            </not>
-        </condition>
-        <condition property="webDesktop" value="false">
-            <istrue value="${mobile}"/>
-        </condition>
-        <property name="webDesktop" value="true"/>
-		<echo>
-            set desktop:${webDesktop}, mobile:${mobile}
-        </echo>
-	</target>
-	
-	<target name="echoProps" depends="setDefaults">
-		<echo>
-            Desktop: ${webDesktop}, Mobile: ${mobile}
-        </echo>
-	</target>
-	
 	<!-- ======================================= -->
 	<!--  Compile, Document, and Package Targets -->
 	<!-- ======================================= -->
 	
-	<target name="compile" depends="init,setDefaults" description="Compile the library .swc file">
+	<target name="compile" depends="init" description="Compile the library .swc file">
 
 		<!-- set up list of classes to include in library -->
 		<fileset id="src.include.fileset" dir="${src.loc}">
@@ -106,9 +81,8 @@
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
 			
-			<!-- add mobile / web compiler args -->
-			<compiler.define name="CONFIG::mobile" value="${mobile}" />
-			<compiler.define name="CONFIG::webDesktop" value="${webDesktop}" />
+			<!-- add standard/mobile compiler arg -->
+			<compiler.define name="CONFIG::standard" value="true" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
 			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
@@ -129,6 +103,35 @@
 		</compc>
 		
 		<echo message="${swiz.name}.swc has been created in ${bin.loc}" />
+		
+		<compc output="${bin.loc}/${swiz.name.mobile}.swc" include-classes="${src.include.classes}">
+			<source-path path-element="${src.loc}" />
+			
+			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
+			<include-namespaces uri="${swiz.namespace}" />
+			
+			<!-- add standard/mobile compiler arg -->
+			<compiler.define name="CONFIG::standard" value="false" />
+			
+			<!-- Configure the flex framework libraries as external link dependencies -->
+			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
+				<include name="libs" />
+				<include name="locale/{locale}" />
+			</external-library-path>
+			
+			<keep-as3-metadata name="Inject"/>
+			<keep-as3-metadata name="Autowire"/>
+			<keep-as3-metadata name="Dispatcher"/>
+			<keep-as3-metadata name="EventHandler"/>
+			<keep-as3-metadata name="Mediate"/>
+			<keep-as3-metadata name="PostConstruct"/>
+			<keep-as3-metadata name="PreDestroy"/>
+
+			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
+			<headless-server>true</headless-server>
+		</compc>
+		
+		<echo message="${swiz.name.mobile}.swc has been created in ${bin.loc}" />
 	</target>
 	
 	<target name="asdoc" depends="init" description="Generate ASDoc documentation">
@@ -141,16 +144,20 @@
 			<arg line="-source-path ${src.loc}"/>
 			<arg line="-output ${docs.loc}"/>
 			<arg line="-window-title 'Swiz ${swiz.version}'"/>
+			<arg line="-define+=CONFIG::standard,true" />
 		</java>
 		
 		<echo message="${swiz.name} documentation has been created in ${docs.loc}" />
 	</target>
 	
-	<target name="package" depends="clean, compile, asdoc" description="Prepares and assembles the .zip artifact with the .swc library and corresponding ASDoc documentation">
+	<target name="package" depends="clean, compile, asdoc" description="Prepares and assembles the .zip artifact with the .swc libraries, source files and corresponding ASDoc documentation">
 		<zip destfile="${dist.loc}/${swiz.name}.zip">
-			<!-- Include the libray .swc file -->
+			<!-- Include the library .swc files -->
 			<zipfileset dir="${bin.loc}" prefix="${swiz.name}">
 				<include name="${swiz.name}.swc" />
+			</zipfileset>
+			<zipfileset dir="${bin.loc}" prefix="${swiz.name}">
+				<include name="${swiz.name.mobile}.swc" />
 			</zipfileset>
 			
 			<!-- Include README.markdown -->

@@ -26,12 +26,10 @@ package org.swizframework.core
 		function setUp( swiz:ISwiz ):void;
 		function tearDown():void;
 		
-		function createBeanFromSource( source:Object, beanName:String = null ):Bean;
 		function setUpBean( bean:Bean ):void;
 		function addBean( bean:Bean, autoSetUpBean:Boolean = true ):Bean;
 		function addBeanProvider( beanProvider:IBeanProvider, autoSetUpBeans:Boolean = true ):void;
 		
-		function getBeanForSource( source:Object ):Bean;
 		function tearDownBean( bean:Bean ):void;
 		function removeBean( bean:Bean ):void;
 		function removeBeanProvider( beanProvider:IBeanProvider ):void;
