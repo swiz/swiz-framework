@@ -29,6 +29,7 @@ package org.swizframework.core
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.ProcessorPriority;
 	import org.swizframework.processors.SwizInterfaceProcessor;
+	import org.swizframework.processors.ViewProcessor;
 	import org.swizframework.utils.logging.AbstractSwizLoggingTarget;
 	import org.swizframework.utils.logging.SwizLogger;
 	
@@ -56,7 +57,8 @@ package org.swizframework.core
 		protected var _beanProviders:Array;
 		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new InjectProcessor(), new DispatcherProcessor(), new EventHandlerProcessor(), 
-											new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor() ];
+											new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor(), 
+											new ViewProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
 		
