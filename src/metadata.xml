@@ -120,4 +120,16 @@
 				   required="false"
 				   description="Position in which to call the decorated method if there are multiple [PreDestroy] methods. Called in ascending order." />
 	</metadata>
+	
+	<metadata name="ViewAdded" description="Passes in a view that matches the decorated type when caught by the setUpEventType listener">
+		<context name="variable" />
+		<context name="setter" />
+		<context name="method" />
+	</metadata>
+	
+	<metadata name="ViewRemoved" description="Passes in a view that matches the decorated type when caught by the tearDownEventType listener">
+		<context name="variable" />
+		<context name="setter" />
+		<context name="method" />
+	</metadata>
 </annotations>

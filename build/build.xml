@@ -92,13 +92,15 @@
 				<include name="locale/{locale}" />
 			</external-library-path>
 			
-			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Autowire"/>
 			<keep-as3-metadata name="Dispatcher"/>
 			<keep-as3-metadata name="EventHandler"/>
+			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Mediate"/>
 			<keep-as3-metadata name="PostConstruct"/>
 			<keep-as3-metadata name="PreDestroy"/>
+			<keep-as3-metadata name="ViewAdded"/>
+			<keep-as3-metadata name="ViewRemoved"/>
 
 			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
 			<headless-server>true</headless-server>
@@ -123,13 +125,15 @@
 				<include name="locale/{locale}" />
 			</external-library-path>
 			
-			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Autowire"/>
 			<keep-as3-metadata name="Dispatcher"/>
 			<keep-as3-metadata name="EventHandler"/>
+			<keep-as3-metadata name="Inject"/>
 			<keep-as3-metadata name="Mediate"/>
 			<keep-as3-metadata name="PostConstruct"/>
 			<keep-as3-metadata name="PreDestroy"/>
+			<keep-as3-metadata name="ViewAdded"/>
+			<keep-as3-metadata name="ViewRemoved"/>
 
 			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
 			<headless-server>true</headless-server>
