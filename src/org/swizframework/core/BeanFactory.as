@@ -24,11 +24,6 @@ package org.swizframework.core
 	import flash.system.ApplicationDomain;
 	import flash.utils.getQualifiedClassName;
 	
-	CONFIG::standard
-	{
-		import mx.modules.Module;
-	}
-	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.events.SwizEvent;
 	import org.swizframework.processors.IBeanProcessor;
@@ -36,6 +31,7 @@ package org.swizframework.core
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.TypeCache;
+	import org.swizframework.utils.ModuleTypeUtil;
 	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
@@ -544,11 +540,8 @@ package org.swizframework.core
 			if( SwizManager.wiredViews[ event.target ] )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 			
-			CONFIG::standard
-			{
-				if( event.target is Module )
-					addRemovedDisplayObject( DisplayObject( event.target ) );
-			}
+			if( event.target is ModuleTypeUtil.MODULE_TYPE )
+				addRemovedDisplayObject( DisplayObject( event.target ) );
 		}
 		
 		protected function addRemovedDisplayObject( displayObject:DisplayObject ):void
