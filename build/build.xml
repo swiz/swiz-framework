@@ -83,8 +83,9 @@
 			
 			<include-file name="metadata.xml" path="${src.loc}/metadata.xml" />
 			
-			<!-- add standard/mobile compiler arg -->
-			<compiler.define name="CONFIG::standard" value="true" />
+			<!-- add flex3/flex4 compiler arg -->
+			<compiler.define name="CONFIG::flex3" value="false" />
+			<compiler.define name="CONFIG::flex4" value="true" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
 			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
@@ -108,7 +109,7 @@
 		
 		<echo message="${swiz.name}.swc has been created in ${bin.loc}" />
 		
-		<compc output="${bin.loc}/${swiz.name.mobile}.swc" include-classes="${src.include.classes}">
+		<compc output="${bin.loc}/${swiz.name.flex3}.swc" include-classes="${src.include.classes}">
 			<source-path path-element="${src.loc}" />
 			
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
@@ -116,8 +117,9 @@
 			
 			<include-file name="metadata.xml" path="${src.loc}/metadata.xml" />
 			
-			<!-- add standard/mobile compiler arg -->
-			<compiler.define name="CONFIG::standard" value="false" />
+			<!-- add flex3/flex4 compiler arg -->
+			<compiler.define name="CONFIG::flex3" value="true" />
+			<compiler.define name="CONFIG::flex4" value="false" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
 			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
@@ -139,7 +141,7 @@
 			<headless-server>true</headless-server>
 		</compc>
 		
-		<echo message="${swiz.name.mobile}.swc has been created in ${bin.loc}" />
+		<echo message="${swiz.name.flex3}.swc has been created in ${bin.loc}" />
 	</target>
 	
 	<target name="asdoc" depends="init" description="Generate ASDoc documentation">
@@ -152,7 +154,8 @@
 			<arg line="-source-path ${src.loc}"/>
 			<arg line="-output ${docs.loc}"/>
 			<arg line="-window-title 'Swiz ${swiz.version}'"/>
-			<arg line="-define+=CONFIG::standard,true" />
+			<arg line="-define+=CONFIG::flex3,false" />
+			<arg line="-define+=CONFIG::flex4,true" />
 		</java>
 		
 		<echo message="${swiz.name} documentation has been created in ${docs.loc}" />
@@ -165,7 +168,7 @@
 				<include name="${swiz.name}.swc" />
 			</zipfileset>
 			<zipfileset dir="${bin.loc}" prefix="${swiz.name}">
-				<include name="${swiz.name.mobile}.swc" />
+				<include name="${swiz.name.flex3}.swc" />
 			</zipfileset>
 			
 			<!-- Include README.markdown -->
