@@ -24,11 +24,6 @@ package org.swizframework.core
 	import flash.system.ApplicationDomain;
 	import flash.utils.getQualifiedClassName;
 	
-	CONFIG::standard
-	{
-		import mx.modules.Module;
-	}
-	
 	import org.swizframework.events.BeanEvent;
 	import org.swizframework.events.SwizEvent;
 	import org.swizframework.processors.IBeanProcessor;
@@ -36,6 +31,7 @@ package org.swizframework.core
 	import org.swizframework.processors.IMetadataProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.reflection.TypeCache;
+	import org.swizframework.utils.ModuleTypeUtil;
 	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
@@ -447,7 +443,7 @@ package org.swizframework.core
 					if( existingBean )
 						tearDownBean( existingBean );
 					else
-						logger.warn( "Could not find bean with {0} as its source. Ignoring TEAR_DOWN_BEAN request.", event.source.toString() );
+						tearDownBean( constructBean( event.source, null, swiz.domain ) ); // non-singleton Prototype beans are not stored, so this is how we tear them down
 					break;
 				
 				case BeanEvent.REMOVE_BEAN:
@@ -544,11 +540,8 @@ package org.swizframework.core
 			if( SwizManager.wiredViews[ event.target ] )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 			
-			CONFIG::standard
-			{
-				if( event.target is Module )
-					addRemovedDisplayObject( DisplayObject( event.target ) );
-			}
+			if( event.target is ModuleTypeUtil.MODULE_TYPE )
+				addRemovedDisplayObject( DisplayObject( event.target ) );
 		}
 		
 		protected function addRemovedDisplayObject( displayObject:DisplayObject ):void

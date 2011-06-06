@@ -17,7 +17,6 @@
 package org.swizframework.reflection
 {
 	import flash.system.ApplicationDomain;
-	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
 	public class ClassConstant
@@ -100,10 +99,10 @@ package org.swizframework.reflection
 		{
 			var descriptor:TypeDescriptor = TypeCache.getTypeDescriptor( definition, domain );
 			
-			var node:XMLList = descriptor.description.constant.(@name == constantName );
+			var node:XMLList = descriptor.description.constant.( @name == constantName );
+			
 			// todo: do we need to check for jackasses who don't make their event types constants?
-			//       I'm looking at you mapquest!
-			var variableNode:XMLList = descriptor.description.variable.(@name == constantName );
+			var variableNode:XMLList = descriptor.description.variable.( @name == constantName );
 			
 			if( node.length() == 0 )
 			{
@@ -184,7 +183,6 @@ package org.swizframework.reflection
 			try
 			{
 				return domain.getDefinition( name ) as Class;
-				// return getDefinitionByName( name ) as Class;
 			}
 			catch( e:ReferenceError )
 			{
