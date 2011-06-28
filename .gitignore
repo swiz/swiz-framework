@@ -18,3 +18,8 @@ Icon
 Thumbs.db
 .DS_Store
 
+target
+*.iml
+*.ipr
+*.iws
+.idea

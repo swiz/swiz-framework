@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2008 Marvin Herman Froeder
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <groupId>org.swizframework</groupId>
+    <artifactId>swiz-framework</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+    <packaging>swc</packaging>
+    <name>swiz-framework</name>
+    <url>http://swizframework.org/</url>
+    <description>
+        Swiz is a framework for Adobe Flex and ActionScript that aims to bring complete simplicity to RIA development.
+    </description>
+    <licenses>
+        <license>
+            <url>https://raw.github.com/btilford/swiz-framework/master/LICENSE</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Chris Scott</name>
+            <url>http://github.com/asstrochris</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Ben Clinkinbeard</name>
+            <url>http://github.com/bclinkinbeard</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Sönke Rohde</name>
+            <url>http://github.com/srohde</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Ryan Campbell</name>
+            <url>http://github.com/ryancampbell</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Darron Schall</name>
+            <url>http://github.com/darronschall</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>David Tucker</name>
+            <url>http://github.com/davidtucker</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>John Yanarella</name>
+            <url>http://github.com/johnyanarella</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Cliff Meyers</name>
+            <url>http://github.com/cliffmeyers</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Brian Kotek</name>
+            <url>http://github.com/brian428</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Adam Lehman</name>
+            <email>adrocknaphobia@gmail.com</email>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git://github.com/btilford/swiz-framework.git</connection>
+        <developerConnection>scm:git@github.com:btilford/swiz-framework.git</developerConnection>
+        <url>https://btilford@github.com/btilford/swiz-framework.git</url>
+    </scm>
+    <issueManagement>
+        <system>jira</system>
+        <url>http://swizframework.jira.com/</url>
+    </issueManagement>
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>${flexmojos.version}</version>
+                <extensions>true</extensions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.adobe.flex</groupId>
+                        <artifactId>compiler</artifactId>
+                        <version>${flex.version}</version>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <storepass/>
+                    <!--<targetPlayer>11.0.0</targetPlayer>-->
+                    <definesDeclaration>
+                        <property>
+                            <name>CONFIG::flex4</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>CONFIG::flex3</name>
+                            <value>false</value>
+                        </property>
+                    </definesDeclaration>
+                    <configurationReport>true</configurationReport>
+                    <skipTests>true</skipTests>
+                    <!-- flexmojos / flex sdk dependencies are completely unusable -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.adobe.flex.framework</groupId>
+                <artifactId>flex-framework</artifactId>
+                <version>${flex.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.adobe.flex.framework</groupId>
+                <artifactId>playerglobal</artifactId>
+                <version>${flex.version}</version>
+                <classifier>10</classifier>
+                <type>swc</type>
+                <!--<scope>test</scope>-->
+            </dependency>
+            <dependency>
+                <groupId>org.flexunit</groupId>
+                <artifactId>flexunit</artifactId>
+                <version>1.0</version>
+                <type>swc</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-unittest-flexunit4</artifactId>
+                <version>${flexmojos.version}</version>
+                <type>swc</type>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.adobe.flex.framework</groupId>
+                        <artifactId>playerglobal</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flexunit</groupId>
+            <artifactId>flexunit</artifactId>
+            <type>swc</type>
+        </dependency>
+        <dependency>
+            <groupId>org.sonatype.flexmojos</groupId>
+            <artifactId>flexmojos-unittest-flexunit4</artifactId>
+            <type>swc</type>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>m2e</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.maven.ide.eclipse</groupId>
+                        <artifactId>lifecycle-mapping</artifactId>
+                        <version>0.9.9-SNAPSHOT</version>
+                        <configuration>
+                            <mappingId>customizable</mappingId>
+                            <configurators>
+                                <configurator id='org.maven.ide.eclipse.configuration.flex.configurator'/>
+                            </configurators>
+                            <mojoExecutions>
+                                <mojoExecution>org.apache.maven.plugins:maven-resources-plugin::</mojoExecution>
+                            </mojoExecutions>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <version>2.4</version>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>flex3</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <flex.version>3.6.0.16995</flex.version>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.flexmojos</groupId>
+                        <artifactId>flexmojos-maven-plugin</artifactId>
+                        <version>${flexmojos.version}</version>
+                        <extensions>true</extensions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.adobe.flex</groupId>
+                                <artifactId>compiler</artifactId>
+                                <version>${flex.version}</version>
+                                <type>pom</type>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <classifier>flex3</classifier>
+                            <storepass/>
+                            <definesDeclaration>
+                                <property>
+                                    <name>CONFIG::flex4</name>
+                                    <value>false</value>
+                                </property>
+                                <property>
+                                    <name>CONFIG::flex3</name>
+                                    <value>true</value>
+                                </property>
+                            </definesDeclaration>
+                            <configurationReport>true</configurationReport>
+                            <skipTests>true</skipTests>
+                            <!-- flexmojos / flex sdk dependencies are completely unusable -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <properties>
+        <flex.version>4.5.0.18623</flex.version>
+        <!--<flexmojos.version>4.0-beta-7</flexmojos.version>-->
+        <flexmojos.version>3.8</flexmojos.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>http://repository.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>flash-nexus-repository</id>
+            <url>http://www.flashnexus.org/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype</id>
+            <url>http://repository.sonatype.org/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>
