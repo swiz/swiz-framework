@@ -25,7 +25,7 @@
     </parent>
     <groupId>org.swizframework</groupId>
     <artifactId>swiz-framework</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version> <!-- using 1.1.0-SNAPSHOT so when a release build is done it can be 1.2.0 and be in sync with current project version -->
     <packaging>swc</packaging>
     <name>swiz-framework</name>
     <url>http://swizframework.org/</url>
