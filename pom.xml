@@ -27,7 +27,8 @@
 
     <groupId>org.swizframework</groupId>
     <artifactId>swiz-framework</artifactId>
-    <version>1.1.0-SNAPSHOT</version> <!-- using 1.1.0-SNAPSHOT so when a release build is done it can be 1.2.0 and be in sync with current project version -->
+    <version>1.1.0-SNAPSHOT</version>
+    <!-- using 1.1.0-SNAPSHOT so when a release build is done it can be 1.2.0 and be in sync with current project version -->
     <packaging>swc</packaging>
     <name>swiz-framework</name>
     <url>http://swizframework.org/</url>
@@ -110,6 +111,13 @@
                 <role>contributor</role>
             </roles>
         </developer>
+        <developer>
+            <name>Ben Tilford</name>
+            <url>http://github.com/btilford</url>
+            <roles>
+                <role>contributor</role>
+            </roles>
+        </developer>
     </developers>
     <scm>
         <connection>scm:git://github.com/btilford/swiz-framework.git</connection>
@@ -130,6 +138,7 @@
                 <artifactId>flexmojos-maven-plugin</artifactId>
                 <version>${flexmojos.version}</version>
                 <extensions>true</extensions>
+
                 <dependencies>
                     <dependency>
                         <groupId>com.adobe.flex</groupId>
@@ -140,7 +149,11 @@
                 </dependencies>
                 <configuration>
                     <storepass/>
-                    <!--<targetPlayer>11.0.0</targetPlayer>-->
+                    <targetPlayer>${target.player.version}</targetPlayer>
+                    <keepGeneratedActionscript>false</keepGeneratedActionscript>
+
+                    <staticLinkRuntimeSharedLibraries>false</staticLinkRuntimeSharedLibraries>
+
                     <definesDeclaration>
                         <property>
                             <name>CONFIG::flex4</name>
@@ -152,36 +165,37 @@
                         </property>
                     </definesDeclaration>
                     <configurationReport>true</configurationReport>
-                    <skipTests>true</skipTests>
-                    <!-- flexmojos / flex sdk dependencies are completely unusable -->
+                    <skipTests>true</skipTests><!-- not sure what flexunit is being used -->
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>swc</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile-swc</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>com.adobe.flex.framework</groupId>
                 <artifactId>flex-framework</artifactId>
                 <version>${flex.version}</version>
                 <type>pom</type>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.adobe.flex.framework</groupId>
+                        <artifactId>playerglobal</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-            <dependency>
-                <groupId>com.adobe.flex.framework</groupId>
-                <artifactId>playerglobal</artifactId>
-                <version>${flex.version}</version>
-                <classifier>10</classifier>
-                <type>swc</type>
-                <!--<scope>test</scope>-->
-            </dependency>
-            <dependency>
-                <groupId>org.flexunit</groupId>
-                <artifactId>flexunit</artifactId>
-                <version>1.0</version>
-                <type>swc</type>
-                <scope>test</scope>
-            </dependency>
+
             <dependency>
                 <groupId>org.sonatype.flexmojos</groupId>
                 <artifactId>flexmojos-unittest-flexunit4</artifactId>
@@ -193,13 +207,38 @@
                         <groupId>com.adobe.flex.framework</groupId>
                         <artifactId>playerglobal</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.adobe.flex.framework</groupId>
+                        <artifactId>framework</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
-        </dependencies>
 
+            <dependency>
+                <groupId>com.adobe.flex.framework</groupId>
+                <artifactId>playerglobal</artifactId>
+                <version>${flex.version}</version>
+                <classifier>${target.player.version}</classifier>
+                <type>swc</type>
+            </dependency>
+            <dependency>
+                <groupId>com.adobe.flex.framework</groupId>
+                <artifactId>framework</artifactId>
+                <classifier>en_US</classifier>
+                <type>rb.swc</type>
+                <version>${flex.version}</version>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>playerglobal</artifactId>
+            <classifier>${target.player.version}</classifier>
+            <type>swc</type>
+        </dependency>
+
         <dependency>
             <groupId>com.adobe.flex.framework</groupId>
             <artifactId>flex-framework</artifactId>
@@ -207,16 +246,17 @@
         </dependency>
 
         <dependency>
-            <groupId>org.flexunit</groupId>
-            <artifactId>flexunit</artifactId>
-            <type>swc</type>
-        </dependency>
-        <dependency>
             <groupId>org.sonatype.flexmojos</groupId>
             <artifactId>flexmojos-unittest-flexunit4</artifactId>
             <type>swc</type>
         </dependency>
-
+        <dependency>
+            <groupId>org.flexunit</groupId>
+            <artifactId>flexunit</artifactId>
+            <version>1.0</version>
+            <type>swc</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -270,6 +310,7 @@
                         <artifactId>flexmojos-maven-plugin</artifactId>
                         <version>${flexmojos.version}</version>
                         <extensions>true</extensions>
+
                         <dependencies>
                             <dependency>
                                 <groupId>com.adobe.flex</groupId>
@@ -279,8 +320,13 @@
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <classifier>flex3</classifier>
                             <storepass/>
+                            <targetPlayer>${target.player.version}</targetPlayer>
+                            <keepGeneratedActionscript>false</keepGeneratedActionscript>
+
+                            <staticLinkRuntimeSharedLibraries>false</staticLinkRuntimeSharedLibraries>
+
+                            <classifier>flex3</classifier>
                             <definesDeclaration>
                                 <property>
                                     <name>CONFIG::flex4</name>
@@ -292,9 +338,17 @@
                                 </property>
                             </definesDeclaration>
                             <configurationReport>true</configurationReport>
-                            <skipTests>true</skipTests>
-                            <!-- flexmojos / flex sdk dependencies are completely unusable -->
+                            <skipTests>true</skipTests><!-- not sure what flexunit is being used -->
                         </configuration>
+                        <executions>
+                            <execution>
+                                <id>swc</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>compile-swc</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -304,6 +358,7 @@
         <flex.version>4.5.0.18623</flex.version>
         <!--<flexmojos.version>4.0-beta-7</flexmojos.version>-->
         <flexmojos.version>3.8</flexmojos.version>
+        <target.player.version>10.2</target.player.version>
     </properties>
 
     <repositories>
