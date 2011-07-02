@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<design>
+    <!--- Only the classes that can be declared in mxml -->
+    <namespaces>
+        <namespace prefix="sf" uri="library://ns.swizframework.org/swiz" />
+    </namespaces>
+ 
+    <categories>
+        <category id="swiz" label="Swiz" defaultExpand="true" />
+    </categories>
+    
+    <components>
+        <component name="Swiz" namespace="sf" category="swiz" insertStyle="control" displayName="Swiz">
+            <mxmlProperties use="sf:Swiz" />
+        </component>
+        
+        <!-- core package -->
+        <component name="SwizConfig" namespace="sf" category="swiz" insertStyle="control" displayName="Swiz Config">
+            <mxmlProperties use="sf:SwizConfig" />
+        </component>
+        <component name="Bean" namespace="sf" category="swiz" insertStyle="control" displayName="Bean">
+            <mxmlProperties use="sf:Bean" />
+        </component>
+        <component name="BeanFactory" namespace="sf" category="swiz" insertStyle="control" displayName="Bean Factory">
+            <mxmlProperties use="sf:BeanFactory" />
+        </component>
+        <component name="BeanProvider" namespace="sf" category="swiz" insertStyle="control" displayName="Bean Provider">
+            <mxmlProperties use="sf:BeanProvider" />
+        </component>
+        <component name="BeanLoader" namespace="sf" category="swiz" insertStyle="control" displayName="Bean Loader">
+            <mxmlProperties use="sf:BeanLoader" />
+        </component>
+        
+        <!-- utils package -->
+        <component name="ServiceHelper" namespace="sf" category="swiz" insertStyle="control" displayName="Service Helper">
+            <mxmlProperties use="sf:ServiceHelper" />
+        </component>
+        <component name="ChannelSetHelper" namespace="sf" category="swiz" insertStyle="control" displayName="ChannelSet Helper">
+            <mxmlProperties use="sf:ChannelSetHelper" />
+        </component>
+        <component name="URLRequestHelper" namespace="sf" category="swiz" insertStyle="control" displayName="URL Request Helper">
+            <mxmlProperties use="sf:URLRequestHelper" />
+        </component>
+        
+    </components>
+</design>

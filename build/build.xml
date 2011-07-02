@@ -82,6 +82,7 @@
 			<include-namespaces uri="${swiz.namespace}" />
 			
 			<include-file name="metadata.xml" path="${src.loc}/metadata.xml" />
+            <include-file name="design.xml" path="${src.loc}/design.xml" />
 			
 			<!-- add flex3/flex4 compiler arg -->
 			<compiler.define name="CONFIG::flex3" value="false" />
