@@ -106,14 +106,14 @@ package org.swizframework.utils.event
 		public function handleEvent( event:Event ):void
 		{
 			// ignore if the event types do not match
-			if( ( eventClass != null ) && ! ( event is eventClass ) )
+			if( ( eventClass != null ) && !( event is eventClass ) )
 				return;
 			
 			var result:* = null;
 			
 			if( metadataTag.properties != null )
 			{
-				if( validateEvent( event, metadataTag.properties ) )
+				if( validateEvent( event, metadataTag ) )
 					result = method.apply( null, getEventArgs( event, metadataTag.properties ) );
 			}
 			else if( getRequiredParameterCount() <= 1 )
@@ -152,12 +152,28 @@ package org.swizframework.utils.event
 		 * @param properties The required properties specified in the [EventHandler] tag.
 		 * @returns A Boolean value indicating whether the event has all of the required properties specified in the [EventHandler] tag.
 		 */
-		protected function validateEvent( event:Event, properties:Array ):Boolean
+		protected function validateEvent( event:Event, metadataTag:EventHandlerMetadataTag ):Boolean
 		{
-			for each( var property:String in properties )
+			for each( var property:String in metadataTag.properties )
 			{
-				if( ! ( property in event ) )
-					throw new Error(  "Unable to handle event: " + property + " does not exist as a property of " + getQualifiedClassName( event ) + "." );
+				if( property.indexOf( "." ) < 0 && !( property in event ) )
+				{
+					throw new Error( "Unable to handle event: " + property + " does not exist as a property of " + getQualifiedClassName( event ) + "." );
+				}
+				else
+				{
+					var chain:Array = property.split( "." );
+					var o:Object = event;
+					while( chain.length > 0 )
+					{
+						var prop:String = chain.shift();
+						
+						if( prop in o )
+							o = o[ prop ];
+						else
+							throw new Error( "Unable to handle event: " + prop + " does not exist as a property of " + getQualifiedClassName( o ) + " as defined in " + metadataTag.asTag + "." );
+					}
+				}
 			}
 			
 			return true;
@@ -175,7 +191,19 @@ package org.swizframework.utils.event
 			
 			for each( var property:String in properties )
 			{
-				args[ args.length ] = event[ property ];
+				if( property.indexOf( "." ) < 0 )
+				{
+					args[ args.length ] = event[ property ];
+				}
+				else
+				{
+					var chain:Array = property.split( "." );
+					var o:Object = event;
+					while( chain.length > 1 )
+						o = o[ chain.shift() ];
+					
+					args[ args.length ] = o[ chain.shift() ];
+				}
 			}
 			
 			return args;
