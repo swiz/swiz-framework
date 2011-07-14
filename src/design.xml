@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<design version="2">
+
+    <namespaces>
+        <namespace prefix="swiz" uri="http://swiz.swizframework.org" />
+    </namespaces>
+ 
+    <categories>
+        <category id="Swiz" label="Swiz Framework" defaultExpand="true" />
+    </categories>
+    
+    <components>
+        <component name="Swiz" 					displayName="Swiz" 					namespace="swiz" category="Swiz" />
+        <component name="SwizConfig" 			displayName="SwizConfig" 			namespace="swiz" category="Swiz" />
+        <component name="Bean" 					displayName="Bean" 					namespace="swiz" category="Swiz" />
+        <component name="BeanProvider" 			displayName="BeanProvider" 			namespace="swiz" category="Swiz" />
+        <component name="Prototype" 			displayName="Prototype" 			namespace="swiz" category="Swiz" />
+        <component name="SwizTraceTarget" 		displayName="SwizTraceTarget" 		namespace="swiz" category="Swiz" />
+        <component name="ServiceHelper" 		displayName="ServiceHelper"			namespace="swiz" category="Swiz" />
+        <component name="ChannelSetHelper" 		displayName="ChannelSetHelper" 		namespace="swiz" category="Swiz" />
+        <component name="MockDelegateHelper" 	displayName="MockDelegateHelper" 	namespace="swiz" category="Swiz" />
+        <component name="URLRequestHelper" 		displayName="URLRequestHelper" 		namespace="swiz" category="Swiz" />
+    </components>
+    
+</design>
