@@ -1,46 +1,48 @@
-<?xml version="1.0"?>
-<design>
+<?xml version="1.0" encoding="utf-8"?>
+<design version="2">
     <!--- Only the classes that can be declared in mxml -->
     <namespaces>
-        <namespace prefix="sf" uri="library://ns.swizframework.org/swiz" />
+        <namespace prefix="swiz" uri="http://swiz.swizframework.org" />
     </namespaces>
  
     <categories>
-        <category id="swiz" label="Swiz" defaultExpand="true" />
+        <category id="swiz" label="Swiz Framework" defaultExpand="true" />
     </categories>
     
     <components>
-        <component name="Swiz" namespace="sf" category="swiz" insertStyle="control" displayName="Swiz">
-            <mxmlProperties use="sf:Swiz" />
+		<!-- main swiz -->
+        <component name="Swiz" namespace="swiz" category="swiz" insertStyle="control" displayName="Swiz">
+            <mxmlProperties use="swiz:Swiz" />
         </component>
         
         <!-- core package -->
-        <component name="SwizConfig" namespace="sf" category="swiz" insertStyle="control" displayName="Swiz Config">
-            <mxmlProperties use="sf:SwizConfig" />
+        <component name="SwizConfig" namespace="swiz" category="swiz" insertStyle="control" displayName="Swiz Config">
+            <mxmlProperties use="swiz:SwizConfig" />
         </component>
-        <component name="Bean" namespace="sf" category="swiz" insertStyle="control" displayName="Bean">
-            <mxmlProperties use="sf:Bean" />
+        <component name="Bean" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean">
+            <mxmlProperties use="swiz:Bean" />
         </component>
-        <component name="BeanFactory" namespace="sf" category="swiz" insertStyle="control" displayName="Bean Factory">
-            <mxmlProperties use="sf:BeanFactory" />
+        <component name="BeanFactory" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean Factory">
+            <mxmlProperties use="swiz:BeanFactory" />
         </component>
-        <component name="BeanProvider" namespace="sf" category="swiz" insertStyle="control" displayName="Bean Provider">
-            <mxmlProperties use="sf:BeanProvider" />
+        <component name="BeanProvider" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean Provider">
+            <mxmlProperties use="swiz:BeanProvider" />
         </component>
-        <component name="BeanLoader" namespace="sf" category="swiz" insertStyle="control" displayName="Bean Loader">
-            <mxmlProperties use="sf:BeanLoader" />
+        <component name="BeanLoader" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean Loader">
+            <mxmlProperties use="swiz:BeanLoader" />
         </component>
         
         <!-- utils package -->
-        <component name="ServiceHelper" namespace="sf" category="swiz" insertStyle="control" displayName="Service Helper">
-            <mxmlProperties use="sf:ServiceHelper" />
+        <component name="ServiceHelper" namespace="swiz" category="swiz" insertStyle="control" displayName="Service Helper">
+            <mxmlProperties use="swiz:ServiceHelper" />
         </component>
-        <component name="ChannelSetHelper" namespace="sf" category="swiz" insertStyle="control" displayName="ChannelSet Helper">
-            <mxmlProperties use="sf:ChannelSetHelper" />
+        <component name="ChannelSetHelper" namespace="swiz" category="swiz" insertStyle="control" displayName="ChannelSet Helper">
+            <mxmlProperties use="swiz:ChannelSetHelper" />
         </component>
-        <component name="URLRequestHelper" namespace="sf" category="swiz" insertStyle="control" displayName="URL Request Helper">
-            <mxmlProperties use="sf:URLRequestHelper" />
+        <component name="URLRequestHelper" namespace="swiz" category="swiz" insertStyle="control" displayName="URL Request Helper">
+            <mxmlProperties use="swiz:URLRequestHelper" />
         </component>
         
     </components>
+
 </design>
