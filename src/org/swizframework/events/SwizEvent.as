@@ -30,20 +30,20 @@ package org.swizframework.events
 		// ========================================
 		
 		/**
-		 * The BeanEvent.ADDED constant defines the value of the type property
-		 * of a beanAdded event object.
+		 * The SwizEvent.CREATED constant defines the value of the type property
+		 * of a swizCreated event object.
 		 */
 		public static const CREATED:String = "swizCreated";
 		
 		/**
-		 * The BeanEvent.LOAD_COMPLETE constant defines the value of the type property
+		 * The SwizEvent.LOAD_COMPLETE constant defines the value of the type property
 		 * of an initial load complete event object.
 		 */
 		public static const LOAD_COMPLETE:String = "loadComplete";
 		
 		/**
-		 * The BeanEvent.REMOVED constant defines the value of the type property
-		 * of a beanRemoved event object.
+		 * The SwizEvent.DESTROYED constant defines the value of the type property
+		 * of a swizDestroyed event object.
 		 */
 		public static const DESTROYED:String = "swizDestroyed";
 		
