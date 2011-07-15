@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 <?xml version="1.0"?>
 <design version="2">
 
@@ -8,66 +7,12 @@
 <design version="2">
     <!--- Only the classes that can be declared in mxml -->
 >>>>>>> parent of 6a01a83... synchronizing for merge with master branch
-=======
-<?xml version="1.0" encoding="utf-8"?>
-<design version="2">
-    <!--- Only the classes that can be declared in mxml -->
-=======
-<?xml version="1.0"?>
-<design version="2">
-
->>>>>>> master
->>>>>>> parent of 7d41a06... synchronizing for merge with master branch
     <namespaces>
         <namespace prefix="swiz" uri="http://swiz.swizframework.org" />
     </namespaces>
  
     <categories>
 <<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        <category id="swiz" label="Swiz Framework" defaultExpand="true" />
-    </categories>
-    
-    <components>
-		<!-- main swiz -->
-        <component name="Swiz" namespace="swiz" category="swiz" insertStyle="control" displayName="Swiz">
-            <mxmlProperties use="swiz:Swiz" />
-        </component>
-        
-        <!-- core package -->
-        <component name="SwizConfig" namespace="swiz" category="swiz" insertStyle="control" displayName="Swiz Config">
-            <mxmlProperties use="swiz:SwizConfig" />
-        </component>
-        <component name="Bean" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean">
-            <mxmlProperties use="swiz:Bean" />
-        </component>
-        <component name="BeanFactory" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean Factory">
-            <mxmlProperties use="swiz:BeanFactory" />
-        </component>
-        <component name="BeanProvider" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean Provider">
-            <mxmlProperties use="swiz:BeanProvider" />
-        </component>
-        <component name="BeanLoader" namespace="swiz" category="swiz" insertStyle="control" displayName="Bean Loader">
-            <mxmlProperties use="swiz:BeanLoader" />
-        </component>
-        
-        <!-- utils package -->
-        <component name="ServiceHelper" namespace="swiz" category="swiz" insertStyle="control" displayName="Service Helper">
-            <mxmlProperties use="swiz:ServiceHelper" />
-        </component>
-        <component name="ChannelSetHelper" namespace="swiz" category="swiz" insertStyle="control" displayName="ChannelSet Helper">
-            <mxmlProperties use="swiz:ChannelSetHelper" />
-        </component>
-        <component name="URLRequestHelper" namespace="swiz" category="swiz" insertStyle="control" displayName="URL Request Helper">
-            <mxmlProperties use="swiz:URLRequestHelper" />
-        </component>
-        
-    </components>
-
-</design>
-=======
->>>>>>> parent of 7d41a06... synchronizing for merge with master branch
         <category id="Swiz" label="Swiz Framework" defaultExpand="true" />
     </categories>
     
@@ -85,7 +30,6 @@
     </components>
     
 </design>
-<<<<<<< HEAD
 =======
         <category id="swiz" label="Swiz Framework" defaultExpand="true" />
     </categories>
@@ -128,6 +72,3 @@
 
 </design>
 >>>>>>> parent of 6a01a83... synchronizing for merge with master branch
-=======
->>>>>>> master
->>>>>>> parent of 7d41a06... synchronizing for merge with master branch
