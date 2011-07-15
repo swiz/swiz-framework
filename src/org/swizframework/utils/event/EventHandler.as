@@ -52,6 +52,11 @@ package org.swizframework.utils.event
 		 */
 		protected var _eventClass:Class;
 		
+		/**
+		 * Strongly typed reference to metadataTag.host
+		 */
+		protected var hostMethod:MetadataHostMethod;
+		
 		// ========================================
 		// public properties
 		// ========================================
@@ -92,6 +97,8 @@ package org.swizframework.utils.event
 			_metadataTag = metadataTag;
 			_method = method;
 			_eventClass = eventClass;
+			
+			verifyTag();
 		}
 		
 		// ========================================
@@ -116,16 +123,12 @@ package org.swizframework.utils.event
 				if( validateEvent( event, metadataTag ) )
 					result = method.apply( null, getEventArgs( event, metadataTag.properties ) );
 			}
-			else if( getRequiredParameterCount() <= 1 )
+			else if( hostMethod.requiredParameterCount <= 1 )
 			{
-				if( ( getParameterCount() > 0 ) && ( event is getParameterType( 0 ) ) )
+				if( hostMethod.parameterCount > 0 && event is getParameterType( 0 ) )
 					result = method.apply( null, [ event ] );
 				else
 					result = method.apply();
-			}
-			else
-			{
-				throw new Error( "Unable to handle event: " + metadataTag.host.name + "() requires " + getRequiredParameterCount() + " parameters, and no properties were specified." );
 			}
 			
 			if( event is IAsynchronousEvent && IAsynchronousEvent( event ).step != null )
@@ -141,6 +144,21 @@ package org.swizframework.utils.event
 			
 			if( metadataTag.stopImmediatePropagation )
 				event.stopImmediatePropagation();
+		}
+		
+		// ========================================
+		// protected methods
+		// ========================================
+		
+		protected function verifyTag():void
+		{
+			hostMethod = MetadataHostMethod( metadataTag.host );
+			
+			if( metadataTag.properties == null && hostMethod.requiredParameterCount > 0 && !( getParameterType( 0 ) == eventClass ) )
+				throw new Error( metadataTag.asTag + " is invalid. If you do not specify a properties attribute your method must accept no arguments or the event itself." );
+			
+			if( metadataTag.properties != null && ( metadataTag.properties.length < hostMethod.requiredParameterCount ) || ( metadataTag.properties.length > hostMethod.parameterCount ) )
+				throw new Error( "The properties attribute of " + metadataTag.asTag + " is not compatible with the method signature of " + hostMethod.name + "()." );
 		}
 		
 		/**
@@ -210,37 +228,6 @@ package org.swizframework.utils.event
 		}
 		
 		/**
-		 * Get Parameter Count
-		 *
-		 * @returns The number of parameters for the event handler method.
-		 */
-		protected function getParameterCount():int
-		{
-			return ( metadataTag.host as MetadataHostMethod ).parameters.length;
-		}
-		
-		/**
-		 * Get Required Parameter Count
-		 *
-		 * @returns The number of required parameters for the event handler method.
-		 */
-		protected function getRequiredParameterCount():int
-		{
-			var requiredParameterCount:int = 0;
-			
-			var parameters:Array = ( metadataTag.host as MetadataHostMethod ).parameters;
-			for each( var parameter:MethodParameter in parameters )
-			{
-				if( parameter.optional )
-					break;
-				
-				requiredParameterCount++;
-			}
-			
-			return requiredParameterCount;
-		}
-		
-		/**
 		 * Get Parameter Type
 		 *
 		 * @param parameterIndex The index of parameter of the event handler method.
@@ -248,7 +235,7 @@ package org.swizframework.utils.event
 		 */
 		protected function getParameterType( parameterIndex:int ):Class
 		{
-			var parameters:Array = ( metadataTag.host as MetadataHostMethod ).parameters;
+			var parameters:Array = hostMethod.parameters;
 			
 			if( parameterIndex < parameters.length )
 				return ( parameters[ parameterIndex ] as MethodParameter ).type;
