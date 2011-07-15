@@ -62,30 +62,6 @@ package org.swizframework.reflection
 			return _parameters;
 		}
 		
-		/**
-		 * @return The total number of parameters for the method.
-		 */
-		public function get parameterCount():int
-		{
-			return parameters.length;
-		}
-		
-		/**
-		 * @returns The number of required parameters for the method.
-		 */
-		public function get requiredParameterCount():int
-		{
-			var requiredParameterCount:int = 0;
-			
-			for each( var parameter:MethodParameter in parameters )
-			{
-				if( !parameter.optional )
-					requiredParameterCount++;
-			}
-			
-			return requiredParameterCount;
-		}
-		
 		// ========================================
 		// constructor
 		// ========================================
