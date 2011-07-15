@@ -127,7 +127,7 @@ package org.swizframework.processors
 				var destPropName:* = getDestinationPropertyName( injectTag );
 				
 				var chain:String = injectTag.source.substr( injectTag.source.indexOf( "." ) + 1 );
-				var bind:Boolean = injectTag.bind && ChangeWatcher.canWatch( namedBean.source, chain ) && !( destPropName is QName );
+				var bind:Boolean = injectTag.bind && !( destPropName is QName );
 				
 				// if injecting by name simply assign the bean's current value
 				// as there is no context to create a binding
@@ -387,16 +387,8 @@ package org.swizframework.processors
 				// the last token of the source attribute is the actual property name
 				var sourcePropName:String = sourcePropertyChain[ 0 ];
 				
-				// create the reverse binding where the view/new bean is the source
-				if( ChangeWatcher.canWatch( destObject, destPropName ) )
-				{
-					// if a destination was provided we can use it as the host chain value
-					injectByProperty[ uid ].push( BindingUtils.bindProperty( sourceObject, sourcePropName, destObject, destPropName ) );
-				}
-				else
-				{
-					logger.error( "Cannot create twoWay binding for {0} property on {1} because it is not bindable.", destPropName, destObject );
-				}
+				// create the reverse binding where the view/new bean (or its property) is the source
+				injectByProperty[ uid ].push( BindingUtils.bindProperty( sourceObject, sourcePropName, destObject, destPropName ) );
 			}
 		}
 		
