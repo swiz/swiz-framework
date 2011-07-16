@@ -1,28 +1,108 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <componentPackage>
-	
-	<component class="org.swizframework.core.mxml.Swiz" />
-	
-	<!-- core package -->
-	<component class="org.swizframework.core.SwizConfig" />
-	<component class="org.swizframework.core.Bean" />
-	<component class="org.swizframework.core.BeanFactory" />
-	<component class="org.swizframework.core.BeanProvider" />
-	<component class="org.swizframework.core.BeanLoader" />
-	<component class="org.swizframework.core.Prototype" />
-	
-	<!-- events package -->
-	<component class="org.swizframework.events.BeanEvent" />
-	
-	<!-- factories package -->
-	<component class="org.swizframework.factories.MetadataHostFactory" />
-	
-	<!-- utils package -->
-	<component class="org.swizframework.utils.logging.SwizLogger" />
-	<component class="org.swizframework.utils.logging.SwizTraceTarget" />
-	<component class="org.swizframework.utils.services.ServiceHelper" />
-	<component class="org.swizframework.utils.services.ChannelSetHelper" />
-	<component class="org.swizframework.utils.services.MockDelegateHelper" />
-	<component class="org.swizframework.utils.services.URLRequestHelper" />
-	
+	<component id="AbstractController" class="org.swizframework.controller.AbstractController"/>
+	<component id="Bean" class="org.swizframework.core.Bean"/>
+	<component id="BeanFactory" class="org.swizframework.core.BeanFactory"/>
+	<component id="BeanLoader" class="org.swizframework.core.BeanLoader"/>
+	<component id="BeanProvider" class="org.swizframework.core.BeanProvider"/>
+	<component id="IBeanFactory" class="org.swizframework.core.IBeanFactory"/>
+	<component id="IBeanFactoryAware" class="org.swizframework.core.IBeanFactoryAware"/>
+	<component id="IBeanProvider" class="org.swizframework.core.IBeanProvider"/>
+	<component id="IDispatcherAware" class="org.swizframework.core.IDispatcherAware"/>
+	<component id="IDisposable" class="org.swizframework.core.IDisposable"/>
+	<component id="IInitializing" class="org.swizframework.core.IInitializing"/>
+	<component id="ISetUpValidator" class="org.swizframework.core.ISetUpValidator"/>
+	<component id="ISwiz" class="org.swizframework.core.ISwiz"/>
+	<component id="ISwizAware" class="org.swizframework.core.ISwizAware"/>
+	<component id="ISwizConfig" class="org.swizframework.core.ISwizConfig"/>
+	<component id="ISwizHost" class="org.swizframework.core.ISwizHost"/>
+	<component id="ISwizInterface" class="org.swizframework.core.ISwizInterface"/>
+	<component id="ITearDownValidator" class="org.swizframework.core.ITearDownValidator"/>
+	<component id="Swiz" class="org.swizframework.core.mxml.Swiz"/>
+	<component id="Prototype" class="org.swizframework.core.Prototype"/>
+	<component id="SwizCore" class="org.swizframework.core.Swiz"/>
+	<component id="SwizConfig" class="org.swizframework.core.SwizConfig"/>
+	<component id="SwizManager" class="org.swizframework.core.SwizManager"/>
+	<component id="BeanEvent" class="org.swizframework.events.BeanEvent"/>
+	<component id="ChainEvent" class="org.swizframework.events.ChainEvent"/>
+	<component id="SwizEvent" class="org.swizframework.events.SwizEvent"/>
+	<component id="MetadataHostFactory" class="org.swizframework.factories.MetadataHostFactory"/>
+	<component id="EventHandlerMetadataTag" class="org.swizframework.metadata.EventHandlerMetadataTag"/>
+	<component id="EventTypeExpression" class="org.swizframework.metadata.EventTypeExpression"/>
+	<component id="InjectMetadataTag" class="org.swizframework.metadata.InjectMetadataTag"/>
+	<component id="PostConstructMetadataTag" class="org.swizframework.metadata.PostConstructMetadataTag"/>
+	<component id="PreDestroyMetadataTag" class="org.swizframework.metadata.PreDestroyMetadataTag"/>
+	<component id="BaseMetadataProcessor" class="org.swizframework.processors.BaseMetadataProcessor"/>
+	<component id="DispatcherProcessor" class="org.swizframework.processors.DispatcherProcessor"/>
+	<component id="EventHandlerProcessor" class="org.swizframework.processors.EventHandlerProcessor"/>
+	<component id="IBeanProcessor" class="org.swizframework.processors.IBeanProcessor"/>
+	<component id="IFactoryProcessor" class="org.swizframework.processors.IFactoryProcessor"/>
+	<component id="IMetadataProcessor" class="org.swizframework.processors.IMetadataProcessor"/>
+	<component id="InjectProcessor" class="org.swizframework.processors.InjectProcessor"/>
+	<component id="IProcessor" class="org.swizframework.processors.IProcessor"/>
+	<component id="PostConstructProcessor" class="org.swizframework.processors.PostConstructProcessor"/>
+	<component id="PreDestroyProcessor" class="org.swizframework.processors.PreDestroyProcessor"/>
+	<component id="ProcessorPriority" class="org.swizframework.processors.ProcessorPriority"/>
+	<component id="SwizInterfaceProcessor" class="org.swizframework.processors.SwizInterfaceProcessor"/>
+	<component id="ViewProcessor" class="org.swizframework.processors.ViewProcessor"/>
+	<component id="BaseMetadataHost" class="org.swizframework.reflection.BaseMetadataHost"/>
+	<component id="BaseMetadataTag" class="org.swizframework.reflection.BaseMetadataTag"/>
+	<component id="BindableMetadataHost" class="org.swizframework.reflection.BindableMetadataHost"/>
+	<component id="ClassConstant" class="org.swizframework.reflection.ClassConstant"/>
+	<component id="Constant" class="org.swizframework.reflection.Constant"/>
+	<component id="IMetadataHost" class="org.swizframework.reflection.IMetadataHost"/>
+	<component id="IMetadataTag" class="org.swizframework.reflection.IMetadataTag"/>
+	<component id="MetadataArg" class="org.swizframework.reflection.MetadataArg"/>
+	<component id="MetadataHostClass" class="org.swizframework.reflection.MetadataHostClass"/>
+	<component id="MetadataHostMethod" class="org.swizframework.reflection.MetadataHostMethod"/>
+	<component id="MetadataHostProperty" class="org.swizframework.reflection.MetadataHostProperty"/>
+	<component id="MethodParameter" class="org.swizframework.reflection.MethodParameter"/>
+	<component id="TypeCache" class="org.swizframework.reflection.TypeCache"/>
+	<component id="TypeDescriptor" class="org.swizframework.reflection.TypeDescriptor"/>
+	<component id="ISharedObjectBean" class="org.swizframework.storage.ISharedObjectBean"/>
+	<component id="SharedObjectBean" class="org.swizframework.storage.SharedObjectBean"/>
+	<component id="AbstractAsynchronousDispatcherOperation" class="org.swizframework.utils.async.AbstractAsynchronousDispatcherOperation"/>
+	<component id="AbstractAsynchronousOperation" class="org.swizframework.utils.async.AbstractAsynchronousOperation"/>
+	<component id="AsynchronousChainOperation" class="org.swizframework.utils.async.AsynchronousChainOperation"/>
+	<component id="AsynchronousEvent" class="org.swizframework.utils.async.AsynchronousEvent"/>
+	<component id="AsynchronousIOOperation" class="org.swizframework.utils.async.AsynchronousIOOperation"/>
+	<component id="AsyncTokenOperation" class="org.swizframework.utils.async.AsyncTokenOperation"/>
+	<component id="IAsynchronousEvent" class="org.swizframework.utils.async.IAsynchronousEvent"/>
+	<component id="IAsynchronousOperation" class="org.swizframework.utils.async.IAsynchronousOperation"/>
+	<component id="AbstractChain" class="org.swizframework.utils.chain.AbstractChain"/>
+	<component id="AsyncCommandChainStep" class="org.swizframework.utils.chain.AsyncCommandChainStep"/>
+	<component id="BaseChainStep" class="org.swizframework.utils.chain.BaseChainStep"/>
+	<component id="BaseCompositeChain" class="org.swizframework.utils.chain.BaseCompositeChain"/>
+	<component id="ChainType" class="org.swizframework.utils.chain.ChainType"/>
+	<component id="ChainUtil" class="org.swizframework.utils.chain.ChainUtil"/>
+	<component id="CommandChain" class="org.swizframework.utils.chain.CommandChain"/>
+	<component id="CommandChainStep" class="org.swizframework.utils.chain.CommandChainStep"/>
+	<component id="EventChain" class="org.swizframework.utils.chain.EventChain"/>
+	<component id="EventChainStep" class="org.swizframework.utils.chain.EventChainStep"/>
+	<component id="FunctionChainStep" class="org.swizframework.utils.chain.FunctionChainStep"/>
+	<component id="IAsyncChainStep" class="org.swizframework.utils.chain.IAsyncChainStep"/>
+	<component id="IAutonomousChainStep" class="org.swizframework.utils.chain.IAutonomousChainStep"/>
+	<component id="IChain" class="org.swizframework.utils.chain.IChain"/>
+	<component id="IChainStep" class="org.swizframework.utils.chain.IChainStep"/>
+	<component id="CommandMap" class="org.swizframework.utils.commands.CommandMap"/>
+	<component id="ICommand" class="org.swizframework.utils.commands.ICommand"/>
+	<component id="IEventAwareCommand" class="org.swizframework.utils.commands.IEventAwareCommand"/>
+	<component id="DomainUtil" class="org.swizframework.utils.DomainUtil"/>
+	<component id="EventHandler" class="org.swizframework.utils.event.EventHandler"/>
+	<component id="AbstractSwizLoggingTarget" class="org.swizframework.utils.logging.AbstractSwizLoggingTarget"/>
+	<component id="SwizLogEvent" class="org.swizframework.utils.logging.SwizLogEvent"/>
+	<component id="SwizLogEventLevel" class="org.swizframework.utils.logging.SwizLogEventLevel"/>
+	<component id="SwizLogger" class="org.swizframework.utils.logging.SwizLogger"/>
+	<component id="SwizTraceTarget" class="org.swizframework.utils.logging.SwizTraceTarget"/>
+	<component id="ModuleTypeUtil" class="org.swizframework.utils.ModuleTypeUtil"/>
+	<component id="AMFUtil" class="org.swizframework.utils.services.AMFUtil"/>
+	<component id="ChannelSetHelper" class="org.swizframework.utils.services.ChannelSetHelper"/>
+	<component id="IServiceHelper" class="org.swizframework.utils.services.IServiceHelper"/>
+	<component id="IURLRequestHelper" class="org.swizframework.utils.services.IURLRequestHelper"/>
+	<component id="MockDelegateHelper" class="org.swizframework.utils.services.MockDelegateHelper"/>
+	<component id="ServiceHelper" class="org.swizframework.utils.services.ServiceHelper"/>
+	<component id="SwizResponder" class="org.swizframework.utils.services.SwizResponder"/>
+	<component id="SwizURLRequest" class="org.swizframework.utils.services.SwizURLRequest"/>
+	<component id="URLRequestHelper" class="org.swizframework.utils.services.URLRequestHelper"/>
+	<component id="AutowiredTestCase" class="org.swizframework.utils.test.AutowiredTestCase"/>
 </componentPackage>
