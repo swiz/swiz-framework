@@ -157,8 +157,9 @@ package org.swizframework.utils.event
 			if( metadataTag.properties == null && hostMethod.requiredParameterCount > 0 && !( getParameterType( 0 ) == eventClass ) )
 				throw new Error( metadataTag.asTag + " is invalid. If you do not specify a properties attribute your method must accept no arguments or the event itself." );
 			
-			if( metadataTag.properties != null && ( metadataTag.properties.length < hostMethod.requiredParameterCount ) || ( metadataTag.properties.length > hostMethod.parameterCount ) )
-				throw new Error( "The properties attribute of " + metadataTag.asTag + " is not compatible with the method signature of " + hostMethod.name + "()." );
+				if( metadataTag.properties != null )
+					if( ( metadataTag.properties.length < hostMethod.requiredParameterCount ) || ( metadataTag.properties.length > hostMethod.parameterCount ) )
+						throw new Error( "The properties attribute of " + metadataTag.asTag + " is not compatible with the method signature of " + hostMethod.name + "()." );
 		}
 		
 		/**
