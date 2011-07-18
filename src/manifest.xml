@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <componentPackage>
 	
-	<component id="Swiz" 					class="org.swizframework.core.mxml.Swiz" />
-	<component id="SwizConfig" 				class="org.swizframework.core.SwizConfig" />
 	<component id="Bean" 					class="org.swizframework.core.Bean" />
 	<component id="BeanProvider" 			class="org.swizframework.core.BeanProvider" />
-	<component id="Prototype" 				class="org.swizframework.core.Prototype" />
-	<component id="SwizTraceTarget" 		class="org.swizframework.utils.logging.SwizTraceTarget" />
-	<component id="ServiceHelper" 			class="org.swizframework.utils.services.ServiceHelper" />
 	<component id="ChannelSetHelper" 		class="org.swizframework.utils.services.ChannelSetHelper" />
 	<component id="MockDelegateHelper" 		class="org.swizframework.utils.services.MockDelegateHelper" />
+	<component id="Prototype" 				class="org.swizframework.core.Prototype" />
+	<component id="ServiceHelper" 			class="org.swizframework.utils.services.ServiceHelper" />
+	<component id="SharedObjectBean"		class="org.swizframework.storage.SharedObjectBean" />
+	<component id="Swiz" 					class="org.swizframework.core.mxml.Swiz" />
+	<component id="SwizConfig" 				class="org.swizframework.core.SwizConfig" />
+	<component id="SwizTraceTarget" 		class="org.swizframework.utils.logging.SwizTraceTarget" />
 	<component id="URLRequestHelper" 		class="org.swizframework.utils.services.URLRequestHelper" />
 	
 </componentPackage>
