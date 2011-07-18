@@ -425,10 +425,11 @@ package org.swizframework.core
 		{
 			if( event.swiz != null  && event.swiz.parentSwiz == null )
 			{
+				event.stopImmediatePropagation();
 				event.swiz.parentSwiz = this;
 			}
 			
-			logger.info( "Received SwizCreationEvent, set self to parent." );
+			logger.info( "Received SwizEvent.CREATED, set self to parent." );
 		}
 	}
 }
