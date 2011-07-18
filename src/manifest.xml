@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <componentPackage>
-	
 	<component id="Swiz" 					class="org.swizframework.core.mxml.Swiz" />
 	<component id="SwizConfig" 				class="org.swizframework.core.SwizConfig" />
 	<component id="Bean" 					class="org.swizframework.core.Bean" />
@@ -11,5 +10,5 @@
 	<component id="ChannelSetHelper" 		class="org.swizframework.utils.services.ChannelSetHelper" />
 	<component id="MockDelegateHelper" 		class="org.swizframework.utils.services.MockDelegateHelper" />
 	<component id="URLRequestHelper" 		class="org.swizframework.utils.services.URLRequestHelper" />
-	
+    <component id="SharedObjectBean"		class="org.swizframework.storage.SharedObjectBean"/>
 </componentPackage>
