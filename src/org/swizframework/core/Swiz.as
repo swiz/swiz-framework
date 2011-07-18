@@ -425,6 +425,7 @@ package org.swizframework.core
 		{
 			if( event.swiz != null  && event.swiz.parentSwiz == null )
 			{
+				event.stopPropagation();
 				event.swiz.parentSwiz = this;
 			}
 			
