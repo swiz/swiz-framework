@@ -10,4 +10,5 @@
 	<component id="ChannelSetHelper" 		class="org.swizframework.utils.services.ChannelSetHelper" />
 	<component id="MockDelegateHelper" 		class="org.swizframework.utils.services.MockDelegateHelper" />
 	<component id="URLRequestHelper" 		class="org.swizframework.utils.services.URLRequestHelper" />
+    <component id="SharedObjectBean"		class="org.swizframework.storage.SharedObjectBean"/>
 </componentPackage>

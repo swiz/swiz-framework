@@ -20,6 +20,7 @@
         <component name="ChannelSetHelper" 		displayName="ChannelSetHelper" 		namespace="swiz" category="Swiz" />
         <component name="MockDelegateHelper" 	displayName="MockDelegateHelper" 	namespace="swiz" category="Swiz" />
         <component name="URLRequestHelper" 		displayName="URLRequestHelper" 		namespace="swiz" category="Swiz" />
+        <component name="SharedObjectBean" 		displayName="SharedObjectBean" 		namespace="swiz" category="Swiz" />
     </components>
     
 </design>
