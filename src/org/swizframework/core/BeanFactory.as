@@ -534,13 +534,13 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
+			if( event.target is ModuleTypeUtil.MODULE_TYPE )
+				addRemovedDisplayObject( DisplayObject( event.target ) );
+			
 			if( !isPotentialInjectionTarget( event.target ) )
 				return;
 			
 			if( SwizManager.wiredViews[ event.target ] )
-				addRemovedDisplayObject( DisplayObject( event.target ) );
-			
-			if( event.target is ModuleTypeUtil.MODULE_TYPE )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 		}
 		
