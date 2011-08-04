@@ -47,6 +47,8 @@ package org.swizframework.core
 		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\.|__/;
 		
+		protected const viewNavigatorClassName:String = "spark.components::ViewNavigator";
+		
 		protected var swiz:ISwiz;
 		
 		/**
@@ -114,7 +116,8 @@ package org.swizframework.core
 		
 		public function completeBeanFactorySetup():void
 		{
-			if( waitForSetup ) return;
+			if( waitForSetup )
+				return;
 			
 			logger.info( "BeanFactory completing setup" );
 			
@@ -249,7 +252,7 @@ package org.swizframework.core
 		{
 			if( beans.indexOf( bean ) > -1 )
 				beans.splice( beans.indexOf( bean ), 1 );
-				
+			
 			tearDownBean( bean );
 			bean.beanFactory = null;
 			bean.typeDescriptor = null;
@@ -467,6 +470,11 @@ package org.swizframework.core
 			if( !swiz.domain.hasDefinition( className ) )
 			{
 				return false;
+			}
+			// exception to support ViewAdded/Removed for spark.components.ViewNavigator (in mobile apps)
+			else if( className == viewNavigatorClassName )
+			{
+				return true;
 			}
 			else if( swiz.config.viewPackages.length > 0 )
 			{
