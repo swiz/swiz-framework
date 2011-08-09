@@ -63,6 +63,8 @@ package org.swizframework.storage
 		
 		public function SharedObjectBean()
 		{
+			super();
+			invalidate();
 		}
 		
 		protected function invalidate():void
