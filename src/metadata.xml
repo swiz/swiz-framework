@@ -132,4 +132,10 @@
 		<context name="setter" />
 		<context name="method" />
 	</metadata>
+	
+	<metadata name="ViewNavigator" description="Passes in the ViewNavigator instance in a Flex mobile app">
+		<context name="variable" />
+		<context name="setter" />
+		<context name="method" />
+	</metadata>
 </annotations>
