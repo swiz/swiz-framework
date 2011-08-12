@@ -34,6 +34,7 @@ package org.swizframework.processors
 
 		protected static const VIEW_ADDED:String = "ViewAdded";
 		protected static const VIEW_REMOVED:String = "ViewRemoved";
+		protected static const VIEW_NAVIGATOR:String = "ViewNavigator";
 		
 		// ========================================
 		// protected properties
@@ -62,7 +63,7 @@ package org.swizframework.processors
 		 */
 		public function ViewProcessor( metadataNames:Array = null )
 		{
-			super( ( metadataNames == null ) ? [ VIEW_ADDED, VIEW_REMOVED ] : metadataNames );
+			super( ( metadataNames == null ) ? [ VIEW_ADDED, VIEW_REMOVED, VIEW_NAVIGATOR ] : metadataNames );
 		}
 
 		// ========================================
@@ -70,14 +71,14 @@ package org.swizframework.processors
 		// ========================================
 		
 		/**
-		 * This method is called whenever a bean is added that contains [ViewAdded]
-		 * and/or [ViewRemoved] tags. These will/should be regular beans defined
+		 * This method is called whenever a bean is added that contains [ViewAdded], 
+		 * [ViewRemoved] and/or [ViewNavigator] tags. These will/should be regular beans defined
 		 * in a BeanProvider that want to be notified when a particular type of view
 		 * is set up or torn down, respectively.
 		 */
 		override public function setUpMetadataTags( metadataTags:Array, bean:Bean ):void
 		{
-			// parse any [ViewAdded] and [ViewRemoved] tags found
+			// parse any [ViewAdded], [ViewRemoved] or [ViewNavigator] tags found
 			for each ( var tag:IMetadataTag in metadataTags )
 			{
 				var viewType:Class;
@@ -97,13 +98,13 @@ package org.swizframework.processors
 		}
 		
 		/**
-		 * This method is called whenever a bean that contains [ViewAdded]
-		 * and/or [ViewRemoved] tags is torn down. This would likely only
+		 * This method is called whenever a bean that contains [ViewAdded], 
+		 * [ViewRemoved] and/or [ViewNavigator] tags is torn down. This would likely only
 		 * happen if the bean (mediator) was part of a module that was torn down.
 		 */
 		override public function tearDownMetadataTags( metadataTags:Array, bean:Bean ):void
 		{
-			// parse any [ViewAdded] and [ViewRemoved] tags found
+			// parse any [ViewAdded], [ViewRemoved] or [ViewNavigator] tags found
 			for each ( var tag:IMetadataTag in metadataTags )
 			{
 				var viewType:Class;
@@ -157,16 +158,16 @@ package org.swizframework.processors
 				
 				for each( var ref:ViewRef in refs )
 				{
-					if( ref.tag.name != tagName )
+					if( ref.tag.name != tagName && ref.tag.name != VIEW_NAVIGATOR )
 						continue;
 					
-					// if [ViewAdded] was declared on a method we pass the view in as the only argument
+					// if tag was declared on a method we pass the view in as the only argument
 					if( ref.tag.host is MetadataHostMethod )
 					{
 						var f:Function = ref.mediator[ ref.tag.host.name ] as Function;
 						f.apply( null, [ bean.source ] );
 					}
-					else // if [ViewAdded] was declared on a property do a simple assignment
+					else // if tag was declared on a property do a simple assignment
 					{
 						ref.mediator[ ref.tag.host.name ] = bean.source;
 					}
