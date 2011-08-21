@@ -66,7 +66,7 @@ package org.swizframework.utils.commands
 					
 					// validate event class
 					if( !( event is commandMapping.eventClass ) )
-						return;
+						continue;
 					
 					// get our command bean
 					var commandPrototype:Bean = _swiz.beanFactory.getBeanByType( commandMapping.commandClass );
