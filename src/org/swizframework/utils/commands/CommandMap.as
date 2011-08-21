@@ -39,9 +39,17 @@ package org.swizframework.utils.commands
 		 */
 		public function set swiz( swiz:ISwiz ):void
 		{
-			_swiz = swiz;
-			
-			mapCommands();
+			// if swiz is null, we are being torn down
+			if( swiz )
+			{
+				_swiz = swiz;
+				mapCommands();
+			}
+			else
+			{
+				unmapCommands();
+				_swiz = swiz;
+			}
 		}
 		
 		// ========================================
@@ -155,6 +163,18 @@ package org.swizframework.utils.commands
 			
 			// listen for event that will trigger this command
 			_swiz.dispatcher.addEventListener( eventType, handleCommandEvent, false, 0, true );
+		}
+		
+		protected function unmapCommands():void
+		{
+			for( var eventType:* in map )
+			{
+				_swiz.dispatcher.removeEventListener( eventType, handleCommandEvent );
+				
+				delete map[ eventType ];
+			}
+			
+			map = null;
 		}
 	}
 }
