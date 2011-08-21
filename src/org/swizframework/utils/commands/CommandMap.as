@@ -104,7 +104,8 @@ package org.swizframework.utils.commands
 						mappings.splice( indexesToClear[ j ], 1 );
 					}
 					
-					if( indexesToClear.length == 0 )
+					// if no more commands are mapped to this event type, remove from map
+					if( mappings.length == 0 )
 						delete map[ event.type ];
 				}
 			}
