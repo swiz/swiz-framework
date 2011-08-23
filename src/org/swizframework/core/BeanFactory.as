@@ -47,6 +47,8 @@ package org.swizframework.core
 		
 		protected const ignoredClasses:RegExp = /^mx\.|^spark\.|^flash\.|^fl\.|__/;
 		
+		protected const viewNavigatorClassName:String = "spark.components::ViewNavigator";
+		
 		protected var swiz:ISwiz;
 		
 		/**
@@ -114,7 +116,8 @@ package org.swizframework.core
 		
 		public function completeBeanFactorySetup():void
 		{
-			if( waitForSetup ) return;
+			if( waitForSetup )
+				return;
 			
 			logger.info( "BeanFactory completing setup" );
 			
@@ -249,7 +252,7 @@ package org.swizframework.core
 		{
 			if( beans.indexOf( bean ) > -1 )
 				beans.splice( beans.indexOf( bean ), 1 );
-				
+			
 			tearDownBean( bean );
 			bean.beanFactory = null;
 			bean.typeDescriptor = null;
@@ -468,6 +471,11 @@ package org.swizframework.core
 			{
 				return false;
 			}
+			// exception to support ViewAdded/Removed for spark.components.ViewNavigator (in mobile apps)
+			else if( className == viewNavigatorClassName )
+			{
+				return true;
+			}
 			else if( swiz.config.viewPackages.length > 0 )
 			{
 				for each( var viewPackage:String in swiz.config.viewPackages )
@@ -534,13 +542,8 @@ package org.swizframework.core
 			if( event.target is ITearDownValidator && !( ITearDownValidator( event.target ).allowTearDown() ) )
 				return;
 			
-			if( !isPotentialInjectionTarget( event.target ) )
-				return;
-			
+			// only views previously processed can be torn down
 			if( SwizManager.wiredViews[ event.target ] )
-				addRemovedDisplayObject( DisplayObject( event.target ) );
-			
-			if( event.target is ModuleTypeUtil.MODULE_TYPE )
 				addRemovedDisplayObject( DisplayObject( event.target ) );
 		}
 		
