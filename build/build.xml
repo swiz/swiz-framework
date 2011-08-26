@@ -102,6 +102,7 @@
 			<keep-as3-metadata name="PostConstruct"/>
 			<keep-as3-metadata name="PreDestroy"/>
 			<keep-as3-metadata name="ViewAdded"/>
+			<keep-as3-metadata name="ViewNavigator"/>
 			<keep-as3-metadata name="ViewRemoved"/>
 
 			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
@@ -137,6 +138,7 @@
 			<keep-as3-metadata name="PostConstruct"/>
 			<keep-as3-metadata name="PreDestroy"/>
 			<keep-as3-metadata name="ViewAdded"/>
+			<keep-as3-metadata name="ViewNavigator"/>
 			<keep-as3-metadata name="ViewRemoved"/>
 
 			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
