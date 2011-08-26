@@ -34,7 +34,6 @@ package org.swizframework.core
 	import org.swizframework.utils.logging.SwizLogger;
 	
 	[DefaultProperty( "beanProviders" )]
-	[ExcludeClass]
 	
 	/**
 	 * Core framework class that serves as an IoC container rooted

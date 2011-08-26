@@ -18,8 +18,6 @@ package org.swizframework.utils.services
 {
 	import mx.rpc.IResponder;
 	
-	[ExcludeClass]
-	
 	public class SwizResponder implements IResponder
 	{
 		private var resultHandler:Function;
