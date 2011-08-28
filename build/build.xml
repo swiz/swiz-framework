@@ -83,7 +83,7 @@
 		</antcall>
 		
 		<move file="${bin.loc}/rsl/flex4/library.swf" tofile="${bin.loc}/rsl/${swiz.name}.swf" />
-		<echo message="${swiz.name}.swf has been created in ${bin.loc}/rsl/flex4" />
+		<echo message="${swiz.name}.swf has been created in ${bin.loc}/rsl" />
 		
 		<antcall target="-compile-for-platform">
 			<param name="outputLocation" value="${bin.loc}/${swiz.name.flex3}.swc"/>
@@ -102,7 +102,7 @@
 		</antcall>
 		
 		<move file="${bin.loc}/rsl/flex3/library.swf" tofile="${bin.loc}/rsl/${swiz.name.flex3}.swf"/>
-		<echo message="${swiz.name.flex3}.swf has been created in ${bin.loc}/rsl/flex3" />
+		<echo message="${swiz.name.flex3}.swf has been created in ${bin.loc}/rsl" />
 		
 		<!-- Remove extra RSL files -->				
 		<delete includeemptydirs="true" failonerror="false">
