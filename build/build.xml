@@ -123,12 +123,6 @@
 		<property name="isFlex3" value="false"/>
 		<property name="isFlex4" value="true"/>
 		
-		<condition property="targetSDK" value="${flex.sdk}/frameworks" else="${flex3.sdk}/frameworks">
-			<equals arg1="${isFlex4}" arg2="true" />
-		</condition>
-		
-		<echo message="sdkpath=${targetSDK}" />
-
 		<!-- set up list of classes to include in library -->
 		<fileset id="src.include.fileset" dir="${src.loc}">
 			<include name="**/*.as" />
@@ -160,9 +154,14 @@
 			<compiler.define name="CONFIG::flex4" value="${isFlex4}" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
-			<external-library-path dir="${targetSDK}" append="true">
+			<external-library-path dir="${flex.sdk}/frameworks" append="true">
 				<include name="libs" />
 				<include name="locale/{locale}" />
+				<include name="libs/air" />
+				<include name="libs/automation" />
+				<include name="libs/mobile" />
+				<include name="libs/mx" />
+				<include name="libs/player" />
 			</external-library-path>
 			
 			<keep-as3-metadata name="Autowire"/>
