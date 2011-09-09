@@ -17,6 +17,7 @@
 package org.swizframework.utils.event
 {
 	import flash.events.Event;
+	import flash.system.ApplicationDomain;
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.rpc.AsyncToken;
@@ -24,6 +25,8 @@ package org.swizframework.utils.event
 	import org.swizframework.metadata.EventHandlerMetadataTag;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
+	import org.swizframework.reflection.TypeCache;
+	import org.swizframework.reflection.TypeDescriptor;
 	import org.swizframework.utils.async.AsyncTokenOperation;
 	import org.swizframework.utils.async.IAsynchronousEvent;
 	import org.swizframework.utils.async.IAsynchronousOperation;
@@ -51,6 +54,11 @@ package org.swizframework.utils.event
 		 * Backing variable for <code>eventClass</code> property.
 		 */
 		protected var _eventClass:Class;
+		
+		/**
+		 * Backing variable for <code>domain</code> property.
+		 */
+		protected var _domain:ApplicationDomain;
 		
 		/**
 		 * Strongly typed reference to metadataTag.host
@@ -85,6 +93,14 @@ package org.swizframework.utils.event
 			return _eventClass;
 		}
 		
+		/**
+		 * The ApplicationDomain in which to operate.
+		 */
+		public function get domain():ApplicationDomain
+		{
+			return _domain;
+		}
+		
 		// ========================================
 		// constructor
 		// ========================================
@@ -92,7 +108,7 @@ package org.swizframework.utils.event
 		/**
 		 * Constructor
 		 */
-		public function EventHandler( metadataTag:EventHandlerMetadataTag, method:Function, eventClass:Class )
+		public function EventHandler( metadataTag:EventHandlerMetadataTag, method:Function, eventClass:Class, domain:ApplicationDomain )
 		{
 			_metadataTag = metadataTag;
 			_method = method;
@@ -154,8 +170,14 @@ package org.swizframework.utils.event
 		{
 			hostMethod = MetadataHostMethod( metadataTag.host );
 			
-			if( metadataTag.properties == null && hostMethod.requiredParameterCount > 0 && !( getParameterType( 0 ) == eventClass ) )
-				throw new Error( metadataTag.asTag + " is invalid. If you do not specify a properties attribute your method must accept no arguments or the event itself." );
+			if( metadataTag.properties == null && hostMethod.requiredParameterCount > 0 )
+			{
+				var eventClassDescriptor:TypeDescriptor = TypeCache.getTypeDescriptor( eventClass, domain );
+				var parameterTypeName:String = getQualifiedClassName( getParameterType( 0 ) );
+				
+				if( eventClassDescriptor.satisfiesType( parameterTypeName ) == false )
+					throw new Error( metadataTag.asTag + " is invalid. If you do not specify a properties attribute your method must either accept no arguments or an object compatible with the type specified in the tag." );
+			}
 			
 			if( metadataTag.properties != null && ( metadataTag.properties.length < hostMethod.requiredParameterCount || metadataTag.properties.length > hostMethod.parameterCount ) )
 				throw new Error( "The properties attribute of " + metadataTag.asTag + " is not compatible with the method signature of " + hostMethod.name + "()." );
