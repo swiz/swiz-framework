@@ -126,7 +126,7 @@ package org.swizframework.processors
 		 */
 		protected function addEventHandlerByEventType( eventHandlerTag:EventHandlerMetadataTag, method:Function, eventClass:Class, eventType:String ):void
 		{
-			var eventHandler:EventHandler = new eventHandlerClass( eventHandlerTag, method, eventClass );
+			var eventHandler:EventHandler = new eventHandlerClass( eventHandlerTag, method, eventClass, swiz.domain );
 			
 			eventHandlersByEventType[ eventType ] ||= [];
 			eventHandlersByEventType[ eventType ].push( eventHandler );
