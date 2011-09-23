@@ -23,9 +23,6 @@ package org.swizframework.processors
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
 
-	/**
-	 * PostConstruct Processor
-	 */
 	public class ViewProcessor extends BaseMetadataProcessor implements IBeanProcessor
 	{
 		// ========================================
@@ -149,27 +146,35 @@ package org.swizframework.processors
 		 */
 		protected function processViewBean( bean:Bean, tagName:String ):void
 		{
-			var viewType:Class = bean.typeDescriptor.type;
-			
-			// check for any stored refs for this view type
-			if( views[ viewType ] )
+			// iterate over the keys of our Dictionary
+			// the keys are the types we've found in [ViewAdded] and [ViewRemoved] declarations
+			for( var type:* in views )
 			{
-				var refs:Array = views[ viewType ] as Array;
-				
-				for each( var ref:ViewRef in refs )
+				// check to see if the view that was added/removed is a compatible type
+				// using "is" lets us match subclasses and interface implementations
+				if( bean.source is type )
 				{
-					if( ref.tag.name != tagName && ref.tag.name != VIEW_NAVIGATOR )
-						continue;
+					// get refs to all the metadata tag instances
+					var refs:Array = views[ type ] as Array;
 					
-					// if tag was declared on a method we pass the view in as the only argument
-					if( ref.tag.host is MetadataHostMethod )
+					// iterate over all the metadata tag instances
+					for each( var ref:ViewRef in refs )
 					{
-						var f:Function = ref.mediator[ ref.tag.host.name ] as Function;
-						f.apply( null, [ bean.source ] );
-					}
-					else // if tag was declared on a property do a simple assignment
-					{
-						ref.mediator[ ref.tag.host.name ] = bean.source;
+						// if view was added, only process [ViewAdded] tags
+						// if view was removed, only process [ViewRemoved] tags
+						if( ref.tag.name != tagName && ref.tag.name != VIEW_NAVIGATOR )
+							continue;
+						
+						// if tag was declared on a method pass the view in as the only argument
+						if( ref.tag.host is MetadataHostMethod )
+						{
+							var f:Function = ref.mediator[ ref.tag.host.name ] as Function;
+							f.apply( null, [ bean.source ] );
+						}
+						else // if tag was declared on a property do a simple assignment
+						{
+							ref.mediator[ ref.tag.host.name ] = bean.source;
+						}
 					}
 				}
 			}
