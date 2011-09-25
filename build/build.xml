@@ -220,7 +220,7 @@
 	
 	<target name="runTestsAndReport" depends="init" description="Launches the test runner, captures results, generates test report artifacts.">
 		<!-- Run FlexUnit Ant Task to execute the unit tests and capture reporting data -->
-		<taskdef resource="flexUnitTasks.tasks" classpath="${build.libs.loc}/flexUnitTasks-4.0.0.jar" />
+		<taskdef resource="flexUnitTasks.tasks" classpath="${build.libs.loc}/flexUnitTasks-4.1.0-8.jar" />
 		<flexunit swf="${test.bin.loc}/${test.artifact.name}" toDir="${report.loc}"
 			haltonfailure="false" verbose="false" localTrusted="false" player="flash" /> <!-- player="air" -->
 	
