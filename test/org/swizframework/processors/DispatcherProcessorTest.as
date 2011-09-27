@@ -22,7 +22,7 @@ package org.swizframework.processors
 		public var rule:MockolateRule = new MockolateRule();
 		
 		[Mock]
-		public var metadataTag:IMetadataTag;;
+		public var metadataTag:IMetadataTag;
 		
 		[Mock]
 		public var swiz:ISwiz;
@@ -43,7 +43,7 @@ package org.swizframework.processors
 		
 		private var beanSource:Object;
 		
-		private var swizConfig = new SwizConfig();
+		private var swizConfig:SwizConfig;
 		
 		private var metadataArg:MetadataArg;
 		
@@ -55,6 +55,7 @@ package org.swizframework.processors
 			beanSource = new Object();
 			stub(bean).getter("source").returns(beanSource);
 			
+			swizConfig = new SwizConfig();
 			stub(swiz).getter("globalDispatcher").returns(globalDispatcher);
 			stub(swiz).getter("dispatcher").returns(localDispatcher);
 			stub(swiz).getter("config").returns(swizConfig);
