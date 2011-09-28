@@ -68,7 +68,7 @@ package org.swizframework.processors
 		}
 		
 		[Test]
-		public function setUpMetadataTags_twoPostConstructMetadataTagWithOrdering_invokesBothFunctions():void
+		public function setUpMetadataTags_twoPostConstructMetadataTagaWithOrdering_invokesBothFunctions():void
 		{
 			// [PostConstruct(order="1")] public function someFunction():void {...}
 			// [PostConstruct(order="2")] public function someOtherFunction():void {...}
@@ -79,7 +79,7 @@ package org.swizframework.processors
 		}
 		
 		[Test]
-		public function setUpMetadataTags_twoPostConstructMetadataTagWithOrdering_invokesBothFunctionsInProperOrder():void
+		public function setUpMetadataTags_twoPostConstructMetadataTagsWithOrdering_invokesBothFunctionsInProperOrder():void
 		{
 			// [PostConstruct(order="2")] public function someFunction():void {...}
 			// [PostConstruct(order="1")] public function someOtherFunction():void {...}
