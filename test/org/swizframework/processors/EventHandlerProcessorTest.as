@@ -10,6 +10,7 @@ package org.swizframework.processors
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
 	
+	import org.flexunit.asserts.fail;
 	import org.hamcrest.core.isA;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.isFalse;
@@ -70,17 +71,31 @@ package org.swizframework.processors
 		
 		//------------------------------------------------------
 		//
-		// setUpMetadataTag tests
+		// validateMetadataTag tests
 		//
 		//------------------------------------------------------
 		
 		[Test(expects="Error")]
-		public function setUpMetadataTag_noEventArgumentOnTag_throwsError():void
+		public function validateMetadataTag_noEventArgumentOnTag_throwsError():void
 		{
 			// [EventHandler]
 			var tag:IMetadataTag = createEventHandlerMetadataTag({});
-			processor.setUpMetadataTag(tag, bean);
+			processor.setUpMetadataTags([tag], bean);
 		}
+		
+		[Test]
+		public function validateMetadataTag_metadataTagIsValid_doesNotThrowError():void
+		{
+			// [EventHandler(event="flash.events.Event.COMPLETE")]
+			var tag:IMetadataTag = createEventHandlerMetadataTag({"event":"flash.events.Event.COMPLETE"});
+			processor.setUpMetadataTags([tag], bean);
+		}
+		
+		//------------------------------------------------------
+		//
+		// setUpMetadataTag tests
+		//
+		//------------------------------------------------------
 		
 		[Test(expects="Error")]
 		public function setUpMetadataTag_eventArgumentReferencesUnqualifiedClassNotInAnyEventsPackages_throwsError():void
@@ -237,7 +252,7 @@ package org.swizframework.processors
 		
 		private function createEventHandlerMetadataTag(args:Object):EventHandlerMetadataTag
 		{
-			var tag:IMetadataTag = metadataTagHelper.createBaseMetadataTagWithArgs("EventHandler", args, "method", "someFunction");
+			var tag:IMetadataTag = metadataTagHelper.createBaseMetadataTagWithArgs("EventHandler", args, MetadataTagHelper.METADATA_HOST_TYPE_METHOD, "someFunction");
 			var eventHandlerTag:EventHandlerMetadataTag = new EventHandlerMetadataTag();
 			eventHandlerTag.copyFrom(tag);
 			

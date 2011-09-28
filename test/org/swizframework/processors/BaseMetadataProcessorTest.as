@@ -65,6 +65,44 @@ package org.swizframework.processors
 		
 		//------------------------------------------------------
 		//
+		// validateMetadataTag tests
+		//
+		//------------------------------------------------------
+		
+		[Test]
+		public function validateMetadataTags_noMetadataClassPassedToConstructorAndOneMetadataTag_doesNotInvokeValidateMetadataTag():void
+		{
+			processor.setUpMetadataTags([firstMetadataTag], bean);
+			assertThat(NullMetadataProcessor(processor).validateMetadataTagInvocationCount, equalTo(0));
+		}
+		
+		[Test]
+		public function validateMetadataTags_noMetadataClassPassedToConstructorAndMultipleMetadataTags_doesNotInvokeValidateMetadataTag():void
+		{
+			processor.setUpMetadataTags([firstMetadataTag, secondMetadataTag], bean);
+			assertThat(NullMetadataProcessor(processor).validateMetadataTagInvocationCount, equalTo(0));
+		}
+		
+		[Test]
+		public function validateMetadataTags_metadataClassPassedToConstructorAndOneMetadataTag_invokesValidateMetadataTagOnce():void
+		{
+			processor = new NullMetadataProcessor(["MyFirstMetadataName"], MetadataTag);
+			var tags:Array = [firstMetadataTag];
+			processor.setUpMetadataTags(tags, bean);
+			assertThat(NullMetadataProcessor(processor).validateMetadataTagInvocationCount, equalTo(1));
+		}
+		
+		[Test]
+		public function validateMetadataTags_metadataClassPassedToConstructorAndTwoMetadataTags_invokesValidateMetadataTagTwice():void
+		{
+			processor = new NullMetadataProcessor(["MyFirstMetadataName", "MySecondMetadataName"], MetadataTag);
+			var tags:Array = [firstMetadataTag, secondMetadataTag];
+			processor.setUpMetadataTags(tags, bean);
+			assertThat(NullMetadataProcessor(processor).validateMetadataTagInvocationCount, equalTo(2));
+		}
+		
+		//------------------------------------------------------
+		//
 		// tearDownMetadataTags tests
 		//
 		//------------------------------------------------------

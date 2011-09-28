@@ -20,6 +20,24 @@ package helpers.metadata
 		//------------------------------------------------------
 		
 		//------------------------------------------------------
+		// validateMetadataTagInvocationCount
+		//------------------------------------------------------
+		
+		/**
+		 * @private
+		 * A count of the number of times the validateMetadataTag function was invoked.
+		 */
+		private var _validateMetadataTagInvocationCount:int;
+		
+		/**
+		 * Answer the validateMetadataTag invocation count
+		 */
+		public function get validateMetadataTagInvocationCount():int
+		{
+			return _validateMetadataTagInvocationCount;
+		}
+		
+		//------------------------------------------------------
 		// setupMetadataTagInvocationCount
 		//------------------------------------------------------
 		
@@ -80,6 +98,11 @@ package helpers.metadata
 		override public function tearDownMetadataTag(metadataTag:IMetadataTag, bean:Bean):void
 		{
 			_tearDownMetadataTagInvocationCount += 1;
+		}
+		
+		override protected function validateMetadataTag(metadataTag:IMetadataTag):void
+		{
+			_validateMetadataTagInvocationCount += 1;
 		}
 		
 	}

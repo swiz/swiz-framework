@@ -94,5 +94,10 @@ package org.swizframework.processors
 		{
 			bean.source[ metadataTag.host.name ] = null;
 		}
+		
+		override protected function validateMetadataTag(metadataTag:IMetadataTag):void
+		{
+			// No special validation to do
+		}
 	}
 }

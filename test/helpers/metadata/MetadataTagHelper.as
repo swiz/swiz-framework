@@ -18,6 +18,16 @@ package helpers.metadata
 	{
 		//------------------------------------------------------
 		//
+		// Class constants
+		//
+		//------------------------------------------------------
+		
+		public static const METADATA_HOST_TYPE_CLASS:String = "class";
+		public static const METADATA_HOST_TYPE_METHOD:String = "method";
+		public static const METADATA_HOST_TYPE_PROPERTY:String = "property";
+		
+		//------------------------------------------------------
+		//
 		// Public API
 		//
 		//------------------------------------------------------
@@ -42,15 +52,15 @@ package helpers.metadata
 		{
 			var host:IMetadataHost;
 			
-			if ( metadataHostType == "class" )
+			if ( metadataHostType == METADATA_HOST_TYPE_CLASS )
 			{
 				host = new MetadataHostClass();
 			}
-			else if ( metadataHostType == "method" )
+			else if ( metadataHostType == METADATA_HOST_TYPE_METHOD )
 			{
 				host = new MetadataHostMethod();
 			}
-			else if ( metadataHostType == "property" )
+			else if ( metadataHostType == METADATA_HOST_TYPE_PROPERTY )
 			{
 				host = new MetadataHostProperty();
 			}

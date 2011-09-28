@@ -47,7 +47,6 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 		
-		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		protected var eventHandlersByEventType:Dictionary = new Dictionary();
 		protected var eventHandlerClass:Class = EventHandler;
 		
@@ -86,17 +85,11 @@ package org.swizframework.processors
 		{
 			var eventHandlerTag:EventHandlerMetadataTag = metadataTag as EventHandlerMetadataTag;
 			
-			if( eventHandlerTag.name == MEDIATE )
-				logger.warn( "[Mediate] has been deprecated in favor of [EventHandler]. Please update {0} accordingly.", bean );
-			
-			if( validateEventHandlerMetadataTag( eventHandlerTag ) )
-			{
 				var expression:EventTypeExpression = new EventTypeExpression( eventHandlerTag.event, swiz );
 				for each( var eventType:String in expression.eventTypes )
 				{
 					addEventHandlerByEventType( eventHandlerTag, bean.source[ eventHandlerTag.host.name ], expression.eventClass, eventType );
 				}
-			}
 			
 			logger.debug( "EventHandlerProcessor set up {0} on {1}", metadataTag.toString(), bean.toString() );
 		}
@@ -206,12 +199,17 @@ package org.swizframework.processors
 		}
 		
 		/**
-		 * Validate EventHandler Metadata Tag
+		 * Validate the Metadata Tag
 		 *
-		 * @param mediator The EventHandlerMetadataTag
+		 * @param tag The EventHandlerMetadataTag
 		 */
-		protected function validateEventHandlerMetadataTag( eventHandlerTag:EventHandlerMetadataTag ):Boolean
+		override protected function validateMetadataTag( tag:IMetadataTag ):void
 		{
+			var eventHandlerTag:EventHandlerMetadataTag = EventHandlerMetadataTag(tag);
+			
+			if( eventHandlerTag.name == MEDIATE )
+				logger.warn( "[Mediate] has been deprecated in favor of [EventHandler]. Please update accordingly.");
+			
 			if( eventHandlerTag.event == null || eventHandlerTag.event.length == 0 )
 			{
 				throw new Error( "Missing \"event\" property in [EventHandler] tag: " + eventHandlerTag.asTag );
@@ -243,8 +241,6 @@ package org.swizframework.processors
 					}
 				}
 			}
-			
-			return true;
 		}
 	
 	}
