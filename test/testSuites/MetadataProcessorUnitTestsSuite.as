@@ -6,6 +6,7 @@ package testSuites
 	import org.swizframework.processors.InjectProcessorTest;
 	import org.swizframework.processors.PostConstructProcessorTest;
 	import org.swizframework.processors.PreDestroyProcessorTest;
+	import org.swizframework.processors.SwizInterfaceProcessorTest;
 	
 	[Suite]
 	[RunWith("org.flexunit.runners.Suite")]
@@ -22,5 +23,7 @@ package testSuites
 		public var test5:PostConstructProcessorTest;
 		
 		public var test6:PreDestroyProcessorTest;
+		
+		public var test7:SwizInterfaceProcessorTest;
 	}
 }
