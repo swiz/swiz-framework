@@ -74,5 +74,10 @@ package org.swizframework.processors
 				f.apply();
 			}
 		}
+		
+		override protected function validateMetadataTag(metadataTag:IMetadataTag):void
+		{
+			// Nothing special to validate
+		}
 	}
 }

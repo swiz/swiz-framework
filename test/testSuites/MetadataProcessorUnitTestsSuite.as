@@ -4,6 +4,7 @@ package testSuites
 	import org.swizframework.processors.DispatcherProcessorTest;
 	import org.swizframework.processors.EventHandlerProcessorTest;
 	import org.swizframework.processors.InjectProcessorTest;
+	import org.swizframework.processors.PostConstructProcessorTest;
 	
 	[Suite]
 	[RunWith("org.flexunit.runners.Suite")]
@@ -16,5 +17,7 @@ package testSuites
 		public var test3:EventHandlerProcessorTest;
 		
 		public var test4:InjectProcessorTest;
+		
+		public var test5:PostConstructProcessorTest;
 	}
 }
