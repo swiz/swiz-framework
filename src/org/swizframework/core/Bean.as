@@ -27,6 +27,10 @@ package org.swizframework.core
 		// ========================================
 		
 		protected var _source:*;
+		protected var _name:String;
+		protected var _typeDescriptor:TypeDescriptor;
+		protected var _beanFactory:IBeanFactory;
+		protected var _initialized:Boolean;
 		
 		// ========================================
 		// public properties
@@ -48,22 +52,54 @@ package org.swizframework.core
 		/**
 		 * Name
 		 */
-		public var name:String;
+		public function get name():String
+		{
+			return _name;
+		}
+		
+		public function set name(value:String):void
+		{
+			_name = value;
+		}
 		
 		/**
 		 * Type Descriptor
 		 */
-		public var typeDescriptor:TypeDescriptor;
+		public function get typeDescriptor():TypeDescriptor
+		{
+			return _typeDescriptor;
+		}
+		
+		public function set typeDescriptor(value:TypeDescriptor):void
+		{
+			_typeDescriptor = value;
+		}
 		
 		/**
 		 * BeanFactory
 		 */
-		public var beanFactory:IBeanFactory;
+		public function get beanFactory():IBeanFactory
+		{
+			return _beanFactory;
+		}
+		
+		public function set beanFactory(value:IBeanFactory):void
+		{
+			_beanFactory = value;
+		}
 		
 		/**
 		 * Initialzed
 		 */
-		public var initialized:Boolean = false;
+		public function get initialized():Boolean
+		{
+			return _initialized;
+		}
+		
+		public function set initialized(value:Boolean):void
+		{
+			_initialized = value;
+		}
 		
 		public function get type():*
 		{

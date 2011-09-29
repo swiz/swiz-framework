@@ -19,7 +19,9 @@ package org.swizframework.processors
 	import flash.utils.Dictionary;
 	
 	import org.swizframework.core.Bean;
+	import org.swizframework.reflection.IMetadataHost;
 	import org.swizframework.reflection.IMetadataTag;
+	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
 	import org.swizframework.reflection.MethodParameter;
 
@@ -81,6 +83,8 @@ package org.swizframework.processors
 			// parse any [ViewAdded], [ViewRemoved] or [ViewNavigator] tags found
 			for each ( var tag:IMetadataTag in metadataTags )
 			{
+				validateMetadataTag(tag);
+				
 				var viewType:Class;
 				
 				// get the view type by examining the metadata host on which the tag was declared
@@ -172,6 +176,15 @@ package org.swizframework.processors
 						ref.mediator[ ref.tag.host.name ] = bean.source;
 					}
 				}
+			}
+		}
+		
+		override protected function validateMetadataTag(metadataTag:IMetadataTag):void
+		{
+			var host:IMetadataHost = metadataTag.host;
+			if ( host is MetadataHostClass )
+			{
+				throw new Error("[" + metadataTag.name + "] cannot annotate a Class.");
 			}
 		}
 	}
