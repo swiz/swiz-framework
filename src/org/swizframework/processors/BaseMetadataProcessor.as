@@ -22,6 +22,7 @@ package org.swizframework.processors
 	import org.swizframework.core.IBeanFactory;
 	import org.swizframework.core.ISwiz;
 	import org.swizframework.reflection.IMetadataTag;
+	import org.swizframework.utils.logging.SwizLogger;
 	
 	/**
 	 * Metadata Processor
@@ -34,6 +35,7 @@ package org.swizframework.processors
 		
 		protected var swiz:ISwiz;
 		protected var beanFactory:IBeanFactory;
+		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		
 		protected var _metadataNames:Array;
 		protected var _metadataClass:Class;
@@ -107,6 +109,7 @@ package org.swizframework.processors
 				{
 					metadataTag = metadataTags[ i ] as IMetadataTag;
 					metadataTags.splice( i, 1, createMetadataTag( metadataTag ) );
+					validateMetadataTag(metadataTag);
 				}
 			}
 			
@@ -153,6 +156,14 @@ package org.swizframework.processors
 			var tag:IMetadataTag = new metadataClass();
 			tag.copyFrom( metadataTag );
 			return tag;
+		}
+		
+		protected function validateMetadataTag( metadataTag:IMetadataTag ):void
+		{
+			if ( metadataClass )
+			{
+				logger.warn("BaseMetadataProcessor subclasses should override and implement validateMetadataTag and validate that the tag is properly specified.");
+			}
 		}
 	}
 }

@@ -16,14 +16,12 @@
 
 package testSuites
 {
-	import org.swizframework.reflection.ClassConstantTest;
-	import org.swizframework.reflection.TypeCacheTests;
-	
+	import org.swizframework.storage.SharedObjectBeanTest;
+
 	[Suite]
 	[RunWith( "org.flexunit.runners.Suite" )]
-	public class ReflectionTestsSuite
+	public class StorageUnitTestsSuite
 	{
-		//public var typeCacheTests:TypeCacheTests;
-		public var classConstantTests:ClassConstantTest;
+		public var _soTest:SharedObjectBeanTest; 
 	}
 }

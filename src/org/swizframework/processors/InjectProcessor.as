@@ -28,6 +28,7 @@ package org.swizframework.processors
 	import org.swizframework.reflection.IMetadataTag;
 	import org.swizframework.reflection.MetadataHostClass;
 	import org.swizframework.reflection.MetadataHostMethod;
+	import org.swizframework.reflection.MetadataHostProperty;
 	import org.swizframework.reflection.MethodParameter;
 	import org.swizframework.utils.logging.SwizLogger;
 	import org.swizframework.utils.services.IServiceHelper;
@@ -52,7 +53,6 @@ package org.swizframework.processors
 		// protected properties
 		// ========================================
 		
-		protected var logger:SwizLogger = SwizLogger.getLogger( this );
 		protected var injectByProperty:Dictionary = new Dictionary();
 		protected var sharedServiceHelper:IServiceHelper;
 		protected var sharedURLRequestHelper:IURLRequestHelper;
@@ -92,9 +92,6 @@ package org.swizframework.processors
 		override public function setUpMetadataTag( metadataTag:IMetadataTag, bean:Bean ):void
 		{
 			var injectTag:InjectMetadataTag = metadataTag as InjectMetadataTag;
-			
-			if( injectTag.name == AUTOWIRE )
-				logger.warn( "[Autowire] has been deprecated in favor of [Inject]. Please update {0} accordingly.", bean );
 			
 			// no source attribute means we're injecting by type
 			if( injectTag.source == null )
@@ -140,13 +137,6 @@ package org.swizframework.processors
 					// if tag specified no binding or property is not bindable, do simple assignment
 					var sourceObject:Object = getDestinationObject( namedBean.source, chain );
 					setDestinationValue( injectTag, bean, sourceObject[ injectTag.source.split( "." ).pop() ] );
-					
-					if( destPropName is QName && injectTag.bind == true )
-					{
-						var errorStr:String = "Cannot create a binding for " + metadataTag.asTag + " because " + injectTag.source.split( "." ).pop() + " is not public. ";
-						errorStr += "Add bind=false to your Inject tag or make the property public.";
-						throw new Error( errorStr );
-					}
 				}
 				else
 				{
@@ -404,6 +394,20 @@ package org.swizframework.processors
 				cw.unwatch();
 			}
 			delete injectByProperty[ uid ];
+		}
+		
+		override protected function validateMetadataTag(tag:IMetadataTag):void
+		{
+			var injectTag:InjectMetadataTag = InjectMetadataTag(tag);
+			
+			if( injectTag.name == AUTOWIRE )
+				logger.warn( "[Autowire] has been deprecated in favor of [Inject]. Please update accordingly." );
+			
+			if ( injectTag.destination && ( tag.host is MetadataHostMethod || tag.host is MetadataHostProperty ) )
+			{
+				throw new Error("The 'destination' metadata argument can only be used when annotating a class."); 
+			}
+			
 		}
 	}
 }
