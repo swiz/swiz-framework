@@ -40,7 +40,6 @@ package org.swizframework.core
 		 */
 		protected var _beans:Array = [];
 		
-		
 		// ========================================
 		// public properties
 		// ========================================
@@ -61,29 +60,17 @@ package org.swizframework.core
 			{
 				_rawBeans = value;
 			}
-		/*
-		   if( value != _beans )
-		   {
-		   // got rid of remove beans, it didn't do anything...
-		   initializeBeans( value );
-		   }
-		 */
 		}
 		
-		
 		// ========================================
-		// Constructor
+		// constructor
 		// ========================================
 		
-		/**
-		 * Constructor
-		 */
 		public function BeanProvider( beans:Array = null )
 		{
 			super();
 			this.beans = beans;
 		}
-		
 		
 		// ========================================
 		// public methods
@@ -106,8 +93,6 @@ package org.swizframework.core
 			{
 				beans = [ bean ];
 			}
-		
-			// now initialize the bean...
 		}
 		
 		public function removeBean( bean:Bean ):void
@@ -116,10 +101,7 @@ package org.swizframework.core
 			{
 				beans.splice( beans.indexOf( bean ), 1 );
 			}
-		
-			// clean the bean?
 		}
-		
 		
 		// ========================================
 		// protected methods
