@@ -19,7 +19,18 @@ package org.swizframework.mediation
 		{
 			_viewType = value;
 			
-			matcher = new SimpleTypeMatcher( value );
+			matcher = new TypeMatcher( value );
+			TypeMatcher( matcher ).strict = _strict;
 		}
+		
+		public function set strict( value:Boolean ):void
+		{
+			_strict = value;
+			
+			if( matcher )
+				TypeMatcher( matcher ).strict = _strict;
+		}
+		
+		protected var _strict:Boolean = false;
 	}
 }
