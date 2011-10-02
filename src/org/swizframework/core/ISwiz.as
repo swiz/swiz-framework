@@ -63,6 +63,9 @@ package org.swizframework.core
 		function get beanProviders():Array;
 		function set beanProviders( value:Array ):void;
 		
+		function get mediatorMaps():Array;
+		function set mediatorMaps( value:Array ):void;
+		
 		/**
 		 * Bean Factory
 		 */

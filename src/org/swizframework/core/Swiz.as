@@ -25,6 +25,7 @@ package org.swizframework.core
 	import org.swizframework.processors.EventHandlerProcessor;
 	import org.swizframework.processors.IProcessor;
 	import org.swizframework.processors.InjectProcessor;
+	import org.swizframework.processors.MediatorMapProcessor;
 	import org.swizframework.processors.PostConstructProcessor;
 	import org.swizframework.processors.PreDestroyProcessor;
 	import org.swizframework.processors.ProcessorPriority;
@@ -54,10 +55,11 @@ package org.swizframework.core
 		protected var _config:ISwizConfig;
 		protected var _beanFactory:IBeanFactory;
 		protected var _beanProviders:Array;
+		protected var _mediatorMaps:Array;
 		protected var _loggingTargets:Array;
 		protected var _processors:Array = [ new InjectProcessor(), new DispatcherProcessor(), new EventHandlerProcessor(), 
 											new SwizInterfaceProcessor(), new PostConstructProcessor(), new PreDestroyProcessor(), 
-											new ViewProcessor() ];
+											new ViewProcessor(), new MediatorMapProcessor() ];
 		
 		protected var _parentSwiz:ISwiz;
 		
@@ -149,6 +151,16 @@ package org.swizframework.core
 		public function set beanProviders( value:Array ):void
 		{
 			_beanProviders = value;
+		}
+		
+		public function get mediatorMaps():Array
+		{
+			return _mediatorMaps;
+		}
+		
+		public function set mediatorMaps( value:Array ):void
+		{
+			_mediatorMaps = value;
 		}
 		
 		[ArrayElementType( "org.swizframework.processors.IProcessor" )]
@@ -384,7 +396,7 @@ package org.swizframework.core
 			
 			for( var i:int = 0; i < beanProviders.length; i++ )
 			{
-				// if the provider is a class, intantiate it, if a beanLoader, initialize
+				// if the provider is a class, instantiate it, if a beanLoader, initialize
 				// then replace the item in the array
 				if( beanProviders[ i ] is Class )
 				{
