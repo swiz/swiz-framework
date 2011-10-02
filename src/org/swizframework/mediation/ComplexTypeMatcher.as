@@ -32,7 +32,15 @@ package org.swizframework.mediation
 			return this;
 		}
 		
-		public var mediatorType:Class;
+		public function or( type:Class ):ComplexTypeMatcher
+		{
+			if( requiredTypes.length > 0 )
+				optionalTypes.push( requiredTypes.splice( requiredTypes.indexOf( type ), 1 )[ 0 ] );
+			
+			optionalTypes.push( type );
+			
+			return this;
+		}
 		
 		public function to( type:Class ):IMediatorMapping
 		{
@@ -43,7 +51,7 @@ package org.swizframework.mediation
 		{
 			var type:Class;
 			
-			if( prohibitedTypes )
+			if( prohibitedTypes.length > 0 )
 			{
 				for each( type in prohibitedTypes )
 				{
@@ -52,7 +60,7 @@ package org.swizframework.mediation
 				}
 			}
 			
-			if( requiredTypes )
+			if( requiredTypes.length > 0 )
 			{
 				for each( type in requiredTypes )
 				{
@@ -63,7 +71,7 @@ package org.swizframework.mediation
 				return true;
 			}
 			
-			if( optionalTypes )
+			if( optionalTypes.length > 0 )
 			{
 				for each( type in optionalTypes )
 				{
