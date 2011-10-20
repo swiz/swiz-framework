@@ -39,6 +39,8 @@
 				<include name="**/*" />
 			</fileset>
 		</delete>
+		
+		<echo message="Clean complete." />
 	</target>
 	
 	<target name="init" description="Initializes project and destination folders">
@@ -51,6 +53,11 @@
 		<mkdir dir="${docs.loc}" />
 		<mkdir dir="${dist.loc}" />
 		<mkdir dir="${report.loc}" />
+		<mkdir dir="${bin.loc}/rsl" />
+		<mkdir dir="${bin.loc}/rsl/flex4" />
+		<mkdir dir="${bin.loc}/rsl/flex3" />
+		
+		<echo message="Init complete." />
 	</target>
 	
 	<!-- ======================================= -->
@@ -59,6 +66,63 @@
 	
 	<target name="compile" depends="init" description="Compile the library .swc file">
 
+		<antcall target="-compile-for-platform">
+			<param name="outputLocation" value="${bin.loc}/${swiz.name}.swc"/>
+			<param name="isDirectoryCompile" value="false"/>
+			<param name="isFlex4" value="true"/>
+			<param name="isFlex3" value="false"/>
+		</antcall>
+		
+		<echo message="${swiz.name}.swc has been created in ${bin.loc}" />
+		
+		<antcall target="-compile-for-platform">
+			<param name="outputLocation" value="${bin.loc}/rsl/flex4"/>
+			<param name="isDirectoryCompile" value="true"/>
+			<param name="isFlex4" value="true"/>
+			<param name="isFlex3" value="false"/>
+		</antcall>
+		
+		<move file="${bin.loc}/rsl/flex4/library.swf" tofile="${bin.loc}/rsl/${swiz.name}.swf" />
+		<echo message="${swiz.name}.swf has been created in ${bin.loc}/rsl" />
+		
+		<antcall target="-compile-for-platform">
+			<param name="outputLocation" value="${bin.loc}/${swiz.name.flex3}.swc"/>
+			<param name="isDirectoryCompile" value="false"/>
+			<param name="isFlex4" value="false"/>
+			<param name="isFlex3" value="true"/>
+		</antcall>
+		
+		<echo message="${swiz.name.flex3}.swc has been created in ${bin.loc}" />
+		
+		<antcall target="-compile-for-platform">
+			<param name="outputLocation" value="${bin.loc}/rsl/flex3"/>
+			<param name="isDirectoryCompile" value="true"/>
+			<param name="isFlex4" value="false"/>
+			<param name="isFlex3" value="true"/>
+		</antcall>
+		
+		<move file="${bin.loc}/rsl/flex3/library.swf" tofile="${bin.loc}/rsl/${swiz.name.flex3}.swf"/>
+		<echo message="${swiz.name.flex3}.swf has been created in ${bin.loc}/rsl" />
+		
+		<!-- Remove extra RSL files -->				
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.loc}/rsl" defaultexcludes="false">
+				<include name="**/**" />
+				<exclude name="**/*.swf" />
+			</fileset>
+		</delete>
+		
+	</target>
+	
+	<!-- Internal compile target to perform each compile run with options -->
+	<target name="-compile-for-platform">
+		
+		<!-- Default values for output location and directory compile. Normally passed as antcall params. -->
+		<property name="outputLocation" value="${bin.loc}/${swiz.name}.swc"/>
+		<property name="isDirectoryCompile" value="false"/>
+		<property name="isFlex3" value="false"/>
+		<property name="isFlex4" value="true"/>
+		
 		<!-- set up list of classes to include in library -->
 		<fileset id="src.include.fileset" dir="${src.loc}">
 			<include name="**/*.as" />
@@ -67,16 +131,17 @@
 
 		<!-- Convert the test files into a compiler friendly format. -->
 		<pathconvert property="src.include.classes" pathsep=" " refid="src.include.fileset">
-		        <compositemapper>
-		                <chainedmapper>
-		                        <globmapper from="${src.loc}/*" to="*" handledirsep="true" />
-		                        <mapper type="package" from="*.as" to="*" />
-		                </chainedmapper>
-		        </compositemapper>
+	        <compositemapper>
+                <chainedmapper>
+                    <globmapper from="${src.loc}/*" to="*" handledirsep="true" />
+                    <mapper type="package" from="*.as" to="*" />
+                </chainedmapper>
+	        </compositemapper>
 		</pathconvert>
-		
-		<compc output="${bin.loc}/${swiz.name}.swc" include-classes="${src.include.classes}">
+				
+		<compc output="${outputLocation}" include-classes="${src.include.classes}">
 			<source-path path-element="${src.loc}" />
+			<directory>${isDirectoryCompile}</directory>
 			
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
@@ -85,13 +150,18 @@
 			<include-file name="design.xml" path="${src.loc}/design.xml" />
 			
 			<!-- add flex3/flex4 compiler arg -->
-			<compiler.define name="CONFIG::flex3" value="false" />
-			<compiler.define name="CONFIG::flex4" value="true" />
+			<compiler.define name="CONFIG::flex3" value="${isFlex3}" />
+			<compiler.define name="CONFIG::flex4" value="${isFlex4}" />
 			
 			<!-- Configure the flex framework libraries as external link dependencies -->
-			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
+			<external-library-path dir="${flex.sdk}/frameworks" append="true">
 				<include name="libs" />
 				<include name="locale/{locale}" />
+				<include name="libs/air" />
+				<include name="libs/automation" />
+				<include name="libs/mobile" />
+				<include name="libs/mx" />
+				<include name="libs/player" />
 			</external-library-path>
 			
 			<keep-as3-metadata name="Autowire"/>
@@ -108,44 +178,6 @@
 			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
 			<headless-server>true</headless-server>
 		</compc>
-		
-		<echo message="${swiz.name}.swc has been created in ${bin.loc}" />
-		
-		<compc output="${bin.loc}/${swiz.name.flex3}.swc" include-classes="${src.include.classes}">
-			<source-path path-element="${src.loc}" />
-			
-			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
-			<include-namespaces uri="${swiz.namespace}" />
-			
-			<include-file name="metadata.xml" path="${src.loc}/metadata.xml" />
-			<include-file name="design.xml" path="${src.loc}/design.xml" />
-			
-			<!-- add flex3/flex4 compiler arg -->
-			<compiler.define name="CONFIG::flex3" value="true" />
-			<compiler.define name="CONFIG::flex4" value="false" />
-			
-			<!-- Configure the flex framework libraries as external link dependencies -->
-			<external-library-path dir="${FLEX_HOME}/frameworks" append="true">
-				<include name="libs" />
-				<include name="locale/{locale}" />
-			</external-library-path>
-			
-			<keep-as3-metadata name="Autowire"/>
-			<keep-as3-metadata name="Dispatcher"/>
-			<keep-as3-metadata name="EventHandler"/>
-			<keep-as3-metadata name="Inject"/>
-			<keep-as3-metadata name="Mediate"/>
-			<keep-as3-metadata name="PostConstruct"/>
-			<keep-as3-metadata name="PreDestroy"/>
-			<keep-as3-metadata name="ViewAdded"/>
-			<keep-as3-metadata name="ViewNavigator"/>
-			<keep-as3-metadata name="ViewRemoved"/>
-
-			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
-			<headless-server>true</headless-server>
-		</compc>
-		
-		<echo message="${swiz.name.flex3}.swc has been created in ${bin.loc}" />
 	</target>
 	
 	<target name="asdoc" depends="init" description="Generate ASDoc documentation">
@@ -175,6 +207,9 @@
 				<include name="${swiz.name.flex3}.swc" />
 			</zipfileset>
 			
+			<!-- Include the RSL .swf files -->
+			<zipfileset dir="${bin.loc}/rsl" prefix="${swiz.name}/rsl" />
+						
 			<!-- Include README.markdown -->
 			<zipfileset dir="${basedir}" prefix="${swiz.name}">
 				<include name="README.markdown" />
