@@ -139,9 +139,8 @@
 	        </compositemapper>
 		</pathconvert>
 				
-		<compc output="${outputLocation}" include-classes="${src.include.classes}">
+		<compc output="${outputLocation}" include-classes="${src.include.classes}" directory="${isDirectoryCompile}">
 			<source-path path-element="${src.loc}" />
-			<directory>${isDirectoryCompile}</directory>
 			
 			<namespace uri="${swiz.namespace}" manifest="${src.loc}/manifest.xml" />
 			<include-namespaces uri="${swiz.namespace}" />
