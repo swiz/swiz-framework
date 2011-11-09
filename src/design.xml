@@ -18,6 +18,8 @@
         <component name="SwizTraceTarget" 		displayName="SwizTraceTarget" 		namespace="swiz" category="Swiz" />
         <component name="ServiceHelper" 		displayName="ServiceHelper"			namespace="swiz" category="Swiz" />
         <component name="ChannelSetHelper" 		displayName="ChannelSetHelper" 		namespace="swiz" category="Swiz" />
+        <component name="MediatorMap"		 	displayName="MediatorMap"		 	namespace="swiz" category="Swiz" />
+        <component name="ViewMediatorMapping"	displayName="ViewMediatorMapping"	namespace="swiz" category="Swiz" />
         <component name="MockDelegateHelper" 	displayName="MockDelegateHelper" 	namespace="swiz" category="Swiz" />
         <component name="URLRequestHelper" 		displayName="URLRequestHelper" 		namespace="swiz" category="Swiz" />
     </components>
