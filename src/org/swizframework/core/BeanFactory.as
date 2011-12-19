@@ -380,6 +380,9 @@ package org.swizframework.core
 		 */
 		public function tearDownBean( bean:Bean ):void
 		{
+			if( bean.source == null )
+				return;
+				
 			for each( var processor:IProcessor in swiz.processors )
 			{
 				// skip factory processors
