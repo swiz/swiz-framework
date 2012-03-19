@@ -256,7 +256,6 @@ package org.swizframework.core
 			if( !( bean is Prototype ) || Prototype( bean ).initialized )
 				tearDownBean( bean );
 			
-			tearDownBean( bean );
 			bean.beanFactory = null;
 			bean.typeDescriptor = null;
 			bean.source = null;
