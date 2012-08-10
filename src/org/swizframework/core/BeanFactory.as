@@ -260,7 +260,7 @@ package org.swizframework.core
 			bean = null;
 		}
 		
-		public function getBeanByName( name:String ):Bean
+		public function getBeanByName( name:String, discovery:Boolean = true ):Bean
 		{
 			var foundBean:Bean = null;
 			
@@ -275,13 +275,13 @@ package org.swizframework.core
 			
 			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
 				setUpBean( foundBean );
-			else if( foundBean == null && parentBeanFactory != null )
+			else if( foundBean == null && parentBeanFactory != null && discovery )
 				foundBean = parentBeanFactory.getBeanByName( name );
 			
 			return foundBean;
 		}
 		
-		public function getBeanByType( beanType:Class ):Bean
+		public function getBeanByType( beanType:Class, discovery:Boolean = true ):Bean
 		{
 			var foundBean:Bean;
 			
@@ -302,7 +302,7 @@ package org.swizframework.core
 			
 			if( foundBean != null && !( foundBean is Prototype ) && !foundBean.initialized )
 				setUpBean( foundBean );
-			else if( foundBean == null && parentBeanFactory != null )
+			else if( foundBean == null && parentBeanFactory != null && discovery )
 				foundBean = parentBeanFactory.getBeanByType( beanType );
 			
 			return foundBean;

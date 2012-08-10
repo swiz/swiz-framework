@@ -35,8 +35,8 @@ package org.swizframework.core
 		function removeBeanProvider( beanProvider:IBeanProvider ):void;
 		
 		function get beans():Array;
-		function getBeanByName( name:String ):Bean;
-		function getBeanByType( type:Class ):Bean;
+		function getBeanByName( name:String, discovery:Boolean = true ):Bean;
+		function getBeanByType( type:Class, discovery:Boolean = true ):Bean;
 		
 		/**
 		 * Parent Swiz instance, for nesting and modules
