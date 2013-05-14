@@ -6,7 +6,7 @@ The Swiz team welcomes contributions to the framework in the form of pull reques
 
 ## Documentation and Reporting Bugs
 
-Swiz does not use GitHub for issue tracking or documentation. Documentation can be found in the [Swiz wiki](http://wiki.swizframework.org/) and bugs and feature requests should be entered in the [Swiz JIRA instance](http://bugs.swizframework.org/)
+Swiz does not use GitHub for issue tracking or documentation. Documentation can be found in the [Swiz wiki](https://swizframework.jira.com/wiki/display/SWIZ/Home) and bugs and feature requests should be entered in the [Swiz JIRA instance](https://swizframework.jira.com/secure/Dashboard.jspa)
 
 ## Building
 
