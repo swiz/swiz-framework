@@ -55,6 +55,11 @@ package org.swizframework.metadata
 		 * Backing variable for read-only <code>required</code> property.
 		 */
 		protected var _required:Boolean = true;
+
+		/**
+		 * Backing variable for read-only <code>local</code> property.
+		 */
+		protected var _local:Boolean = false;
 		
 		// ========================================
 		// public properties
@@ -117,6 +122,17 @@ package org.swizframework.metadata
 		{
 			return _required;
 		}
+
+		/**
+		 * Returns local attribute of [Inject] tag as a <code>Boolean</code> value.
+		 * If true Swiz will discovery beans only in own instance avoiding parent child structure.
+		 *
+		 * @default false
+		 */
+		public function get local():Boolean
+		{
+			return _local;
+		}
 		
 		// ========================================
 		// constructor
@@ -169,6 +185,9 @@ package org.swizframework.metadata
 			
 			if( hasArg( "required" ) )
 				_required = getArg( "required" ).value == "true";
+
+			if( hasArg( "local" ) )
+				_local = getArg( "local" ).value == "true";
 		}
 	}
 }

@@ -106,7 +106,7 @@ package org.swizframework.processors
 				// source attribute found - means we're injecting by name and potentially by property
 				
 				// try to obtain the bean by using the first part of the source attribute
-				var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
+				var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ], !injectTag.local );
 				
 				if( namedBean == null )
 				{
@@ -216,7 +216,7 @@ package org.swizframework.processors
 		 */
 		protected function removeInjectByProperty( injectTag:InjectMetadataTag, bean:Bean ):void
 		{
-			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ] );
+			var namedBean:Bean = getBeanByName( injectTag.source.split( "." )[ 0 ], !injectTag.local );
 			
 			removePropertyBinding( bean, namedBean, injectTag );
 			
@@ -242,7 +242,7 @@ package org.swizframework.processors
 			{
 				targetType = swiz.domain.getDefinition( injectTag.host.name ) as Class;
 			}
-			var typedBean:Bean = getBeanByType( targetType );
+			var typedBean:Bean = getBeanByType( targetType, !injectTag.local );
 			
 			if( typedBean )
 			{
@@ -322,17 +322,17 @@ package org.swizframework.processors
 		/**
 		 * Get Bean By Name
 		 */
-		protected function getBeanByName( name:String ):Bean
+		protected function getBeanByName( name:String, discovery:Boolean = true ):Bean
 		{
-			return beanFactory.getBeanByName( name );
+			return beanFactory.getBeanByName( name, discovery );
 		}
 		
 		/**
 		 * Get Bean By Type
 		 */
-		protected function getBeanByType( type:Class ):Bean
+		protected function getBeanByType( type:Class, discovery:Boolean = true ):Bean
 		{
-			return beanFactory.getBeanByType( type );
+			return beanFactory.getBeanByType( type, discovery );
 		}
 		
 		/**

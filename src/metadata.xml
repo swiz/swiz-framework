@@ -28,6 +28,13 @@
 				   type="String" 
 				   required="false"
 				   description="Id of the named bean to inject" />
+
+        <attribute name="local"
+                   type="Boolean"
+                   hint="boolean"
+                   defaultValue="false"
+                   required="false"
+                   description="Denotes whether or not Swiz should use the ( parent / child ) relation, to find the bean that will be injected." />
 				   
 		<attribute name="required" 
 				   type="Boolean" 
