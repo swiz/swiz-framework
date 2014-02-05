@@ -349,6 +349,8 @@ package org.swizframework.core
 			// tear down beans defined in bean providers or added with BeanEvents
 			beanFactory.tearDown();
 			
+			dispatcher.removeEventListener( SwizEvent.CREATED, handleSwizCreatedEvent );
+			
 			// clear out refs
 			parentSwiz = null;
 			SwizManager.removeSwiz( this );

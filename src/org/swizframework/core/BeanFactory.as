@@ -253,7 +253,9 @@ package org.swizframework.core
 			if( beans.indexOf( bean ) > -1 )
 				beans.splice( beans.indexOf( bean ), 1 );
 			
-			tearDownBean( bean );
+			if( !( bean is Prototype ) || Prototype( bean ).initialized )
+				tearDownBean( bean );
+			
 			bean.beanFactory = null;
 			bean.typeDescriptor = null;
 			bean.source = null;
