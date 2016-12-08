@@ -22,7 +22,7 @@ package org.swizframework.storage
 	import org.flexunit.asserts.assertTrue;
 	import org.swizframework.storage.ISharedObjectBean;
 	import org.swizframework.storage.SharedObjectBean;
-	
+
 	public class SharedObjectBeanTest
 	{
 		private var _soBean:ISharedObjectBean;
